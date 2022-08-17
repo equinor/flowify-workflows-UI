@@ -1,0 +1,132 @@
+# This is a basic workflow to help you get started with Actions
+
+name: deploy
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push events but only for the main branch
+  push:
+    branches: [ main ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+env:
+  NAME: flowify_ui
+  PROJECT: flowify
+  REGISTRYDEV: auroradevacr.azurecr.io
+  REGISTRYPROD: auroraprodacr.azurecr.io
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  build_push_image:
+    name: build-push docker image
+    outputs:
+      SHA_SHORT: ${{ env.SHA_SHORT }}
+      SHA_FULL: ${{ env.SHA_FULL }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set environment variables
+        run: |
+          REPO="$PROJECT/$NAME"
+          MINUTES=$(( $(date -u "+10#%H * 60 + 10#%M") ))
+          # VERSION=$([[ "$GITHUB_REF" != "refs/heads/main" && "$GITHUB_REF" == refs/heads/* || "$GITHUB_REF" == refs/tags/* ]] && echo "${GITHUB_REF##*/}" || echo "${{ steps.versioning.outputs.tag }}")
+          SHA_SHORT=$(git rev-parse --short HEAD)
+          cat >> $GITHUB_ENV << EOF
+          OWNER=$([ "$GITHUB_REPOSITORY_OWNER" == "equinor" ] && echo "Equinor ASA" || echo "$GITHUB_REPOSITORY_OWNER" )
+          REPO=$REPO
+          GIT_REPO=${GITHUB_REPOSITORY#"$GITHUB_REPOSITORY_OWNER/"}
+          DAY=$(date -u +%d)$((( $MINUTES > 30 && $MINUTES < 750 )) && echo am || echo pm)
+          SHA_SHORT=$SHA_SHORT
+          TAG=$SHA_SHORT
+          DATE=$(TZ=UTC date +'%Y-%m-%dT%TZ')
+          GITHUB_REF=$GITHUB_REF
+          GITHUB_SHA=$GITHUB_SHA
+          GITHUB_SERVER_URL=$GITHUB_SERVER_URL
+          GITHUB_REPOSITORY=$GITHUB_REPOSITORY
+          EOF
+      - name: Set build info
+        run: |
+          echo "BUILD_INFO=date: $DATE repository: $REPO ref: $GITHUB_REF sha: $GITHUB_SHA tag: $TAG owner: $OWNER" >> $GITHUB_ENV
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+        with:
+          platforms: linux
+
+      - name: Build dev image
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          tags: |
+            ${{ env.REGISTRYDEV }}/${{ env.REPO }}:latest
+            ${{ env.REGISTRYDEV }}/${{ env.REPO }}:${{ env.SHA_SHORT }}
+          labels: |
+            com.equinor.aurora.project=${{ env.PROJECT }}
+            org.opencontainers.image.created=${{ env.DATE }}
+            org.opencontainers.image.ref.name=${{ env.GITHUB_REF }}
+            org.opencontainers.image.revision=${{ env.GITHUB_SHA }}
+            org.opencontainers.image.source=${{ env.GITHUB_SERVER_URL }}/${{ env.GITHUB_REPOSITORY }}
+            org.opencontainers.image.vendor=${{ env.OWNER }}
+          load: true
+          build-args: build_info=${{ env.BUILD_INFO }}
+      - name: Push images to dev registry
+        env:
+          USERNAME: ${{ secrets.REGISTRY_USERNAME }}
+          PASSWORD: ${{ secrets.REGISTRY_PASSWORD }}
+        run: |
+          echo "$PASSWORD" | docker login -u $USERNAME --password-stdin $REGISTRYDEV
+          docker push $REGISTRYDEV/$REPO --all-tags
+      - name: Logout from container registry
+        run: docker logout $REGISTRYDEV
+
+      - name: Build prod image
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          tags: |
+            ${{ env.REGISTRYPROD }}/${{ env.REPO }}:latest
+            ${{ env.REGISTRYPROD }}/${{ env.REPO }}:${{ env.SHA_SHORT }}
+          labels: |
+            com.equinor.aurora.project=${{ env.PROJECT }}
+            org.opencontainers.image.created=${{ env.DATE }}
+            org.opencontainers.image.ref.name=${{ env.GITHUB_REF }}
+            org.opencontainers.image.revision=${{ env.GITHUB_SHA }}
+            org.opencontainers.image.source=${{ env.GITHUB_SERVER_URL }}/${{ env.GITHUB_REPOSITORY }}
+            org.opencontainers.image.vendor=${{ env.OWNER }}
+          load: true
+          build-args: build_info=${{ env.BUILD_INFO }}
+      - name: Push images to prod registry
+        env:
+          USERNAME: ${{ secrets.REGISTRY_USERNAME }}
+          PASSWORD: ${{ secrets.REGISTRY_PASSWORD }}
+        run: |
+          echo "$PASSWORD" | docker login -u $USERNAME --password-stdin $REGISTRYPROD
+          docker push $REGISTRYPROD/$REPO --all-tags
+      - name: Logout from container registry
+        run: docker logout $REGISTRYPROD
+
+  deploy:
+    name: Update deployment
+    runs-on: ubuntu-latest
+    needs: build_push_image
+    env:
+      EMAIL: ${{ github.event.head_commit.author.email }}
+      NAME: ${{ github.event.head_commit.author.name }}
+    steps:
+      - name: Checkout infra
+        uses: actions/checkout@v2
+        with:
+          ref: main
+          repository: equinor/flowify-infrastructure
+          ssh-key: ${{ secrets.FLOWIFY_INFRA_DEPLOY_KEY }}
+      - name: Update infra
+        run: |
+          SHA_SHORT=$(echo ${{ github.sha }} | cut -c1-7)
+          SHA_LONG=${{ github.sha }}
+          git config --global user.email "${EMAIL}"
+          git config --global user.name  "GitHub Actions (${NAME})"
+          sed -i "s/newTag:.*/newTag: \"$SHA_SHORT\"/g" kube/frontend/overlays/dev/kustomization.yaml
+          git add kube/frontend/overlays/dev/kustomization.yaml
+          git commit --message "GHA: Update development imageTag" || true
+          git push
