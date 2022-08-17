@@ -161,11 +161,11 @@ export const Sidebar: FC<SidebarProps> = (props: SidebarProps) => {
       <Stack spacing={1}>
         <Typography variant="h5">Inputs</Typography>
         {isNotEmptyArray(inputs) ? (
-          inputs?.map((input, index) => (
+          inputs?.map((input) => (
             <Parameter
               key={input?.name}
               parameter={input}
-              index={index}
+              index={component?.inputs?.findIndex((param) => param.name === input?.name) || -1}
               setComponent={setComponent}
               type="input"
               editableValue={type === 'workflow'}
@@ -184,7 +184,7 @@ export const Sidebar: FC<SidebarProps> = (props: SidebarProps) => {
           <Stack spacing={1}>
             <Typography variant="h5">Secrets</Typography>
             {isNotEmptyArray(inputSecrets) ? (
-              inputSecrets?.map((input, index) => (
+              inputSecrets?.map((input) => (
                 <Parameter
                   key={input?.name}
                   parameter={input}
@@ -211,7 +211,7 @@ export const Sidebar: FC<SidebarProps> = (props: SidebarProps) => {
           <Stack spacing={1}>
             <Typography variant="h5">Volumes</Typography>
             {isNotEmptyArray(inputVolumes) ? (
-              inputVolumes?.map((input, index) => (
+              inputVolumes?.map((input) => (
                 <Parameter
                   key={input?.name}
                   parameter={input}
@@ -248,7 +248,7 @@ export const Sidebar: FC<SidebarProps> = (props: SidebarProps) => {
         ) : (
           <Typography variant="body_short">No outputs exists for this {type}</Typography>
         )}
-        <Button onClick={() => addParameter('outputs', 'volume')} variant="ghost" style={{ alignSelf: 'flex-end' }}>
+        <Button onClick={() => addParameter('outputs', 'parameter')} variant="ghost" style={{ alignSelf: 'flex-end' }}>
           <Icon name="add" /> Add output
         </Button>
       </Stack>
