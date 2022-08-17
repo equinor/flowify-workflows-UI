@@ -165,7 +165,7 @@ export const Sidebar: FC<SidebarProps> = (props: SidebarProps) => {
             <Parameter
               key={input?.name}
               parameter={input}
-              index={component?.inputs?.findIndex((param) => param.name === input?.name) || -1}
+              index={component?.inputs?.findIndex((param) => param.name === input?.name) || 0}
               setComponent={setComponent}
               type="input"
               editableValue={type === 'workflow'}
@@ -188,7 +188,7 @@ export const Sidebar: FC<SidebarProps> = (props: SidebarProps) => {
                 <Parameter
                   key={input?.name}
                   parameter={input}
-                  index={component?.inputs?.findIndex((param) => param.name === input?.name) || -1}
+                  index={component?.inputs?.findIndex((param) => param.name === input?.name) || 0}
                   setComponent={setComponent}
                   type="input"
                   editableValue={false}
@@ -215,7 +215,7 @@ export const Sidebar: FC<SidebarProps> = (props: SidebarProps) => {
                 <Parameter
                   key={input?.name}
                   parameter={input}
-                  index={component?.inputs?.findIndex((param) => param.name === input?.name) || -1}
+                  index={component?.inputs?.findIndex((param) => param.name === input?.name) || 0}
                   setComponent={setComponent}
                   type="input"
                   editableValue={false}
