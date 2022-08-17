@@ -1,0 +1,38 @@
+{
+    "apiVersion": "argoproj.io/v1alpha1",
+    "metadata": {
+        "name": "workflow-oyvvik",
+        "generateName": "workflow-oyvvik-",
+        "creationTimestamp": null,
+        "annotations": {
+            "description": "hello world workflow",
+            "flowify.io/created-by": "OYVVIK@equinor.com",
+            "flowify.io/displayName": "<ENTER_DISPLAY_NAMEf2>",
+            "flowify.io/last-written": "2021-12-17T11:18:19Z",
+            "flowify.io/version": "17"
+        }
+    },
+    "spec": {
+        "templates": [
+            {
+                "name": "whalesay",
+                "inputs": {},
+                "outputs": {},
+                "metadata": {},
+                "container": {
+                    "name": "",
+                    "image": "docker/whalesay",
+                    "command": [
+                        "cowsay"
+                    ],
+                    "args": [
+                        "hello world"
+                    ],
+                    "resources": {}
+                }
+            }
+        ],
+        "entrypoint": "whalesay",
+        "arguments": {}
+    }
+}

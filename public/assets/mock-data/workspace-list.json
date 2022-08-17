@@ -1,0 +1,14 @@
+{
+    "workspaces": [
+        {
+            "name": "argo",
+            "hasAccess": true,
+            "missingRoles": []
+        },
+        {
+            "name": "flowify",
+            "hasAccess": true,
+            "missingRoles": []
+        }
+    ]
+}

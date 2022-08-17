@@ -1,0 +1,1832 @@
+{
+    "result": {
+        "type": "ADDED",
+        "object": {
+            "metadata": {
+                "name": "flowify-well-log-qc-and-store-bprzh",
+                "generateName": "flowify-well-log-qc-and-store-",
+                "namespace": "flowify",
+                "selfLink": "/apis/argoproj.io/v1alpha1/namespaces/flowify/workflows/flowify-well-log-qc-and-store-bprzh",
+                "uid": "db70f5ab-40a1-4e98-8b8f-ebaf5dbfd602",
+                "resourceVersion": "286319570",
+                "generation": 7,
+                "creationTimestamp": "2021-09-15T13:26:40Z",
+                "labels": {
+                    "workflows.argoproj.io/completed": "true",
+                    "workflows.argoproj.io/phase": "Succeeded"
+                },
+                "annotations": {
+                    "description": "This workflow is set up as a use case for the first user stories of the proof of concept for using Argo workflows as a starting point for Flowify."
+                },
+                "managedFields": [
+                    {
+                        "manager": "argo",
+                        "operation": "Update",
+                        "apiVersion": "argoproj.io/v1alpha1",
+                        "time": "2021-09-15T13:26:40Z",
+                        "fieldsType": "FieldsV1",
+                        "fieldsV1": {
+                            "f:metadata": {
+                                "f:annotations": {
+                                    ".": {},
+                                    "f:description": {}
+                                },
+                                "f:generateName": {}
+                            },
+                            "f:spec": {
+                                ".": {},
+                                "f:arguments": {},
+                                "f:entrypoint": {},
+                                "f:serviceAccountName": {},
+                                "f:volumes": {}
+                            },
+                            "f:status": {}
+                        }
+                    },
+                    {
+                        "manager": "workflow-controller",
+                        "operation": "Update",
+                        "apiVersion": "argoproj.io/v1alpha1",
+                        "time": "2021-09-15T13:27:30Z",
+                        "fieldsType": "FieldsV1",
+                        "fieldsV1": {
+                            "f:metadata": {
+                                "f:labels": {
+                                    ".": {},
+                                    "f:workflows.argoproj.io/completed": {},
+                                    "f:workflows.argoproj.io/phase": {}
+                                }
+                            },
+                            "f:spec": {
+                                "f:templates": {}
+                            },
+                            "f:status": {
+                                "f:artifactRepositoryRef": {},
+                                "f:conditions": {},
+                                "f:finishedAt": {},
+                                "f:nodes": {},
+                                "f:phase": {},
+                                "f:progress": {},
+                                "f:resourcesDuration": {},
+                                "f:startedAt": {}
+                            }
+                        }
+                    }
+                ]
+            },
+            "spec": {
+                "templates": [
+                    {
+                        "name": "qc-well-log-and-correct",
+                        "inputs": {
+                            "parameters": [
+                                {
+                                    "name": "log_curve_name"
+                                },
+                                {
+                                    "name": "OUTPUT_FOLDER"
+                                },
+                                {
+                                    "name": "LOG_CURVE_FOLDER"
+                                },
+                                {
+                                    "name": "allowed_maximum_log_value"
+                                },
+                                {
+                                    "name": "allowed_minimum_log_value"
+                                },
+                                {
+                                    "name": "correction_value"
+                                },
+                                {
+                                    "name": "WELLBORE_UUID"
+                                }
+                            ]
+                        },
+                        "outputs": {},
+                        "metadata": {
+                            "annotations": {
+                                "description": "This step reads a well log curve and checks if the log values are within an allowed range and set them to undefined in not.",
+                                "display-name": "Log cruve QC \u0026 correct"
+                            },
+                            "labels": {
+                                "WBS": "E.RDI.10460"
+                            }
+                        },
+                        "container": {
+                            "name": "",
+                            "image": "auroradevacr.azurecr.io/flowify/flowifyusecases:v4.15",
+                            "args": [
+                                "-m",
+                                "wellmaster.jobs.qc_and_correct_wellbore_log",
+                                "--result-folder=/mnt/flowify/{{workflow.name}}/results/mini",
+                                "--wellbore-uuid={{inputs.parameters.WELLBORE_UUID}}",
+                                "--log-curve-name={{inputs.parameters.log_curve_name}}",
+                                "--log-curve-data-sub-folder={{workflow.parameters.LOG_CURVE_FOLDER}}",
+                                "--log-curve-file-name-base=QCed-log_curve-wellboreUUID_",
+                                "--do-correction",
+                                "--allowed-minimum-log-value={{inputs.parameters.allowed_minimum_log_value}}",
+                                "--allowed-maximum-log-value={{inputs.parameters.allowed_maximum_log_value}}",
+                                "--correction-value={{inputs.parameters.correction_value}}",
+                                "--verbose"
+                            ],
+                            "envFrom": [
+                                {
+                                    "secretRef": {
+                                        "name": "flowify-creds"
+                                    }
+                                }
+                            ],
+                            "resources": {},
+                            "volumeMounts": [
+                                {
+                                    "name": "flowify-fileshare",
+                                    "mountPath": "/mnt/flowify/"
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "name": "call-api",
+                        "inputs": {
+                            "parameters": [
+                                {
+                                    "name": "api-name"
+                                },
+                                {
+                                    "name": "url"
+                                },
+                                {
+                                    "name": "output-json-file-name"
+                                },
+                                {
+                                    "name": "OUTPUT_FOLDER"
+                                }
+                            ]
+                        },
+                        "outputs": {
+                            "artifacts": [
+                                {
+                                    "name": "call-api-output",
+                                    "path": "{{inputs.parameters.OUTPUT_FOLDER}}/{{inputs.parameters.output-json-file-name}}"
+                                }
+                            ]
+                        },
+                        "metadata": {
+                            "annotations": {
+                                "description": "This component calls an API and stores the result as an artifact",
+                                "display-name": "Call API"
+                            },
+                            "labels": {
+                                "WBS": "E.RDI.10460"
+                            }
+                        },
+                        "container": {
+                            "name": "",
+                            "image": "auroradevacr.azurecr.io/flowify/flowifyusecases:v4.15",
+                            "args": [
+                                "-m",
+                                "wellmaster.components.call_api",
+                                "--input-api-name={{inputs.parameters.api-name}}",
+                                "--input-url={{inputs.parameters.url}}",
+                                "--result-folder={{inputs.parameters.OUTPUT_FOLDER}}",
+                                "--output-json-file-name={{inputs.parameters.output-json-file-name}}",
+                                "--verbose"
+                            ],
+                            "envFrom": [
+                                {
+                                    "secretRef": {
+                                        "name": "flowify-creds"
+                                    }
+                                }
+                            ],
+                            "resources": {}
+                        }
+                    },
+                    {
+                        "name": "filter-json",
+                        "inputs": {
+                            "parameters": [
+                                {
+                                    "name": "json-input-file"
+                                },
+                                {
+                                    "name": "path"
+                                },
+                                {
+                                    "name": "OUTPUT_FOLDER"
+                                }
+                            ],
+                            "artifacts": [
+                                {
+                                    "name": "call-api-output",
+                                    "path": "{{inputs.parameters.OUTPUT_FOLDER}}/{{inputs.parameters.json-input-file}}"
+                                }
+                            ]
+                        },
+                        "outputs": {
+                            "parameters": [
+                                {
+                                    "name": "filtered-json",
+                                    "valueFrom": {
+                                        "path": "{{inputs.parameters.OUTPUT_FOLDER}}/filtered.json"
+                                    }
+                                }
+                            ]
+                        },
+                        "metadata": {
+                            "annotations": {
+                                "description": "This component takes in a json file and extracts the value of a specific path in the json file and stores this in the filtered-json output parameter",
+                                "display-name": "Filter json file"
+                            },
+                            "labels": {
+                                "WBS": "E.RDI.10460"
+                            }
+                        },
+                        "container": {
+                            "name": "",
+                            "image": "auroradevacr.azurecr.io/flowify/flowifyusecases:v4.15",
+                            "args": [
+                                "-m",
+                                "wellmaster.components.json_path",
+                                "--input-json-file-name={{inputs.parameters.json-input-file}}",
+                                "--input-path={{inputs.parameters.path}}",
+                                "--result-folder={{inputs.parameters.OUTPUT_FOLDER}}",
+                                "--output-json-file-name=filtered.json"
+                            ],
+                            "envFrom": [
+                                {
+                                    "secretRef": {
+                                        "name": "flowify-creds"
+                                    }
+                                }
+                            ],
+                            "resources": {}
+                        }
+                    },
+                    {
+                        "name": "gather-qc-report-data",
+                        "inputs": {
+                            "parameters": [
+                                {
+                                    "name": "wellbore_guid"
+                                },
+                                {
+                                    "name": "WELLBORE_UUID"
+                                },
+                                {
+                                    "name": "OUTPUT_FOLDER"
+                                }
+                            ]
+                        },
+                        "outputs": {},
+                        "metadata": {
+                            "annotations": {
+                                "description": "This component collets QC report data and metadata about the Argo workflow in a json file",
+                                "display-name": "Gather QC report"
+                            },
+                            "labels": {
+                                "WBS": "E.RDI.10460"
+                            }
+                        },
+                        "container": {
+                            "name": "",
+                            "image": "auroradevacr.azurecr.io/flowify/flowifyusecases:v4.15",
+                            "args": [
+                                "-m",
+                                "wellmaster.jobs.gather_well_log_qc_report",
+                                "--workflow-name={{workflow.name}}",
+                                "--namespace={{workflow.namespace}}",
+                                "--argo-server-url=https://flowify.dev.aurora.equinor.com",
+                                "--run-id={{workflow.uid}}",
+                                "--created-timestamp={{workflow.creationTimestamp}}",
+                                "--input-parameters={{workflow.parameters}}",
+                                "--wellbore-uuid={{inputs.parameters.WELLBORE_UUID}}",
+                                "--wellbore-guid={{inputs.parameters.wellbore_guid}}",
+                                "--result-folder=/mnt/flowify/{{workflow.name}}/results/mini",
+                                "--log-curve-data-sub-folder=log-curves",
+                                "--log-curve-file-name-base=QCed-log_curve-wellboreUUID_",
+                                "--log-curve-names=PHIT SWT GRN KHLOG",
+                                "--report-file-name_base=QC_report_wellbore_UUID_",
+                                "--verbose"
+                            ],
+                            "envFrom": [
+                                {
+                                    "secretRef": {
+                                        "name": "flowify-creds"
+                                    }
+                                }
+                            ],
+                            "resources": {},
+                            "volumeMounts": [
+                                {
+                                    "name": "flowify-fileshare",
+                                    "mountPath": "/mnt/flowify/"
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "name": "copy-from-file-share-to-blob",
+                        "inputs": {
+                            "parameters": [
+                                {
+                                    "name": "BLOB-CONTAINER"
+                                },
+                                {
+                                    "name": "blob-file-path"
+                                },
+                                {
+                                    "name": "file-share-path"
+                                }
+                            ]
+                        },
+                        "outputs": {},
+                        "metadata": {
+                            "annotations": {
+                                "description": "Copy from Azure file share to an Azure blob storage container",
+                                "display-name": "Copy from file share to blob"
+                            },
+                            "labels": {
+                                "WBS": "E.RDI.10460"
+                            }
+                        },
+                        "container": {
+                            "name": "",
+                            "image": "auroradevacr.azurecr.io/flowify/flowifyusecases:v4.15",
+                            "args": [
+                                "-m",
+                                "wellmaster.components.write_to_azure_blob_storage",
+                                "--container-name={{inputs.parameters.BLOB-CONTAINER}}",
+                                "--blob-file-path={{inputs.parameters.blob-file-path}}",
+                                "--local-file-path={{inputs.parameters.file-share-path}}",
+                                "--verbose"
+                            ],
+                            "envFrom": [
+                                {
+                                    "secretRef": {
+                                        "name": "flowify-creds"
+                                    }
+                                }
+                            ],
+                            "resources": {},
+                            "volumeMounts": [
+                                {
+                                    "name": "flowify-fileshare",
+                                    "mountPath": "/mnt/flowify"
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "name": "create-volume-mount-folder",
+                        "inputs": {},
+                        "outputs": {},
+                        "metadata": {
+                            "labels": {
+                                "WBS": "E.RDI.10460"
+                            }
+                        },
+                        "script": {
+                            "name": "",
+                            "image": "auroradevacr.azurecr.io/flowify/debian:9.4",
+                            "command": [
+                                "bash"
+                            ],
+                            "resources": {},
+                            "volumeMounts": [
+                                {
+                                    "name": "flowify-fileshare",
+                                    "mountPath": "/mnt/flowify"
+                                }
+                            ],
+                            "source": "set -e\nmkdir /mnt/flowify/{{workflow.name}}\necho \"Folder created!\"\n"
+                        }
+                    },
+                    {
+                        "name": "slack-notification",
+                        "inputs": {
+                            "parameters": [
+                                {
+                                    "name": "wellbore_guid"
+                                },
+                                {
+                                    "name": "WELLBORE_UUID"
+                                },
+                                {
+                                    "name": "phit_log_qc_anomaly"
+                                },
+                                {
+                                    "name": "khlog_log_qc_anomaly"
+                                },
+                                {
+                                    "name": "swt_log_qc_anomaly"
+                                },
+                                {
+                                    "name": "grn_log_qc_anomaly"
+                                }
+                            ]
+                        },
+                        "outputs": {},
+                        "metadata": {
+                            "labels": {
+                                "WBS": "E.RDI.10460"
+                            }
+                        },
+                        "container": {
+                            "name": "",
+                            "image": "auroradevacr.azurecr.io/flowify/flowifyusecases:v4.15",
+                            "args": [
+                                "-m",
+                                "wellmaster.components.slack_notification",
+                                "--workflow-name={{workflow.name}}",
+                                "--namespace=flowify",
+                                "--argo-server-url=https://flowify.dev.aurora.equinor.com",
+                                "--run-id={{workflow.uid}}",
+                                "--workflow-parameters={{workflow.parameters}}",
+                                "--workflow-created={{workflow.creationTimestamp}}",
+                                "--status=\"success\"",
+                                "--rep-url=https://rep.equinor.com/#/wellbore/{{inputs.parameters.wellbore_guid}}",
+                                "--qc-report-file-url=https://portal.azure.com/#blade/Microsoft_Azure_Storage/ContainerMenuBlade/overview/storageAccountId/%2Fsubscriptions%2F1d1ba129-149e-4533-a8e2-266d7a4a92ac%2FresourceGroups%2FFlowifyRGDev%2Fproviders%2FMicrosoft.Storage%2FstorageAccounts%2Fflowifystorage1/path/well-log-qc-results/etag/%220x8D95CC958D9F6C5%22/defaultEncryptionScope/%24account-encryption-key/denyEncryptionScopeOverride//defaultId//publicAccessVal/None",
+                                "--show-qc-results",
+                                "--anomalies-found-phit-log={{inputs.parameters.phit_log_qc_anomaly}}",
+                                "--anomalies-found-swt-log={{inputs.parameters.swt_log_qc_anomaly}}",
+                                "--anomalies-found-khlog-log={{inputs.parameters.khlog_log_qc_anomaly}}",
+                                "--anomalies-found-grn-log={{inputs.parameters.grn_log_qc_anomaly}}"
+                            ],
+                            "envFrom": [
+                                {
+                                    "secretRef": {
+                                        "name": "flowify-creds"
+                                    }
+                                }
+                            ],
+                            "resources": {},
+                            "volumeMounts": [
+                                {
+                                    "name": "flowify-fileshare",
+                                    "mountPath": "/mnt/flowify"
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "name": "check-if-file-exists",
+                        "inputs": {
+                            "parameters": [
+                                {
+                                    "name": "qced-well-log-file-name"
+                                }
+                            ]
+                        },
+                        "outputs": {},
+                        "metadata": {
+                            "labels": {
+                                "WBS": "E.RDI.10460"
+                            }
+                        },
+                        "script": {
+                            "name": "",
+                            "image": "auroradevacr.azurecr.io/flowify/flowifyusecases:v4.15",
+                            "command": [
+                                "bash"
+                            ],
+                            "resources": {},
+                            "volumeMounts": [
+                                {
+                                    "name": "flowify-fileshare",
+                                    "mountPath": "/mnt/flowify"
+                                }
+                            ],
+                            "source": "[ -f {{inputs.parameters.qced-well-log-file-name}} ] \u0026\u0026 echo \"true\" || echo \"false\"\n"
+                        }
+                    },
+                    {
+                        "name": "filter-well-log-json",
+                        "inputs": {
+                            "parameters": [
+                                {
+                                    "name": "json-input-file"
+                                },
+                                {
+                                    "name": "path"
+                                },
+                                {
+                                    "name": "filtered-json-file-path"
+                                }
+                            ]
+                        },
+                        "outputs": {},
+                        "metadata": {
+                            "labels": {
+                                "WBS": "E.RDI.10460"
+                            }
+                        },
+                        "container": {
+                            "name": "",
+                            "image": "auroradevacr.azurecr.io/flowify/flowifyusecases:v4.15",
+                            "args": [
+                                "-m",
+                                "wellmaster.components.json_path",
+                                "--input-json-file-name={{inputs.parameters.json-input-file}}",
+                                "--input-path={{inputs.parameters.path}}",
+                                "--result-folder=/mnt/flowify/{{workflow.name}}/results/mini/log-curves/",
+                                "--output-json-file-name={{inputs.parameters.filtered-json-file-path}}"
+                            ],
+                            "envFrom": [
+                                {
+                                    "secretRef": {
+                                        "name": "flowify-creds"
+                                    }
+                                }
+                            ],
+                            "resources": {},
+                            "volumeMounts": [
+                                {
+                                    "name": "flowify-fileshare",
+                                    "mountPath": "/mnt/flowify/"
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "name": "create-log-qc-report-and-notify",
+                        "inputs": {
+                            "parameters": [
+                                {
+                                    "name": "LOG_CURVE_FOLDER"
+                                },
+                                {
+                                    "name": "OUTPUT_FOLDER"
+                                },
+                                {
+                                    "name": "WELLBORE_UUID"
+                                },
+                                {
+                                    "name": "BLOB-CONTAINER"
+                                }
+                            ]
+                        },
+                        "outputs": {},
+                        "metadata": {},
+                        "dag": {
+                            "tasks": [
+                                {
+                                    "name": "create-mount-folder",
+                                    "template": "create-volume-mount-folder",
+                                    "arguments": {}
+                                },
+                                {
+                                    "name": "well-log-qc-fork",
+                                    "template": "qc-well-log-and-correct",
+                                    "arguments": {
+                                        "parameters": [
+                                            {
+                                                "name": "LOG_CURVE_FOLDER",
+                                                "value": "{{inputs.parameters.LOG_CURVE_FOLDER}}"
+                                            },
+                                            {
+                                                "name": "OUTPUT_FOLDER",
+                                                "value": "{{inputs.parameters.OUTPUT_FOLDER}}"
+                                            },
+                                            {
+                                                "name": "WELLBORE_UUID",
+                                                "value": "{{inputs.parameters.WELLBORE_UUID}}"
+                                            },
+                                            {
+                                                "name": "log_curve_name",
+                                                "value": "{{item.log_curve_name}}"
+                                            },
+                                            {
+                                                "name": "allowed_minimum_log_value",
+                                                "value": "{{item.allowed_minimum_log_value}}"
+                                            },
+                                            {
+                                                "name": "allowed_maximum_log_value",
+                                                "value": "{{item.allowed_maximum_log_value}}"
+                                            },
+                                            {
+                                                "name": "correction_value",
+                                                "value": "{{item.correction_value}}"
+                                            }
+                                        ]
+                                    },
+                                    "dependencies": [
+                                        "create-mount-folder"
+                                    ],
+                                    "withItems": [
+                                        {
+                                            "allowed_maximum_log_value": 300,
+                                            "allowed_minimum_log_value": 0,
+                                            "correction_value": -999999,
+                                            "log_curve_name": "GRN"
+                                        },
+                                        {
+                                            "allowed_maximum_log_value": 1,
+                                            "allowed_minimum_log_value": 0.001,
+                                            "correction_value": -999999,
+                                            "log_curve_name": "SWT"
+                                        },
+                                        {
+                                            "allowed_maximum_log_value": 50000,
+                                            "allowed_minimum_log_value": 0.001,
+                                            "correction_value": -999999,
+                                            "log_curve_name": "KHLOG"
+                                        },
+                                        {
+                                            "allowed_maximum_log_value": 0.45,
+                                            "allowed_minimum_log_value": 0,
+                                            "correction_value": -999999,
+                                            "log_curve_name": "PHIT"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "name": "get-wellbore-header",
+                                    "template": "call-api",
+                                    "arguments": {
+                                        "parameters": [
+                                            {
+                                                "name": "api-name",
+                                                "value": "smda"
+                                            },
+                                            {
+                                                "name": "url",
+                                                "value": "https://api-test.gateway.equinor.com/smda/v1.1/smda_api/wellbores?uuid={{inputs.parameters.WELLBORE_UUID}}"
+                                            },
+                                            {
+                                                "name": "output-json-file-name",
+                                                "value": "wellbore_header.json"
+                                            },
+                                            {
+                                                "name": "OUTPUT_FOLDER",
+                                                "value": "{{inputs.parameters.OUTPUT_FOLDER}}"
+                                            }
+                                        ]
+                                    }
+                                },
+                                {
+                                    "name": "extract-wellbore-guid",
+                                    "template": "filter-json",
+                                    "arguments": {
+                                        "parameters": [
+                                            {
+                                                "name": "json-input-file",
+                                                "value": "wellbore_header.json"
+                                            },
+                                            {
+                                                "name": "path",
+                                                "value": "data.results[0].guid"
+                                            },
+                                            {
+                                                "name": "OUTPUT_FOLDER",
+                                                "value": "{{inputs.parameters.OUTPUT_FOLDER}}"
+                                            }
+                                        ],
+                                        "artifacts": [
+                                            {
+                                                "name": "call-api-output",
+                                                "from": "{{tasks.get-wellbore-header.outputs.artifacts.call-api-output}}"
+                                            }
+                                        ]
+                                    },
+                                    "dependencies": [
+                                        "get-wellbore-header"
+                                    ]
+                                },
+                                {
+                                    "name": "gather-qc-report-to-json",
+                                    "template": "gather-qc-report-data",
+                                    "arguments": {
+                                        "parameters": [
+                                            {
+                                                "name": "wellbore_guid",
+                                                "value": "{{tasks.extract-wellbore-guid.outputs.result}}"
+                                            },
+                                            {
+                                                "name": "WELLBORE_UUID",
+                                                "value": "{{inputs.parameters.WELLBORE_UUID}}"
+                                            },
+                                            {
+                                                "name": "OUTPUT_FOLDER",
+                                                "value": "{{inputs.parameters.OUTPUT_FOLDER}}"
+                                            }
+                                        ]
+                                    },
+                                    "dependencies": [
+                                        "extract-wellbore-guid",
+                                        "well-log-qc-fork"
+                                    ]
+                                },
+                                {
+                                    "name": "copy-qc-report-to-blob",
+                                    "template": "copy-from-file-share-to-blob",
+                                    "arguments": {
+                                        "parameters": [
+                                            {
+                                                "name": "BLOB-CONTAINER",
+                                                "value": "{{inputs.parameters.BLOB-CONTAINER}}"
+                                            },
+                                            {
+                                                "name": "file-share-path",
+                                                "value": "/mnt/flowify/{{workflow.name}}/results/mini/log-curves/QC_report_wellbore_UUID_{{inputs.parameters.WELLBORE_UUID}}.json"
+                                            },
+                                            {
+                                                "name": "blob-file-path",
+                                                "value": "{{workflow.name}}/qc_result/QC_report_wellbore_UUID_{{inputs.parameters.WELLBORE_UUID}}.json"
+                                            }
+                                        ]
+                                    },
+                                    "dependencies": [
+                                        "gather-qc-report-to-json"
+                                    ]
+                                },
+                                {
+                                    "name": "check-if-phit-log-file-exists",
+                                    "template": "check-if-file-exists",
+                                    "arguments": {
+                                        "parameters": [
+                                            {
+                                                "name": "qced-well-log-file-name",
+                                                "value": "/mnt/flowify/{{workflow.name}}/results/mini/log-curves/QCed-log_curve-wellboreUUID_{{inputs.parameters.WELLBORE_UUID}}_PHIT.json"
+                                            }
+                                        ]
+                                    },
+                                    "dependencies": [
+                                        "well-log-qc-fork"
+                                    ]
+                                },
+                                {
+                                    "name": "check-if-phit-log-anomalies-found",
+                                    "template": "filter-well-log-json",
+                                    "arguments": {
+                                        "parameters": [
+                                            {
+                                                "name": "json-input-file",
+                                                "value": "QCed-log_curve-wellboreUUID_{{inputs.parameters.WELLBORE_UUID}}_PHIT.json"
+                                            },
+                                            {
+                                                "name": "path",
+                                                "value": "log_value_range_qc.anomalies_identified"
+                                            },
+                                            {
+                                                "name": "filtered-json-file-path",
+                                                "value": "/mnt/flowify/{{workflow.name}}/results/mini/log-curves/Filtered_QCed-log_curve-wellboreUUID_{{inputs.parameters.WELLBORE_UUID}}_PHIT.json"
+                                            }
+                                        ]
+                                    },
+                                    "dependencies": [
+                                        "check-if-phit-log-file-exists"
+                                    ],
+                                    "when": "{{tasks.check-if-phit-log-file-exists.outputs.result}} == true"
+                                },
+                                {
+                                    "name": "check-if-khlog-log-file-exists",
+                                    "template": "check-if-file-exists",
+                                    "arguments": {
+                                        "parameters": [
+                                            {
+                                                "name": "qced-well-log-file-name",
+                                                "value": "/mnt/flowify/{{workflow.name}}/results/mini/log-curves/QCed-log_curve-wellboreUUID_{{inputs.parameters.WELLBORE_UUID}}_KHLOG.json"
+                                            }
+                                        ]
+                                    },
+                                    "dependencies": [
+                                        "well-log-qc-fork"
+                                    ]
+                                },
+                                {
+                                    "name": "check-if-khlog-log-anomalies-found",
+                                    "template": "filter-well-log-json",
+                                    "arguments": {
+                                        "parameters": [
+                                            {
+                                                "name": "json-input-file",
+                                                "value": "QCed-log_curve-wellboreUUID_{{inputs.parameters.WELLBORE_UUID}}_KHLOG.json"
+                                            },
+                                            {
+                                                "name": "path",
+                                                "value": "log_value_range_qc.anomalies_identified"
+                                            },
+                                            {
+                                                "name": "filtered-json-file-path",
+                                                "value": "/mnt/flowify/{{workflow.name}}/results/mini/log-curves/Filtered_QCed-log_curve-wellboreUUID_{{inputs.parameters.WELLBORE_UUID}}_KHLOG.json"
+                                            }
+                                        ]
+                                    },
+                                    "dependencies": [
+                                        "check-if-khlog-log-file-exists"
+                                    ],
+                                    "when": "{{tasks.check-if-khlog-log-file-exists.outputs.result}} == true"
+                                },
+                                {
+                                    "name": "check-if-swt-log-file-exists",
+                                    "template": "check-if-file-exists",
+                                    "arguments": {
+                                        "parameters": [
+                                            {
+                                                "name": "qced-well-log-file-name",
+                                                "value": "/mnt/flowify/{{workflow.name}}/results/mini/log-curves/QCed-log_curve-wellboreUUID_{{inputs.parameters.WELLBORE_UUID}}_SWT.json"
+                                            }
+                                        ]
+                                    },
+                                    "dependencies": [
+                                        "well-log-qc-fork"
+                                    ]
+                                },
+                                {
+                                    "name": "check-if-swt-log-anomalies-found",
+                                    "template": "filter-well-log-json",
+                                    "arguments": {
+                                        "parameters": [
+                                            {
+                                                "name": "json-input-file",
+                                                "value": "QCed-log_curve-wellboreUUID_{{inputs.parameters.WELLBORE_UUID}}_SWT.json"
+                                            },
+                                            {
+                                                "name": "path",
+                                                "value": "log_value_range_qc.anomalies_identified"
+                                            },
+                                            {
+                                                "name": "filtered-json-file-path",
+                                                "value": "/mnt/flowify/{{workflow.name}}/results/mini/log-curves/Filtered_QCed-log_curve-wellboreUUID_{{inputs.parameters.WELLBORE_UUID}}_SWT.json"
+                                            }
+                                        ]
+                                    },
+                                    "dependencies": [
+                                        "check-if-swt-log-file-exists"
+                                    ],
+                                    "when": "{{tasks.check-if-swt-log-file-exists.outputs.result}} == true"
+                                },
+                                {
+                                    "name": "check-if-grn-log-file-exists",
+                                    "template": "check-if-file-exists",
+                                    "arguments": {
+                                        "parameters": [
+                                            {
+                                                "name": "qced-well-log-file-name",
+                                                "value": "/mnt/flowify/{{workflow.name}}/results/mini/log-curves/QCed-log_curve-wellboreUUID_{{inputs.parameters.WELLBORE_UUID}}_GRN.json"
+                                            }
+                                        ]
+                                    },
+                                    "dependencies": [
+                                        "well-log-qc-fork"
+                                    ]
+                                },
+                                {
+                                    "name": "check-if-grn-log-anomalies-found",
+                                    "template": "filter-well-log-json",
+                                    "arguments": {
+                                        "parameters": [
+                                            {
+                                                "name": "json-input-file",
+                                                "value": "QCed-log_curve-wellboreUUID_{{inputs.parameters.WELLBORE_UUID}}_GRN.json"
+                                            },
+                                            {
+                                                "name": "path",
+                                                "value": "log_value_range_qc.anomalies_identified"
+                                            },
+                                            {
+                                                "name": "filtered-json-file-path",
+                                                "value": "/mnt/flowify/{{workflow.name}}/results/mini/log-curves/Filtered_QCed-log_curve-wellboreUUID_{{inputs.parameters.WELLBORE_UUID}}_GRN.json"
+                                            }
+                                        ]
+                                    },
+                                    "dependencies": [
+                                        "check-if-grn-log-file-exists"
+                                    ],
+                                    "when": "{{tasks.check-if-grn-log-file-exists.outputs.result}} == true"
+                                },
+                                {
+                                    "name": "slack-notification",
+                                    "template": "slack-notification",
+                                    "arguments": {
+                                        "parameters": [
+                                            {
+                                                "name": "wellbore_guid",
+                                                "value": "{{tasks.extract-wellbore-guid.outputs.result}}"
+                                            },
+                                            {
+                                                "name": "WELLBORE_UUID",
+                                                "value": "{{inputs.parameters.WELLBORE_UUID}}"
+                                            },
+                                            {
+                                                "name": "phit_log_qc_anomaly",
+                                                "value": "{{tasks.check-if-phit-log-anomalies-found.outputs.result}}"
+                                            },
+                                            {
+                                                "name": "khlog_log_qc_anomaly",
+                                                "value": "{{tasks.check-if-khlog-log-anomalies-found.outputs.result}}"
+                                            },
+                                            {
+                                                "name": "swt_log_qc_anomaly",
+                                                "value": "{{tasks.check-if-swt-log-anomalies-found.outputs.result}}"
+                                            },
+                                            {
+                                                "name": "grn_log_qc_anomaly",
+                                                "value": "{{tasks.check-if-grn-log-anomalies-found.outputs.result}}"
+                                            }
+                                        ]
+                                    },
+                                    "dependencies": [
+                                        "copy-qc-report-to-blob",
+                                        "check-if-phit-log-anomalies-found",
+                                        "check-if-khlog-log-anomalies-found",
+                                        "check-if-swt-log-anomalies-found",
+                                        "check-if-grn-log-anomalies-found"
+                                    ]
+                                }
+                            ]
+                        }
+                    }
+                ],
+                "entrypoint": "create-log-qc-report-and-notify",
+                "arguments": {
+                    "parameters": [
+                        {
+                            "name": "WELLBORE_UUID",
+                            "value": "ad215042-112e-2b7e-e053-c818a488c79a"
+                        },
+                        {
+                            "name": "OUTPUT_FOLDER",
+                            "value": "/tmp/flowify/results/mini"
+                        },
+                        {
+                            "name": "LOG_CURVE_FOLDER",
+                            "value": "log-curves"
+                        },
+                        {
+                            "name": "BLOB-CONTAINER",
+                            "value": "well-log-qc-results"
+                        }
+                    ]
+                },
+                "serviceAccountName": "workflow-runner",
+                "volumes": [
+                    {
+                        "name": "flowify-fileshare",
+                        "azureFile": {
+                            "secretName": "flowify-fileshare-secret",
+                            "shareName": "flowify-argo-fs"
+                        }
+                    }
+                ]
+            },
+            "status": {
+                "phase": "Succeeded",
+                "startedAt": "2021-09-15T13:26:40Z",
+                "finishedAt": "2021-09-15T13:27:30Z",
+                "progress": "17/17",
+                "nodes": {
+                    "flowify-well-log-qc-and-store-bprzh": {
+                        "id": "flowify-well-log-qc-and-store-bprzh",
+                        "name": "flowify-well-log-qc-and-store-bprzh",
+                        "displayName": "flowify-well-log-qc-and-store-bprzh",
+                        "type": "DAG",
+                        "templateName": "create-log-qc-report-and-notify",
+                        "templateScope": "local/flowify-well-log-qc-and-store-bprzh",
+                        "phase": "Succeeded",
+                        "startedAt": "2021-09-15T13:26:40Z",
+                        "finishedAt": "2021-09-15T13:27:30Z",
+                        "progress": "17/17",
+                        "resourcesDuration": {
+                            "cpu": 58,
+                            "memory": 63
+                        },
+                        "inputs": {
+                            "parameters": [
+                                {
+                                    "name": "LOG_CURVE_FOLDER",
+                                    "value": "log-curves"
+                                },
+                                {
+                                    "name": "OUTPUT_FOLDER",
+                                    "value": "/tmp/flowify/results/mini"
+                                },
+                                {
+                                    "name": "WELLBORE_UUID",
+                                    "value": "ad215042-112e-2b7e-e053-c818a488c79a"
+                                },
+                                {
+                                    "name": "BLOB-CONTAINER",
+                                    "value": "well-log-qc-results"
+                                }
+                            ]
+                        },
+                        "children": [
+                            "flowify-well-log-qc-and-store-bprzh-2672719072",
+                            "flowify-well-log-qc-and-store-bprzh-880120946"
+                        ],
+                        "outboundNodes": [
+                            "flowify-well-log-qc-and-store-bprzh-2375473945"
+                        ]
+                    },
+                    "flowify-well-log-qc-and-store-bprzh-149479797": {
+                        "id": "flowify-well-log-qc-and-store-bprzh-149479797",
+                        "name": "flowify-well-log-qc-and-store-bprzh.check-if-khlog-log-anomalies-found",
+                        "displayName": "check-if-khlog-log-anomalies-found",
+                        "type": "Skipped",
+                        "templateName": "filter-well-log-json",
+                        "templateScope": "local/flowify-well-log-qc-and-store-bprzh",
+                        "phase": "Skipped",
+                        "boundaryID": "flowify-well-log-qc-and-store-bprzh",
+                        "message": "when 'false == true' evaluated false",
+                        "startedAt": "2021-09-15T13:27:10Z",
+                        "finishedAt": "2021-09-15T13:27:10Z",
+                        "progress": "1/1",
+                        "resourcesDuration": {
+                            "cpu": 1,
+                            "memory": 1
+                        },
+                        "children": [
+                            "flowify-well-log-qc-and-store-bprzh-2375473945"
+                        ]
+                    },
+                    "flowify-well-log-qc-and-store-bprzh-1544996200": {
+                        "id": "flowify-well-log-qc-and-store-bprzh-1544996200",
+                        "name": "flowify-well-log-qc-and-store-bprzh.check-if-swt-log-anomalies-found",
+                        "displayName": "check-if-swt-log-anomalies-found",
+                        "type": "Pod",
+                        "templateName": "filter-well-log-json",
+                        "templateScope": "local/flowify-well-log-qc-and-store-bprzh",
+                        "phase": "Succeeded",
+                        "boundaryID": "flowify-well-log-qc-and-store-bprzh",
+                        "startedAt": "2021-09-15T13:27:10Z",
+                        "finishedAt": "2021-09-15T13:27:14Z",
+                        "progress": "1/1",
+                        "resourcesDuration": {
+                            "cpu": 3,
+                            "memory": 3
+                        },
+                        "inputs": {
+                            "parameters": [
+                                {
+                                    "name": "json-input-file",
+                                    "value": "QCed-log_curve-wellboreUUID_ad215042-112e-2b7e-e053-c818a488c79a_SWT.json"
+                                },
+                                {
+                                    "name": "path",
+                                    "value": "log_value_range_qc.anomalies_identified"
+                                },
+                                {
+                                    "name": "filtered-json-file-path",
+                                    "value": "/mnt/flowify/flowify-well-log-qc-and-store-bprzh/results/mini/log-curves/Filtered_QCed-log_curve-wellboreUUID_ad215042-112e-2b7e-e053-c818a488c79a_SWT.json"
+                                }
+                            ]
+                        },
+                        "outputs": {
+                            "result": "False",
+                            "exitCode": "0"
+                        },
+                        "children": [
+                            "flowify-well-log-qc-and-store-bprzh-2375473945"
+                        ]
+                    },
+                    "flowify-well-log-qc-and-store-bprzh-1693918939": {
+                        "id": "flowify-well-log-qc-and-store-bprzh-1693918939",
+                        "name": "flowify-well-log-qc-and-store-bprzh.well-log-qc-fork(3:allowed_maximum_log_value:0.45,allowed_minimum_log_value:0,correction_value:-999999,log_curve_name:PHIT)",
+                        "displayName": "well-log-qc-fork(3:allowed_maximum_log_value:0.45,allowed_minimum_log_value:0,correction_value:-999999,log_curve_name:PHIT)",
+                        "type": "Pod",
+                        "templateName": "qc-well-log-and-correct",
+                        "templateScope": "local/flowify-well-log-qc-and-store-bprzh",
+                        "phase": "Succeeded",
+                        "boundaryID": "flowify-well-log-qc-and-store-bprzh",
+                        "startedAt": "2021-09-15T13:26:50Z",
+                        "finishedAt": "2021-09-15T13:26:56Z",
+                        "progress": "1/1",
+                        "resourcesDuration": {
+                            "cpu": 3,
+                            "memory": 3
+                        },
+                        "inputs": {
+                            "parameters": [
+                                {
+                                    "name": "log_curve_name",
+                                    "value": "PHIT"
+                                },
+                                {
+                                    "name": "OUTPUT_FOLDER",
+                                    "value": "/tmp/flowify/results/mini"
+                                },
+                                {
+                                    "name": "LOG_CURVE_FOLDER",
+                                    "value": "log-curves"
+                                },
+                                {
+                                    "name": "allowed_maximum_log_value",
+                                    "value": "0.45"
+                                },
+                                {
+                                    "name": "allowed_minimum_log_value",
+                                    "value": "0"
+                                },
+                                {
+                                    "name": "correction_value",
+                                    "value": "-999999"
+                                },
+                                {
+                                    "name": "WELLBORE_UUID",
+                                    "value": "ad215042-112e-2b7e-e053-c818a488c79a"
+                                }
+                            ]
+                        },
+                        "outputs": {
+                            "exitCode": "0"
+                        },
+                        "children": [
+                            "flowify-well-log-qc-and-store-bprzh-641068149",
+                            "flowify-well-log-qc-and-store-bprzh-4261154514",
+                            "flowify-well-log-qc-and-store-bprzh-875226260",
+                            "flowify-well-log-qc-and-store-bprzh-2603038805",
+                            "flowify-well-log-qc-and-store-bprzh-1896943878"
+                        ]
+                    },
+                    "flowify-well-log-qc-and-store-bprzh-1896943878": {
+                        "id": "flowify-well-log-qc-and-store-bprzh-1896943878",
+                        "name": "flowify-well-log-qc-and-store-bprzh.check-if-grn-log-file-exists",
+                        "displayName": "check-if-grn-log-file-exists",
+                        "type": "Pod",
+                        "templateName": "check-if-file-exists",
+                        "templateScope": "local/flowify-well-log-qc-and-store-bprzh",
+                        "phase": "Succeeded",
+                        "boundaryID": "flowify-well-log-qc-and-store-bprzh",
+                        "startedAt": "2021-09-15T13:27:00Z",
+                        "finishedAt": "2021-09-15T13:27:09Z",
+                        "progress": "1/1",
+                        "resourcesDuration": {
+                            "cpu": 5,
+                            "memory": 6
+                        },
+                        "inputs": {
+                            "parameters": [
+                                {
+                                    "name": "qced-well-log-file-name",
+                                    "value": "/mnt/flowify/flowify-well-log-qc-and-store-bprzh/results/mini/log-curves/QCed-log_curve-wellboreUUID_ad215042-112e-2b7e-e053-c818a488c79a_GRN.json"
+                                }
+                            ]
+                        },
+                        "outputs": {
+                            "result": "true",
+                            "exitCode": "0"
+                        },
+                        "children": [
+                            "flowify-well-log-qc-and-store-bprzh-2507463059"
+                        ]
+                    },
+                    "flowify-well-log-qc-and-store-bprzh-2375473945": {
+                        "id": "flowify-well-log-qc-and-store-bprzh-2375473945",
+                        "name": "flowify-well-log-qc-and-store-bprzh.slack-notification",
+                        "displayName": "slack-notification",
+                        "type": "Pod",
+                        "templateName": "slack-notification",
+                        "templateScope": "local/flowify-well-log-qc-and-store-bprzh",
+                        "phase": "Succeeded",
+                        "boundaryID": "flowify-well-log-qc-and-store-bprzh",
+                        "startedAt": "2021-09-15T13:27:20Z",
+                        "finishedAt": "2021-09-15T13:27:23Z",
+                        "progress": "1/1",
+                        "resourcesDuration": {
+                            "cpu": 1,
+                            "memory": 1
+                        },
+                        "inputs": {
+                            "parameters": [
+                                {
+                                    "name": "wellbore_guid",
+                                    "value": "98458344"
+                                },
+                                {
+                                    "name": "WELLBORE_UUID",
+                                    "value": "ad215042-112e-2b7e-e053-c818a488c79a"
+                                },
+                                {
+                                    "name": "phit_log_qc_anomaly",
+                                    "value": "False"
+                                },
+                                {
+                                    "name": "khlog_log_qc_anomaly",
+                                    "value": "{{tasks.check-if-khlog-log-anomalies-found.outputs.result}}"
+                                },
+                                {
+                                    "name": "swt_log_qc_anomaly",
+                                    "value": "False"
+                                },
+                                {
+                                    "name": "grn_log_qc_anomaly",
+                                    "value": "True"
+                                }
+                            ]
+                        },
+                        "outputs": {
+                            "exitCode": "0"
+                        }
+                    },
+                    "flowify-well-log-qc-and-store-bprzh-2507463059": {
+                        "id": "flowify-well-log-qc-and-store-bprzh-2507463059",
+                        "name": "flowify-well-log-qc-and-store-bprzh.check-if-grn-log-anomalies-found",
+                        "displayName": "check-if-grn-log-anomalies-found",
+                        "type": "Pod",
+                        "templateName": "filter-well-log-json",
+                        "templateScope": "local/flowify-well-log-qc-and-store-bprzh",
+                        "phase": "Succeeded",
+                        "boundaryID": "flowify-well-log-qc-and-store-bprzh",
+                        "startedAt": "2021-09-15T13:27:10Z",
+                        "finishedAt": "2021-09-15T13:27:14Z",
+                        "progress": "1/1",
+                        "resourcesDuration": {
+                            "cpu": 2,
+                            "memory": 2
+                        },
+                        "inputs": {
+                            "parameters": [
+                                {
+                                    "name": "json-input-file",
+                                    "value": "QCed-log_curve-wellboreUUID_ad215042-112e-2b7e-e053-c818a488c79a_GRN.json"
+                                },
+                                {
+                                    "name": "path",
+                                    "value": "log_value_range_qc.anomalies_identified"
+                                },
+                                {
+                                    "name": "filtered-json-file-path",
+                                    "value": "/mnt/flowify/flowify-well-log-qc-and-store-bprzh/results/mini/log-curves/Filtered_QCed-log_curve-wellboreUUID_ad215042-112e-2b7e-e053-c818a488c79a_GRN.json"
+                                }
+                            ]
+                        },
+                        "outputs": {
+                            "result": "True",
+                            "exitCode": "0"
+                        },
+                        "children": [
+                            "flowify-well-log-qc-and-store-bprzh-2375473945"
+                        ]
+                    },
+                    "flowify-well-log-qc-and-store-bprzh-2603038805": {
+                        "id": "flowify-well-log-qc-and-store-bprzh-2603038805",
+                        "name": "flowify-well-log-qc-and-store-bprzh.check-if-swt-log-file-exists",
+                        "displayName": "check-if-swt-log-file-exists",
+                        "type": "Pod",
+                        "templateName": "check-if-file-exists",
+                        "templateScope": "local/flowify-well-log-qc-and-store-bprzh",
+                        "phase": "Succeeded",
+                        "boundaryID": "flowify-well-log-qc-and-store-bprzh",
+                        "startedAt": "2021-09-15T13:27:00Z",
+                        "finishedAt": "2021-09-15T13:27:09Z",
+                        "progress": "1/1",
+                        "resourcesDuration": {
+                            "cpu": 5,
+                            "memory": 6
+                        },
+                        "inputs": {
+                            "parameters": [
+                                {
+                                    "name": "qced-well-log-file-name",
+                                    "value": "/mnt/flowify/flowify-well-log-qc-and-store-bprzh/results/mini/log-curves/QCed-log_curve-wellboreUUID_ad215042-112e-2b7e-e053-c818a488c79a_SWT.json"
+                                }
+                            ]
+                        },
+                        "outputs": {
+                            "result": "true",
+                            "exitCode": "0"
+                        },
+                        "children": [
+                            "flowify-well-log-qc-and-store-bprzh-1544996200"
+                        ]
+                    },
+                    "flowify-well-log-qc-and-store-bprzh-2672719072": {
+                        "id": "flowify-well-log-qc-and-store-bprzh-2672719072",
+                        "name": "flowify-well-log-qc-and-store-bprzh.create-mount-folder",
+                        "displayName": "create-mount-folder",
+                        "type": "Pod",
+                        "templateName": "create-volume-mount-folder",
+                        "templateScope": "local/flowify-well-log-qc-and-store-bprzh",
+                        "phase": "Succeeded",
+                        "boundaryID": "flowify-well-log-qc-and-store-bprzh",
+                        "startedAt": "2021-09-15T13:26:40Z",
+                        "finishedAt": "2021-09-15T13:26:47Z",
+                        "progress": "1/1",
+                        "resourcesDuration": {
+                            "cpu": 5,
+                            "memory": 6
+                        },
+                        "outputs": {
+                            "exitCode": "0"
+                        },
+                        "children": [
+                            "flowify-well-log-qc-and-store-bprzh-981012332"
+                        ]
+                    },
+                    "flowify-well-log-qc-and-store-bprzh-3334215264": {
+                        "id": "flowify-well-log-qc-and-store-bprzh-3334215264",
+                        "name": "flowify-well-log-qc-and-store-bprzh.well-log-qc-fork(0:allowed_maximum_log_value:300,allowed_minimum_log_value:0,correction_value:-999999,log_curve_name:GRN)",
+                        "displayName": "well-log-qc-fork(0:allowed_maximum_log_value:300,allowed_minimum_log_value:0,correction_value:-999999,log_curve_name:GRN)",
+                        "type": "Pod",
+                        "templateName": "qc-well-log-and-correct",
+                        "templateScope": "local/flowify-well-log-qc-and-store-bprzh",
+                        "phase": "Succeeded",
+                        "boundaryID": "flowify-well-log-qc-and-store-bprzh",
+                        "startedAt": "2021-09-15T13:26:50Z",
+                        "finishedAt": "2021-09-15T13:26:56Z",
+                        "progress": "1/1",
+                        "resourcesDuration": {
+                            "cpu": 4,
+                            "memory": 4
+                        },
+                        "inputs": {
+                            "parameters": [
+                                {
+                                    "name": "log_curve_name",
+                                    "value": "GRN"
+                                },
+                                {
+                                    "name": "OUTPUT_FOLDER",
+                                    "value": "/tmp/flowify/results/mini"
+                                },
+                                {
+                                    "name": "LOG_CURVE_FOLDER",
+                                    "value": "log-curves"
+                                },
+                                {
+                                    "name": "allowed_maximum_log_value",
+                                    "value": "300"
+                                },
+                                {
+                                    "name": "allowed_minimum_log_value",
+                                    "value": "0"
+                                },
+                                {
+                                    "name": "correction_value",
+                                    "value": "-999999"
+                                },
+                                {
+                                    "name": "WELLBORE_UUID",
+                                    "value": "ad215042-112e-2b7e-e053-c818a488c79a"
+                                }
+                            ]
+                        },
+                        "outputs": {
+                            "exitCode": "0"
+                        },
+                        "children": [
+                            "flowify-well-log-qc-and-store-bprzh-641068149",
+                            "flowify-well-log-qc-and-store-bprzh-4261154514",
+                            "flowify-well-log-qc-and-store-bprzh-875226260",
+                            "flowify-well-log-qc-and-store-bprzh-2603038805",
+                            "flowify-well-log-qc-and-store-bprzh-1896943878"
+                        ]
+                    },
+                    "flowify-well-log-qc-and-store-bprzh-3745656881": {
+                        "id": "flowify-well-log-qc-and-store-bprzh-3745656881",
+                        "name": "flowify-well-log-qc-and-store-bprzh.well-log-qc-fork(1:allowed_maximum_log_value:1,allowed_minimum_log_value:0.001,correction_value:-999999,log_curve_name:SWT)",
+                        "displayName": "well-log-qc-fork(1:allowed_maximum_log_value:1,allowed_minimum_log_value:0.001,correction_value:-999999,log_curve_name:SWT)",
+                        "type": "Pod",
+                        "templateName": "qc-well-log-and-correct",
+                        "templateScope": "local/flowify-well-log-qc-and-store-bprzh",
+                        "phase": "Succeeded",
+                        "boundaryID": "flowify-well-log-qc-and-store-bprzh",
+                        "startedAt": "2021-09-15T13:26:50Z",
+                        "finishedAt": "2021-09-15T13:26:55Z",
+                        "progress": "1/1",
+                        "resourcesDuration": {
+                            "cpu": 4,
+                            "memory": 4
+                        },
+                        "inputs": {
+                            "parameters": [
+                                {
+                                    "name": "log_curve_name",
+                                    "value": "SWT"
+                                },
+                                {
+                                    "name": "OUTPUT_FOLDER",
+                                    "value": "/tmp/flowify/results/mini"
+                                },
+                                {
+                                    "name": "LOG_CURVE_FOLDER",
+                                    "value": "log-curves"
+                                },
+                                {
+                                    "name": "allowed_maximum_log_value",
+                                    "value": "1"
+                                },
+                                {
+                                    "name": "allowed_minimum_log_value",
+                                    "value": "0.001"
+                                },
+                                {
+                                    "name": "correction_value",
+                                    "value": "-999999"
+                                },
+                                {
+                                    "name": "WELLBORE_UUID",
+                                    "value": "ad215042-112e-2b7e-e053-c818a488c79a"
+                                }
+                            ]
+                        },
+                        "outputs": {
+                            "exitCode": "0"
+                        },
+                        "children": [
+                            "flowify-well-log-qc-and-store-bprzh-641068149",
+                            "flowify-well-log-qc-and-store-bprzh-4261154514",
+                            "flowify-well-log-qc-and-store-bprzh-875226260",
+                            "flowify-well-log-qc-and-store-bprzh-2603038805",
+                            "flowify-well-log-qc-and-store-bprzh-1896943878"
+                        ]
+                    },
+                    "flowify-well-log-qc-and-store-bprzh-3784649191": {
+                        "id": "flowify-well-log-qc-and-store-bprzh-3784649191",
+                        "name": "flowify-well-log-qc-and-store-bprzh.check-if-phit-log-anomalies-found",
+                        "displayName": "check-if-phit-log-anomalies-found",
+                        "type": "Pod",
+                        "templateName": "filter-well-log-json",
+                        "templateScope": "local/flowify-well-log-qc-and-store-bprzh",
+                        "phase": "Succeeded",
+                        "boundaryID": "flowify-well-log-qc-and-store-bprzh",
+                        "startedAt": "2021-09-15T13:27:10Z",
+                        "finishedAt": "2021-09-15T13:27:16Z",
+                        "progress": "1/1",
+                        "resourcesDuration": {
+                            "cpu": 3,
+                            "memory": 3
+                        },
+                        "inputs": {
+                            "parameters": [
+                                {
+                                    "name": "json-input-file",
+                                    "value": "QCed-log_curve-wellboreUUID_ad215042-112e-2b7e-e053-c818a488c79a_PHIT.json"
+                                },
+                                {
+                                    "name": "path",
+                                    "value": "log_value_range_qc.anomalies_identified"
+                                },
+                                {
+                                    "name": "filtered-json-file-path",
+                                    "value": "/mnt/flowify/flowify-well-log-qc-and-store-bprzh/results/mini/log-curves/Filtered_QCed-log_curve-wellboreUUID_ad215042-112e-2b7e-e053-c818a488c79a_PHIT.json"
+                                }
+                            ]
+                        },
+                        "outputs": {
+                            "result": "False",
+                            "exitCode": "0"
+                        },
+                        "children": [
+                            "flowify-well-log-qc-and-store-bprzh-2375473945"
+                        ]
+                    },
+                    "flowify-well-log-qc-and-store-bprzh-4182469509": {
+                        "id": "flowify-well-log-qc-and-store-bprzh-4182469509",
+                        "name": "flowify-well-log-qc-and-store-bprzh.well-log-qc-fork(2:allowed_maximum_log_value:50000,allowed_minimum_log_value:0.001,correction_value:-999999,log_curve_name:KHLOG)",
+                        "displayName": "well-log-qc-fork(2:allowed_maximum_log_value:50000,allowed_minimum_log_value:0.001,correction_value:-999999,log_curve_name:KHLOG)",
+                        "type": "Pod",
+                        "templateName": "qc-well-log-and-correct",
+                        "templateScope": "local/flowify-well-log-qc-and-store-bprzh",
+                        "phase": "Succeeded",
+                        "boundaryID": "flowify-well-log-qc-and-store-bprzh",
+                        "startedAt": "2021-09-15T13:26:50Z",
+                        "finishedAt": "2021-09-15T13:26:55Z",
+                        "progress": "1/1",
+                        "resourcesDuration": {
+                            "cpu": 3,
+                            "memory": 3
+                        },
+                        "inputs": {
+                            "parameters": [
+                                {
+                                    "name": "log_curve_name",
+                                    "value": "KHLOG"
+                                },
+                                {
+                                    "name": "OUTPUT_FOLDER",
+                                    "value": "/tmp/flowify/results/mini"
+                                },
+                                {
+                                    "name": "LOG_CURVE_FOLDER",
+                                    "value": "log-curves"
+                                },
+                                {
+                                    "name": "allowed_maximum_log_value",
+                                    "value": "50000"
+                                },
+                                {
+                                    "name": "allowed_minimum_log_value",
+                                    "value": "0.001"
+                                },
+                                {
+                                    "name": "correction_value",
+                                    "value": "-999999"
+                                },
+                                {
+                                    "name": "WELLBORE_UUID",
+                                    "value": "ad215042-112e-2b7e-e053-c818a488c79a"
+                                }
+                            ]
+                        },
+                        "outputs": {
+                            "exitCode": "0"
+                        },
+                        "children": [
+                            "flowify-well-log-qc-and-store-bprzh-641068149",
+                            "flowify-well-log-qc-and-store-bprzh-4261154514",
+                            "flowify-well-log-qc-and-store-bprzh-875226260",
+                            "flowify-well-log-qc-and-store-bprzh-2603038805",
+                            "flowify-well-log-qc-and-store-bprzh-1896943878"
+                        ]
+                    },
+                    "flowify-well-log-qc-and-store-bprzh-4261154514": {
+                        "id": "flowify-well-log-qc-and-store-bprzh-4261154514",
+                        "name": "flowify-well-log-qc-and-store-bprzh.check-if-phit-log-file-exists",
+                        "displayName": "check-if-phit-log-file-exists",
+                        "type": "Pod",
+                        "templateName": "check-if-file-exists",
+                        "templateScope": "local/flowify-well-log-qc-and-store-bprzh",
+                        "phase": "Succeeded",
+                        "boundaryID": "flowify-well-log-qc-and-store-bprzh",
+                        "startedAt": "2021-09-15T13:27:00Z",
+                        "finishedAt": "2021-09-15T13:27:08Z",
+                        "progress": "1/1",
+                        "resourcesDuration": {
+                            "cpu": 5,
+                            "memory": 6
+                        },
+                        "inputs": {
+                            "parameters": [
+                                {
+                                    "name": "qced-well-log-file-name",
+                                    "value": "/mnt/flowify/flowify-well-log-qc-and-store-bprzh/results/mini/log-curves/QCed-log_curve-wellboreUUID_ad215042-112e-2b7e-e053-c818a488c79a_PHIT.json"
+                                }
+                            ]
+                        },
+                        "outputs": {
+                            "result": "true",
+                            "exitCode": "0"
+                        },
+                        "children": [
+                            "flowify-well-log-qc-and-store-bprzh-3784649191"
+                        ]
+                    },
+                    "flowify-well-log-qc-and-store-bprzh-450718202": {
+                        "id": "flowify-well-log-qc-and-store-bprzh-450718202",
+                        "name": "flowify-well-log-qc-and-store-bprzh.copy-qc-report-to-blob",
+                        "displayName": "copy-qc-report-to-blob",
+                        "type": "Pod",
+                        "templateName": "copy-from-file-share-to-blob",
+                        "templateScope": "local/flowify-well-log-qc-and-store-bprzh",
+                        "phase": "Succeeded",
+                        "boundaryID": "flowify-well-log-qc-and-store-bprzh",
+                        "startedAt": "2021-09-15T13:27:10Z",
+                        "finishedAt": "2021-09-15T13:27:15Z",
+                        "progress": "1/1",
+                        "resourcesDuration": {
+                            "cpu": 2,
+                            "memory": 2
+                        },
+                        "inputs": {
+                            "parameters": [
+                                {
+                                    "name": "BLOB-CONTAINER",
+                                    "value": "well-log-qc-results"
+                                },
+                                {
+                                    "name": "blob-file-path",
+                                    "value": "flowify-well-log-qc-and-store-bprzh/qc_result/QC_report_wellbore_UUID_ad215042-112e-2b7e-e053-c818a488c79a.json"
+                                },
+                                {
+                                    "name": "file-share-path",
+                                    "value": "/mnt/flowify/flowify-well-log-qc-and-store-bprzh/results/mini/log-curves/QC_report_wellbore_UUID_ad215042-112e-2b7e-e053-c818a488c79a.json"
+                                }
+                            ]
+                        },
+                        "outputs": {
+                            "exitCode": "0"
+                        },
+                        "children": [
+                            "flowify-well-log-qc-and-store-bprzh-2375473945"
+                        ]
+                    },
+                    "flowify-well-log-qc-and-store-bprzh-641068149": {
+                        "id": "flowify-well-log-qc-and-store-bprzh-641068149",
+                        "name": "flowify-well-log-qc-and-store-bprzh.gather-qc-report-to-json",
+                        "displayName": "gather-qc-report-to-json",
+                        "type": "Pod",
+                        "templateName": "gather-qc-report-data",
+                        "templateScope": "local/flowify-well-log-qc-and-store-bprzh",
+                        "phase": "Succeeded",
+                        "boundaryID": "flowify-well-log-qc-and-store-bprzh",
+                        "startedAt": "2021-09-15T13:27:00Z",
+                        "finishedAt": "2021-09-15T13:27:05Z",
+                        "progress": "1/1",
+                        "resourcesDuration": {
+                            "cpu": 4,
+                            "memory": 4
+                        },
+                        "inputs": {
+                            "parameters": [
+                                {
+                                    "name": "wellbore_guid",
+                                    "value": "98458344"
+                                },
+                                {
+                                    "name": "WELLBORE_UUID",
+                                    "value": "ad215042-112e-2b7e-e053-c818a488c79a"
+                                },
+                                {
+                                    "name": "OUTPUT_FOLDER",
+                                    "value": "/tmp/flowify/results/mini"
+                                }
+                            ]
+                        },
+                        "outputs": {
+                            "exitCode": "0"
+                        },
+                        "children": [
+                            "flowify-well-log-qc-and-store-bprzh-450718202"
+                        ]
+                    },
+                    "flowify-well-log-qc-and-store-bprzh-856854423": {
+                        "id": "flowify-well-log-qc-and-store-bprzh-856854423",
+                        "name": "flowify-well-log-qc-and-store-bprzh.extract-wellbore-guid",
+                        "displayName": "extract-wellbore-guid",
+                        "type": "Pod",
+                        "templateName": "filter-json",
+                        "templateScope": "local/flowify-well-log-qc-and-store-bprzh",
+                        "phase": "Succeeded",
+                        "boundaryID": "flowify-well-log-qc-and-store-bprzh",
+                        "startedAt": "2021-09-15T13:26:50Z",
+                        "finishedAt": "2021-09-15T13:26:55Z",
+                        "progress": "1/1",
+                        "resourcesDuration": {
+                            "cpu": 2,
+                            "memory": 2
+                        },
+                        "inputs": {
+                            "parameters": [
+                                {
+                                    "name": "json-input-file",
+                                    "value": "wellbore_header.json"
+                                },
+                                {
+                                    "name": "path",
+                                    "value": "data.results[0].guid"
+                                },
+                                {
+                                    "name": "OUTPUT_FOLDER",
+                                    "value": "/tmp/flowify/results/mini"
+                                }
+                            ],
+                            "artifacts": [
+                                {
+                                    "name": "call-api-output",
+                                    "path": "/tmp/flowify/results/mini/wellbore_header.json",
+                                    "s3": {
+                                        "key": "artifacts/flowify-well-log-qc-and-store-bprzh/flowify-well-log-qc-and-store-bprzh-880120946/call-api-output.tgz"
+                                    }
+                                }
+                            ]
+                        },
+                        "outputs": {
+                            "parameters": [
+                                {
+                                    "name": "filtered-json",
+                                    "value": "98458344",
+                                    "valueFrom": {
+                                        "path": "/tmp/flowify/results/mini/filtered.json"
+                                    }
+                                }
+                            ],
+                            "result": "98458344",
+                            "exitCode": "0"
+                        },
+                        "children": [
+                            "flowify-well-log-qc-and-store-bprzh-641068149"
+                        ]
+                    },
+                    "flowify-well-log-qc-and-store-bprzh-875226260": {
+                        "id": "flowify-well-log-qc-and-store-bprzh-875226260",
+                        "name": "flowify-well-log-qc-and-store-bprzh.check-if-khlog-log-file-exists",
+                        "displayName": "check-if-khlog-log-file-exists",
+                        "type": "Pod",
+                        "templateName": "check-if-file-exists",
+                        "templateScope": "local/flowify-well-log-qc-and-store-bprzh",
+                        "phase": "Succeeded",
+                        "boundaryID": "flowify-well-log-qc-and-store-bprzh",
+                        "startedAt": "2021-09-15T13:27:00Z",
+                        "finishedAt": "2021-09-15T13:27:09Z",
+                        "progress": "1/1",
+                        "resourcesDuration": {
+                            "cpu": 5,
+                            "memory": 6
+                        },
+                        "inputs": {
+                            "parameters": [
+                                {
+                                    "name": "qced-well-log-file-name",
+                                    "value": "/mnt/flowify/flowify-well-log-qc-and-store-bprzh/results/mini/log-curves/QCed-log_curve-wellboreUUID_ad215042-112e-2b7e-e053-c818a488c79a_KHLOG.json"
+                                }
+                            ]
+                        },
+                        "outputs": {
+                            "result": "false",
+                            "exitCode": "0"
+                        },
+                        "children": [
+                            "flowify-well-log-qc-and-store-bprzh-149479797"
+                        ]
+                    },
+                    "flowify-well-log-qc-and-store-bprzh-880120946": {
+                        "id": "flowify-well-log-qc-and-store-bprzh-880120946",
+                        "name": "flowify-well-log-qc-and-store-bprzh.get-wellbore-header",
+                        "displayName": "get-wellbore-header",
+                        "type": "Pod",
+                        "templateName": "call-api",
+                        "templateScope": "local/flowify-well-log-qc-and-store-bprzh",
+                        "phase": "Succeeded",
+                        "boundaryID": "flowify-well-log-qc-and-store-bprzh",
+                        "startedAt": "2021-09-15T13:26:40Z",
+                        "finishedAt": "2021-09-15T13:26:43Z",
+                        "progress": "1/1",
+                        "resourcesDuration": {
+                            "cpu": 2,
+                            "memory": 2
+                        },
+                        "inputs": {
+                            "parameters": [
+                                {
+                                    "name": "api-name",
+                                    "value": "smda"
+                                },
+                                {
+                                    "name": "url",
+                                    "value": "https://api-test.gateway.equinor.com/smda/v1.1/smda_api/wellbores?uuid=ad215042-112e-2b7e-e053-c818a488c79a"
+                                },
+                                {
+                                    "name": "output-json-file-name",
+                                    "value": "wellbore_header.json"
+                                },
+                                {
+                                    "name": "OUTPUT_FOLDER",
+                                    "value": "/tmp/flowify/results/mini"
+                                }
+                            ]
+                        },
+                        "outputs": {
+                            "artifacts": [
+                                {
+                                    "name": "call-api-output",
+                                    "path": "/tmp/flowify/results/mini/wellbore_header.json",
+                                    "s3": {
+                                        "key": "artifacts/flowify-well-log-qc-and-store-bprzh/flowify-well-log-qc-and-store-bprzh-880120946/call-api-output.tgz"
+                                    }
+                                }
+                            ],
+                            "exitCode": "0"
+                        },
+                        "children": [
+                            "flowify-well-log-qc-and-store-bprzh-856854423"
+                        ]
+                    },
+                    "flowify-well-log-qc-and-store-bprzh-981012332": {
+                        "id": "flowify-well-log-qc-and-store-bprzh-981012332",
+                        "name": "flowify-well-log-qc-and-store-bprzh.well-log-qc-fork",
+                        "displayName": "well-log-qc-fork",
+                        "type": "TaskGroup",
+                        "templateName": "qc-well-log-and-correct",
+                        "templateScope": "local/flowify-well-log-qc-and-store-bprzh",
+                        "phase": "Succeeded",
+                        "boundaryID": "flowify-well-log-qc-and-store-bprzh",
+                        "startedAt": "2021-09-15T13:26:50Z",
+                        "finishedAt": "2021-09-15T13:27:00Z",
+                        "progress": "14/14",
+                        "resourcesDuration": {
+                            "cpu": 49,
+                            "memory": 53
+                        },
+                        "children": [
+                            "flowify-well-log-qc-and-store-bprzh-3334215264",
+                            "flowify-well-log-qc-and-store-bprzh-3745656881",
+                            "flowify-well-log-qc-and-store-bprzh-4182469509",
+                            "flowify-well-log-qc-and-store-bprzh-1693918939"
+                        ]
+                    }
+                },
+                "conditions": [
+                    {
+                        "type": "PodRunning",
+                        "status": "False"
+                    },
+                    {
+                        "type": "Completed",
+                        "status": "True"
+                    }
+                ],
+                "resourcesDuration": {
+                    "cpu": 58,
+                    "memory": 63
+                },
+                "artifactRepositoryRef": {
+                    "default": true
+                }
+            }
+        }
+    }
+}

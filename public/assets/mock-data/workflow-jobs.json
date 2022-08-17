@@ -1,0 +1,70 @@
+{
+    "metadata": {
+        "resourceVersion": "287761261"
+    },
+    "items": [
+        {
+            "metadata": {
+                "name": "flowify-well-log-qc-and-store-g59qs",
+                "namespace": "flowify",
+                "uid": "bf8702b2-e0e3-443f-a0e1-b2c7f2cd852c",
+                "creationTimestamp": "2021-08-31T10:00:12Z",
+                "labels": {
+                    "workflows.argoproj.io/completed": "true",
+                    "workflows.argoproj.io/phase": "Succeeded"
+                }
+            },
+            "spec": {
+                "arguments": {}
+            },
+            "status": {
+                "phase": "Succeeded",
+                "startedAt": "2021-08-31T10:00:12Z",
+                "finishedAt": "2021-08-31T10:04:20Z",
+                "progress": "17/17"
+            }
+        },
+        {
+            "metadata": {
+                "name": "flowify-well-log-quality-pipelinefbg6g",
+                "namespace": "flowify",
+                "uid": "1f1364d1-af35-4b99-86e0-c7ac235546d4",
+                "creationTimestamp": "2021-08-27T13:50:28Z",
+                "labels": {
+                    "workflows.argoproj.io/completed": "true",
+                    "workflows.argoproj.io/phase": "Failed"
+                }
+            },
+            "spec": {
+                "arguments": {}
+            },
+            "status": {
+                "phase": "Failed",
+                "startedAt": "2021-08-27T13:50:28Z",
+                "finishedAt": "2021-08-27T13:51:08Z",
+                "progress": "10/10"
+            }
+        },
+        {
+            "metadata": {
+                "name": "flowify-well-log-quality-pipelineh7bv6",
+                "namespace": "flowify",
+                "uid": "bd9937d4-3019-4172-855b-e64fc434d1f5",
+                "creationTimestamp": "2021-08-27T13:49:30Z",
+                "labels": {
+                    "workflows.argoproj.io/completed": "true",
+                    "workflows.argoproj.io/phase": "Succeeded"
+                }
+            },
+            "spec": {
+                "arguments": {}
+            },
+            "status": {
+                "phase": "Succeeded",
+                "startedAt": "2021-08-27T13:49:30Z",
+                "finishedAt": "2021-08-27T13:50:11Z",
+                "progress": "13/13"
+            }
+        }
+    ]
+}

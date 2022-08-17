@@ -1,0 +1,18 @@
+.mui-override-outlined-input {
+  fieldset {
+    border-color: transparent;
+  }
+}
+
+code {
+  font-size: 0.875rem;
+}
+
+.MuiMenuItem-root {
+  &.Mui-selected {
+    background-color: #c9e0e2 !important;
+  }
+  &:hover {
+    background-color: #deedee !important;
+  }
+}

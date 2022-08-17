@@ -1,0 +1,233 @@
+@import 'react-flow-renderer/dist/theme-default.css';
+
+.react-flow {
+  background: rgba(220, 220, 220, 0.7);
+}
+
+@mixin generalNodeStyles() {
+  padding: 1rem;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  text-align: center;
+  background-color: #fff;
+
+  &.selected {
+    //background-color: #ffe7d6;
+    outline: 3px solid #ffc1c1;
+    //box-shadow: 2px 2px 4px 1px rgba(0, 0, 0, 0.2);
+  }
+}
+
+.react-flow-button--handle {
+  background-color: #ff9200;
+  border: none;
+  position: relative;
+  left: -3px;
+  transform: none;
+  top: 0;
+  width: 0.675rem;
+  height: 0.675rem;
+  padding: 0;
+  border-radius: 50%;
+  svg {
+    width: 0.475rem;
+    height: 0.475rem;
+  }
+}
+
+.react-flow__node-addNode {
+  @include generalNodeStyles();
+  padding: 0;
+  button {
+    height: 100%;
+    width: 100%;
+    padding: 2rem 3rem;
+    border: 0;
+    background: none;
+    cursor: pointer;
+    border-radius: 0.5rem;
+    &:hover {
+      background: rgb(230, 250, 236);
+    }
+  }
+}
+
+.react-flow__node-taskNode,
+.react-flow__node-subNode {
+  @include generalNodeStyles();
+  padding: 0.75rem 0.75rem 0.5rem;
+  display: flex;
+  align-items: center;
+
+  .react-flow__handle {
+    width: 0.675rem;
+    height: 0.675rem;
+    background-color: #0084c4;
+    border: none;
+  }
+
+  & .handle--secret {
+    background-color: #ff9200;
+  }
+
+  .react-flow__handle-left {
+    left: -3px;
+    transform: none;
+    top: 0;
+  }
+  .react-flow__handle-right {
+    right: -3px;
+    transform: none;
+    top: 0;
+  }
+
+  &.selectable {
+    &:hover {
+      box-shadow: 2px 2px 4px 1px rgba(0, 0, 0, 0.2);
+    }
+  }
+}
+
+.react-flow__node-mapNode,
+.react-flow__node-conditionalNode {
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  text-align: center;
+  padding: 2rem;
+  display: flex;
+  align-items: center;
+  border: 2px dashed #0084c4;
+  background: rgba(255, 255, 255, 0.3);
+  &--internal {
+    background: white;
+    padding: 0.75rem 0.75rem 0.5rem;
+    border-radius: 0.5rem;
+  }
+
+  .react-flow__handle {
+    width: 0.675rem;
+    height: 0.675rem;
+    background-color: #0084c4;
+    border: none;
+  }
+
+  .react-flow__handle-left {
+    left: -1.4rem;
+    transform: none;
+    top: 0;
+  }
+  .react-flow__handle-right {
+    right: -1.4rem;
+    transform: none;
+    top: 0;
+  }
+
+  &.selectable {
+    &:hover {
+      box-shadow: 2px 2px 4px 1px rgba(0, 0, 0, 0.2);
+    }
+  }
+}
+
+.react-flow__node-startNode,
+.react-flow__node-endNode {
+  &__wrapper {
+    @include generalNodeStyles();
+    display: flex;
+    align-items: center;
+    padding: 0.5rem 2rem 0.5rem 1rem;
+    transform: skew(-20deg);
+    p {
+      display: flex;
+      align-items: center;
+      column-gap: 1rem;
+    }
+    p,
+    .react-flow__handle {
+      transform: skew(20deg) !important;
+    }
+    .react-flow__handle {
+      top: calc(50% - 5px);
+      width: 0.675rem;
+      height: 0.675rem;
+      background-color: #0084c4;
+      border: none;
+    }
+  }
+  &.selectable {
+    .react-flow__node-startNode__wrapper,
+    .react-flow__node-endNode__wrapper {
+      &:hover {
+        box-shadow: 2px 2px 4px 1px rgb(0 0 0 / 20%);
+      }
+    }
+  }
+
+  &.selected {
+    > div {
+      background-color: rgb(230, 250, 236);
+      box-shadow: 2px 2px 4px 1px rgb(0 0 0 / 20%);
+    }
+  }
+}
+
+.react-flow__node-execNode {
+  @include generalNodeStyles();
+  &.selectable {
+    &:hover {
+      box-shadow: 2px 2px 4px 1px rgba(0, 0, 0, 0.2);
+    }
+  }
+  .react-flow__handle {
+    width: 6px;
+    height: 6px;
+    background-color: rgb(185, 149, 80);
+    border-color: #007079;
+    visibility: hidden;
+  }
+}
+
+.react-flow__node-hiddenNode {
+  padding-left: 1rem;
+  width: 22px;
+  height: 1px;
+  overflow: visible;
+  visibility: hidden;
+
+  .react-flow__handle {
+    width: 6px;
+    height: 6px;
+    background-color: rgb(185, 149, 80);
+    border-color: #007079;
+    visibility: hidden;
+  }
+}
+
+.react-flow__handle {
+  width: 12px;
+  height: 12px;
+  background-color: #007079;
+  border-color: white;
+}
+
+.react-flow__handle-top {
+  top: -6px;
+}
+
+.react-flow__handle-bottom {
+  bottom: -6px;
+}
+
+.react-flow__handle-top,
+.react-flow__handle-bottom {
+  background-color: #fff;
+  border: 1px solid #555;
+}
+
+.react-flow__handle-right {
+  right: -6px;
+}
+
+.react-flow__handle-valid {
+  border: 1px solid #555;
+}
