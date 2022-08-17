@@ -155,6 +155,7 @@ export const Parameter: FC<ParameterProps> = (props: ParameterProps) => {
         ),
       },
     }));
+    setOpen(false);
   }
 
   function addArrayValue() {
