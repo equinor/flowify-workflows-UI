@@ -65,6 +65,7 @@ export default function Pages(props: IPages) {
         />
         <Route path="/components" element={<ComponentsPage />} />
         <Route path="/component/:component" element={<ComponentPage />} />
+        <Route path="/component/:component/:version" element={<ComponentPage />} />
         <Route path="/user" element={<UserInfoPage />} />
         <Route path="/admin" element={<AdminPage />} />
         <Route path="*" element={<Page404NotFound />} />

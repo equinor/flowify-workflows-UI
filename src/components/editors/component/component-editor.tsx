@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router';
 import { Button, Progress, Snackbar } from '@equinor/eds-core-react';
 import { Grid, Stack } from '@mui/material';
 import { Component, Conditional, Graph, Map } from '../../../models/v2';
@@ -16,6 +17,8 @@ interface IEditor {
 
 const Editor: React.FC<IEditor> = (props: IEditor) => {
   const { name, workspace } = props;
+  const { version } = useParams();
+  console.log(version);
   const [component, setComponent] = useState<Component | undefined>();
   const [subcomponents, setSubcomponents] = useState<Component[]>();
   const [nodes, setNodes, onNodesChange] = useNodesState<INode>([]);
@@ -69,7 +72,7 @@ const Editor: React.FC<IEditor> = (props: IEditor) => {
 
     if (name) {
       services.components
-        .get(name)
+        .get(name, version)
         .then((res) => {
           getInitialSubComponents(res)
             .then((subs) => {
@@ -85,7 +88,7 @@ const Editor: React.FC<IEditor> = (props: IEditor) => {
           setLoading(false);
         });
     }
-  }, [workspace, name]);
+  }, [workspace, name, version]);
 
   useEffect(() => {
     if (component) {
