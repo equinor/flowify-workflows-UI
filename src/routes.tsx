@@ -40,6 +40,14 @@ export default function Pages(props: IPages) {
           }
         />
         <Route
+          path="/workspace/:workspace/workflow/:workflow/:version"
+          element={
+            <WorkspaceAuth>
+              <WorkflowPage />
+            </WorkspaceAuth>
+          }
+        />
+        <Route
           path="/workspace/:workspace/workflows"
           element={
             <WorkspaceAuth>

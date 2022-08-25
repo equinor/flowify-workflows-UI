@@ -85,7 +85,9 @@ export const Sidebar: FC<SidebarProps> = (props: SidebarProps) => {
     <Stack spacing={2} sx={{ padding: '1rem', position: 'relative', width: '100%' }}>
       <EditorHeader type={type === 'component' ? 'Component' : 'Workflow'} workspace={workspace}></EditorHeader>
       <Stack spacing={1}>
-        {component?.version?.current && <Chip style={{ fontSize: '1rem' }}>v{component?.version?.current}</Chip>}
+        <Chip style={{ fontSize: '1rem' }}>
+          <span>v{type === 'workflow' ? workflow?.version?.current : component?.version?.current}</span>
+        </Chip>
         {editName ? (
           <TextField
             autoFocus

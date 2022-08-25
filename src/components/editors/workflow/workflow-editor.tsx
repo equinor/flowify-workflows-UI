@@ -10,6 +10,7 @@ import { isNotEmptyArray } from '../../../common';
 import { ObjectEditor } from '../../object-editor/object-editor';
 import { useEdgesState, useNodesState } from 'react-flow-renderer';
 import { IfConfig } from '../components/functional-components/if/if-config';
+import { useParams } from 'react-router';
 
 interface IWorkflowEditor {
   uid: string | null;
@@ -18,6 +19,7 @@ interface IWorkflowEditor {
 
 const WorkflowEditor: FC<IWorkflowEditor> = (props: IWorkflowEditor) => {
   const { workspace, uid } = props;
+  const { version } = useParams();
   const [workflow, setWorkflow] = useState<Workflow | undefined>();
   const [component, setComponent] = useState<Component | undefined>();
   const [nodes, setNodes, onNodesChange] = useNodesState<INode>([]);
@@ -74,7 +76,7 @@ const WorkflowEditor: FC<IWorkflowEditor> = (props: IWorkflowEditor) => {
 
     if (uid) {
       services.workflows
-        .get(uid)
+        .get(uid, version)
         .then((res) => {
           getInitialSubComponents(res)
             .then((subs) => {
@@ -98,7 +100,7 @@ const WorkflowEditor: FC<IWorkflowEditor> = (props: IWorkflowEditor) => {
     services.volumes.list(workspace!).then((res) => {
       setWorkspaceVolumes(res.items);
     });
-  }, [workspace, uid]);
+  }, [workspace, uid, version]);
 
   useEffect(() => {
     if (workflow) {
