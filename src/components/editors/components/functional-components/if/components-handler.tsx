@@ -16,7 +16,7 @@ interface ComponentsHandlerProps {
 export const ComponentsHandler: FC<ComponentsHandlerProps> = (props: ComponentsHandlerProps) => {
   const { ifComponent, subcomponents, setSubcomponents, setMarketplaceSnackbar, setIfComponent } = props;
   const [openMarketplace, setOpenMarketplace] = useState<'trueNode' | 'falseNode'>();
-  const [selectComponent, setSelectComponent] = useState<'trueNode' | 'falseNode'>();
+  const [selectComponent] = useState<'trueNode' | 'falseNode'>();
   const { nodeTrue, nodeFalse } = (ifComponent?.implementation as Conditional) || {};
   const trueNode = typeof nodeTrue === 'string' ? subcomponents?.find((comp) => comp.uid === nodeTrue) : nodeTrue;
   const falseNode = typeof nodeFalse === 'string' ? subcomponents?.find((comp) => comp.uid === nodeFalse) : nodeFalse;
