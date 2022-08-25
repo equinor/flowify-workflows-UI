@@ -61,7 +61,7 @@ export const MapConfig: FC<MapConfigProps> = (props: MapConfigProps) => {
         const updated = mappings.filter(
           (edge) =>
             (edge?.source?.node === mapConfigComponent ? outputs?.includes(edge?.source?.port) : true) &&
-            (edge?.target?.node === mapConfigComponent ? inputs?.includes(edge?.source?.port) : true),
+            (edge?.target?.node === mapConfigComponent ? inputs?.includes(edge?.target?.port) : true),
         );
         return updated;
       }

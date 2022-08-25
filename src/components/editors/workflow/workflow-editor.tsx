@@ -211,6 +211,8 @@ const WorkflowEditor: FC<IWorkflowEditor> = (props: IWorkflowEditor) => {
         ifConfigComponent={configComponent?.id}
         open={configComponent !== undefined && configComponent?.type === 'if'}
         setOpen={() => setConfigComponent(undefined)}
+        setSubcomponents={setSubcomponents}
+        setMarketplaceSnackbar={setMarketplaceSnackbar}
       />
       <SecretsVolumesConfig
         parameterConfig={parameterConfig}
