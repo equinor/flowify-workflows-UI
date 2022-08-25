@@ -93,7 +93,7 @@
   border-radius: 0.5rem;
   font-size: 1rem;
   text-align: center;
-  padding: 2rem;
+  padding: 0 0.5rem;
   display: flex;
   align-items: center;
   border: 2px dashed #0084c4;
@@ -112,12 +112,12 @@
   }
 
   .react-flow__handle-left {
-    left: -1.4rem;
+    left: -0rem;
     transform: none;
     top: 0;
   }
   .react-flow__handle-right {
-    right: -1.4rem;
+    right: -0rem;
     transform: none;
     top: 0;
   }

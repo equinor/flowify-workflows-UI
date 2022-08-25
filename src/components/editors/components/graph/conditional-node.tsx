@@ -25,23 +25,21 @@ export const ConditionalNode = memo((props: IConditionalNode) => {
     <>
       <Handles parameters={data?.component?.inputs} type="Input" />
       <div>
-        <Button variant="ghost" onClick={() => data.setConfigComponent({ id: props.id, type: 'if' })}>
-          Configure if
-        </Button>
         <Stack className="react-flow__node-mapNode--internal" spacing={2} direction="row" alignItems="center">
           <NodePreviewModal node={props} open={open} onClose={setOpen} />
           <Stack alignItems="center" spacing={3} direction="row">
             <Stack spacing={1} alignItems="space-between">
-              <Icon name="formula" size={16} color="#999" />
+              <Icon name="formula" size={16} color="#0084c4" />
               <div>
                 <Typography variant="body_short_bold">{falseNode ? 'If/else' : 'If'}</Typography>
-                <Typography variant="body_short" style={{ maxWidth: '280px' }}>
-                  {data?.component?.description}
-                </Typography>
               </div>
               <Stack direction="row" alignItems="center">
                 <Chip>{data?.component?.implementation?.type}</Chip>
               </Stack>
+              <Button variant="ghost" onClick={() => data.setConfigComponent({ id: props.id, type: 'if' })}>
+                <Icon name="tune" />
+                Configure conditional
+              </Button>
             </Stack>
             <DragIcon className="custom-drag-handle" sx={{ color: '#666', fontSize: '2rem' }} />
           </Stack>
