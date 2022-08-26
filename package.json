@@ -30,7 +30,7 @@
     "react": "^17.0.2",
     "react-beautiful-dnd": "^13.1.0",
     "react-dom": "^17.0.2",
-    "react-flow-renderer": "10.3.7",
+    "react-flow-renderer": "10.3.14",
     "react-json-view": "^1.21.3",
     "react-router": "^6.3.0",
     "react-router-config": "^5.1.1",
