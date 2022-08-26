@@ -2,11 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 import { Button, Progress, Snackbar } from '@equinor/eds-core-react';
 import { Grid, Stack } from '@mui/material';
-import { Component, Conditional, Graph, Map } from '../../../models/v2';
+import { Component, Graph } from '../../../models/v2';
 import { services } from '../../../services/v2';
 import { EditorCentralBar, GraphEditor, Sidebar, Brick, MapConfig, SecretsVolumesConfig } from '../components';
-import { createGraphElements, INode, nanoid } from '../helpers';
-import { isNotEmptyArray } from '../../../common';
+import { createGraphElements, fetchInitialSubComponents, INode, nanoid } from '../helpers';
 import { ObjectEditor } from '../../object-editor/object-editor';
 import { useEdgesState, useNodesState } from 'react-flow-renderer';
 
@@ -34,47 +33,11 @@ const Editor: React.FC<IEditor> = (props: IEditor) => {
 
   useEffect(() => {
     console.log('component on mount');
-    async function getInitialSubComponents(component: Component) {
-      if (component) {
-        const subs: Component[] = [];
-        const { nodes } = component.implementation as Graph;
-        if (isNotEmptyArray(nodes)) {
-          await Promise.all(
-            nodes.map(async (node) => {
-              if (typeof node.node === 'string') {
-                const res = await services.components.get(node.node);
-                subs.push(res);
-              }
-              if ((node?.node as Component)?.implementation?.type === 'map') {
-                const mapNode = ((node?.node as Component)?.implementation as Map)?.node;
-                if (typeof mapNode === 'string') {
-                  const res = await services.components.get(mapNode);
-                  subs.push(res);
-                }
-              }
-              if ((node?.node as Component)?.implementation?.type === 'conditional') {
-                const { nodeTrue, nodeFalse } = (node?.node as Component)?.implementation as Conditional;
-                if (typeof nodeTrue === 'string') {
-                  const res = await services.components.get(nodeTrue);
-                  subs.push(res);
-                }
-                if (typeof nodeFalse === 'string') {
-                  const res = await services.components.get(nodeFalse);
-                  subs.push(res);
-                }
-              }
-            }),
-          );
-        }
-        return subs;
-      }
-    }
-
     if (name) {
       services.components
         .get(name, version)
         .then((res) => {
-          getInitialSubComponents(res)
+          fetchInitialSubComponents(res)
             .then((subs) => {
               setSubcomponents(subs);
             })
