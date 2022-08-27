@@ -2,23 +2,60 @@ import React, { FC, useState } from 'react';
 import { Stack } from '@mui/material';
 import { Tooltip, Button, Menu, Icon, Typography } from '@equinor/eds-core-react';
 import { EditorSettings, MarketplaceModal, FunctionalComponents } from '.';
-import { Component } from '../../../models/v2';
+import { Component, Graph } from '../../../models/v2';
+import { nanoid } from '../helpers';
+import { services } from '../../../services/v2';
+import { FeedbackTypes } from './feedbacks/feedbacks';
 
 interface EditorCentralBarProps {
   setUseManifest?: any;
-  onAddComponent?: any;
   type?: string;
   component?: Component;
   subComponents?: Component[];
   setComponent?: any;
+  setSubcomponents?: React.Dispatch<React.SetStateAction<Component[] | undefined>>;
+  setFeedback?: (message: FeedbackTypes) => void;
 }
 
 export const EditorCentralBar: FC<EditorCentralBarProps> = (props: EditorCentralBarProps) => {
-  const { type } = props;
+  const { type, setSubcomponents, setFeedback, setComponent } = props;
   const [menuOpen, setMenuOpen] = useState<boolean>(false);
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement>();
   const [marketplaceOpen, setMarketplaceOpen] = useState<boolean>(false);
   const [functionalComponentsOpen, setFunctionalComponentsOpen] = useState<boolean>(false);
+
+  async function onAddComponent(component: Component, setButtonState: any) {
+    const { uid } = component;
+    if (uid && setSubcomponents && setFeedback) {
+      services.components
+        .get(uid)
+        .then((res) => setSubcomponents((prev) => [...(prev || []), res]))
+        .then(() => {
+          setButtonState('success');
+          setFeedback('MARKETPLACE_SUCCESS');
+          setTimeout(() => {
+            setButtonState('default');
+          }, 3000);
+        })
+        .then(() => {
+          setComponent((prev: Component) => ({
+            ...prev,
+            implementation: {
+              ...prev.implementation,
+              nodes: [...((prev.implementation as Graph)?.nodes || []), { id: `n${nanoid(8)}`, node: uid }],
+            },
+          }));
+        })
+        .catch((error) => {
+          console.error(error);
+          setFeedback('MARKETPLACE_ERROR');
+          setButtonState('error');
+          setTimeout(() => {
+            setButtonState('default');
+          }, 3000);
+        });
+    }
+  }
 
   return (
     <Stack
@@ -52,7 +89,7 @@ export const EditorCentralBar: FC<EditorCentralBarProps> = (props: EditorCentral
             <MarketplaceModal
               open={marketplaceOpen}
               onClose={() => setMarketplaceOpen(false)}
-              onAddComponent={props.onAddComponent}
+              onAddComponent={onAddComponent}
             />
             <FunctionalComponents
               open={functionalComponentsOpen}

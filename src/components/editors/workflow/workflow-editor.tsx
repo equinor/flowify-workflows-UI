@@ -1,10 +1,19 @@
 import React, { useEffect, useState, FC } from 'react';
-import { Button, Progress, Snackbar } from '@equinor/eds-core-react';
+import { Progress } from '@equinor/eds-core-react';
 import { Grid, Stack } from '@mui/material';
 import { Workflow } from '../../../models/v2/workflow';
-import { EditorCentralBar, Sidebar, Brick, GraphEditor, MapConfig, SecretsVolumesConfig } from '../components';
-import { createGraphElements, fetchInitialSubComponents, INode, nanoid } from '../helpers';
-import { Component, Graph, IVolume } from '../../../models/v2';
+import {
+  EditorCentralBar,
+  Sidebar,
+  Brick,
+  GraphEditor,
+  MapConfig,
+  SecretsVolumesConfig,
+  FeedbackTypes,
+  Feedbacks,
+} from '../components';
+import { createGraphElements, fetchInitialSubComponents, INode } from '../helpers';
+import { Component, IVolume } from '../../../models/v2';
 import { services } from '../../../services/v2';
 import { ObjectEditor } from '../../object-editor/object-editor';
 import { useEdgesState, useNodesState } from 'react-flow-renderer';
@@ -26,9 +35,7 @@ const WorkflowEditor: FC<IWorkflowEditor> = (props: IWorkflowEditor) => {
   const [subcomponents, setSubcomponents] = useState<Component[]>();
   const [dirty, setDirty] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
-  const [successSnackbar, setSuccessSnackbar] = useState<boolean>(false);
-  const [errorSnackbar, setErrorSnackbar] = useState<boolean>(false);
-  const [marketplaceSnackbar, setMarketplaceSnackbar] = useState<boolean>(false);
+  const [feedback, setFeedback] = useState<FeedbackTypes>();
   const [useManifest, setUseManifest] = useState<boolean>(false);
   const [configComponent, setConfigComponent] = useState<{ id: string; type: 'map' | 'if' }>();
   const [parameterConfig, setParameterConfig] = useState<{ type: 'secret' | 'volume'; id: string }>();
@@ -91,77 +98,27 @@ const WorkflowEditor: FC<IWorkflowEditor> = (props: IWorkflowEditor) => {
     }
   }, [component]);
 
-  function onAddComponent(component: Component, setButtonState: any) {
-    setDirty(true);
-    const { uid } = component;
-    if (uid) {
-      services.components
-        .get(uid)
-        .then((res) => setSubcomponents((prev) => [...(prev || []), res]))
-        .then(() => {
-          setButtonState('success');
-          setMarketplaceSnackbar(true);
-          setTimeout(() => {
-            setButtonState('default');
-          }, 3000);
-        })
-        .then(() => {
-          //@ts-expect-error
-          setComponent((prev: Component) => ({
-            ...prev,
-            implementation: {
-              ...prev.implementation,
-              nodes: [...((prev.implementation as Graph).nodes || []), { id: `n${nanoid(8)}`, node: uid }],
-            },
-          }));
-        });
-    }
-  }
-
   function onWorkflowSave() {
     if (workflow && !loading) {
       setLoading(true);
       services.workflows
         .update(workflow, workflow.uid!)
         .then(() => {
-          setSuccessSnackbar(true);
+          setFeedback('SAVE_SUCCESS');
           setLoading(false);
           setDirty(false);
         })
         .catch((error) => {
           console.error(error);
           setLoading(false);
-          setErrorSnackbar(true);
+          setFeedback('UPDATE_ERROR');
         });
     }
   }
 
   return (
     <>
-      <Snackbar open={successSnackbar} onClose={() => setSuccessSnackbar(false)}>
-        Workflow was successfully updated
-        <Snackbar.Action>
-          <Button onClick={() => setSuccessSnackbar(false)} variant="ghost">
-            Close
-          </Button>
-        </Snackbar.Action>
-      </Snackbar>
-      <Snackbar open={errorSnackbar} onClose={() => setErrorSnackbar(false)}>
-        Save failed. Could not update workflow.
-        <Snackbar.Action>
-          <Button onClick={() => setErrorSnackbar(false)} variant="ghost" color="danger">
-            Close
-          </Button>
-        </Snackbar.Action>
-      </Snackbar>
-      <Snackbar open={marketplaceSnackbar} onClose={() => setMarketplaceSnackbar(false)} placement="top">
-        Component was successfully added
-        <Snackbar.Action>
-          <Button onClick={() => setMarketplaceSnackbar(false)} variant="ghost">
-            Close
-          </Button>
-        </Snackbar.Action>
-      </Snackbar>
+      <Feedbacks feedback={feedback} setFeedback={setFeedback} type="workflow" />
       <MapConfig
         component={component}
         subcomponents={subcomponents}
@@ -212,10 +169,11 @@ const WorkflowEditor: FC<IWorkflowEditor> = (props: IWorkflowEditor) => {
               <EditorCentralBar
                 setUseManifest={setUseManifest}
                 type={workflow?.component?.implementation?.type}
-                onAddComponent={onAddComponent}
                 component={workflow?.component}
                 subComponents={subcomponents}
                 setComponent={setComponent}
+                setFeedback={setFeedback}
+                setSubcomponents={setSubcomponents}
               />
               {useManifest ? (
                 <ObjectEditor

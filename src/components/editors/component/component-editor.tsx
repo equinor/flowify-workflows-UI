@@ -1,13 +1,22 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
-import { Button, Progress, Snackbar } from '@equinor/eds-core-react';
+import { Progress } from '@equinor/eds-core-react';
 import { Grid, Stack } from '@mui/material';
-import { Component, Graph } from '../../../models/v2';
-import { services } from '../../../services/v2';
-import { EditorCentralBar, GraphEditor, Sidebar, Brick, MapConfig, SecretsVolumesConfig } from '../components';
-import { createGraphElements, fetchInitialSubComponents, INode, nanoid } from '../helpers';
-import { ObjectEditor } from '../../object-editor/object-editor';
 import { useEdgesState, useNodesState } from 'react-flow-renderer';
+import { Component } from '../../../models/v2';
+import { services } from '../../../services/v2';
+import {
+  EditorCentralBar,
+  GraphEditor,
+  Sidebar,
+  Brick,
+  MapConfig,
+  SecretsVolumesConfig,
+  Feedbacks,
+  FeedbackTypes,
+} from '../components';
+import { createGraphElements, fetchInitialSubComponents, INode } from '../helpers';
+import { ObjectEditor } from '../../object-editor/object-editor';
 
 interface IEditor {
   name: string | null;
@@ -17,16 +26,13 @@ interface IEditor {
 const Editor: React.FC<IEditor> = (props: IEditor) => {
   const { name, workspace } = props;
   const { version } = useParams();
-  console.log(version);
   const [component, setComponent] = useState<Component | undefined>();
   const [subcomponents, setSubcomponents] = useState<Component[]>();
   const [nodes, setNodes, onNodesChange] = useNodesState<INode>([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
   const [dirty, setDirty] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
-  const [savedSnackbar, setSavedSnackbar] = useState<boolean>(false);
-  const [errorSnackbar, setErrorSnackbar] = useState<boolean>(false);
-  const [marketplaceSnackbar, setMarketplaceSnackbar] = useState<boolean>(false);
+  const [feedback, setFeedback] = useState<FeedbackTypes>();
   const [useManifest, setUseManifest] = useState<boolean>(false);
   const [configComponent, setConfigComponent] = useState<{ id: string; type: 'map' | 'if' }>();
   const [parameterConfig, setParameterConfig] = useState<{ type: 'secret' | 'volume'; id: string }>();
@@ -67,88 +73,31 @@ const Editor: React.FC<IEditor> = (props: IEditor) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [component]);
 
-  const editsOnChange = (comp: Component) => {
+  function editsOnChange(comp: Component) {
     setComponent(() => ({
       ...comp,
     }));
     setDirty(true);
-  };
+  }
 
-  const onSave = () => {
+  function onSave() {
     if (component) {
       services.components
         .update(component, component.uid!)
         .then((res) => {
           console.log(res);
-          setSavedSnackbar(true);
+          setFeedback('SAVE_SUCCESS');
         })
         .catch((error) => {
           console.error(error);
-          setErrorSnackbar(true);
-        });
-    }
-  };
-
-  async function onAddComponent(component: Component, setButtonState: any) {
-    setDirty(true);
-    const { uid } = component;
-    if (uid) {
-      services.components
-        .get(uid)
-        .then((res) => setSubcomponents((prev) => [...(prev || []), res]))
-        .then(() => {
-          setButtonState('success');
-          setMarketplaceSnackbar(true);
-          setTimeout(() => {
-            setButtonState('default');
-          }, 3000);
-        })
-        .then(() => {
-          //@ts-expect-error
-          setComponent((prev: Component) => ({
-            ...prev,
-            implementation: {
-              ...prev.implementation,
-              nodes: [...((prev.implementation as Graph)?.nodes || []), { id: `n${nanoid(8)}`, node: uid }],
-            },
-          }));
-        })
-        .catch((error) => {
-          console.error(error);
-          setButtonState('error');
-          setTimeout(() => {
-            setButtonState('default');
-          }, 3000);
+          setFeedback('UPDATE_ERROR');
         });
     }
   }
 
   return (
     <>
-      <Snackbar open={savedSnackbar} onClose={() => setSavedSnackbar(false)} placement="top">
-        Component was successfully updated
-        <Snackbar.Action>
-          <Button onClick={() => setSavedSnackbar(false)} variant="ghost">
-            Close
-          </Button>
-        </Snackbar.Action>
-      </Snackbar>
-      <Snackbar open={errorSnackbar} onClose={() => setErrorSnackbar(false)} placement="top">
-        Save failed. Could not update component.
-        <Snackbar.Action>
-          <Button onClick={() => setErrorSnackbar(false)} variant="ghost" color="danger">
-            Close
-          </Button>
-        </Snackbar.Action>
-      </Snackbar>
-      <Snackbar open={marketplaceSnackbar} onClose={() => setMarketplaceSnackbar(false)} placement="top">
-        Component was successfully added
-        <Snackbar.Action>
-          <Button onClick={() => setMarketplaceSnackbar(false)} variant="ghost">
-            Close
-          </Button>
-        </Snackbar.Action>
-      </Snackbar>
+      <Feedbacks feedback={feedback} setFeedback={setFeedback} type="component" />
       <MapConfig
         component={component}
         subcomponents={subcomponents}
@@ -186,10 +135,11 @@ const Editor: React.FC<IEditor> = (props: IEditor) => {
               <EditorCentralBar
                 setUseManifest={setUseManifest}
                 type={component?.implementation?.type}
-                onAddComponent={onAddComponent}
                 component={component}
                 subComponents={subcomponents}
                 setComponent={setComponent}
+                setSubcomponents={setSubcomponents}
+                setFeedback={setFeedback}
               />
               {useManifest ? (
                 <ObjectEditor value={component} onChange={(t: Component) => editsOnChange(t)} onSave={onSave} />

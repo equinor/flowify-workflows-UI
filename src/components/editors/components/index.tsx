@@ -13,3 +13,4 @@ export { Brick } from './brick/brick';
 export { Parameter } from './parameter';
 export { MapConfig } from './functional-components/map/map-config';
 export { SecretsVolumesConfig } from './parameters/secrets-volumes-config';
+export * from './feedbacks/feedbacks';
