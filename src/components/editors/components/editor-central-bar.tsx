@@ -10,9 +10,9 @@ import { FeedbackTypes } from './feedbacks/feedbacks';
 interface EditorCentralBarProps {
   setUseManifest?: any;
   type?: string;
-  component?: Component;
+  component?: Component | undefined;
   subComponents?: Component[];
-  setComponent?: any;
+  setComponent?: React.Dispatch<React.SetStateAction<Component | undefined>>;
   setSubcomponents?: React.Dispatch<React.SetStateAction<Component[] | undefined>>;
   setFeedback?: (message: FeedbackTypes) => void;
 }
@@ -26,7 +26,7 @@ export const EditorCentralBar: FC<EditorCentralBarProps> = (props: EditorCentral
 
   async function onAddComponent(component: Component, setButtonState: any) {
     const { uid } = component;
-    if (uid && setSubcomponents && setFeedback) {
+    if (uid && setSubcomponents && setFeedback && setComponent) {
       services.components
         .get(uid)
         .then((res) => setSubcomponents((prev) => [...(prev || []), res]))
@@ -38,11 +38,11 @@ export const EditorCentralBar: FC<EditorCentralBarProps> = (props: EditorCentral
           }, 3000);
         })
         .then(() => {
-          setComponent((prev: Component) => ({
+          setComponent((prev) => ({
             ...prev,
             implementation: {
-              ...prev.implementation,
-              nodes: [...((prev.implementation as Graph)?.nodes || []), { id: `n${nanoid(8)}`, node: uid }],
+              ...prev?.implementation,
+              nodes: [...((prev?.implementation as Graph)?.nodes || []), { id: `n${nanoid(8)}`, node: uid }],
             },
           }));
         })
@@ -96,7 +96,7 @@ export const EditorCentralBar: FC<EditorCentralBarProps> = (props: EditorCentral
               setOpen={setFunctionalComponentsOpen}
               component={props.component}
               subComponents={props.subComponents}
-              setComponent={props.setComponent}
+              setComponent={setComponent || (() => null)}
             />
             <Menu
               id="add-menu"

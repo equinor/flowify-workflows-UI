@@ -12,7 +12,7 @@ interface FunctionalComponentsProps {
   setOpen: any;
   component?: Component;
   subComponents?: Component[];
-  setComponent?: any;
+  setComponent: React.Dispatch<React.SetStateAction<Component | undefined>>;
 }
 
 type COMPONENT_IDS = 'map' | 'if';
@@ -57,11 +57,11 @@ export const FunctionalComponents: FC<FunctionalComponentsProps> = (props: Funct
   }
 
   function onAddIf() {
-    setComponent((prev: Component) => ({
+    setComponent((prev) => ({
       ...prev,
       implementation: {
-        ...prev.implementation,
-        nodes: generateIf((prev?.implementation as Graph)?.nodes),
+        ...prev?.implementation,
+        nodes: generateIf((prev?.implementation as Graph)?.nodes || []),
       },
     }));
     onClose();

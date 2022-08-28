@@ -11,7 +11,7 @@ import { DraggableList } from './draggable-list/draggable-list';
 interface ParameterProps {
   parameter: Data;
   index: number;
-  setComponent: any;
+  setComponent: React.Dispatch<React.SetStateAction<Component | undefined>>;
   type: 'input' | 'output';
   secrets?: string[];
   editableValue?: boolean;
@@ -55,7 +55,7 @@ export const Parameter: FC<ParameterProps> = (props: ParameterProps) => {
   const parameterType = type === 'input' ? 'inputs' : 'outputs';
   const parameterMappings = type === 'input' ? 'inputMappings' : 'outputMappings';
 
-  function getMediaType(value: string, mediatypes: string[]) {
+  function getMediaType(value: string | undefined, mediatypes: string[] | undefined) {
     if (value === 'parameter' || value === 'parameter_array') {
       return mediatypes;
     }
@@ -77,14 +77,14 @@ export const Parameter: FC<ParameterProps> = (props: ParameterProps) => {
     }
     list[index] = {
       ...parameter,
-      mediatype: getMediaType(parameter.type, parameter.mediatype),
+      mediatype: getMediaType(parameter?.type, parameter?.mediatype),
     };
     return list;
   }
 
-  function updateArgs(args: Arg[]) {
+  function updateArgs(args: Arg[] | undefined) {
     if (isNotEmptyArray(args) && type === 'input') {
-      const updated = args.map((arg) =>
+      const updated = args?.map((arg) =>
         (arg?.source as Port)?.port === props.parameter?.name
           ? { ...arg, source: { port: parameter.name }, target: { ...arg.target, type: parameter.type } }
           : arg,
@@ -107,7 +107,7 @@ export const Parameter: FC<ParameterProps> = (props: ParameterProps) => {
   }
 
   async function onClose() {
-    setComponent((prev: Component) =>
+    setComponent((prev) =>
       prev?.implementation?.type === 'brick'
         ? {
             ...prev,
@@ -126,29 +126,29 @@ export const Parameter: FC<ParameterProps> = (props: ParameterProps) => {
         : {
             ...prev,
             implementation: {
-              ...prev.implementation,
-              [parameterMappings]: (prev.implementation as Graph)[parameterMappings]?.map((mapping: Edge) =>
+              ...prev?.implementation,
+              [parameterMappings]: (prev?.implementation as Graph)[parameterMappings]?.map((mapping: Edge) =>
                 mapping.source.port !== props.parameter.name
                   ? mapping
                   : { ...mapping, source: { port: parameter.name } },
               ),
             },
-            [parameterType]: updateParameter(prev[parameterType]),
+            [parameterType]: updateParameter(prev?.[parameterType]),
           },
     );
     setOpen(false);
   }
 
   function removeInput() {
-    setComponent((prev: Component) => ({
+    setComponent((prev) => ({
       ...prev,
       [parameterType]: [
-        ...prev[parameterType]!.slice(0, index),
-        ...prev[parameterType]!.slice(index + 1, prev[parameterType]!.length),
+        ...(prev?.[parameterType]!.slice(0, index) || []),
+        ...(prev?.[parameterType]!.slice(index + 1, prev?.[parameterType]!.length) || []),
       ],
       implementation: {
-        ...prev.implementation,
-        [parameterMappings]: (prev.implementation as Graph)?.[parameterMappings]?.filter((mapping: Edge) =>
+        ...prev?.implementation,
+        [parameterMappings]: (prev?.implementation as Graph)?.[parameterMappings]?.filter((mapping: Edge) =>
           parameterMappings === 'inputMappings'
             ? mapping?.source?.port !== props.parameter?.name
             : mapping?.target?.port !== props?.parameter?.name,
@@ -398,7 +398,7 @@ export const Parameter: FC<ParameterProps> = (props: ParameterProps) => {
                 >
                   {MEDIATYPES.map((type: string) => (
                     <MenuItem key={type} value={type}>
-                      <Checkbox checked={parameter.mediatype?.indexOf(type) > -1} />
+                      <Checkbox checked={(parameter?.mediatype?.indexOf(type) || -2) > -1} />
                       <ListItemText primary={type} />
                     </MenuItem>
                   ))}

@@ -32,8 +32,8 @@ interface ResultProps {
   result: IResult;
   outputs?: Data[];
   index: number;
-  setComponent?: any;
-  setWorkflow?: any;
+  setComponent?: React.Dispatch<React.SetStateAction<Component | undefined>>;
+  setWorkflow?: React.Dispatch<React.SetStateAction<Workflow | undefined>>;
 }
 
 export const Result: FC<ResultProps> = (props: ResultProps) => {
@@ -56,23 +56,23 @@ export const Result: FC<ResultProps> = (props: ResultProps) => {
 
   function onChange() {
     if (typeof setComponent === 'function') {
-      setComponent((prev: Component) => ({
+      setComponent((prev) => ({
         ...prev,
         implementation: {
-          ...prev.implementation,
-          results: updateValues((prev.implementation as Brick).results!),
+          ...prev?.implementation,
+          results: updateValues((prev?.implementation as Brick)?.results || []),
         },
       }));
       return;
     }
     if (typeof setWorkflow === 'function') {
-      setWorkflow((prev: Workflow) => ({
+      setWorkflow((prev) => ({
         ...prev,
         component: {
-          ...prev.component,
+          ...prev?.component,
           implementation: {
-            ...prev.component.implementation,
-            results: updateValues((prev.component.implementation as Brick).results!),
+            ...prev?.component?.implementation,
+            results: updateValues((prev?.component?.implementation as Brick)?.results || []),
           },
         },
       }));

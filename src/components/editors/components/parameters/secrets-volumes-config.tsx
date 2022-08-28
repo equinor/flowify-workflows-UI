@@ -8,7 +8,7 @@ interface SecretsVolumesConfigProps {
   parameterConfig: { type: 'secret' | 'volume'; id: string } | undefined;
   setParameterConfig: any;
   component: Component | undefined;
-  setComponent: any;
+  setComponent: React.Dispatch<React.SetStateAction<Component | undefined>>;
   subcomponents: Component[] | undefined;
   type: 'workflow' | 'component';
   workspace?: string;
@@ -78,7 +78,10 @@ export const SecretsVolumesConfig: FC<SecretsVolumesConfigProps> = (props: Secre
     return mappings;
   }
 
-  function updateComponentMappings(mappings: Edge[], existingMapping: number, name: string, value: string) {
+  function updateComponentMappings(mappings: Edge[] | undefined, existingMapping: number, name: string, value: string) {
+    if (!mappings) {
+      return [];
+    }
     if (existingMapping !== -1 && existingMapping !== undefined) {
       mappings.splice(existingMapping, 1);
     }
@@ -94,14 +97,14 @@ export const SecretsVolumesConfig: FC<SecretsVolumesConfigProps> = (props: Secre
     if (type === 'workflow') {
       const inputId = `${id}-${name}`;
       const existingInputIndex = component?.inputs?.findIndex((input) => input.name === inputId);
-      setComponent((prev: Component) => ({
+      setComponent((prev) => ({
         ...prev,
         inputs: updateInput(prev?.inputs || [], existingInputIndex!, inputId, value),
         implementation: {
-          ...prev.implementation,
+          ...prev?.implementation,
           inputMappings: updateWorkflowMappings(
             (prev?.implementation as Graph)?.inputMappings || [],
-            existingMapping,
+            existingMapping!,
             name,
             inputId,
           ),
@@ -109,13 +112,13 @@ export const SecretsVolumesConfig: FC<SecretsVolumesConfigProps> = (props: Secre
       }));
       return;
     }
-    setComponent((prev: Component) => ({
+    setComponent((prev) => ({
       ...prev,
       implementation: {
-        ...prev.implementation,
+        ...prev?.implementation,
         inputMappings: updateComponentMappings(
           (prev?.implementation as Graph)?.inputMappings,
-          existingMapping,
+          existingMapping!,
           name,
           value,
         ),
@@ -152,28 +155,28 @@ export const SecretsVolumesConfig: FC<SecretsVolumesConfigProps> = (props: Secre
             secrets?.map((secret: Data) => (
               <Select
                 key={secret.name}
-                id={secret.name}
+                id={secret.name || ''}
                 label={secret.name}
                 options={secretOptions}
-                onChange={(event: any) => onSelectChange(event, secret.name)}
+                onChange={(event: any) => onSelectChange(event, secret.name || '')}
                 placeholder={
                   type === 'workflow' ? 'Select from workspace configured secrets' : 'Select from component inputs'
                 }
-                value={findSelectValue(secret.name)}
+                value={findSelectValue(secret.name || '')}
               />
             ))}
           {parameterConfig.type === 'volume' &&
             mounts?.map((volume: Data) => (
               <Select
                 key={volume.name}
-                id={volume.name}
+                id={volume.name || ''}
                 label={volume.name}
                 options={mountOptions}
-                onChange={(event: any) => onSelectChange(event, volume.name)}
+                onChange={(event: any) => onSelectChange(event, volume.name || '')}
                 placeholder={
                   type === 'workflow' ? 'Select from workspace configured volumes' : 'Select from component inputs'
                 }
-                value={findSelectValue(volume.name)}
+                value={findSelectValue(volume.name || '')}
               />
             ))}
         </Stack>

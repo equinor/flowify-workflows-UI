@@ -19,29 +19,34 @@ import { createGraphElements, fetchInitialSubComponents, INode } from '../helper
 import { ObjectEditor } from '../../object-editor/object-editor';
 
 interface IEditor {
-  name: string | null;
+  uid: string | null;
   workspace: string;
 }
 
+/**
+ * Component Editor: containing
+ * @param props
+ * @returns
+ */
 const Editor: React.FC<IEditor> = (props: IEditor) => {
-  const { name, workspace } = props;
+  const { uid, workspace } = props;
   const { version } = useParams();
-  const [component, setComponent] = useState<Component | undefined>();
-  const [subcomponents, setSubcomponents] = useState<Component[]>();
-  const [nodes, setNodes, onNodesChange] = useNodesState<INode>([]);
-  const [edges, setEdges, onEdgesChange] = useEdgesState([]);
-  const [dirty, setDirty] = useState<boolean>(false);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [feedback, setFeedback] = useState<FeedbackTypes>();
-  const [useManifest, setUseManifest] = useState<boolean>(false);
   const [configComponent, setConfigComponent] = useState<{ id: string; type: 'map' | 'if' }>();
+  const [component, setComponent] = useState<Component | undefined>();
+  const [dirty, setDirty] = useState<boolean>(false);
+  const [edges, setEdges, onEdgesChange] = useEdgesState([]);
+  const [feedback, setFeedback] = useState<FeedbackTypes>();
+  const [loading, setLoading] = useState<boolean>(true);
+  const [nodes, setNodes, onNodesChange] = useNodesState<INode>([]);
   const [parameterConfig, setParameterConfig] = useState<{ type: 'secret' | 'volume'; id: string }>();
+  const [subcomponents, setSubcomponents] = useState<Component[]>();
+  const [useManifest, setUseManifest] = useState<boolean>(false);
 
   useEffect(() => {
     console.log('component on mount');
-    if (name) {
+    if (uid) {
       services.components
-        .get(name, version)
+        .get(uid, version)
         .then((res) => {
           fetchInitialSubComponents(res)
             .then((subs) => {
@@ -57,7 +62,7 @@ const Editor: React.FC<IEditor> = (props: IEditor) => {
           setLoading(false);
         });
     }
-  }, [workspace, name, version]);
+  }, [workspace, uid, version]);
 
   useEffect(() => {
     if (component) {
@@ -100,28 +105,28 @@ const Editor: React.FC<IEditor> = (props: IEditor) => {
       <Feedbacks feedback={feedback} setFeedback={setFeedback} type="component" />
       <MapConfig
         component={component}
-        subcomponents={subcomponents}
-        setComponent={setComponent}
         mapConfigComponent={configComponent?.id}
         open={configComponent !== undefined && configComponent?.type === 'map'}
+        setComponent={setComponent}
         setOpen={() => setConfigComponent(undefined)}
+        subcomponents={subcomponents}
       />
       <SecretsVolumesConfig
-        parameterConfig={parameterConfig}
-        setParameterConfig={setParameterConfig}
         component={component}
+        parameterConfig={parameterConfig}
         setComponent={setComponent}
+        setParameterConfig={setParameterConfig}
         subcomponents={subcomponents}
         type="component"
       />
       <Grid container sx={{ flexGrow: '1', minHeight: '0', flexWrap: 'nowrap' }}>
         <Grid item xs={3} sx={{ flexGrow: '1', overflowY: 'auto', minHeight: '0' }}>
           <Sidebar
-            workspace={workspace}
-            type="component"
             component={component}
             setComponent={setComponent}
             setInstance={setComponent}
+            type="component"
+            workspace={workspace}
           />
         </Grid>
         <Grid item xs={9} sx={{ flexGrow: '1', minHeight: '0', flexWrap: 'nowrap' }}>
@@ -133,31 +138,31 @@ const Editor: React.FC<IEditor> = (props: IEditor) => {
               sx={{ flexGrow: '1', minHeight: '0', flexWrap: 'nowrap', height: '100%', width: '100%' }}
             >
               <EditorCentralBar
-                setUseManifest={setUseManifest}
-                type={component?.implementation?.type}
                 component={component}
-                subComponents={subcomponents}
                 setComponent={setComponent}
-                setSubcomponents={setSubcomponents}
                 setFeedback={setFeedback}
+                setSubcomponents={setSubcomponents}
+                setUseManifest={setUseManifest}
+                subComponents={subcomponents}
+                type={component?.implementation?.type}
               />
               {useManifest ? (
-                <ObjectEditor value={component} onChange={(t: Component) => editsOnChange(t)} onSave={onSave} />
+                <ObjectEditor value={component} onChange={(comp: Component) => editsOnChange(comp)} onSave={onSave} />
               ) : component?.implementation?.type === 'graph' ? (
                 <GraphEditor
                   component={component}
-                  onChange={editsOnChange}
-                  subcomponents={subcomponents}
-                  onSave={onSave}
                   dirty={dirty}
                   edges={edges}
+                  mapModalOpen={configComponent !== undefined}
                   nodes={nodes}
+                  onChange={editsOnChange}
                   onEdgesChange={onEdgesChange}
                   onNodesChange={onNodesChange}
-                  mapModalOpen={configComponent !== undefined}
+                  onSave={onSave}
+                  subcomponents={subcomponents}
                 />
               ) : (
-                <Brick component={component} setComponent={setComponent} onSave={onSave} />
+                <Brick component={component} onSave={onSave} setComponent={setComponent} />
               )}
             </Stack>
           )}

@@ -62,6 +62,9 @@ export function removeConnection(removedObject: ICustomConnection, component: Co
 
 export function removeTaskNode(removedElement: Node, component: Component): Component {
   const { nodes, edges, inputMappings, outputMappings } = component.implementation as Graph;
+  if (!nodes) {
+    return component;
+  }
   const nodeIndex = nodes.findIndex((node) => node.id === removedElement.id);
   if (nodeIndex === -1) {
     throw new Error('Could not find deleted node in component object');
@@ -136,7 +139,7 @@ export function addConnection(
       (component.implementation as Graph).inputMappings = [];
     }
     const { inputMappings } = component.implementation as Graph;
-    inputMappings.push({
+    inputMappings?.push({
       source: { port: params.source },
       target: { node: params.target, port: params.targetHandle.slice(2) },
     });
@@ -147,7 +150,7 @@ export function addConnection(
       (component.implementation as Graph).outputMappings = [];
     }
     const { outputMappings } = component.implementation as Graph;
-    outputMappings.push({
+    outputMappings?.push({
       source: { node: params.source, port: params.sourceHandle.slice(2) },
       target: { port: params.target },
     });
@@ -158,7 +161,7 @@ export function addConnection(
     (component.implementation as Graph).edges = [];
   }
   const { edges } = component.implementation as Graph;
-  edges.push({
+  edges?.push({
     source: { node: params.source, port: params.sourceHandle.slice(2) },
     target: { node: params.target, port: params.targetHandle.slice(2) },
   });
@@ -166,12 +169,12 @@ export function addConnection(
 }
 
 export function updateTaskNodePostion(component: Component, node: Node) {
-  const nodePlacement = (component?.implementation as Graph)?.nodes.findIndex((comp) => comp.id === node.id);
-  if ((component?.implementation as Graph)?.nodes[nodePlacement]) {
-    if (!(component.implementation as Graph).nodes[nodePlacement].userdata) {
-      (component.implementation as Graph).nodes[nodePlacement].userdata = {};
+  const nodePlacement = (component?.implementation as Graph)?.nodes?.findIndex((comp) => comp.id === node.id) || -1;
+  if ((component?.implementation as Graph)?.nodes?.[nodePlacement]) {
+    if (!(component.implementation as Graph).nodes?.[nodePlacement].userdata) {
+      (component.implementation as Graph).nodes![nodePlacement].userdata = {};
     }
-    (component.implementation as Graph).nodes[nodePlacement].userdata!.graphPosition = {
+    (component.implementation as Graph).nodes![nodePlacement].userdata!.graphPosition = {
       x: node.position.x,
       y: node.position.y,
     };

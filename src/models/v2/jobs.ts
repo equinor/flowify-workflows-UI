@@ -1,8 +1,8 @@
 import { IPageInfo, Workflow } from '.';
 
 export interface InputValue {
-  value: string | string[];
-  target: string;
+  value?: string | string[];
+  target?: string;
 }
 
 export interface Job {

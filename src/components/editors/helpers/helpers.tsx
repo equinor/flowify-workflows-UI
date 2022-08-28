@@ -39,7 +39,7 @@ function newStartNodes(inputs: Data[]): Node<INode>[] {
     .filter((i) => i.name)
     .filter((i) => i.type !== 'env_secret' && i.type !== 'volume')
     .map((input, index) => ({
-      id: input.name,
+      id: input.name || nanoid(6),
       type: 'startNode',
       data: {
         label: input.name,
@@ -62,7 +62,7 @@ function newStartNodes(inputs: Data[]): Node<INode>[] {
  */
 function newEndNodes(outputs: Data[]): Node<INode>[] {
   const nodes = outputs.map((output, index) => ({
-    id: output.name,
+    id: output.name || nanoid(6),
     type: 'endNode',
     data: {
       label: output.name,
@@ -241,11 +241,11 @@ interface ConnectionData {
  */
 function buildConnections(component: Component) {
   const { implementation } = component;
-  if (implementation.type === 'graph') {
+  if (implementation?.type === 'graph') {
     const { edges, inputMappings, outputMappings } = implementation as Graph;
     const connections: Edge<ConnectionData>[] = [];
     if (isNotEmptyArray(edges)) {
-      edges.forEach((edge, index) => {
+      edges?.forEach((edge, index) => {
         if (edge.source?.node && edge.source?.port && edge.target?.node && edge.target?.port) {
           connections.push({
             id: `${edge.source.port}-${edge.target.port}_${index}`,
@@ -261,7 +261,7 @@ function buildConnections(component: Component) {
       });
     }
     if (isNotEmptyArray(inputMappings)) {
-      inputMappings.forEach((edge, index) => {
+      inputMappings?.forEach((edge, index) => {
         if (edge.source?.port && edge.target?.node && edge.target?.port) {
           connections.push({
             id: `${edge.source.port}-${edge.target.port}_${index}`,
@@ -277,7 +277,7 @@ function buildConnections(component: Component) {
       });
     }
     if (isNotEmptyArray(outputMappings)) {
-      outputMappings.forEach((edge, index) => {
+      outputMappings?.forEach((edge, index) => {
         if (edge.source?.port && edge.source?.node && edge.target?.port) {
           connections.push({
             id: `${edge.source.port}-${edge.target.port}_${index}`,
@@ -320,8 +320,8 @@ export async function createGraphElements(
     const { nodes: componentNodes } = component.implementation as Graph;
     if (isNotEmptyArray(componentNodes)) {
       const taskNodes = await createTaskNodes(
-        componentNodes,
-        subcomponents!,
+        componentNodes!,
+        subcomponents || [],
         setParameterConfig,
         setConfigComponent,
         component,

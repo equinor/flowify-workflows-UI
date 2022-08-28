@@ -11,7 +11,7 @@ export const ComponentPage: FC<IComponentPage> = () => {
   return (
     <Layout dashboard>
       <Container dashboard>
-        <ComponentEditor name={component!} workspace={workspace!} />
+        <ComponentEditor uid={component!} workspace={workspace!} />
       </Container>
     </Layout>
   );

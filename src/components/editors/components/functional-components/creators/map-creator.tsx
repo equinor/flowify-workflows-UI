@@ -7,8 +7,8 @@ import { generateMap } from '../helpers/generators';
 interface MapCreatorProps {
   component?: Component;
   subcomponents?: Component[];
-  setComponent: any;
-  onClose: any;
+  setComponent: React.Dispatch<React.SetStateAction<Component | undefined>>;
+  onClose: () => void;
 }
 
 export const MapCreator: FC<MapCreatorProps> = (props: MapCreatorProps) => {
@@ -25,11 +25,11 @@ export const MapCreator: FC<MapCreatorProps> = (props: MapCreatorProps) => {
   }
 
   function onCreate() {
-    setComponent((prev: Component) => ({
+    setComponent((prev) => ({
       ...prev,
       implementation: {
-        ...prev.implementation,
-        nodes: generateMap((prev?.implementation as Graph)?.nodes, selectedComponent, subcomponents, options),
+        ...prev?.implementation,
+        nodes: generateMap((prev?.implementation as Graph)?.nodes || [], selectedComponent, subcomponents, options),
       },
     }));
     props.onClose();

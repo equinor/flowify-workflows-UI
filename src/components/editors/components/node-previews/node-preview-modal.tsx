@@ -10,7 +10,7 @@ import { Brick, Graph } from '../../../../models/v2';
 
 interface NodePreviewModalProps {
   open: boolean;
-  onClose: any;
+  onClose: (open: boolean) => void;
   node: NodeProps<INode>;
 }
 
@@ -69,7 +69,7 @@ export const NodePreviewModal: FC<NodePreviewModalProps> = (props: NodePreviewMo
                 <Stack spacing={1}>
                   <Typography variant="body_short_bold">Container</Typography>
                   <ReactJson
-                    src={(data?.implementation as Brick)?.container}
+                    src={(data?.implementation as Brick)?.container || {}}
                     name="container"
                     collapsed
                     displayDataTypes={false}
@@ -78,7 +78,7 @@ export const NodePreviewModal: FC<NodePreviewModalProps> = (props: NodePreviewMo
                 <Stack spacing={1}>
                   <Typography variant="body_short_bold">Arguments</Typography>
                   <ReactJson
-                    src={(data?.implementation as Brick)?.args}
+                    src={(data?.implementation as Brick)?.args || {}}
                     name="args"
                     collapsed
                     displayDataTypes={false}
@@ -100,7 +100,7 @@ export const NodePreviewModal: FC<NodePreviewModalProps> = (props: NodePreviewMo
                 <Stack spacing={1}>
                   <Typography variant="body_short_bold">Nodes</Typography>
                   <ReactJson
-                    src={(data?.implementation as Graph)?.nodes}
+                    src={(data?.implementation as Graph)?.nodes || {}}
                     name="nodes"
                     collapsed
                     displayDataTypes={false}

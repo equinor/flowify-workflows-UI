@@ -9,7 +9,7 @@ interface ArgumentProps {
   arg: Arg;
   inputs?: Data[];
   index: number;
-  setComponent?: any;
+  setComponent?: React.Dispatch<React.SetStateAction<Component | undefined>>;
 }
 
 const ArgumentWrapper = styled.div`
@@ -50,7 +50,7 @@ export const Argument: FC<ArgumentProps> = (props: ArgumentProps) => {
   const [prefixValue, setPrefixValue] = useState<string>(arg?.target?.prefix || '');
   const [suffixValue, setSuffixValue] = useState<string>(arg?.target?.suffix || '');
   const [inputValue, setInputValue] = useState<any>(isConst ? arg?.source : '');
-  const [selectValue, setSelectValue] = useState<string>(isConst ? '' : (arg?.source as Port)?.port);
+  const [selectValue, setSelectValue] = useState<string | undefined>(isConst ? '' : (arg?.source as Port)?.port);
   const [type, setType] = useState<string>('');
 
   useEffect(() => {
@@ -69,11 +69,11 @@ export const Argument: FC<ArgumentProps> = (props: ArgumentProps) => {
 
   function onChange() {
     if (typeof setComponent === 'function') {
-      setComponent((prev: Component) => ({
+      setComponent((prev) => ({
         ...prev,
         implementation: {
-          ...prev.implementation,
-          args: updateValue((prev.implementation as Brick).args),
+          ...prev?.implementation,
+          args: updateValue((prev?.implementation as Brick)?.args || []),
         },
       }));
     }

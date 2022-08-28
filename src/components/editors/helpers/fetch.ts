@@ -13,7 +13,7 @@ export async function fetchInitialSubComponents(component: Component): Promise<C
     const { nodes } = component.implementation as Graph;
     if (isNotEmptyArray(nodes)) {
       await Promise.all(
-        nodes.map(async (node) => {
+        nodes!.map(async (node) => {
           // Component reference
           if (typeof node.node === 'string') {
             const res = await services.components.get(node.node);

@@ -34,8 +34,6 @@ export const RunWorkflow: FC<RunWorkflowProps> = (props: RunWorkflowProps) => {
         .map((input) => input.userdata?.value);
       const uniqueVolumeIds = [...new Set(inputVolumes)];
       const usedVolumes: IVolume[] = [];
-      console.log(inputVolumes);
-      console.log(uniqueVolumeIds);
       if (isNotEmptyArray(uniqueVolumeIds)) {
         await Promise.all(
           uniqueVolumeIds.map(async (id) => {
@@ -44,7 +42,6 @@ export const RunWorkflow: FC<RunWorkflowProps> = (props: RunWorkflowProps) => {
           }),
         );
       }
-      console.log(usedVolumes);
       setVolumes(usedVolumes);
     }
     /**
@@ -65,8 +62,7 @@ export const RunWorkflow: FC<RunWorkflowProps> = (props: RunWorkflowProps) => {
 
   useEffect(() => {
     if (component) {
-      // @ts-expect-error
-      setWorkflow((prev: Workflow) => ({
+      setWorkflow((prev) => ({
         ...prev,
         component: component,
       }));

@@ -1,6 +1,6 @@
 import { Connection, Edge, Node } from 'react-flow-renderer';
 import { Component, Map } from '../../../../../models/v2';
-import { INode } from '../../../helpers';
+import { INode, nanoid } from '../../../helpers';
 
 export function checkValidation(params: Edge<any> | Connection, component: Component, subcomponents?: Component[]) {
   const { source, sourceHandle, target, targetHandle } = params;
@@ -85,7 +85,7 @@ export function createNodes(childNode: Component, id: string, component: Compone
   // Add Input nodes
   component?.inputs?.forEach((input, index) => {
     nodes.push({
-      id: input.name,
+      id: input.name || nanoid(6),
       type: 'mapInput',
       selectable: false,
       data: {
@@ -102,7 +102,7 @@ export function createNodes(childNode: Component, id: string, component: Compone
   // Add output nodes
   component?.outputs?.forEach((output, index) => {
     nodes.push({
-      id: output.name,
+      id: output.name || nanoid(6),
       type: 'mapOutput',
       selectable: false,
       data: {

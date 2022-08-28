@@ -1,7 +1,7 @@
 import React, { FC, useEffect, useMemo } from 'react';
 import ReactFlow, { Edge, ReactFlowProvider, useNodesState, useEdgesState, Node } from 'react-flow-renderer/nocss';
 import { Component, Conditional, Map } from '../../../../../models/v2';
-import { INode } from '../../../helpers';
+import { INode, nanoid } from '../../../helpers';
 import { AddNode, EndNode, StartNode, TaskNode } from '../../graph';
 import { SubNode } from '../../graph/sub-node';
 
@@ -9,7 +9,7 @@ interface IfGraphProps {
   component: Component | undefined;
   id: string;
   subcomponents: Component[] | undefined;
-  setComponent: any;
+  setComponent: React.Dispatch<React.SetStateAction<Component | undefined>>;
   setOpenMarketplace: any;
 }
 
@@ -100,7 +100,7 @@ export const IfGraph: FC<IfGraphProps> = (props: IfGraphProps) => {
       }
       component?.inputs?.forEach((input, index) => {
         nodes.push({
-          id: input.name,
+          id: input.name || nanoid(6),
           type: 'ifInput',
           selectable: false,
           data: {
@@ -116,7 +116,7 @@ export const IfGraph: FC<IfGraphProps> = (props: IfGraphProps) => {
       });
       component?.outputs?.forEach((output, index) => {
         nodes.push({
-          id: output.name,
+          id: output.name || nanoid(6),
           type: 'ifOutput',
           selectable: false,
           data: {
