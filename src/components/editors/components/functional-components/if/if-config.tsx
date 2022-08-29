@@ -3,9 +3,8 @@ import { Button, Icon, Typography } from '@equinor/eds-core-react';
 import { Dialog, Grid, Stack } from '@mui/material';
 import { Component, Conditional, Graph } from '../../../../../models/v2';
 import { MultiToggle, Select, TextField, ToggleButton } from '../../../../ui';
-import { Parameter } from '../../parameter';
 import { IfGraph } from './if-graph';
-import { MarketplaceModal } from '../../marketplace-modal';
+import { MarketplaceModal, Parameter } from '../..';
 
 interface IfConfigProps {
   open: boolean;

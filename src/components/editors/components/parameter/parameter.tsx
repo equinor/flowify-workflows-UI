@@ -1,51 +1,14 @@
 import React, { FC, useState } from 'react';
 import { Button, Icon, Typography } from '@equinor/eds-core-react';
-import styled from 'styled-components';
 import { Checkbox, Dialog, ListItemText, MenuItem, OutlinedInput, Select, Stack, TextField } from '@mui/material';
 import Editor from '@monaco-editor/react';
 import { Storage } from '@mui/icons-material';
-import { Arg, Brick, Component, Data, DataTypes, Edge, Graph, Port, Result } from '../../../models/v2';
-import { isNotEmptyArray } from '../../../common';
-import { DraggableList } from './draggable-list/draggable-list';
-
-interface ParameterProps {
-  parameter: Data;
-  index: number;
-  setComponent: React.Dispatch<React.SetStateAction<Component | undefined>>;
-  type: 'input' | 'output';
-  secrets?: string[];
-  editableValue?: boolean;
-  onlyEditableValue?: boolean;
-  secret?: boolean;
-  volume?: boolean;
-}
-
-const ParameterWrapper = styled.button`
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  column-gap: 1rem;
-  padding: 0.75rem;
-  background-color: #ade2e619;
-  border: none;
-  //border-left: 3px solid #007079;
-  border-radius: 1rem;
-  &:hover {
-    cursor: pointer;
-    background-color: rgba(0, 112, 121, 0.2);
-  }
-`;
-
-const TYPE_ICONS = {
-  parameter: 'swap_horizontal',
-  artifact: 'file',
-  env_secret: 'security',
-  parameter_array: 'list',
-};
-
-const MEDIATYPES = ['string', 'integer', 'env_variable'];
-
-const TYPES: DataTypes[] = ['parameter', 'artifact', 'parameter_array'];
+import { Brick, Data, DataTypes, Edge, Graph } from '../../../../models/v2';
+import { isNotEmptyArray } from '../../../../common';
+import { DraggableList } from '../draggable-list/draggable-list';
+import { ParameterWrapper } from './styles';
+import { ParameterProps, MEDIATYPES, TYPE_ICONS, TYPES } from './types';
+import { updateArgs, updateParameter, updateResults } from './helpers';
 
 export const Parameter: FC<ParameterProps> = (props: ParameterProps) => {
   const { index, setComponent, type, secrets, onlyEditableValue, editableValue, secret, volume } = props;
@@ -54,57 +17,6 @@ export const Parameter: FC<ParameterProps> = (props: ParameterProps) => {
 
   const parameterType = type === 'input' ? 'inputs' : 'outputs';
   const parameterMappings = type === 'input' ? 'inputMappings' : 'outputMappings';
-
-  function getMediaType(value: string | undefined, mediatypes: string[] | undefined) {
-    if (value === 'parameter' || value === 'parameter_array') {
-      return mediatypes;
-    }
-    if (value === 'env_secret') {
-      return ['env_secret'];
-    }
-    if (value === 'artifact') {
-      return ['file'];
-    }
-    if (value === 'volume') {
-      return ['volume'];
-    }
-    return [];
-  }
-
-  function updateParameter(list?: Data[]) {
-    if (!list) {
-      return [];
-    }
-    list[index] = {
-      ...parameter,
-      mediatype: getMediaType(parameter?.type, parameter?.mediatype),
-    };
-    return list;
-  }
-
-  function updateArgs(args: Arg[] | undefined) {
-    if (isNotEmptyArray(args) && type === 'input') {
-      const updated = args?.map((arg) =>
-        (arg?.source as Port)?.port === props.parameter?.name
-          ? { ...arg, source: { port: parameter.name }, target: { ...arg.target, type: parameter.type } }
-          : arg,
-      );
-      return updated;
-    }
-    return args;
-  }
-
-  function updateResults(results: Result[] | undefined) {
-    if (isNotEmptyArray(results) && type === 'output') {
-      const updated = results!.map((result) =>
-        result?.target?.port === props.parameter?.name
-          ? { ...result, target: { ...result?.target, port: parameter?.name } }
-          : result,
-      );
-      return updated;
-    }
-    return results;
-  }
 
   async function onClose() {
     setComponent((prev) =>
@@ -118,9 +30,14 @@ export const Parameter: FC<ParameterProps> = (props: ParameterProps) => {
                   ? mapping
                   : { ...mapping, source: { port: parameter.name } },
               ),
-              [parameterType]: updateParameter(prev[parameterType]),
-              args: updateArgs((prev?.implementation as Brick)?.args),
-              results: updateResults((prev?.implementation as Brick)?.results),
+              [parameterType]: updateParameter(prev[parameterType], index, parameter),
+              args: updateArgs((prev?.implementation as Brick)?.args, props?.parameter?.name || '', type, parameter),
+              results: updateResults(
+                (prev?.implementation as Brick)?.results,
+                props?.parameter?.name || '',
+                type,
+                parameter,
+              ),
             },
           }
         : {
@@ -133,7 +50,7 @@ export const Parameter: FC<ParameterProps> = (props: ParameterProps) => {
                   : { ...mapping, source: { port: parameter.name } },
               ),
             },
-            [parameterType]: updateParameter(prev?.[parameterType]),
+            [parameterType]: updateParameter(prev?.[parameterType], index, parameter),
           },
     );
     setOpen(false);

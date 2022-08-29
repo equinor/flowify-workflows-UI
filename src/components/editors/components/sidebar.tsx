@@ -7,7 +7,7 @@ import { isNotEmptyArray } from '../../../common';
 import { nanoid } from '../helpers';
 import { EditorHeader } from '../components';
 import { Component, Workflow } from '../../../models/v2';
-import { Parameter } from './parameter';
+import { Parameter } from '.';
 import { RunWorkflow } from '../../creators';
 
 interface SidebarProps {

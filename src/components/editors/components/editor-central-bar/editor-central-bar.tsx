@@ -1,11 +1,12 @@
 import React, { FC, useState } from 'react';
 import { Stack } from '@mui/material';
 import { Tooltip, Button, Menu, Icon, Typography } from '@equinor/eds-core-react';
-import { EditorSettings, MarketplaceModal, FunctionalComponents } from '.';
-import { Component, Graph } from '../../../models/v2';
-import { nanoid } from '../helpers';
-import { services } from '../../../services/v2';
-import { FeedbackTypes } from './feedbacks/feedbacks';
+import { EditorSettings, MarketplaceModal, FunctionalComponents } from '..';
+import { Component, Graph } from '../../../../models/v2';
+import { nanoid } from '../../helpers';
+import { services } from '../../../../services/v2';
+import { FeedbackTypes } from '../feedbacks/feedbacks';
+import { BUTTON_STATE } from '../../../creators/add-component-to-graph';
 
 interface EditorCentralBarProps {
   setUseManifest?: any;
@@ -24,7 +25,10 @@ export const EditorCentralBar: FC<EditorCentralBarProps> = (props: EditorCentral
   const [marketplaceOpen, setMarketplaceOpen] = useState<boolean>(false);
   const [functionalComponentsOpen, setFunctionalComponentsOpen] = useState<boolean>(false);
 
-  async function onAddComponent(component: Component, setButtonState: any) {
+  async function onAddComponent(
+    component: Component,
+    setButtonState: React.Dispatch<React.SetStateAction<BUTTON_STATE>>,
+  ) {
     const { uid } = component;
     if (uid && setSubcomponents && setFeedback && setComponent) {
       services.components

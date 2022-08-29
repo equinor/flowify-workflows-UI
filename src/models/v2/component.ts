@@ -28,7 +28,7 @@ export interface Port {
 
 export interface Arg {
   source?: string | Port;
-  target?: { type: string; name?: string; prefix?: string; suffix?: string };
+  target?: { type?: string; name?: string; prefix?: string; suffix?: string };
 }
 
 export interface FilePath {

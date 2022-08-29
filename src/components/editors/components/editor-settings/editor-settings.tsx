@@ -4,7 +4,7 @@ import { Dialog, Stack } from '@mui/material';
 import {
   SettingsContextStore,
   IEditorSettings as SettingsInterface,
-} from '../../../common/context/editor-settings-context';
+} from '../../../../common/context/editor-settings-context';
 
 interface IEditorSettings {}
 
