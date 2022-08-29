@@ -6,7 +6,7 @@ import { DragIndicator as DragIcon } from '@mui/icons-material';
 import { Link } from 'react-router-dom';
 import { INode } from '../../helpers/helpers';
 import { Handles } from '.';
-import { NodePreviewModal } from '../node-previews/node-preview-modal';
+import { NodePreview } from '..';
 import { isNotEmptyArray } from '../../../../common';
 
 interface ITaskNode extends NodeProps<INode> {}
@@ -32,7 +32,7 @@ export const TaskNode = memo((props: ITaskNode) => {
   return (
     <Stack>
       <Stack spacing={2} direction="row" alignItems="center">
-        <NodePreviewModal node={props} open={open} onClose={setOpen} />
+        <NodePreview node={props} open={open} onClose={setOpen} />
         <Handles parameters={data?.inputs} type="Input" />
         <Stack alignItems="center" spacing={3} direction="row">
           <Stack spacing={1} alignItems="space-between">

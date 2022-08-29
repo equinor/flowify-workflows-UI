@@ -8,13 +8,13 @@ import ReactJson from 'react-json-view';
 import { INode } from '../../helpers/helpers';
 import { Brick, Graph } from '../../../../models/v2';
 
-interface NodePreviewModalProps {
+interface NodePreviewProps {
   open: boolean;
   onClose: (open: boolean) => void;
   node: NodeProps<INode>;
 }
 
-export const NodePreviewModal: FC<NodePreviewModalProps> = (props: NodePreviewModalProps) => {
+export const NodePreview: FC<NodePreviewProps> = (props: NodePreviewProps) => {
   const { node, onClose } = props;
   const { data, type } = node;
   const inputParams = data?.inputs || [];

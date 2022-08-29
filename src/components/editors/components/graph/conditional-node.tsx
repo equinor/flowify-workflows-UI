@@ -5,7 +5,7 @@ import { NodeProps } from 'react-flow-renderer/nocss';
 import { DragIndicator as DragIcon } from '@mui/icons-material';
 import { INode } from '../../helpers/helpers';
 import { Handles } from '.';
-import { NodePreviewModal } from '../node-previews/node-preview-modal';
+import { NodePreview } from '..';
 import { Conditional } from '../../../../models/v2';
 
 interface IConditionalNode extends NodeProps<INode> {}
@@ -29,7 +29,7 @@ export const ConditionalNode = memo((props: IConditionalNode) => {
           Configure if
         </Button>
         <Stack className="react-flow__node-mapNode--internal" spacing={2} direction="row" alignItems="center">
-          <NodePreviewModal node={props} open={open} onClose={setOpen} />
+          <NodePreview node={props} open={open} onClose={setOpen} />
           <Stack alignItems="center" spacing={3} direction="row">
             <Stack spacing={1} alignItems="space-between">
               <Icon name="formula" size={16} color="#999" />

@@ -14,3 +14,4 @@ export { Parameter } from './parameter';
 export { MapConfig } from './functional-components/map/map-config';
 export { SecretsVolumesConfig } from './parameters/secrets-volumes-config';
 export * from './feedbacks/feedbacks';
+export * from './node-preview/node-preview';
