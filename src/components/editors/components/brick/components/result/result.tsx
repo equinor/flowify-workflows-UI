@@ -1,40 +1,9 @@
 import React, { FC, useState } from 'react';
-import styled from 'styled-components';
 import { Icon, Radio, Typography } from '@equinor/eds-core-react';
 import { Dialog, MenuItem, Select, Stack, TextField } from '@mui/material';
-import { Brick, Component, Data, FilePath, Result as IResult, Workflow } from '../../../../models/v2';
-
-const ResultWrapper = styled.div`
-  display: flex;
-  flex-direction: row;
-  column-gap: 1rem;
-  align-items: center;
-  padding: 0rem 1rem;
-  flex-grow: 2;
-`;
-
-const ArgumentButton = styled.button`
-  background-color: #ade2e619;
-  border-radius: 1rem;
-  display: flex;
-  align-items: center;
-  column-gap: 1rem;
-  flex-grow: 2;
-  border: none;
-  padding: 0.5rem;
-  cursor: pointer;
-  &:hover {
-    background-color: #deedee;
-  }
-`;
-
-interface ResultProps {
-  result: IResult;
-  outputs?: Data[];
-  index: number;
-  setComponent?: React.Dispatch<React.SetStateAction<Component | undefined>>;
-  setWorkflow?: React.Dispatch<React.SetStateAction<Workflow | undefined>>;
-}
+import { ResultProps } from './types';
+import { ResultButton, ResultWrapper } from './styles';
+import { Brick, FilePath, Result as IResult } from '../../../../../../models/v2';
 
 export const Result: FC<ResultProps> = (props: ResultProps) => {
   const { outputs, result, setComponent, index, setWorkflow } = props;
@@ -107,7 +76,7 @@ export const Result: FC<ResultProps> = (props: ResultProps) => {
           </Stack>
         </Stack>
       </Dialog>
-      <ArgumentButton onClick={() => setOpen(true)}>
+      <ResultButton onClick={() => setOpen(true)}>
         <Stack direction="row" justifyContent="center" spacing={2}>
           <Typography variant="h6">
             {isPath ? (result?.source as FilePath)?.file || 'undefined' : (result?.source as string) || 'undefined'}
@@ -115,7 +84,7 @@ export const Result: FC<ResultProps> = (props: ResultProps) => {
           <Icon name="chevron_right" />
           <Typography variant="h6">{result?.target?.port || 'undefined'}</Typography>
         </Stack>
-      </ArgumentButton>
+      </ResultButton>
     </ResultWrapper>
   );
 };

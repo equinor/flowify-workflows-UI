@@ -6,8 +6,8 @@ import { Argument, DraggableList, Result } from '../../components';
 
 interface BrickProps {
   component: Component | null | undefined;
-  setComponent: any;
-  onSave: any;
+  setComponent: React.Dispatch<React.SetStateAction<Component | undefined>>;
+  onSave: () => void;
 }
 
 export const Brick: FC<BrickProps> = (props: BrickProps) => {
@@ -28,12 +28,12 @@ export const Brick: FC<BrickProps> = (props: BrickProps) => {
 
   function updateContainerStringValue(event: any, name: string) {
     const { value } = event.target;
-    setComponent((prev: Component) => ({
+    setComponent((prev) => ({
       ...prev,
       implementation: {
-        ...prev.implementation,
+        ...prev?.implementation,
         container: {
-          ...(prev.implementation as IBrick).container,
+          ...(prev?.implementation as IBrick).container,
           [name]: value,
         },
       },
@@ -46,12 +46,12 @@ export const Brick: FC<BrickProps> = (props: BrickProps) => {
   };
 
   function commandHandler(list: any[]) {
-    setComponent((prev: Component) => ({
+    setComponent((prev) => ({
       ...prev,
       implementation: {
-        ...prev.implementation,
+        ...prev?.implementation,
         container: {
-          ...(prev.implementation as IBrick).container,
+          ...(prev?.implementation as IBrick).container,
           command: list,
         },
       },
@@ -60,67 +60,67 @@ export const Brick: FC<BrickProps> = (props: BrickProps) => {
 
   function commandOnBlur(event: any, index: number) {
     const { value } = event.target;
-    setComponent((prev: Component) => ({
+    setComponent((prev) => ({
       ...prev,
       implementation: {
-        ...prev.implementation,
+        ...prev?.implementation,
         container: {
-          ...(prev.implementation as IBrick).container,
-          command: updateStringValueInArray((prev.implementation as IBrick).container?.command!, index, value),
+          ...(prev?.implementation as IBrick).container,
+          command: updateStringValueInArray((prev?.implementation as IBrick).container?.command || [], index, value),
         },
       },
     }));
   }
 
   function addCommand() {
-    setComponent((prev: Component) => ({
+    setComponent((prev) => ({
       ...prev,
       implementation: {
-        ...prev.implementation,
+        ...prev?.implementation,
         container: {
-          ...(prev.implementation as IBrick).container,
-          command: [...((prev.implementation as IBrick).container?.command || ''), ''],
+          ...(prev?.implementation as IBrick).container,
+          command: [...((prev?.implementation as IBrick).container?.command || ''), ''],
         },
       },
     }));
   }
 
   function argsHandler(list: object[]) {
-    setComponent((prev: Component) => ({
+    setComponent((prev) => ({
       ...prev,
       implementation: {
-        ...prev.implementation,
+        ...prev?.implementation,
         args: list,
       },
     }));
   }
 
   function addArgument() {
-    setComponent((prev: Component) => ({
+    setComponent((prev) => ({
       ...prev,
       implementation: {
-        ...prev.implementation,
-        args: [...((prev.implementation as IBrick).args || ''), { source: '' }],
+        ...prev?.implementation,
+        args: [...((prev?.implementation as IBrick).args || []), { source: '' }],
       },
     }));
   }
 
   function resultHandler(list: object[]) {
-    setComponent((prev: Component) => ({
+    setComponent((prev) => ({
       ...prev,
       implementation: {
-        ...prev.implementation,
+        ...prev?.implementation,
         results: list,
       },
     }));
   }
 
   function addResult() {
-    setComponent((prev: Component) => ({
+    setComponent((prev) => ({
       ...prev,
       implementation: {
-        ...prev.implementation,
-        results: [...((prev.implementation as IBrick).results || ''), { source: '', target: { port: '' } }],
+        ...prev?.implementation,
+        results: [...((prev?.implementation as IBrick).results || []), { source: '', target: { port: '' } }],
       },
     }));
   }
