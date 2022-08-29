@@ -11,7 +11,7 @@ export { FunctionalComponents } from './functional-components/functional-compone
 export { Sidebar } from './sidebar';
 export { Brick } from './brick/brick';
 export { Parameter } from './parameter';
-export { MapConfig } from './functional-components/map/map-config';
+export { MapConfig } from './functional-components/map/map-config/map-config';
 export { SecretsVolumesConfig } from './parameters/secrets-volumes-config';
 export * from './feedbacks/feedbacks';
 export * from './node-preview/node-preview';

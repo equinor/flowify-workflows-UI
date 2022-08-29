@@ -1,8 +1,8 @@
 import React, { FC, useState } from 'react';
 import { Stack } from '@mui/material';
 import { Button, Checkbox, Icon, Radio, Typography } from '@equinor/eds-core-react';
-import { Component, Graph } from '../../../../../models/v2';
-import { generateMap } from '../helpers/generators';
+import { Component, Graph } from '../../../../../../models/v2';
+import { generateMap } from './helpers';
 
 interface MapCreatorProps {
   component?: Component;
