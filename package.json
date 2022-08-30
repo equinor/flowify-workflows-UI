@@ -10,7 +10,7 @@
     "@equinor/eds-tokens": "0.7.1",
     "@monaco-editor/react": "4.4.5",
     "@mui/icons-material": "5.8.4",
-    "@mui/material": "5.8.5",
+    "@mui/material": "5.10.0",
     "@mui/styles": "5.8.4",
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^12.1.5",
