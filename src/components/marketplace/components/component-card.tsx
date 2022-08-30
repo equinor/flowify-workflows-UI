@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import { Stack } from '@mui/material';
-import { Icon, Typography } from '@equinor/eds-core-react';
+import { Chip, Icon, Typography } from '@equinor/eds-core-react';
 import { Link } from 'react-router-dom';
 import { ComponentCard as Card, ComponentIcon, ButtonLink } from '../../ui';
 import { Component } from '../../../models/v2';
@@ -27,7 +27,10 @@ export const ComponentCard: FC<IComponentCard> = (props: IComponentCard) => {
               {today.diff(component.timestamp, 'days') < 3 ? <Icon name="new_label" size={32} color="#004f55" /> : null}
             </Stack>
             <Stack spacing={1}>
-              <Typography variant="body_short_bold">{component.name}</Typography>
+              <Stack direction="row" alignItems="center">
+                <Typography variant="body_short_bold">{component.name}</Typography>
+                <Chip style={{ fontSize: '1rem' }}>v{component?.version?.current}</Chip>
+              </Stack>
               <Typography variant="caption">
                 Last updated: <Timestamp date={component?.timestamp} />{' '}
                 {component?.modifiedBy ? <>by {component?.modifiedBy}</> : ''}
@@ -35,7 +38,7 @@ export const ComponentCard: FC<IComponentCard> = (props: IComponentCard) => {
             </Stack>
             <Typography variant="body_short">{component?.description}</Typography>
             <ButtonLink simple>
-              <Link to={`/component/${component?.uid}`}>View component</Link>
+              <Link to={`/component/${component?.uid}/${component?.version?.current}`}>View component</Link>
               <Icon name="chevron_right" size={16} color="#004f55" />
             </ButtonLink>
           </Stack>

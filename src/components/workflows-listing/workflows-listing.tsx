@@ -114,7 +114,11 @@ const WorkflowsListing: FC<IWorkflowsListing> = (props: IWorkflowsListing) => {
         </Stack>
         <Stack sx={{ padding: '1rem' }} spacing={1} alignItems="flex-start">
           <Typography variant="h5">Docs</Typography>
-          <a href="https://equinor.github.io/flowify-documentation/docs/workflow/" target="_blank" rel="noopener noreferrer">
+          <a
+            href="https://equinor.github.io/flowify-documentation/docs/workflow/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             <ButtonLink simple>
               <span>Creating a workflow</span> <Icon name="chevron_right" size={16} color="#004f55" />
             </ButtonLink>
@@ -179,7 +183,13 @@ const WorkflowsListing: FC<IWorkflowsListing> = (props: IWorkflowsListing) => {
             {requestData?.totalNumber && requestData.totalNumber > 0 ? (
               <TableBody>
                 {Array.isArray(workflows) &&
-                  workflows.map((row) => <WorkflowTableRow key={row?.uid} row={row} workspace={workspace} />)}
+                  workflows.map((workflow) => (
+                    <WorkflowTableRow
+                      key={`${workflow?.uid}_${workflow?.version?.current}`}
+                      row={workflow}
+                      workspace={workspace}
+                    />
+                  ))}
               </TableBody>
             ) : loadingWorkflows ? (
               <Progress.Dots />

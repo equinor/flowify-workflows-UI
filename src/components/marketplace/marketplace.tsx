@@ -176,7 +176,7 @@ export const Marketplace: FC<MarketplaceProps> = (props: MarketplaceProps) => {
             {isNotEmptyArray(components) &&
               !loading &&
               components.map((component) => (
-                <Grid key={component.uid} item xs={4}>
+                <Grid key={`${component.uid}_${component?.version?.current}`} item xs={4}>
                   <ComponentCard component={component}>
                     {typeof onAddComponent === 'function' && (
                       <AddComponentToGraph component={component} onAddComponent={onAddComponent} />

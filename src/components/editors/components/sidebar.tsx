@@ -1,5 +1,5 @@
 import React, { FC, useState } from 'react';
-import { Button, Icon, Typography } from '@equinor/eds-core-react';
+import { Button, Chip, Icon, Typography } from '@equinor/eds-core-react';
 import { Stack, TextField } from '@mui/material';
 import moment from 'moment';
 import styled from 'styled-components';
@@ -84,32 +84,37 @@ export const Sidebar: FC<SidebarProps> = (props: SidebarProps) => {
   return (
     <Stack spacing={2} sx={{ padding: '1rem', position: 'relative', width: '100%' }}>
       <EditorHeader type={type === 'component' ? 'Component' : 'Workflow'} workspace={workspace}></EditorHeader>
-      {editName ? (
-        <TextField
-          autoFocus
-          defaultValue={type === 'component' ? component?.name : workflow?.name}
-          onBlur={(event) => updateName(event)}
-        />
-      ) : (
-        <StyledTextButton onClick={() => setEditName(true)}>
-          <Typography variant="h3">{type === 'component' ? component?.name : workflow?.name}</Typography>
-        </StyledTextButton>
-      )}
-      {editDescription ? (
-        <TextField
-          autoFocus
-          multiline
-          rows={3}
-          defaultValue={type === 'component' ? component?.description : workflow?.description}
-          onBlur={(event) => updateDescription(event)}
-        />
-      ) : (
-        <StyledTextButton onClick={() => setEditDescription(true)}>
-          <Typography variant="body_long">
-            {(type === 'component' ? component?.description : workflow?.description) || '+ add description'}
-          </Typography>
-        </StyledTextButton>
-      )}
+      <Stack spacing={1}>
+        <Chip style={{ fontSize: '1rem' }}>
+          <span>v{type === 'workflow' ? workflow?.version?.current : component?.version?.current}</span>
+        </Chip>
+        {editName ? (
+          <TextField
+            autoFocus
+            defaultValue={type === 'component' ? component?.name : workflow?.name}
+            onBlur={(event) => updateName(event)}
+          />
+        ) : (
+          <StyledTextButton onClick={() => setEditName(true)}>
+            <Typography variant="h3">{type === 'component' ? component?.name : workflow?.name}</Typography>
+          </StyledTextButton>
+        )}
+        {editDescription ? (
+          <TextField
+            autoFocus
+            multiline
+            rows={3}
+            defaultValue={type === 'component' ? component?.description : workflow?.description}
+            onBlur={(event) => updateDescription(event)}
+          />
+        ) : (
+          <StyledTextButton onClick={() => setEditDescription(true)}>
+            <Typography variant="body_long">
+              {(type === 'component' ? component?.description : workflow?.description) || '+ add description'}
+            </Typography>
+          </StyledTextButton>
+        )}
+      </Stack>
       <Typography variant="body_long">
         <b>Author</b> {type === 'component' ? component?.modifiedBy : workflow?.modifiedBy} <br />
         {type === 'workflow' && (

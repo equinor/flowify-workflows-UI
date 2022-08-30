@@ -15,8 +15,8 @@ export class WorkflowService {
     return requests.get(`api/v2/workflows/${parsedFilters}`).then((res) => res.body as WorkflowListRequest);
   }
 
-  public get(id: string) {
-    return requests.get(`api/v2/workflows/${id}`).then((res) => res.body as Workflow);
+  public get(id: string, version?: string) {
+    return requests.get(`api/v2/workflows/${id}${version ? `/${version}` : ''}`).then((res) => res.body as Workflow);
   }
 
   public update(workflow: Workflow, id: string) {

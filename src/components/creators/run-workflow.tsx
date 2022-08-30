@@ -25,6 +25,9 @@ export const RunWorkflow: FC<RunWorkflowProps> = (props: RunWorkflowProps) => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    if (!modalOpen) {
+      return;
+    }
     async function getVolumes(workflow: Workflow) {
       const inputVolumes = workflow?.component?.inputs
         ?.filter((input) => input.type === 'volume')
@@ -58,7 +61,7 @@ export const RunWorkflow: FC<RunWorkflowProps> = (props: RunWorkflowProps) => {
     getVolumes(props.workflow);
     setWorkflow(props.workflow as Workflow);
     setComponent(props.workflow?.component);
-  }, [props.workflow, workspace]);
+  }, [props.workflow, workspace, modalOpen]);
 
   useEffect(() => {
     if (component) {

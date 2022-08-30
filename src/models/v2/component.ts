@@ -117,6 +117,11 @@ export interface Metadata {
   uid?: CRef;
   previous?: CRef;
   timestamp?: Time;
+  version?: {
+    current?: number;
+    previous?: { uid?: string };
+    tags?: string[];
+  };
 }
 
 export interface Component extends Metadata {
