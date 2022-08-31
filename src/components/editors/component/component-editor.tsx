@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
-import { Progress } from '@equinor/eds-core-react';
+import { Button, Progress } from '@equinor/eds-core-react';
 import { Grid, Stack } from '@mui/material';
 import { useEdgesState, useNodesState } from 'react-flow-renderer';
 import { Component } from '../../../models/v2';
@@ -17,6 +17,7 @@ import {
 } from '../components';
 import { createGraphElements, fetchInitialSubComponents, INode } from '../helpers';
 import { ObjectEditor } from '../../object-editor/object-editor';
+import { VersionBar } from '../components/version-bar/version-bar';
 
 interface IEditor {
   uid: string | null;
@@ -41,6 +42,7 @@ const Editor: React.FC<IEditor> = (props: IEditor) => {
   const [parameterConfig, setParameterConfig] = useState<{ type: 'secret' | 'volume'; id: string }>();
   const [subcomponents, setSubcomponents] = useState<Component[]>();
   const [useManifest, setUseManifest] = useState<boolean>(false);
+  const isLatest = component?.version?.tags?.includes('latest');
 
   useEffect(() => {
     console.log('component on mount');
@@ -86,6 +88,7 @@ const Editor: React.FC<IEditor> = (props: IEditor) => {
   }
 
   function onSave() {
+    // TODO: Check if latest version
     if (component) {
       services.components
         .update(component, component.uid!)
@@ -95,7 +98,23 @@ const Editor: React.FC<IEditor> = (props: IEditor) => {
         })
         .catch((error) => {
           console.error(error);
+          // TODO: Handle 409 error
           setFeedback('UPDATE_ERROR');
+        });
+    }
+  }
+
+  function onPublish() {
+    if (component) {
+      services.components
+        .publish(component, component.uid!)
+        .then((res) => {
+          console.log(res);
+          // TODO: Reroute to new component
+        })
+        .catch((error) => {
+          console.error(error);
+          // TODO: Handle error
         });
     }
   }
@@ -127,6 +146,7 @@ const Editor: React.FC<IEditor> = (props: IEditor) => {
             setInstance={setComponent}
             type="component"
             workspace={workspace}
+            isLatest={isLatest}
           />
         </Grid>
         <Grid item xs={9} sx={{ flexGrow: '1', minHeight: '0', flexWrap: 'nowrap' }}>
@@ -146,24 +166,31 @@ const Editor: React.FC<IEditor> = (props: IEditor) => {
                 subComponents={subcomponents}
                 type={component?.implementation?.type}
               />
-              {useManifest ? (
-                <ObjectEditor value={component} onChange={(comp: Component) => editsOnChange(comp)} onSave={onSave} />
-              ) : component?.implementation?.type === 'graph' ? (
-                <GraphEditor
-                  component={component}
-                  dirty={dirty}
-                  edges={edges}
-                  mapModalOpen={configComponent !== undefined}
-                  nodes={nodes}
-                  onChange={editsOnChange}
-                  onEdgesChange={onEdgesChange}
-                  onNodesChange={onNodesChange}
+              <Stack sx={{ flexGrow: '1', minHeight: '0', flexWrap: 'nowrap', height: '100%', width: '100%' }}>
+                <VersionBar
+                  version={component?.version?.current}
+                  isLatest={isLatest || false}
                   onSave={onSave}
-                  subcomponents={subcomponents}
+                  onPublish={onPublish}
                 />
-              ) : (
-                <Brick component={component} onSave={onSave} setComponent={setComponent} />
-              )}
+                {useManifest ? (
+                  <ObjectEditor value={component} onChange={(comp: Component) => editsOnChange(comp)} />
+                ) : component?.implementation?.type === 'graph' ? (
+                  <GraphEditor
+                    component={component}
+                    dirty={dirty}
+                    edges={edges}
+                    mapModalOpen={configComponent !== undefined}
+                    nodes={nodes}
+                    onChange={editsOnChange}
+                    onEdgesChange={onEdgesChange}
+                    onNodesChange={onNodesChange}
+                    subcomponents={subcomponents}
+                  />
+                ) : (
+                  <Brick component={component} setComponent={setComponent} />
+                )}
+              </Stack>
             </Stack>
           )}
         </Grid>

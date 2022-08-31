@@ -30,11 +30,11 @@ interface ObjectEditorProps {
   value: any;
   lang?: languages;
   onChange?: (value: any) => void;
-  onSave?: () => void;
+  onSave?: (() => void) | null;
 }
 
 export const ObjectEditor: FC<ObjectEditorProps> = (props: ObjectEditorProps) => {
-  const { value, onChange } = props;
+  const { value, onChange, onSave } = props;
 
   const { settings } = useContext(SettingsContextStore);
   const [error, setError] = useState<IError | null>();
@@ -82,8 +82,8 @@ export const ObjectEditor: FC<ObjectEditorProps> = (props: ObjectEditorProps) =>
           </Dialog>
         </>
       )}
-      {typeof props.onSave === 'function' && (
-        <Button onClick={props.onSave} style={{ position: 'absolute', right: 16, marginTop: 8 }}>
+      {typeof onSave === 'function' && (
+        <Button onClick={onSave} style={{ position: 'absolute', right: 16, marginTop: 8 }}>
           <Icon name="save" /> Save changes
         </Button>
       )}

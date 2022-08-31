@@ -20,9 +20,16 @@ export class ComponentService {
     return requests.get(uri).then((res) => res.body as Component);
   }
 
-  public update(component: Component, id: string) {
+  public publish(component: Component, id: string) {
     return requests
       .put(`api/v2/components/${id}`)
+      .send({ component })
+      .then((res) => res.body as Component);
+  }
+
+  public update(component: Component, id: string) {
+    return requests
+      .patch(`api/v2/components/${id}`)
       .send({ component })
       .then((res) => res.body as Component);
   }

@@ -160,14 +160,16 @@ export const GraphEditor: React.FC<IGraphEditor> = (props: IGraphEditor) => {
           <Controls style={{ right: 10, left: 'auto' }} fitViewOptions={{ duration: 1000 }}>
             {/*<NodesDebugger />*/}
           </Controls>
-          <Button
-            //disabled={!props.dirty}
-            onClick={onSave}
-            style={{ position: 'fixed', right: '1rem', marginTop: '1rem', zIndex: 1000 }}
-          >
-            <Icon name="save" />
-            Save changes
-          </Button>
+          {typeof onSave === 'function' && (
+            <Button
+              //disabled={!props.dirty}
+              onClick={onSave}
+              style={{ position: 'fixed', right: '1rem', marginTop: '1rem', zIndex: 1000 }}
+            >
+              <Icon name="save" />
+              Save changes
+            </Button>
+          )}
         </ReactFlow>
       </ReactFlowProvider>
     </div>

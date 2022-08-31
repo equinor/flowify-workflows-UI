@@ -7,11 +7,11 @@ import { Argument, DraggableList, Result } from '../../components';
 interface BrickProps {
   component: Component | null | undefined;
   setComponent: React.Dispatch<React.SetStateAction<Component | undefined>>;
-  onSave: () => void;
+  onSave?: (() => void) | null;
 }
 
 export const Brick: FC<BrickProps> = (props: BrickProps) => {
-  const { component, setComponent } = props;
+  const { component, setComponent, onSave } = props;
   if (!component) {
     return null;
   }
@@ -181,9 +181,11 @@ export const Brick: FC<BrickProps> = (props: BrickProps) => {
             </Stack>
           </Grid>
           <Grid item xs={6} sx={{ flexGrow: '1', overflowY: 'auto', minHeight: '0' }}>
-            <Button onClick={props.onSave} style={{ position: 'absolute', right: 16, marginTop: 16 }}>
-              Save changes
-            </Button>
+            {typeof onSave === 'function' && (
+              <Button onClick={onSave} style={{ position: 'absolute', right: 16, marginTop: 16 }}>
+                Save changes
+              </Button>
+            )}
           </Grid>
         </>
       )}

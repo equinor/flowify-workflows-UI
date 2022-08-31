@@ -19,6 +19,7 @@ import { ObjectEditor } from '../../object-editor/object-editor';
 import { useEdgesState, useNodesState } from 'react-flow-renderer';
 import { IfConfig } from '../components/functional-components/if/if-config';
 import { useParams } from 'react-router';
+import { VersionBar } from '../components/version-bar/version-bar';
 
 interface IWorkflowEditor {
   uid: string | null;
@@ -41,6 +42,7 @@ const WorkflowEditor: FC<IWorkflowEditor> = (props: IWorkflowEditor) => {
   const [workflow, setWorkflow] = useState<Workflow | undefined>();
   const [workspaceSecrets, setWorkspaceSecrets] = useState<string[]>([]);
   const [workspaceVolumes, setWorkspaceVolumes] = useState<IVolume[]>([]);
+  const isLatest = workflow?.version?.tags?.includes('latest');
 
   useEffect(() => {
     console.log('component onMount');
@@ -97,7 +99,7 @@ const WorkflowEditor: FC<IWorkflowEditor> = (props: IWorkflowEditor) => {
     }
   }, [component]);
 
-  function onWorkflowSave() {
+  function onSave() {
     if (workflow && !loading) {
       setLoading(true);
       services.workflows
@@ -111,6 +113,22 @@ const WorkflowEditor: FC<IWorkflowEditor> = (props: IWorkflowEditor) => {
           console.error(error);
           setLoading(false);
           setFeedback('UPDATE_ERROR');
+        });
+    }
+  }
+
+  function onPublish() {
+    if (workflow && !loading) {
+      setLoading(true);
+      services.workflows
+        .publish(workflow, workflow.uid!)
+        .then((res) => {
+          console.log(res);
+          // TODO: Reroute to new workflow
+        })
+        .catch((error) => {
+          console.log(error);
+          // TODO: Handle error
         });
     }
   }
@@ -174,32 +192,38 @@ const WorkflowEditor: FC<IWorkflowEditor> = (props: IWorkflowEditor) => {
                 subComponents={subcomponents}
                 type={workflow?.component?.implementation?.type}
               />
-              {useManifest ? (
-                <ObjectEditor
-                  onChange={(wf: Workflow) => {
-                    setWorkflow(wf);
-                    setComponent(wf.component);
-                    setDirty(true);
-                  }}
-                  onSave={onWorkflowSave}
-                  value={workflow}
+              <Stack sx={{ flexGrow: '1', minHeight: '0', flexWrap: 'nowrap', height: '100%', width: '100%' }}>
+                <VersionBar
+                  version={workflow?.version?.current}
+                  isLatest={isLatest || false}
+                  onSave={onSave}
+                  onPublish={onPublish}
                 />
-              ) : workflow?.component?.implementation?.type === 'graph' ? (
-                <GraphEditor
-                  component={component || null}
-                  dirty={dirty}
-                  edges={edges}
-                  mapModalOpen={configComponent !== undefined}
-                  nodes={nodes}
-                  onChange={setComponent}
-                  onEdgesChange={onEdgesChange}
-                  onNodesChange={onNodesChange}
-                  onSave={onWorkflowSave}
-                  subcomponents={subcomponents}
-                />
-              ) : (
-                <Brick component={component} setComponent={setComponent} onSave={onWorkflowSave} />
-              )}
+                {useManifest ? (
+                  <ObjectEditor
+                    onChange={(wf: Workflow) => {
+                      setWorkflow(wf);
+                      setComponent(wf.component);
+                      setDirty(true);
+                    }}
+                    value={workflow}
+                  />
+                ) : workflow?.component?.implementation?.type === 'graph' ? (
+                  <GraphEditor
+                    component={component || null}
+                    dirty={dirty}
+                    edges={edges}
+                    mapModalOpen={configComponent !== undefined}
+                    nodes={nodes}
+                    onChange={setComponent}
+                    onEdgesChange={onEdgesChange}
+                    onNodesChange={onNodesChange}
+                    subcomponents={subcomponents}
+                  />
+                ) : (
+                  <Brick component={component} setComponent={setComponent} />
+                )}
+              </Stack>
             </Stack>
           )}
         </Grid>

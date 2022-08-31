@@ -1,5 +1,5 @@
 import React, { FC, useState } from 'react';
-import { Button, Chip, Icon, Typography } from '@equinor/eds-core-react';
+import { Button, Icon, Typography } from '@equinor/eds-core-react';
 import { Stack, TextField } from '@mui/material';
 import moment from 'moment';
 import styled from 'styled-components';
@@ -18,6 +18,7 @@ interface SidebarProps {
   setInstance: any;
   workspace: string;
   secrets?: string[];
+  isLatest?: boolean;
 }
 
 const StyledTextButton = styled.button`
@@ -85,9 +86,6 @@ export const Sidebar: FC<SidebarProps> = (props: SidebarProps) => {
     <Stack spacing={2} sx={{ padding: '1rem', position: 'relative', width: '100%' }}>
       <EditorHeader type={type === 'component' ? 'Component' : 'Workflow'} workspace={workspace}></EditorHeader>
       <Stack spacing={1}>
-        <Chip style={{ fontSize: '1rem' }}>
-          <span>v{type === 'workflow' ? workflow?.version?.current : component?.version?.current}</span>
-        </Chip>
         {editName ? (
           <TextField
             autoFocus
