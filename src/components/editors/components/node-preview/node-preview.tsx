@@ -111,11 +111,13 @@ export const NodePreview: FC<NodePreviewProps> = (props: NodePreviewProps) => {
           </Stack>
         )}
         <Stack alignItems="flex-end" sx={{ paddingTop: '2rem' }}>
-          <Link to={`/component/${data?.component?.uid}`} target="_blank">
-            <Button as="span" color="secondary">
-              <Icon name="code" /> View component source
-            </Button>
-          </Link>
+          {!node.data?.isInlineComponent && (
+            <Link to={`/component/${data?.component?.uid}`} target="_blank">
+              <Button as="span" color="secondary">
+                <Icon name="code" /> View component source
+              </Button>
+            </Link>
+          )}
         </Stack>
       </Stack>
     </Drawer>

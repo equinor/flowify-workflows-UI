@@ -20,6 +20,7 @@ export interface INode {
   subcomponents?: Component[];
   setConfigComponent?: any;
   inputMappings?: IEdge[];
+  isInlineComponent?: boolean;
 }
 
 /**
@@ -118,6 +119,7 @@ async function createTaskNode(
       subcomponents,
       setConfigComponent,
       inputMappings,
+      isInlineComponent: (node as Component)?.type === 'component',
     },
     position: {
       x: componentNode?.userdata?.graphPosition?.x || 400,

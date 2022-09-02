@@ -48,22 +48,25 @@ export const TaskNode = memo((props: ITaskNode) => {
             </div>
             <Stack direction="row" alignItems="center">
               <Chip>{data.component?.implementation?.type}</Chip>
+              {data?.isInlineComponent && <Chip>local</Chip>}
               <Tooltip title="View component information" style={{ fontSize: '1rem' }}>
                 <Button variant="ghost_icon" color="secondary" onClick={() => setOpen(true)}>
                   <Icon name="visibility" />
                 </Button>
               </Tooltip>
-              <Tooltip title="View component source" style={{ fontSize: '1rem' }}>
-                <Link
-                  to={`/component/${data.component?.uid}/${data?.component?.version?.current}`}
-                  target="_blank"
-                  title="Open component in the editor (opens new tab)"
-                >
-                  <Button variant="ghost_icon" color="secondary" as="span">
-                    <Icon name="code" />
-                  </Button>
-                </Link>
-              </Tooltip>
+              {!data?.isInlineComponent && (
+                <Tooltip title="View component source" style={{ fontSize: '1rem' }}>
+                  <Link
+                    to={`/component/${data.component?.uid}/${data?.component?.version?.current}`}
+                    target="_blank"
+                    title="Open component in the editor (opens new tab)"
+                  >
+                    <Button variant="ghost_icon" color="secondary" as="span">
+                      <Icon name="code" />
+                    </Button>
+                  </Link>
+                </Tooltip>
+              )}
             </Stack>
           </Stack>
           <DragIcon className="custom-drag-handle" sx={{ color: '#666', fontSize: '2rem' }} />
