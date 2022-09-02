@@ -37,7 +37,7 @@
     "react-router-dom": "^6.3.0",
     "react-scripts": "^5.0.1",
     "rxjs": "^7.3.0",
-    "sass": "1.52.3",
+    "sass": "1.54.4",
     "styled-components": "^5.3.5",
     "superagent": "7.1.6",
     "superagent-promise": "^1.1.0",
