@@ -1,1 +1,1 @@
-export { WorkflowHistory } from './workflow-history';
+export { History } from './history';

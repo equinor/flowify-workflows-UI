@@ -194,6 +194,7 @@ const WorkflowEditor: FC<IWorkflowEditor> = (props: IWorkflowEditor) => {
               />
               <Stack sx={{ flexGrow: '1', minHeight: '0', flexWrap: 'nowrap', height: '100%', width: '100%' }}>
                 <VersionBar
+                  type="workflow"
                   version={workflow?.version?.current}
                   isLatest={isLatest || false}
                   onSave={onSave}

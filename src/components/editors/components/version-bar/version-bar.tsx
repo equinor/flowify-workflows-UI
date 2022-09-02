@@ -1,22 +1,24 @@
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 import { Button, Chip, Icon } from '@equinor/eds-core-react';
 import { Stack } from '@mui/material';
-import { Select } from '../../../ui';
+import { History } from '../../workflow/components';
 
 interface VersionBarProps {
   version: number | undefined;
   isLatest: boolean;
   onSave: () => void;
   onPublish: () => void;
+  type: 'component' | 'workflow';
 }
 
 export const VersionBar: FC<VersionBarProps> = (props: VersionBarProps) => {
   const { version, onSave, onPublish } = props;
+  const [modalOpen, setModalOpen] = useState<boolean>(false);
 
-  const versionsOptions = Array.from({ length: version || 0 }, (_, i) => i + 1).map((count) => ({
-    label: `Version ${count}`,
-    value: `${count}`,
-  }));
+  /**
+   * TODO: Add api call to fetch versions overview - this is temporary hack
+   */
+  const versions = Array.from({ length: version || 0 }, (_, i) => i + 1);
 
   return (
     <Stack
@@ -32,7 +34,16 @@ export const VersionBar: FC<VersionBarProps> = (props: VersionBarProps) => {
             v{version} {props.isLatest ? '(Latest version)' : ''}
           </span>
         </Chip>
-        <Select id="version_selector" options={versionsOptions} onChange={null} value={`${version}`} />
+        <Button variant="ghost_icon" onClick={() => setModalOpen(true)}>
+          <Icon name="history" />
+        </Button>
+        <History
+          type={props.type}
+          open={modalOpen}
+          onClose={() => setModalOpen(false)}
+          versions={versions}
+          currentVersion={version}
+        />
       </Stack>
       <Stack direction="row" spacing={2}>
         <Button onClick={onSave}>

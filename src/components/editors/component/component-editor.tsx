@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
-import { Button, Progress } from '@equinor/eds-core-react';
+import { Progress } from '@equinor/eds-core-react';
 import { Grid, Stack } from '@mui/material';
 import { useEdgesState, useNodesState } from 'react-flow-renderer';
 import { Component } from '../../../models/v2';
@@ -50,14 +50,11 @@ const Editor: React.FC<IEditor> = (props: IEditor) => {
       services.components
         .get(uid, version)
         .then((res) => {
-          fetchInitialSubComponents(res)
-            .then((subs) => {
-              setSubcomponents(subs);
-            })
-            .then(() => {
-              setComponent(res);
-              setLoading(false);
-            });
+          fetchInitialSubComponents(res).then((subs) => {
+            setSubcomponents(subs);
+            setComponent(res);
+            setLoading(false);
+          });
         })
         .catch((error) => {
           console.error(error);
@@ -119,6 +116,10 @@ const Editor: React.FC<IEditor> = (props: IEditor) => {
     }
   }
 
+  if (!component) {
+    return null;
+  }
+
   return (
     <>
       <Feedbacks feedback={feedback} setFeedback={setFeedback} type="component" />
@@ -168,6 +169,7 @@ const Editor: React.FC<IEditor> = (props: IEditor) => {
               />
               <Stack sx={{ flexGrow: '1', minHeight: '0', flexWrap: 'nowrap', height: '100%', width: '100%' }}>
                 <VersionBar
+                  type="component"
                   version={component?.version?.current}
                   isLatest={isLatest || false}
                   onSave={onSave}
