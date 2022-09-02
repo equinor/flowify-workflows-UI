@@ -3,7 +3,7 @@ import { Button, Chip, Icon, Typography } from '@equinor/eds-core-react';
 import { Stack } from '@mui/material';
 import { NodeProps } from 'react-flow-renderer/nocss';
 import { DragIndicator as DragIcon } from '@mui/icons-material';
-import { INode } from '../../helpers/helpers';
+import { INode, getComponentFromRef } from '../../helpers/helpers';
 import { Handles } from '.';
 import { NodePreview } from '..';
 import { Map } from '../../../../models/v2';
@@ -16,8 +16,7 @@ export const MapNode = memo((props: IMapNode) => {
   const [open, setOpen] = useState<boolean>(false);
 
   const childRef = (data?.component?.implementation as Map).node;
-  const childNode =
-    typeof childRef === 'string' ? data?.subcomponents?.find((comp) => comp.uid === childRef) : childRef;
+  const childNode = getComponentFromRef(childRef, data.subcomponents || []);
 
   const secrets = data?.component?.inputs?.filter((input) => input.type === 'env_secret');
   const volumes = data?.component?.inputs?.filter((input) => input.type === 'volume');

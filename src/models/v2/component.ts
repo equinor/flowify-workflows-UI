@@ -59,7 +59,7 @@ export interface Map {
   type: 'map';
   inputMappings: Edge[];
   outputMappings: Edge[];
-  node: Component | CRef;
+  node: Component | CRef | string;
 }
 
 export interface Conditional {
@@ -86,13 +86,16 @@ export interface Any extends ComponentImplementationBase {
 }
 
 // a reference to a component in the server/database
-export type CRef = string;
+export interface CRef {
+  uid?: string;
+  version?: number;
+}
 export interface Node {
   // a locally unique identifier
   id: string;
   // a node is either an 'inline' component or a reference to the server/database
   // inline components make it possible to build components from scratch
-  node: Component | CRef;
+  node: Component | CRef | string;
   userdata?: UserData;
 }
 
@@ -114,7 +117,7 @@ export interface Metadata {
   name?: string;
   description?: string;
   modifiedBy?: string;
-  uid?: CRef;
+  uid?: string;
   previous?: CRef;
   timestamp?: Time;
   version?: {

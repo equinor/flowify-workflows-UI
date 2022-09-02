@@ -2,6 +2,7 @@ import { Connection, Edge, Node } from 'react-flow-renderer';
 import { Component, Map } from '../../../../../../models/v2';
 import { INode, nanoid } from '../../../../helpers';
 import { ConnectionData } from '../types';
+import { getComponentFromRef } from '../../../../helpers';
 
 export function checkValidation(params: Edge<any> | Connection, component: Component, subcomponents?: Component[]) {
   const { source, sourceHandle, target, targetHandle } = params;
@@ -11,7 +12,7 @@ export function checkValidation(params: Edge<any> | Connection, component: Compo
 
   const node = (component.implementation as Map).node;
 
-  const childComponent = typeof node === 'string' ? subcomponents?.find((comp) => comp.uid === node) : node;
+  const childComponent = getComponentFromRef(node, subcomponents || []);
 
   if (isBaseOutput) {
     const baseOutput = outputs?.find((output) => output.name === target);
@@ -69,12 +70,7 @@ export function createNodes(childNode: Component, id: string, component: Compone
       selectable: false,
       data: {
         label: childNode?.name || id,
-        inputs: childNode?.inputs,
-        outputs: childNode?.outputs,
-        componentId: childNode?.uid,
-        description: childNode?.description,
-        author: childNode?.modifiedBy,
-        published: childNode?.timestamp,
+        component: childNode,
         implementation: childNode?.implementation,
       },
       position: {

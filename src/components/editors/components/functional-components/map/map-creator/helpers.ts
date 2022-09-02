@@ -1,10 +1,11 @@
 import { uuid } from '../../../../../../common';
 import { Component, Node, Edge } from '../../../../../../models/v2';
+import { getComponentFromRef } from '../../../../helpers';
 
 export function generateMap(nodes: Node[], nodeId: string, subcomponents: Component[] | undefined, options: any) {
   const index = nodes.findIndex((node) => node.id === nodeId);
   const subnode = nodes[index]?.node;
-  const subcomponent = typeof subnode === 'string' ? subcomponents?.find((comp) => comp.uid === subnode) : subnode;
+  const subcomponent = getComponentFromRef(subnode, subcomponents || []);
 
   const inputMappings: Edge[] =
     subcomponent?.inputs?.map((input) => ({

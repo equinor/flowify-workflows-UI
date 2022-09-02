@@ -3,6 +3,7 @@ import { Stack } from '@mui/material';
 import { Button, Checkbox, Icon, Radio, Typography } from '@equinor/eds-core-react';
 import { Component, Graph } from '../../../../../../models/v2';
 import { generateMap } from './helpers';
+import { getComponentFromRef } from '../../../../helpers';
 
 interface MapCreatorProps {
   component?: Component;
@@ -44,11 +45,7 @@ export const MapCreator: FC<MapCreatorProps> = (props: MapCreatorProps) => {
             (component.implementation as Graph).nodes?.map((node) => (
               <Radio
                 key={node?.id}
-                label={
-                  typeof node.node === 'string'
-                    ? subcomponents?.find((component) => component.uid === node.node)?.name
-                    : node.node?.name || node.id
-                }
+                label={getComponentFromRef(node.node, subcomponents || [])?.name}
                 value={node?.id}
                 checked={selectedComponent === node?.id}
                 onChange={(event: any) => setSelectedComponent(event.target.value)}

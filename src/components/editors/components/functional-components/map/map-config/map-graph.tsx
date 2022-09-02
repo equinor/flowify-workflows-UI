@@ -6,7 +6,7 @@ import ReactFlow, {
   useNodesState,
   useEdgesState,
 } from 'react-flow-renderer/nocss';
-import { INode } from '../../../../helpers/helpers';
+import { INode, getComponentFromRef } from '../../../../helpers/helpers';
 import { Component, Map, Edge as IEdge } from '../../../../../../models/v2';
 import { StartNode, EndNode, ConditionalNode, SubNode } from '../../../graph';
 import { addConnection, checkValidation, createEdges, createNodes } from './helpers';
@@ -32,7 +32,7 @@ export const MapGraph: FC<MapGraphProps> = (props: MapGraphProps) => {
   const [edges, setEdges, onEdgesChange] = useEdgesState<any>([]);
 
   const childRef = (component?.implementation as Map)?.node;
-  const childNode = typeof childRef === 'string' ? subcomponents?.find((comp) => comp.uid === childRef) : childRef;
+  const childNode = getComponentFromRef(childRef, subcomponents || []);
 
   useEffect(() => {
     if (component) {

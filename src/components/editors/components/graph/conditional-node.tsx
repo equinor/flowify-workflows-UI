@@ -19,8 +19,6 @@ export const ConditionalNode = memo((props: IConditionalNode) => {
   //const trueNode = (data?.component?.implementation as Conditional)?.nodeTrue;
   const falseNode = (data?.component?.implementation as Conditional)?.nodeFalse;
 
-  //const childNode = typeof childRef === 'string' ? data?.subcomponents?.find((comp) => comp.uid === childRef) : childRef;
-
   return (
     <>
       <Handles parameters={data?.component?.inputs} type="Input" />

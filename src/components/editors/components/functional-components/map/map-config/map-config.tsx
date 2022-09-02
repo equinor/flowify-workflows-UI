@@ -1,7 +1,7 @@
 import React, { FC, useEffect, useState } from 'react';
 import { Stack, Dialog, Grid } from '@mui/material';
 import { Button, Icon, Typography } from '@equinor/eds-core-react';
-import { nanoid } from '../../../../helpers';
+import { getComponentFromRef, nanoid } from '../../../../helpers';
 import { Parameter } from '../../..';
 import { Component, Edge, Graph, Node } from '../../../../../../models/v2';
 import { MapGraph } from './map-graph';
@@ -24,12 +24,8 @@ export const MapConfig: FC<MapConfigProps> = (props: MapConfigProps) => {
     if (mapConfigComponent) {
       if (component?.implementation?.type === 'graph') {
         const node = (component?.implementation as Graph)?.nodes?.find((node) => node.id === mapConfigComponent);
-        if (typeof node?.node === 'string') {
-          const subcomponent = subcomponents?.find((comp) => comp.uid === node.node);
-          setMapComponent(subcomponent);
-          return;
-        }
-        setMapComponent(node?.node);
+        const subcomponent = getComponentFromRef(node?.node!, subcomponents || []);
+        setMapComponent(subcomponent);
       }
     }
   }, [mapConfigComponent, component, subcomponents]);

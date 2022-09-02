@@ -17,14 +17,14 @@ export const SubNode = memo((props: ISubNode) => {
   return (
     <Stack spacing={2} direction="row" alignItems="center">
       <NodePreview node={props} open={open} onClose={setOpen} />
-      <Handles parameters={data?.inputs} type="Input" filterParameters={false} />
+      <Handles parameters={data?.component?.inputs} type="Input" filterParameters={false} />
       <Stack alignItems="center" spacing={3} direction="row">
         <Stack spacing={1} alignItems="space-between">
           <Icon name="mall" size={16} color="#999" />
           <div>
             <Typography variant="body_short_bold">{data.label}</Typography>
             <Typography variant="body_short" style={{ maxWidth: '280px' }}>
-              {data.description}
+              {data?.component?.description}
             </Typography>
           </div>
           <Stack direction="row" alignItems="center">
@@ -36,7 +36,7 @@ export const SubNode = memo((props: ISubNode) => {
             </Tooltip>
             <Tooltip title="View component source" style={{ fontSize: '1rem' }}>
               <Link
-                to={`/component/${data.componentId}`}
+                to={`/component/${data.component?.uid}/${data?.component?.version?.current}`}
                 target="_blank"
                 title="Open component in the editor (opens new tab)"
               >
@@ -49,7 +49,7 @@ export const SubNode = memo((props: ISubNode) => {
         </Stack>
         <DragIcon className="custom-drag-handle" sx={{ color: '#666', fontSize: '2rem' }} />
       </Stack>
-      <Handles parameters={data?.outputs} type="Output" filterParameters={false} />
+      <Handles parameters={data?.component?.outputs} type="Output" filterParameters={false} />
     </Stack>
   );
 });

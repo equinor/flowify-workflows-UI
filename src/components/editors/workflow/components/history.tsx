@@ -7,7 +7,6 @@ interface IHistory {
   open: boolean;
   onClose: () => void;
   versions: any;
-  changeVersion: (index: number) => void;
   currentVersion: number | undefined;
   type: 'component' | 'workflow';
 }

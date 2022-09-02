@@ -1,6 +1,6 @@
 import { Edge, Node } from 'react-flow-renderer/nocss';
 import { isNotEmptyArray } from '../../../common';
-import { Node as ComponentNode, Data, Graph, Brick, Any, Component, Edge as IEdge } from '../../../models/v2';
+import { Node as ComponentNode, Data, Graph, Brick, Any, Component, Edge as IEdge, CRef } from '../../../models/v2';
 import { customAlphabet } from 'nanoid';
 
 // RFC1123 alphanumeric + hyphen, we skip hyphen because cant appear at start or end
@@ -12,17 +12,10 @@ export function nanoid(len: number) {
 
 export interface INode {
   label?: string;
-  inputs?: Data[];
-  outputs?: Data[];
   component?: Component;
   mediatype?: string[];
   type?: string;
-  componentId?: string;
-  description?: string;
-  author?: string;
-  published?: string;
   implementation?: Graph | Brick | Any;
-  node?: Component;
   setParameterConfig?: any;
   subcomponents?: Component[];
   setConfigComponent?: any;
@@ -77,6 +70,27 @@ function newEndNodes(outputs: Data[]): Node<INode>[] {
   return nodes;
 }
 
+export function getComponentFromRef(node: Component | CRef | string, subcomponents: Component[]): Component {
+  // If node is inline component
+  if ((node as Component)?.type === 'component') {
+    return node as Component;
+  }
+  // If node references uid as string
+  if (typeof node === 'string') {
+    // Since the uid string references don't contain version we want to return the latest version. We filter 'cause there might be different version of the same component - if there only is one, we know that's the right one. If there are more we fetch the latest by the latest tag. We have to do this 'cause old components start from v0 and don't contain the latest tag, so this workaround helps solve that issue. Probably will be deprecated when all components and workflows in the db use the new versioning.
+    const subcomps = subcomponents.filter((component) => component.uid === node);
+    if (subcomps?.length === 1) {
+      return subcomps[0];
+    }
+    const latest = subcomps.find((component) => component?.version?.tags?.includes('latest'));
+    return latest!;
+  }
+  // If node references uid and version as Cref
+  return subcomponents.find(
+    (component) => component.uid === (node as CRef)?.uid && component?.version?.current === (node as CRef)?.version,
+  ) as Component;
+}
+
 /**
  * Create singular task node
  * @param componentNode
@@ -92,85 +106,18 @@ async function createTaskNode(
   inputMappings?: IEdge[],
 ): Promise<Node<INode>> {
   const { id, node } = componentNode;
-  /**
-   * If component is cref
-   */
-  if (typeof node === 'string') {
-    const component = subcomponents.find((c) => c.uid === node);
-    const type = component?.implementation?.type;
-    if (type === 'map' || type === 'conditional') {
-      return {
-        id,
-        type: type === 'map' ? 'mapNode' : 'conditionalNode',
-        data: {
-          component,
-          setParameterConfig,
-          subcomponents,
-          setConfigComponent,
-          inputMappings,
-        },
-        position: {
-          x: componentNode?.userdata?.graphPosition?.x || 400,
-          y: componentNode?.userdata?.graphPosition?.y || 100 + 100 * index,
-        },
-      };
-    }
-    return {
-      id: id,
-      type: 'taskNode',
-      data: {
-        label: component?.name || id,
-        inputs: component?.inputs,
-        outputs: component?.outputs,
-        componentId: component?.uid,
-        description: component?.description,
-        author: component?.modifiedBy,
-        published: component?.timestamp,
-        implementation: component?.implementation,
-        component,
-        inputMappings,
-        setParameterConfig,
-      },
-      position: {
-        x: componentNode?.userdata?.graphPosition?.x || 400,
-        y: componentNode?.userdata?.graphPosition?.y || 100 + 100 * index,
-      },
-    };
-  }
-  const n = node as Component;
-  const type = n?.implementation?.type;
-  if (type === 'map' || type === 'conditional') {
-    return {
-      id,
-      type: type === 'map' ? 'mapNode' : 'conditionalNode',
-      data: {
-        component: n,
-        setParameterConfig,
-        subcomponents,
-        setConfigComponent,
-        inputMappings,
-      },
-      position: {
-        x: componentNode?.userdata?.graphPosition?.x || 400,
-        y: componentNode?.userdata?.graphPosition?.y || 100 + 100 * index,
-      },
-    };
-  }
+  const component = getComponentFromRef(node, subcomponents);
+  const type = component?.implementation?.type;
+
   return {
-    id: id,
-    type: 'taskNode',
+    id,
+    type: type === 'map' ? 'mapNode' : type === 'conditional' ? 'conditionalNode' : 'taskNode',
     data: {
-      label: n?.name || id,
-      inputs: n?.inputs,
-      outputs: n?.outputs,
-      componentId: n?.uid,
-      description: n?.description,
-      author: n?.modifiedBy,
-      published: n?.timestamp,
-      implementation: n?.implementation,
-      component: n,
-      inputMappings,
+      component,
       setParameterConfig,
+      subcomponents,
+      setConfigComponent,
+      inputMappings,
     },
     position: {
       x: componentNode?.userdata?.graphPosition?.x || 400,

@@ -15,8 +15,8 @@ export const TaskNode = memo((props: ITaskNode) => {
   const { data, id } = props;
   const [open, setOpen] = useState<boolean>(false);
 
-  const secrets = data?.inputs?.filter((input) => input.type === 'env_secret');
-  const volumes = data?.inputs?.filter((input) => input.type === 'volume');
+  const secrets = data?.component?.inputs?.filter((input) => input.type === 'env_secret');
+  const volumes = data?.component?.inputs?.filter((input) => input.type === 'volume');
 
   const { inputMappings, setParameterConfig } = data;
 
@@ -33,18 +33,21 @@ export const TaskNode = memo((props: ITaskNode) => {
     <Stack>
       <Stack spacing={2} direction="row" alignItems="center">
         <NodePreview node={props} open={open} onClose={setOpen} />
-        <Handles parameters={data?.inputs} type="Input" />
+        <Handles parameters={data?.component?.inputs} type="Input" />
         <Stack alignItems="center" spacing={3} direction="row">
           <Stack spacing={1} alignItems="space-between">
             <Icon name="mall" size={16} color="#999" />
             <div>
-              <Typography variant="body_short_bold">{data.label}</Typography>
+              <Typography variant="body_short_bold">
+                {data.component?.name}{' '}
+                {data?.component?.version?.current ? `(v${data?.component?.version?.current})` : ''}
+              </Typography>
               <Typography variant="body_short" style={{ maxWidth: '280px' }}>
-                {data.description}
+                {data?.component?.description}
               </Typography>
             </div>
             <Stack direction="row" alignItems="center">
-              <Chip>{data.implementation?.type}</Chip>
+              <Chip>{data.component?.implementation?.type}</Chip>
               <Tooltip title="View component information" style={{ fontSize: '1rem' }}>
                 <Button variant="ghost_icon" color="secondary" onClick={() => setOpen(true)}>
                   <Icon name="visibility" />
@@ -52,7 +55,7 @@ export const TaskNode = memo((props: ITaskNode) => {
               </Tooltip>
               <Tooltip title="View component source" style={{ fontSize: '1rem' }}>
                 <Link
-                  to={`/component/${data.componentId}`}
+                  to={`/component/${data.component?.uid}/${data?.component?.version?.current}`}
                   target="_blank"
                   title="Open component in the editor (opens new tab)"
                 >
@@ -65,7 +68,7 @@ export const TaskNode = memo((props: ITaskNode) => {
           </Stack>
           <DragIcon className="custom-drag-handle" sx={{ color: '#666', fontSize: '2rem' }} />
         </Stack>
-        <Handles parameters={data?.outputs} type="Output" />
+        <Handles parameters={data?.component?.outputs} type="Output" />
       </Stack>
       <Stack direction="row">
         {isNotEmptyArray(secrets) && (

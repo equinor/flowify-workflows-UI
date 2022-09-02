@@ -29,10 +29,10 @@ export const EditorCentralBar: FC<EditorCentralBarProps> = (props: EditorCentral
     component: Component,
     setButtonState: React.Dispatch<React.SetStateAction<BUTTON_STATE>>,
   ) {
-    const { uid } = component;
+    const { uid, version } = component;
     if (uid && setSubcomponents && setFeedback && setComponent) {
       services.components
-        .get(uid)
+        .get(uid, version?.current)
         .then((res) => setSubcomponents((prev) => [...(prev || []), res]))
         .then(() => {
           setButtonState('success');
@@ -46,7 +46,10 @@ export const EditorCentralBar: FC<EditorCentralBarProps> = (props: EditorCentral
             ...prev,
             implementation: {
               ...prev?.implementation,
-              nodes: [...((prev?.implementation as Graph)?.nodes || []), { id: `n${nanoid(8)}`, node: uid }],
+              nodes: [
+                ...((prev?.implementation as Graph)?.nodes || []),
+                { id: `n${nanoid(8)}`, node: { uid, version: version?.current } },
+              ],
             },
           }));
         })

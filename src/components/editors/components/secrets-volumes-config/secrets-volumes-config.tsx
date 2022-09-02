@@ -3,6 +3,7 @@ import { Stack, Dialog } from '@mui/material';
 import { Typography } from '@equinor/eds-core-react';
 import { Component, Data, Edge, Graph, IVolume } from '../../../../models/v2';
 import { Select } from '../../../ui';
+import { getComponentFromRef } from '../../helpers';
 
 interface SecretsVolumesConfigProps {
   parameterConfig: { type: 'secret' | 'volume'; id: string } | undefined;
@@ -35,7 +36,7 @@ export const SecretsVolumesConfig: FC<SecretsVolumesConfigProps> = (props: Secre
 
   const node = (component?.implementation as Graph)?.nodes?.find((node) => node.id === id);
   const subnode = node?.node;
-  const subcomponent = typeof subnode === 'string' ? subcomponents?.find((comp) => comp.uid === subnode) : subnode;
+  const subcomponent = getComponentFromRef(subnode!, subcomponents || []);
 
   const secrets = subcomponent?.inputs?.filter((input: any) => input.type === 'env_secret');
   const mounts = subcomponent?.inputs?.filter((input: any) => input.type === 'volume');
