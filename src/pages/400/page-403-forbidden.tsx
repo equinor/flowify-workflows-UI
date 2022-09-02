@@ -1,6 +1,7 @@
 import React, { FC } from 'react';
 import { Typography } from '@equinor/eds-core-react';
 import { Container, Layout } from '../../layout';
+import { Helmet } from 'react-helmet-async';
 
 interface IPage403Forbidden {
   children: React.ReactNode;
@@ -8,8 +9,12 @@ interface IPage403Forbidden {
 
 export const Page403Forbidden: FC<IPage403Forbidden> = (props: IPage403Forbidden) => {
   const { children } = props;
+
   return (
     <Layout>
+      <Helmet>
+        <title>403 - Flowify</title>
+      </Helmet>
       <Container withMargins>
         <i className="far fa-frown fa-5x" />
         <br />

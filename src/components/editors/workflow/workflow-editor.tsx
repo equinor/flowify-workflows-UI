@@ -1,6 +1,7 @@
 import React, { useEffect, useState, FC } from 'react';
 import { Progress } from '@equinor/eds-core-react';
 import { Grid, Stack } from '@mui/material';
+import { Helmet } from 'react-helmet-async';
 import { Workflow } from '../../../models/v2/workflow';
 import {
   EditorCentralBar,
@@ -135,6 +136,12 @@ const WorkflowEditor: FC<IWorkflowEditor> = (props: IWorkflowEditor) => {
 
   return (
     <>
+      <Helmet>
+        <title>
+          {workflow?.name || ''} {workflow?.version?.current ? `(v${workflow?.version?.current})` : ''} - Workflow
+          editor - Flowify
+        </title>
+      </Helmet>
       <Feedbacks feedback={feedback} setFeedback={setFeedback} type="workflow" />
       <MapConfig
         component={component}

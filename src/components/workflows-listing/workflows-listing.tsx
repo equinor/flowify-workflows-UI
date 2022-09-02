@@ -11,7 +11,7 @@ import {
   TablePagination,
   TableSortLabel,
 } from '@mui/material';
-import { Icon, Progress, Typography } from '@equinor/eds-core-react';
+import { Icon, Typography } from '@equinor/eds-core-react';
 import WorkflowTableRow from './components/table-row';
 import { Workflow } from '../../models/v2/workflow';
 import { services } from '../../services/v2';
@@ -191,12 +191,12 @@ const WorkflowsListing: FC<IWorkflowsListing> = (props: IWorkflowsListing) => {
                     />
                   ))}
               </TableBody>
-            ) : loadingWorkflows ? (
-              <Progress.Dots />
             ) : (
-              <Stack sx={{ padding: '1rem' }}>
-                <Typography variant="body_short">No workflows available.</Typography>
-              </Stack>
+              !loadingWorkflows && (
+                <Stack sx={{ padding: '1rem' }}>
+                  <Typography variant="body_short">No workflows available.</Typography>
+                </Stack>
+              )
             )}
           </StyledTable>
           {requestData && (

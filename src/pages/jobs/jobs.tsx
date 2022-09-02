@@ -5,6 +5,7 @@ import { Breadcrumbs } from '../../components/ui';
 import { JobsListing } from '../../components';
 import { Layout, Container } from '../../layout';
 import { Stack } from '@mui/material';
+import { Helmet } from 'react-helmet-async';
 
 interface JobsPageProps {}
 
@@ -13,6 +14,9 @@ export const JobsPage: React.FC<JobsPageProps> = (props: JobsPageProps) => {
 
   return (
     <Layout>
+      <Helmet>
+        <title>Jobs - {workspace} - Flowify</title>
+      </Helmet>
       <Container withMargins>
         <Stack spacing={8}>
           <Breadcrumbs>

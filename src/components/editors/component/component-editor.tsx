@@ -3,6 +3,7 @@ import { useParams } from 'react-router';
 import { Progress } from '@equinor/eds-core-react';
 import { Grid, Stack } from '@mui/material';
 import { useEdgesState, useNodesState } from 'react-flow-renderer';
+import { Helmet } from 'react-helmet-async';
 import { Component } from '../../../models/v2';
 import { services } from '../../../services/v2';
 import {
@@ -122,6 +123,9 @@ const Editor: React.FC<IEditor> = (props: IEditor) => {
 
   return (
     <>
+      <Helmet>
+        <title>{component?.name || ''} - Component editor - Flowify</title>
+      </Helmet>
       <Feedbacks feedback={feedback} setFeedback={setFeedback} type="component" />
       <MapConfig
         component={component}

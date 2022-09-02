@@ -1,5 +1,6 @@
 import React from 'react';
 import { SnackbarProvider } from 'notistack';
+import { HelmetProvider } from 'react-helmet-async';
 import './common/icons';
 import './styles/scss/index.scss';
 import Pages from './routes';
@@ -11,11 +12,13 @@ function App() {
   return (
     <CurrentUserProvider>
       <AuthProvider>
-        <EditorSettingsProvider>
-          <SnackbarProvider maxSnack={3}>
-            <Pages />
-          </SnackbarProvider>
-        </EditorSettingsProvider>
+        <HelmetProvider>
+          <EditorSettingsProvider>
+            <SnackbarProvider maxSnack={3}>
+              <Pages />
+            </SnackbarProvider>
+          </EditorSettingsProvider>
+        </HelmetProvider>
       </AuthProvider>
     </CurrentUserProvider>
   );

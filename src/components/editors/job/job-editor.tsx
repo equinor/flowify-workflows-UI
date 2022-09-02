@@ -6,6 +6,7 @@ import { Workflow } from '../../../models';
 import { EditorCentralBar, EditorHeader } from '../components';
 import { JobSidebar, JobGraph } from './components';
 import { NodeDetails } from './components/job-node-preview/job-node-preview';
+import { Helmet } from 'react-helmet-async';
 
 interface JobViewerProps {
   job: Workflow | undefined;
@@ -17,9 +18,12 @@ export const JobViewer: FC<JobViewerProps> = (props: JobViewerProps) => {
   const { job, loading } = props;
   const [useManifest, setUseManifest] = useState<boolean>(false);
   const [selectedNodeId, setSelectedNodeId] = useState<string | undefined>(undefined);
-
+  console.log(job);
   return (
     <>
+      <Helmet>
+        <title>{job?.metadata?.name} - Job viewer - Flowify</title>
+      </Helmet>
       <Grid container sx={{ flexGrow: '1', minHeight: '0', flexWrap: 'nowrap' }}>
         {selectedNodeId && (
           <NodeDetails
