@@ -23,13 +23,19 @@ export class WorkflowService {
     return requests
       .patch(`api/v2/workflows/${id}`)
       .send({ workflow })
-      .then((res) => res.body as Workflow);
+      .then(
+        (res) => res.body as Workflow,
+        (reason) => reason,
+      );
   }
 
   public publish(workflow: Workflow, id: string) {
     return requests
       .put(`api/v2/workflows/${id}`)
       .send({ workflow })
-      .then((res) => res.body as Workflow);
+      .then(
+        (res) => res.body as Workflow,
+        (reason) => reason,
+      );
   }
 }

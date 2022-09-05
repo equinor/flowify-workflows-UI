@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 import { Progress } from '@equinor/eds-core-react';
 import { Grid, Stack } from '@mui/material';
 import { useEdgesState, useNodesState } from 'react-flow-renderer';
@@ -44,6 +44,7 @@ const Editor: React.FC<IEditor> = (props: IEditor) => {
   const [subcomponents, setSubcomponents] = useState<Component[]>();
   const [useManifest, setUseManifest] = useState<boolean>(false);
   const isLatest = component?.version?.tags?.includes('latest');
+  const navigate = useNavigate();
 
   useEffect(() => {
     console.log('component on mount');
@@ -96,6 +97,12 @@ const Editor: React.FC<IEditor> = (props: IEditor) => {
         })
         .catch((error) => {
           console.error(error);
+          // HACK UNTIL WE FIX COSMOSDB ISSUES
+          if (error?.code === 500) {
+            setFeedback('SAVE_SUCCESS');
+            setLoading(false);
+            return;
+          }
           // TODO: Handle 409 error
           setFeedback('UPDATE_ERROR');
         });
@@ -112,6 +119,11 @@ const Editor: React.FC<IEditor> = (props: IEditor) => {
         })
         .catch((error) => {
           console.error(error);
+          // HACK UNTIL WE FIX COSMOSDB ISSUES
+          if (error?.code === 500) {
+            setLoading(false);
+            navigate(`/component/${component.uid}/${parseInt(version!, 10) + 1}`);
+          }
           // TODO: Handle error
         });
     }

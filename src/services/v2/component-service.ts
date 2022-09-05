@@ -24,13 +24,19 @@ export class ComponentService {
     return requests
       .put(`api/v2/components/${id}`)
       .send({ component })
-      .then((res) => res.body as Component);
+      .then(
+        (res) => res.body as Component,
+        (reason) => reason,
+      );
   }
 
   public update(component: Component, id: string) {
     return requests
       .patch(`api/v2/components/${id}`)
       .send({ component })
-      .then((res) => res.body as Component);
+      .then(
+        (res) => res.body as Component,
+        (reason) => reason,
+      );
   }
 }

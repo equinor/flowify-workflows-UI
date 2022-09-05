@@ -19,7 +19,7 @@ import { services } from '../../../services/v2';
 import { ObjectEditor } from '../../object-editor/object-editor';
 import { useEdgesState, useNodesState } from 'react-flow-renderer';
 import { IfConfig } from '../components/functional-components/if/if-config';
-import { useParams } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 import { VersionBar } from '../components/version-bar/version-bar';
 
 interface IWorkflowEditor {
@@ -44,6 +44,7 @@ const WorkflowEditor: FC<IWorkflowEditor> = (props: IWorkflowEditor) => {
   const [workspaceSecrets, setWorkspaceSecrets] = useState<string[]>([]);
   const [workspaceVolumes, setWorkspaceVolumes] = useState<IVolume[]>([]);
   const isLatest = workflow?.version?.tags?.includes('latest');
+  const navigate = useNavigate();
 
   useEffect(() => {
     console.log('component onMount');
@@ -105,13 +106,20 @@ const WorkflowEditor: FC<IWorkflowEditor> = (props: IWorkflowEditor) => {
       setLoading(true);
       services.workflows
         .update(workflow, workflow.uid!)
-        .then(() => {
+        .then((res) => {
+          console.log(res);
           setFeedback('SAVE_SUCCESS');
           setLoading(false);
           setDirty(false);
         })
         .catch((error) => {
           console.error(error);
+          // HACK UNTIL WE FIX COSMOSDB ISSUES
+          if (error?.code === 500) {
+            setFeedback('SAVE_SUCCESS');
+            setLoading(false);
+            return;
+          }
           setLoading(false);
           setFeedback('UPDATE_ERROR');
         });
@@ -125,10 +133,15 @@ const WorkflowEditor: FC<IWorkflowEditor> = (props: IWorkflowEditor) => {
         .publish(workflow, workflow.uid!)
         .then((res) => {
           console.log(res);
-          // TODO: Reroute to new workflow
+          navigate(`/workspace/${workspace}/workflow/${workflow.uid}/${parseInt(version!, 10) + 1}`);
         })
         .catch((error) => {
           console.log(error);
+          // HACK UNTIL WE FIX COSMOSDB ISSUES
+          if (error?.code === 500) {
+            setLoading(false);
+            navigate(`/workspace/${workspace}/workflow/${workflow.uid}/${parseInt(version!, 10) + 1}`);
+          }
           // TODO: Handle error
         });
     }
