@@ -6,16 +6,18 @@ import { Marketplace, WorkspacesListing } from '../../components';
 import { DashboardListing } from '../../components/listings/dashboard-listing';
 import { Typography } from '@equinor/eds-core-react';
 import { CreateComponent } from '../../components/creators';
+import { Helmet } from 'react-helmet-async';
 
 interface IDashboardPage {}
 
 const DashboardPage: FC<IDashboardPage> = (props: IDashboardPage) => {
   const [newComponentOpen, setNewComponentOpen] = useState<boolean>(false);
 
-  console.log(newComponentOpen);
-
   return (
     <Layout>
+      <Helmet>
+        <title>Dashboard - Flowify</title>
+      </Helmet>
       <Container withMargins>
         <Stack spacing={4}>
           <Breadcrumbs>

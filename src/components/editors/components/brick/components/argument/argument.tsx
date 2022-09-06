@@ -1,46 +1,10 @@
 import React, { FC, useEffect, useState } from 'react';
-import styled from 'styled-components';
 import { Icon, Radio, Typography } from '@equinor/eds-core-react';
 import { Dialog, MenuItem, Select, Stack, TextField } from '@mui/material';
-import { Arg, Brick, Component, Data, Port } from '../../../../models/v2';
 import { Storage } from '@mui/icons-material';
-
-interface ArgumentProps {
-  arg: Arg;
-  inputs?: Data[];
-  index: number;
-  setComponent?: any;
-}
-
-const ArgumentWrapper = styled.div`
-  display: flex;
-  flex-direction: row;
-  column-gap: 1rem;
-  align-items: center;
-  padding: 0rem 1rem;
-  flex-grow: 2;
-`;
-
-const ArgumentButton = styled.button`
-  background-color: #ade2e619;
-  border-radius: 1rem;
-  display: flex;
-  align-items: center;
-  column-gap: 1rem;
-  flex-grow: 2;
-  border: none;
-  padding: 0.5rem;
-  cursor: pointer;
-  &:hover {
-    background-color: #deedee;
-  }
-`;
-
-const TYPE_ICONS = {
-  parameter: 'swap_horizontal',
-  artifact: 'file',
-  env_secret: 'security',
-};
+import { TYPE_ICONS, ArgumentProps } from './types';
+import { ArgumentButton, ArgumentWrapper } from './styles';
+import { Brick, Port } from '../../../../../../models/v2';
 
 export const Argument: FC<ArgumentProps> = (props: ArgumentProps) => {
   const { arg, inputs, setComponent, index } = props;
@@ -50,7 +14,7 @@ export const Argument: FC<ArgumentProps> = (props: ArgumentProps) => {
   const [prefixValue, setPrefixValue] = useState<string>(arg?.target?.prefix || '');
   const [suffixValue, setSuffixValue] = useState<string>(arg?.target?.suffix || '');
   const [inputValue, setInputValue] = useState<any>(isConst ? arg?.source : '');
-  const [selectValue, setSelectValue] = useState<string>(isConst ? '' : (arg?.source as Port)?.port);
+  const [selectValue, setSelectValue] = useState<string | undefined>(isConst ? '' : (arg?.source as Port)?.port);
   const [type, setType] = useState<string>('');
 
   useEffect(() => {
@@ -69,11 +33,11 @@ export const Argument: FC<ArgumentProps> = (props: ArgumentProps) => {
 
   function onChange() {
     if (typeof setComponent === 'function') {
-      setComponent((prev: Component) => ({
+      setComponent((prev) => ({
         ...prev,
         implementation: {
-          ...prev.implementation,
-          args: updateValue((prev.implementation as Brick).args),
+          ...prev?.implementation,
+          args: updateValue((prev?.implementation as Brick)?.args || []),
         },
       }));
     }

@@ -1,16 +1,26 @@
 import React, { useEffect, useState, FC } from 'react';
-import { Button, Progress, Snackbar } from '@equinor/eds-core-react';
+import { Progress } from '@equinor/eds-core-react';
 import { Grid, Stack } from '@mui/material';
+import { Helmet } from 'react-helmet-async';
 import { Workflow } from '../../../models/v2/workflow';
-import { EditorCentralBar, Sidebar, Brick, GraphEditor, MapConfig, SecretsVolumesConfig } from '../components';
-import { createGraphElements, INode, nanoid } from '../helpers';
-import { Component, Conditional, Graph, IVolume, Map } from '../../../models/v2';
+import {
+  EditorCentralBar,
+  Sidebar,
+  Brick,
+  GraphEditor,
+  MapConfig,
+  SecretsVolumesConfig,
+  FeedbackTypes,
+  Feedbacks,
+} from '../components';
+import { createGraphElements, fetchInitialSubComponents, INode } from '../helpers';
+import { Component, IVolume } from '../../../models/v2';
 import { services } from '../../../services/v2';
-import { isNotEmptyArray } from '../../../common';
 import { ObjectEditor } from '../../object-editor/object-editor';
 import { useEdgesState, useNodesState } from 'react-flow-renderer';
 import { IfConfig } from '../components/functional-components/if/if-config';
-import { useParams } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
+import { VersionBar } from '../components/version-bar/version-bar';
 
 interface IWorkflowEditor {
   uid: string | null;
@@ -20,76 +30,40 @@ interface IWorkflowEditor {
 const WorkflowEditor: FC<IWorkflowEditor> = (props: IWorkflowEditor) => {
   const { workspace, uid } = props;
   const { version } = useParams();
-  const [workflow, setWorkflow] = useState<Workflow | undefined>();
-  const [component, setComponent] = useState<Component | undefined>();
-  const [nodes, setNodes, onNodesChange] = useNodesState<INode>([]);
-  const [edges, setEdges, onEdgesChange] = useEdgesState<any>([]);
-  const [subcomponents, setSubcomponents] = useState<Component[]>();
-  const [dirty, setDirty] = useState<boolean>(false);
-  const [loading, setLoading] = useState<boolean>(false);
-  const [successSnackbar, setSuccessSnackbar] = useState<boolean>(false);
-  const [errorSnackbar, setErrorSnackbar] = useState<boolean>(false);
-  const [marketplaceSnackbar, setMarketplaceSnackbar] = useState<boolean>(false);
-  const [useManifest, setUseManifest] = useState<boolean>(false);
   const [configComponent, setConfigComponent] = useState<{ id: string; type: 'map' | 'if' }>();
+  const [component, setComponent] = useState<Component | undefined>();
+  const [dirty, setDirty] = useState<boolean>(false);
+  const [edges, setEdges, onEdgesChange] = useEdgesState<any>([]);
+  const [feedback, setFeedback] = useState<FeedbackTypes>();
+  const [loading, setLoading] = useState<boolean>(false);
+  const [nodes, setNodes, onNodesChange] = useNodesState<INode>([]);
   const [parameterConfig, setParameterConfig] = useState<{ type: 'secret' | 'volume'; id: string }>();
+  const [subcomponents, setSubcomponents] = useState<Component[]>();
+  const [useManifest, setUseManifest] = useState<boolean>(false);
+  const [workflow, setWorkflow] = useState<Workflow | undefined>();
   const [workspaceSecrets, setWorkspaceSecrets] = useState<string[]>([]);
   const [workspaceVolumes, setWorkspaceVolumes] = useState<IVolume[]>([]);
+  const isLatest = workflow?.version?.tags?.includes('latest');
+  const navigate = useNavigate();
 
   useEffect(() => {
     console.log('component onMount');
-    async function getInitialSubComponents(workflow: Workflow) {
-      if (workflow) {
-        const subs: Component[] = [];
-        const { nodes } = workflow.component.implementation as Graph;
-        if (isNotEmptyArray(nodes)) {
-          await Promise.all(
-            nodes.map(async (node) => {
-              if (typeof node.node === 'string') {
-                const res = await services.components.get(node.node);
-                subs.push(res);
-              }
-              if ((node?.node as Component)?.implementation?.type === 'map') {
-                const mapNode = ((node?.node as Component)?.implementation as Map)?.node;
-                if (typeof mapNode === 'string') {
-                  const res = await services.components.get(mapNode);
-                  subs.push(res);
-                }
-              }
-              if ((node?.node as Component)?.implementation?.type === 'conditional') {
-                const { nodeTrue, nodeFalse } = (node?.node as Component)?.implementation as Conditional;
-                if (typeof nodeTrue === 'string') {
-                  const res = await services.components.get(nodeTrue);
-                  subs.push(res);
-                }
-                if (typeof nodeFalse === 'string') {
-                  const res = await services.components.get(nodeFalse);
-                  subs.push(res);
-                }
-              }
-            }),
-          );
-        }
-        return subs;
-      }
-    }
-
     if (uid) {
       services.workflows
         .get(uid, version)
         .then((res) => {
-          getInitialSubComponents(res)
-            .then((subs) => {
+          if (res?.component) {
+            fetchInitialSubComponents(res?.component).then((subs) => {
               setSubcomponents(subs);
-            })
-            .then(() => {
               setComponent(res.component);
               setWorkflow(res);
             });
+          }
         })
         .catch((error) => console.error(error));
     }
 
+    // Fetch workspace secrets to use for selection of secrets in nodes/components
     services.secrets
       .list(workspace!)
       .then((res) => {
@@ -97,6 +71,7 @@ const WorkflowEditor: FC<IWorkflowEditor> = (props: IWorkflowEditor) => {
       })
       .catch((error) => console.error(error));
 
+    // Fetch workspace volumes to use for selection of volumes in nodes/components
     services.volumes.list(workspace!).then((res) => {
       setWorkspaceVolumes(res.items);
     });
@@ -119,106 +94,89 @@ const WorkflowEditor: FC<IWorkflowEditor> = (props: IWorkflowEditor) => {
   useEffect(() => {
     if (component) {
       console.log('component updates workflow');
-      //@ts-expect-error
-      setWorkflow((prev: Workflow) => ({
+      setWorkflow((prev) => ({
         ...prev,
         component: component,
       }));
     }
   }, [component]);
 
-  function onAddComponent(component: Component, setButtonState: any) {
-    setDirty(true);
-    const { uid } = component;
-    if (uid) {
-      services.components
-        .get(uid)
-        .then((res) => setSubcomponents((prev) => [...(prev || []), res]))
-        .then(() => {
-          setButtonState('success');
-          setMarketplaceSnackbar(true);
-          setTimeout(() => {
-            setButtonState('default');
-          }, 3000);
-        })
-        .then(() => {
-          //@ts-expect-error
-          setComponent((prev: Component) => ({
-            ...prev,
-            implementation: {
-              ...prev.implementation,
-              nodes: [...((prev.implementation as Graph).nodes || []), { id: `n${nanoid(8)}`, node: uid }],
-            },
-          }));
-        });
-    }
-  }
-
-  function onWorkflowSave() {
+  function onSave() {
     if (workflow && !loading) {
       setLoading(true);
       services.workflows
         .update(workflow, workflow.uid!)
-        .then(() => {
-          setSuccessSnackbar(true);
+        .then((res) => {
+          console.log(res);
+          setFeedback('SAVE_SUCCESS');
           setLoading(false);
           setDirty(false);
         })
         .catch((error) => {
           console.error(error);
+          // HACK UNTIL WE FIX COSMOSDB ISSUES
+          if (error?.code === 500) {
+            setFeedback('SAVE_SUCCESS');
+            setLoading(false);
+            return;
+          }
           setLoading(false);
-          setErrorSnackbar(true);
+          setFeedback('UPDATE_ERROR');
+        });
+    }
+  }
+
+  function onPublish() {
+    if (workflow && !loading) {
+      setLoading(true);
+      services.workflows
+        .publish(workflow, workflow.uid!)
+        .then((res) => {
+          console.log(res);
+          navigate(`/workspace/${workspace}/workflow/${workflow.uid}/${parseInt(version!, 10) + 1}`);
+        })
+        .catch((error) => {
+          console.log(error);
+          // HACK UNTIL WE FIX COSMOSDB ISSUES
+          if (error?.code === 500) {
+            setLoading(false);
+            navigate(`/workspace/${workspace}/workflow/${workflow.uid}/${parseInt(version!, 10) + 1}`);
+          }
+          // TODO: Handle error
         });
     }
   }
 
   return (
     <>
-      <Snackbar open={successSnackbar} onClose={() => setSuccessSnackbar(false)}>
-        Workflow was successfully updated
-        <Snackbar.Action>
-          <Button onClick={() => setSuccessSnackbar(false)} variant="ghost">
-            Close
-          </Button>
-        </Snackbar.Action>
-      </Snackbar>
-      <Snackbar open={errorSnackbar} onClose={() => setErrorSnackbar(false)}>
-        Save failed. Could not update workflow.
-        <Snackbar.Action>
-          <Button onClick={() => setErrorSnackbar(false)} variant="ghost" color="danger">
-            Close
-          </Button>
-        </Snackbar.Action>
-      </Snackbar>
-      <Snackbar open={marketplaceSnackbar} onClose={() => setMarketplaceSnackbar(false)} placement="top">
-        Component was successfully added
-        <Snackbar.Action>
-          <Button onClick={() => setMarketplaceSnackbar(false)} variant="ghost">
-            Close
-          </Button>
-        </Snackbar.Action>
-      </Snackbar>
+      <Helmet>
+        <title>
+          {workflow?.name || ''} {workflow?.version?.current ? `(v${workflow?.version?.current})` : ''} - Workflow
+          editor - Flowify
+        </title>
+      </Helmet>
+      <Feedbacks feedback={feedback} setFeedback={setFeedback} type="workflow" />
       <MapConfig
         component={component}
-        subcomponents={subcomponents}
-        setComponent={setComponent}
         mapConfigComponent={configComponent?.id}
         open={configComponent !== undefined && configComponent?.type === 'map'}
+        setComponent={setComponent}
         setOpen={() => setConfigComponent(undefined)}
+        subcomponents={subcomponents}
       />
       <IfConfig
         component={component}
-        subcomponents={subcomponents}
-        setComponent={setComponent}
         ifConfigComponent={configComponent?.id}
         open={configComponent !== undefined && configComponent?.type === 'if'}
+        setComponent={setComponent}
         setOpen={() => setConfigComponent(undefined)}
+        subcomponents={subcomponents}
       />
       <SecretsVolumesConfig
-        parameterConfig={parameterConfig}
-        setParameterConfig={setParameterConfig}
         component={component}
+        parameterConfig={parameterConfig}
         setComponent={setComponent}
+        setParameterConfig={setParameterConfig}
         subcomponents={subcomponents}
         type="workflow"
         workspace={workspace}
@@ -228,13 +186,13 @@ const WorkflowEditor: FC<IWorkflowEditor> = (props: IWorkflowEditor) => {
       <Grid container sx={{ flexGrow: '1', minHeight: '0', flexWrap: 'nowrap' }}>
         <Grid item xs={3} sx={{ flexGrow: '1', overflowY: 'auto', minHeight: '0' }}>
           <Sidebar
+            component={component}
+            secrets={workspaceSecrets}
+            setComponent={setComponent}
+            setInstance={setWorkflow}
             type="workflow"
             workflow={workflow}
-            setInstance={setWorkflow}
             workspace={workspace}
-            component={component}
-            setComponent={setComponent}
-            secrets={workspaceSecrets}
           />
         </Grid>
         <Grid item xs={9} sx={{ flexGrow: '1', minHeight: '0', flexWrap: 'nowrap' }}>
@@ -246,39 +204,47 @@ const WorkflowEditor: FC<IWorkflowEditor> = (props: IWorkflowEditor) => {
               sx={{ flexGrow: '1', minHeight: '0', flexWrap: 'nowrap', height: '100%', width: '100%' }}
             >
               <EditorCentralBar
-                setUseManifest={setUseManifest}
-                type={workflow?.component?.implementation?.type}
-                onAddComponent={onAddComponent}
                 component={workflow?.component}
-                subComponents={subcomponents}
                 setComponent={setComponent}
+                setFeedback={setFeedback}
+                setSubcomponents={setSubcomponents}
+                setUseManifest={setUseManifest}
+                subComponents={subcomponents}
+                type={workflow?.component?.implementation?.type}
               />
-              {useManifest ? (
-                <ObjectEditor
-                  value={workflow}
-                  onChange={(t: Workflow) => {
-                    setWorkflow(t);
-                    setComponent(t.component);
-                    setDirty(true);
-                  }}
-                  onSave={onWorkflowSave}
+              <Stack sx={{ flexGrow: '1', minHeight: '0', flexWrap: 'nowrap', height: '100%', width: '100%' }}>
+                <VersionBar
+                  type="workflow"
+                  version={workflow?.version?.current}
+                  isLatest={isLatest || false}
+                  onSave={onSave}
+                  onPublish={onPublish}
                 />
-              ) : workflow?.component?.implementation?.type === 'graph' ? (
-                <GraphEditor
-                  component={component || null}
-                  onChange={setComponent}
-                  subcomponents={subcomponents}
-                  onSave={onWorkflowSave}
-                  dirty={dirty}
-                  edges={edges}
-                  nodes={nodes}
-                  onEdgesChange={onEdgesChange}
-                  onNodesChange={onNodesChange}
-                  mapModalOpen={configComponent !== undefined}
-                />
-              ) : (
-                <Brick component={component} setComponent={setComponent} onSave={onWorkflowSave} />
-              )}
+                {useManifest ? (
+                  <ObjectEditor
+                    onChange={(wf: Workflow) => {
+                      setWorkflow(wf);
+                      setComponent(wf.component);
+                      setDirty(true);
+                    }}
+                    value={workflow}
+                  />
+                ) : workflow?.component?.implementation?.type === 'graph' ? (
+                  <GraphEditor
+                    component={component || null}
+                    dirty={dirty}
+                    edges={edges}
+                    mapModalOpen={configComponent !== undefined}
+                    nodes={nodes}
+                    onChange={setComponent}
+                    onEdgesChange={onEdgesChange}
+                    onNodesChange={onNodesChange}
+                    subcomponents={subcomponents}
+                  />
+                ) : (
+                  <Brick component={component} setComponent={setComponent} />
+                )}
+              </Stack>
             </Stack>
           )}
         </Grid>

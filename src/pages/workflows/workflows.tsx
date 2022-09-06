@@ -5,12 +5,16 @@ import { Stack } from '@mui/material';
 import { Breadcrumbs } from '../../components/ui';
 import WorkflowsListing from '../../components/workflows-listing/workflows-listing';
 import { Container, Layout } from '../../layout';
+import { Helmet } from 'react-helmet-async';
 
 export const WorkflowsPage: FC = () => {
   const { workspace } = useParams();
 
   return (
     <Layout>
+      <Helmet>
+        <title>Workflows - {workspace} - Flowify</title>
+      </Helmet>
       <Container withMargins>
         <Stack spacing={6}>
           <Breadcrumbs>

@@ -3,9 +3,8 @@ import { Button, Icon, Typography } from '@equinor/eds-core-react';
 import { Dialog, Grid, Stack } from '@mui/material';
 import { Component, Conditional, Graph } from '../../../../../models/v2';
 import { MultiToggle, Select, TextField, ToggleButton } from '../../../../ui';
-import { Parameter } from '../../parameter';
 import { IfGraph } from './if-graph';
-import { MarketplaceModal } from '../../marketplace-modal';
+import { MarketplaceModal, Parameter } from '../..';
 
 interface IfConfigProps {
   open: boolean;
@@ -38,24 +37,29 @@ export const IfConfig: FC<IfConfigProps> = (props: IfConfigProps) => {
     if (ifConfigComponent) {
       if (component?.implementation?.type === 'graph') {
         const node = (component?.implementation as Graph)?.nodes?.find((node) => node.id === ifConfigComponent);
-        if (typeof node?.node === 'string') {
-          const subcomponent = subcomponents?.find((comp) => comp.uid === node.node);
-          setIfComponent(subcomponent);
+        if ((node?.node as Component)?.type === 'component') {
+          setIfComponent(node?.node as Component);
           setLeftType(
-            typeof (subcomponent?.implementation as Conditional)?.expression?.left === 'string' ? 'custom' : 'input',
+            typeof ((node?.node as Component)?.implementation as Conditional)?.expression?.left === 'string'
+              ? 'custom'
+              : 'input',
           );
           setRightType(
-            typeof (subcomponent?.implementation as Conditional)?.expression?.right === 'string' ? 'custom' : 'input',
+            typeof ((node?.node as Component)?.implementation as Conditional)?.expression?.right === 'string'
+              ? 'custom'
+              : 'input',
           );
           return;
         }
+        const ref = typeof node?.node === 'string' ? node?.node : node?.node?.uid;
+        const subcomponent = subcomponents?.find((comp) => comp.uid === ref);
+        setIfComponent(subcomponent);
         setLeftType(
-          typeof (node?.node?.implementation as Conditional)?.expression?.left === 'string' ? 'custom' : 'input',
+          typeof (subcomponent?.implementation as Conditional)?.expression?.left === 'string' ? 'custom' : 'input',
         );
         setRightType(
-          typeof (node?.node?.implementation as Conditional)?.expression?.right === 'string' ? 'custom' : 'input',
+          typeof (subcomponent?.implementation as Conditional)?.expression?.right === 'string' ? 'custom' : 'input',
         );
-        setIfComponent(node?.node);
       }
     }
   }, [ifConfigComponent, component, subcomponents]);

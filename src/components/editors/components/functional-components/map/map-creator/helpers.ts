@@ -1,11 +1,11 @@
-import { uuid } from '../../../../../common';
-import { Component, Edge, Node } from '../../../../../models/v2';
-import { nanoid } from '../../../helpers';
+import { uuid } from '../../../../../../common';
+import { Component, Node, Edge } from '../../../../../../models/v2';
+import { getComponentFromRef } from '../../../../helpers';
 
-function generateMap(nodes: Node[], nodeId: string, subcomponents: Component[] | undefined, options: any) {
+export function generateMap(nodes: Node[], nodeId: string, subcomponents: Component[] | undefined, options: any) {
   const index = nodes.findIndex((node) => node.id === nodeId);
   const subnode = nodes[index]?.node;
-  const subcomponent = typeof subnode === 'string' ? subcomponents?.find((comp) => comp.uid === subnode) : subnode;
+  const subcomponent = getComponentFromRef(subnode, subcomponents || []);
 
   const inputMappings: Edge[] =
     subcomponent?.inputs?.map((input) => ({
@@ -36,20 +36,3 @@ function generateMap(nodes: Node[], nodeId: string, subcomponents: Component[] |
   };
   return nodes;
 }
-
-function generateIf(nodes: Node[]) {
-  nodes.push({
-    id: `n-${nanoid(6)}`,
-    node: {
-      uid: uuid(),
-      name: 'If component',
-      type: 'component',
-      implementation: {
-        type: 'conditional',
-      },
-    },
-  });
-  return nodes;
-}
-
-export { generateMap, generateIf };

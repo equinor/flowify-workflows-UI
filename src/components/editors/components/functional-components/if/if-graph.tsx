@@ -1,7 +1,7 @@
 import React, { FC, useEffect, useMemo } from 'react';
 import ReactFlow, { Edge, ReactFlowProvider, useNodesState, useEdgesState, Node } from 'react-flow-renderer/nocss';
 import { Component, Conditional, Map } from '../../../../../models/v2';
-import { INode } from '../../../helpers';
+import { getComponentFromRef, INode, nanoid } from '../../../helpers';
 import { AddNode, EndNode, StartNode, TaskNode } from '../../graph';
 import { SubNode } from '../../graph/sub-node';
 
@@ -9,7 +9,7 @@ interface IfGraphProps {
   component: Component | undefined;
   id: string;
   subcomponents: Component[] | undefined;
-  setComponent: any;
+  setComponent: React.Dispatch<React.SetStateAction<Component | undefined>>;
   setOpenMarketplace: any;
 }
 
@@ -18,8 +18,8 @@ export const IfGraph: FC<IfGraphProps> = (props: IfGraphProps) => {
   const [nodes, setNodes, onNodesChange] = useNodesState<INode>([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState<any>([]);
   const { nodeTrue, nodeFalse } = component?.implementation as Conditional;
-  const trueNode = typeof nodeTrue === 'string' ? subcomponents?.find((comp) => comp.uid === nodeTrue) : nodeTrue;
-  const falseNode = typeof nodeFalse === 'string' ? subcomponents?.find((comp) => comp.uid === nodeFalse) : nodeFalse;
+  const trueNode = getComponentFromRef(nodeTrue, subcomponents || []);
+  const falseNode = getComponentFromRef(nodeFalse, subcomponents || []);
 
   interface ConnectionData {
     connectionType: string;
@@ -48,12 +48,7 @@ export const IfGraph: FC<IfGraphProps> = (props: IfGraphProps) => {
           selectable: false,
           data: {
             label: `True: ${trueNode?.name || ''}`,
-            inputs: trueNode?.inputs,
-            outputs: trueNode?.outputs,
-            componentId: trueNode?.uid,
-            description: trueNode?.description,
-            author: trueNode?.modifiedBy,
-            published: trueNode?.timestamp,
+            component: trueNode,
             implementation: trueNode?.implementation,
           },
           position: {
@@ -69,12 +64,7 @@ export const IfGraph: FC<IfGraphProps> = (props: IfGraphProps) => {
           selectable: false,
           data: {
             label: `False: ${falseNode?.name || ''}`,
-            inputs: falseNode?.inputs,
-            outputs: falseNode?.outputs,
-            componentId: falseNode?.uid,
-            description: falseNode?.description,
-            author: falseNode?.modifiedBy,
-            published: falseNode?.timestamp,
+            component: falseNode,
             implementation: falseNode?.implementation,
           },
           position: {
@@ -100,7 +90,7 @@ export const IfGraph: FC<IfGraphProps> = (props: IfGraphProps) => {
       }
       component?.inputs?.forEach((input, index) => {
         nodes.push({
-          id: input.name,
+          id: input.name || nanoid(6),
           type: 'ifInput',
           selectable: false,
           data: {
@@ -116,7 +106,7 @@ export const IfGraph: FC<IfGraphProps> = (props: IfGraphProps) => {
       });
       component?.outputs?.forEach((output, index) => {
         nodes.push({
-          id: output.name,
+          id: output.name || nanoid(6),
           type: 'ifOutput',
           selectable: false,
           data: {

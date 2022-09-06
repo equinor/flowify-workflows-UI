@@ -14,44 +14,44 @@ export interface UserData {
 export type DataTypes = 'parameter' | 'env_secret' | 'artifact' | 'volume' | 'parameter_array';
 
 export interface Data {
-  name: string;
-  mediatype: string[];
-  type: DataTypes;
+  name?: string;
+  mediatype?: string[];
+  type?: DataTypes;
   userdata?: UserData;
 }
 
 export interface Port {
-  port: string;
+  port?: string;
   // if node is not specified it implicitly refers to the enclosing component
   node?: string;
 }
 
 export interface Arg {
-  source: string | Port;
-  target?: { type: string; name?: string; prefix?: string; suffix?: string };
+  source?: string | Port;
+  target?: { type?: string; name?: string; prefix?: string; suffix?: string };
 }
 
 export interface FilePath {
-  file: string;
+  file?: string;
 }
 
 export interface Result {
-  source: string | FilePath;
-  target: Port;
+  source?: string | FilePath;
+  target?: Port;
 }
 
 export interface ComponentImplementationBase {
-  type: string;
+  type?: string;
 }
 
 export interface Brick {
   // override type
-  type: BrickType;
+  type?: BrickType;
 
   // the executing entity
-  container: kubernetes.Container;
+  container?: kubernetes.Container;
 
-  args: Arg[];
+  args?: Arg[];
   results?: Result[];
 }
 
@@ -59,7 +59,7 @@ export interface Map {
   type: 'map';
   inputMappings: Edge[];
   outputMappings: Edge[];
-  node: Component | CRef;
+  node: Component | CRef | string;
 }
 
 export interface Conditional {
@@ -86,13 +86,16 @@ export interface Any extends ComponentImplementationBase {
 }
 
 // a reference to a component in the server/database
-export type CRef = string;
+export interface CRef {
+  uid?: string;
+  version?: number;
+}
 export interface Node {
   // a locally unique identifier
   id: string;
   // a node is either an 'inline' component or a reference to the server/database
   // inline components make it possible to build components from scratch
-  node: Component | CRef;
+  node: Component | CRef | string;
   userdata?: UserData;
 }
 
@@ -102,19 +105,19 @@ export interface Edge {
 }
 
 export interface Graph extends ComponentImplementationBase {
-  nodes: Node[];
-  edges: Edge[];
+  nodes?: Node[];
+  edges?: Edge[];
   // the input-mapping contains edges from the enclosing component to a port inside the node list
-  inputMappings: Edge[];
+  inputMappings?: Edge[];
   // the output-mapping contains edges from node-list to the enclosing component output interface
-  outputMappings: Edge[];
+  outputMappings?: Edge[];
 }
 
 export interface Metadata {
   name?: string;
   description?: string;
   modifiedBy?: string;
-  uid?: CRef;
+  uid?: string;
   previous?: CRef;
   timestamp?: Time;
   version?: {
@@ -125,7 +128,7 @@ export interface Metadata {
 }
 
 export interface Component extends Metadata {
-  type: ComponentType;
+  type?: ComponentType;
   name?: string;
   description?: string;
   inputs?: Data[];
@@ -134,7 +137,7 @@ export interface Component extends Metadata {
   // the implementation takes the data flowing to inputs and either computes
   // it inside a Brick or passes it on to a Graph. The implementation is also responsible
   // for passing internal results back out to the outputs interface
-  implementation: Any | Graph | Brick | Map | Conditional;
+  implementation?: Any | Graph | Brick | Map | Conditional;
 }
 
 export interface ComponentList {

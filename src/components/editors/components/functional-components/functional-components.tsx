@@ -3,45 +3,10 @@ import { Dialog, Grid, Stack } from '@mui/material';
 import { Button, Icon, Typography } from '@equinor/eds-core-react';
 import { ComponentCard } from '../../../ui';
 import { isNotEmptyArray } from '../../../../common';
-import { Component, Graph } from '../../../../models/v2';
-import { generateIf } from './helpers/generators';
-import { MapCreator } from './creators/map-creator';
-
-interface FunctionalComponentsProps {
-  open: boolean;
-  setOpen: any;
-  component?: Component;
-  subComponents?: Component[];
-  setComponent?: any;
-}
-
-type COMPONENT_IDS = 'map' | 'if';
-
-interface IFunctionalComponent {
-  id: COMPONENT_IDS;
-  name: string;
-  type: 'map' | 'conditional';
-  description: string;
-  onAdd: string;
-}
-
-const FUNCTIONAL_COMPONENTS: IFunctionalComponent[] = [
-  {
-    id: 'map',
-    name: 'Map component',
-    type: 'map',
-    description: 'Wrap component in a map and use parameter arrays to run it multiple times when running jobs.',
-    onAdd: 'onAddMap',
-  },
-  {
-    id: 'if',
-    name: 'If component',
-    type: 'conditional',
-    description:
-      'Select component to run if condition is true, additionally select component to run if condition is false',
-    onAdd: 'onAddIf',
-  },
-];
+import { Graph } from '../../../../models/v2';
+import { generateIf } from './helpers';
+import { MapCreator } from './map/map-creator/map-creator';
+import { FunctionalComponentsProps, COMPONENT_IDS, FUNCTIONAL_COMPONENTS } from './types';
 
 export const FunctionalComponents: FC<FunctionalComponentsProps> = (props: FunctionalComponentsProps) => {
   const { component, subComponents, setComponent, setOpen } = props;
@@ -57,11 +22,11 @@ export const FunctionalComponents: FC<FunctionalComponentsProps> = (props: Funct
   }
 
   function onAddIf() {
-    setComponent((prev: Component) => ({
+    setComponent((prev) => ({
       ...prev,
       implementation: {
-        ...prev.implementation,
-        nodes: generateIf((prev?.implementation as Graph)?.nodes),
+        ...prev?.implementation,
+        nodes: generateIf((prev?.implementation as Graph)?.nodes || []),
       },
     }));
     onClose();

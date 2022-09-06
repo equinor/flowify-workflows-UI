@@ -8,6 +8,7 @@ import { ISecret, ISecretsList, IUserVolume, IVolume, Workspace, WorkspaceList }
 import { Breadcrumbs, Select } from '../../components/ui';
 import { Link } from 'react-router-dom';
 import { VolumeEditor } from '../../components/editors/volume/volume-editor';
+import { Helmet } from 'react-helmet-async';
 
 function CREATE_VOLUME_TEMPLATE(workspace: string) {
   return {
@@ -97,6 +98,9 @@ export const AdminPage: React.FC = (): React.ReactElement => {
 
   return (
     <Layout>
+      <Helmet>
+        <title>Admin - Flowify</title>
+      </Helmet>
       <Container withMargins>
         <Stack spacing={4}>
           <Breadcrumbs>

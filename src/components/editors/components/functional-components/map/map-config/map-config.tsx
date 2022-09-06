@@ -1,18 +1,18 @@
 import React, { FC, useEffect, useState } from 'react';
 import { Stack, Dialog, Grid } from '@mui/material';
 import { Button, Icon, Typography } from '@equinor/eds-core-react';
-import { nanoid } from '../../../helpers/helpers';
-import { Parameter } from '../../parameter';
-import { Component, Edge, Graph, Node } from '../../../../../models/v2';
+import { getComponentFromRef, nanoid } from '../../../../helpers';
+import { Parameter } from '../../..';
+import { Component, Edge, Graph, Node } from '../../../../../../models/v2';
 import { MapGraph } from './map-graph';
-import { isNotEmptyArray } from '../../../../../common';
+import { isNotEmptyArray } from '../../../../../../common';
 
 interface MapConfigProps {
   open: boolean;
-  setOpen: any;
+  setOpen: (open: boolean) => void;
   component: Component | undefined;
   subcomponents: Component[] | undefined;
-  setComponent: any;
+  setComponent: React.Dispatch<React.SetStateAction<Component | undefined>>;
   mapConfigComponent: string | undefined;
 }
 
@@ -24,12 +24,8 @@ export const MapConfig: FC<MapConfigProps> = (props: MapConfigProps) => {
     if (mapConfigComponent) {
       if (component?.implementation?.type === 'graph') {
         const node = (component?.implementation as Graph)?.nodes?.find((node) => node.id === mapConfigComponent);
-        if (typeof node?.node === 'string') {
-          const subcomponent = subcomponents?.find((comp) => comp.uid === node.node);
-          setMapComponent(subcomponent);
-          return;
-        }
-        setMapComponent(node?.node);
+        const subcomponent = getComponentFromRef(node?.node!, subcomponents || []);
+        setMapComponent(subcomponent);
       }
     }
   }, [mapConfigComponent, component, subcomponents]);
@@ -68,25 +64,24 @@ export const MapConfig: FC<MapConfigProps> = (props: MapConfigProps) => {
       return mappings;
     }
 
-    setComponent((prev: Component) => ({
+    setComponent((prev) => ({
       ...prev,
       implementation: {
         ...prev?.implementation,
-        nodes: updateMapComponent((prev?.implementation as Graph)?.nodes),
-        inputMappings: updateMappings((prev?.implementation as Graph)?.inputMappings, 'inputs'),
-        outputMappings: updateMappings((prev?.implementation as Graph)?.outputMappings, 'outputs'),
-        edges: updateMappings((prev?.implementation as Graph)?.edges, 'edges'),
+        nodes: updateMapComponent((prev?.implementation as Graph)?.nodes || []),
+        inputMappings: updateMappings((prev?.implementation as Graph)?.inputMappings || [], 'inputs'),
+        outputMappings: updateMappings((prev?.implementation as Graph)?.outputMappings || [], 'outputs'),
+        edges: updateMappings((prev?.implementation as Graph)?.edges || [], 'edges'),
       },
     }));
     setOpen(false);
   }
 
   function addParameter(type: 'inputs' | 'outputs') {
-    //@ts-expect-error
-    setMapComponent((prev: Component) => ({
+    setMapComponent((prev) => ({
       ...prev,
       [type]: [
-        ...(prev[type] || []),
+        ...(prev?.[type] || []),
         {
           name: nanoid(6),
           type: 'parameter',

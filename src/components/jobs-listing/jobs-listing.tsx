@@ -11,7 +11,7 @@ import {
   TablePagination,
   TableSortLabel,
 } from '@mui/material';
-import { Icon, Progress, Typography } from '@equinor/eds-core-react';
+import { Icon, Typography } from '@equinor/eds-core-react';
 import JobTableRow from './components/table-row';
 import { services } from '../../services/v2';
 import { Job, IPageInfo } from '../../models/v2';
@@ -160,17 +160,17 @@ const JobsListing: FC<IJobsListing> = (props: IJobsListing) => {
                 <TableCell>&nbsp;</TableCell>
               </TableRow>
             </TableHead>
-            {loadingJobs ? (
-              <Progress.Dots color="primary" />
-            ) : requestData?.totalNumber && requestData?.totalNumber > 0 ? (
+            {!loadingJobs && requestData?.totalNumber && requestData?.totalNumber > 0 ? (
               <TableBody>
                 {Array.isArray(jobs) &&
                   jobs.map((job) => <JobTableRow key={job?.uid} workspace={workspace} row={job} />)}
               </TableBody>
             ) : (
-              <Stack sx={{ padding: '1rem' }}>
-                <Typography variant="body_short">No jobs available.</Typography>
-              </Stack>
+              <TableBody sx={{ padding: '1rem' }}>
+                <TableRow>
+                  <TableCell>No jobs available.</TableCell>
+                </TableRow>
+              </TableBody>
             )}
           </StyledTable>
           {requestData && (

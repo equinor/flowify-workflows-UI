@@ -15,15 +15,28 @@ export class ComponentService {
     return requests.get(`api/v2/components/${parsedFilters}`).then((res) => res.body as ComponentListRequest);
   }
 
-  public get(id: string, version?: string) {
+  public get(id: string, version?: string | number) {
     let uri = `api/v2/components/${id}${version ? `/${version}` : ''}`;
     return requests.get(uri).then((res) => res.body as Component);
   }
 
-  public update(component: Component, id: string) {
+  public publish(component: Component, id: string) {
     return requests
       .put(`api/v2/components/${id}`)
       .send({ component })
-      .then((res) => res.body as Component);
+      .then(
+        (res) => res.body as Component,
+        (reason) => reason,
+      );
+  }
+
+  public update(component: Component, id: string) {
+    return requests
+      .patch(`api/v2/components/${id}`)
+      .send({ component })
+      .then(
+        (res) => res.body as Component,
+        (reason) => reason,
+      );
   }
 }

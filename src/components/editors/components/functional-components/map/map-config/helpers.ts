@@ -1,6 +1,8 @@
 import { Connection, Edge, Node } from 'react-flow-renderer';
-import { Component, Map } from '../../../../../models/v2';
-import { INode } from '../../../helpers';
+import { Component, Map } from '../../../../../../models/v2';
+import { INode, nanoid } from '../../../../helpers';
+import { ConnectionData } from '../types';
+import { getComponentFromRef } from '../../../../helpers';
 
 export function checkValidation(params: Edge<any> | Connection, component: Component, subcomponents?: Component[]) {
   const { source, sourceHandle, target, targetHandle } = params;
@@ -10,7 +12,7 @@ export function checkValidation(params: Edge<any> | Connection, component: Compo
 
   const node = (component.implementation as Map).node;
 
-  const childComponent = typeof node === 'string' ? subcomponents?.find((comp) => comp.uid === node) : node;
+  const childComponent = getComponentFromRef(node, subcomponents || []);
 
   if (isBaseOutput) {
     const baseOutput = outputs?.find((output) => output.name === target);
@@ -68,12 +70,7 @@ export function createNodes(childNode: Component, id: string, component: Compone
       selectable: false,
       data: {
         label: childNode?.name || id,
-        inputs: childNode?.inputs,
-        outputs: childNode?.outputs,
-        componentId: childNode?.uid,
-        description: childNode?.description,
-        author: childNode?.modifiedBy,
-        published: childNode?.timestamp,
+        component: childNode,
         implementation: childNode?.implementation,
       },
       position: {
@@ -85,7 +82,7 @@ export function createNodes(childNode: Component, id: string, component: Compone
   // Add Input nodes
   component?.inputs?.forEach((input, index) => {
     nodes.push({
-      id: input.name,
+      id: input.name || nanoid(6),
       type: 'mapInput',
       selectable: false,
       data: {
@@ -102,7 +99,7 @@ export function createNodes(childNode: Component, id: string, component: Compone
   // Add output nodes
   component?.outputs?.forEach((output, index) => {
     nodes.push({
-      id: output.name,
+      id: output.name || nanoid(6),
       type: 'mapOutput',
       selectable: false,
       data: {
@@ -117,4 +114,42 @@ export function createNodes(childNode: Component, id: string, component: Compone
     });
   });
   return nodes;
+}
+
+export function createEdges(component: Component, id: string) {
+  const edges: Edge<ConnectionData>[] = [];
+  (component?.implementation as Map)?.inputMappings?.forEach((edge, index) => {
+    if (edge.source?.port && edge.target?.port) {
+      edges.push({
+        id: `map-${edge.source.port}-${edge.target.port}_${index}`,
+        source: edge.source.port,
+        sourceHandle: `i-${edge.source.port}`,
+        targetHandle: `p-${edge.target.port}`,
+        target: id,
+        data: {
+          connectionType: 'input',
+          sourcePort: edge.source.port,
+          targetPort: edge.target.port,
+        },
+      });
+    }
+  });
+
+  (component?.implementation as Map)?.outputMappings?.forEach((edge, index) => {
+    if (edge.source?.port && edge.target?.port) {
+      edges.push({
+        id: `map-${edge.source.port}-${edge.target.port}_${index}`,
+        source: id,
+        sourceHandle: `p-${edge.source.port}`,
+        target: edge.target.port,
+        targetHandle: `o-${edge.target.port}`,
+        data: {
+          connectionType: 'output',
+          sourcePort: edge.source.port,
+          targetPort: edge.target.port,
+        },
+      });
+    }
+  });
+  return edges;
 }

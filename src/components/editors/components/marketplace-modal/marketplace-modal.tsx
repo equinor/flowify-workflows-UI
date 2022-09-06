@@ -1,12 +1,14 @@
 import React, { FC } from 'react';
 import { Dialog, DialogContent, Stack } from '@mui/material';
 import { Button, Icon } from '@equinor/eds-core-react';
-import { Marketplace } from '../../marketplace/marketplace';
+import { Marketplace } from '../../../marketplace/marketplace';
+import { Component } from '../../../../models/v2';
+import { BUTTON_STATE } from '../../../creators/add-component-to-graph';
 
 interface MarketplaceModalProps {
   open: boolean;
-  onClose: any;
-  onAddComponent: any;
+  onClose: (open: boolean) => void;
+  onAddComponent: (component: Component, setButtonState: React.Dispatch<React.SetStateAction<BUTTON_STATE>>) => void;
 }
 
 export const MarketplaceModal: FC<MarketplaceModalProps> = (props: MarketplaceModalProps) => {

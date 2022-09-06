@@ -1,28 +1,19 @@
 import { Connection, Edge } from 'react-flow-renderer/nocss';
-import { Component, Data, Graph, Node as INode } from '../../../models/v2';
+import { Component, CRef, Graph, Node as INode } from '../../../models/v2';
+import { getComponentFromRef } from './helpers';
 
-async function getTargetNodeInput(targetNode: Component | string, targetHandle: string, subcomponents: Component[]) {
-  if (typeof targetNode === 'string') {
-    const component = subcomponents.find((c) => c.uid === targetNode);
-    return component?.inputs?.find((input: Data) => `p-${input.name}` === targetHandle);
-  }
-  return (targetNode as Component)?.inputs?.find((input: Data) => `p-${input.name}` === targetHandle);
+async function getTargetNodeInput(
+  targetNode: Component | CRef | string,
+  targetHandle: string,
+  subcomponents: Component[],
+) {
+  const component = getComponentFromRef(targetNode, subcomponents);
+  return component?.inputs?.find((input) => `p-${input.name}` === targetHandle);
 }
 
-async function getSourceOutput(sourceNode: Component | string, sourceHandle: string, subcomponents: Component[]) {
-  if (typeof sourceNode === 'string') {
-    const component = subcomponents.find((c) => c.uid === sourceNode);
-    return component?.outputs?.find((output: Data) => `p-${output.name}` === sourceHandle);
-  }
-  return (sourceNode as Component)?.outputs?.find((output: Data) => `p-${output.name}` === sourceHandle);
-}
-
-async function getSourceInput(sourceNode: Component | string, sourceHandle: string, subcomponents: Component[]) {
-  if (typeof sourceNode === 'string') {
-    const component = subcomponents.find((c) => c.uid === sourceNode);
-    return component?.outputs?.find((output) => `p-${output.name}` === sourceHandle);
-  }
-  return (sourceNode as Component).outputs?.find((output) => `p-${output.name}` === sourceHandle);
+async function getSourceParam(sourceNode: Component | CRef | string, sourceHandle: string, subcomponents: Component[]) {
+  const component = getComponentFromRef(sourceNode, subcomponents);
+  return component?.outputs?.find((output) => `p-${output.name}` === sourceHandle);
 }
 
 export async function checkValidation(
@@ -47,7 +38,7 @@ export async function checkValidation(
   if (isBaseOutput) {
     const baseOutput = outputs?.find((output) => output.name === target);
     const sourceNode = nodes.find((node: INode) => node.id === source);
-    const sourceInput = await getSourceInput(sourceNode?.node!, sourceHandle!, subcomponents!);
+    const sourceInput = await getSourceParam(sourceNode?.node!, sourceHandle!, subcomponents!);
     console.log(sourceInput);
     const sourceType = sourceInput?.type;
     const targetType = baseOutput?.type;
@@ -73,7 +64,7 @@ export async function checkValidation(
    * Otherwise find the source node in the nodes list in the component implementation object
    */
   const { node: sourceNode } = nodes.find((node: INode) => node.id === source)!;
-  const sourceOutput = await getSourceOutput(sourceNode, sourceHandle!, subcomponents!);
+  const sourceOutput = await getSourceParam(sourceNode, sourceHandle!, subcomponents!);
   if (sourceOutput && targetInput) {
     const targetType = targetInput.type;
     const sourceType = sourceOutput.type;

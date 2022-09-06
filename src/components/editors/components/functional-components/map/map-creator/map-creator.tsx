@@ -1,14 +1,15 @@
 import React, { FC, useState } from 'react';
 import { Stack } from '@mui/material';
 import { Button, Checkbox, Icon, Radio, Typography } from '@equinor/eds-core-react';
-import { Component, Graph } from '../../../../../models/v2';
-import { generateMap } from '../helpers/generators';
+import { Component, Graph } from '../../../../../../models/v2';
+import { generateMap } from './helpers';
+import { getComponentFromRef } from '../../../../helpers';
 
 interface MapCreatorProps {
   component?: Component;
   subcomponents?: Component[];
-  setComponent: any;
-  onClose: any;
+  setComponent: React.Dispatch<React.SetStateAction<Component | undefined>>;
+  onClose: () => void;
 }
 
 export const MapCreator: FC<MapCreatorProps> = (props: MapCreatorProps) => {
@@ -25,11 +26,11 @@ export const MapCreator: FC<MapCreatorProps> = (props: MapCreatorProps) => {
   }
 
   function onCreate() {
-    setComponent((prev: Component) => ({
+    setComponent((prev) => ({
       ...prev,
       implementation: {
-        ...prev.implementation,
-        nodes: generateMap((prev?.implementation as Graph)?.nodes, selectedComponent, subcomponents, options),
+        ...prev?.implementation,
+        nodes: generateMap((prev?.implementation as Graph)?.nodes || [], selectedComponent, subcomponents, options),
       },
     }));
     props.onClose();
@@ -44,11 +45,7 @@ export const MapCreator: FC<MapCreatorProps> = (props: MapCreatorProps) => {
             (component.implementation as Graph).nodes?.map((node) => (
               <Radio
                 key={node?.id}
-                label={
-                  typeof node.node === 'string'
-                    ? subcomponents?.find((component) => component.uid === node.node)?.name
-                    : node.node?.name || node.id
-                }
+                label={getComponentFromRef(node.node, subcomponents || [])?.name}
                 value={node?.id}
                 checked={selectedComponent === node?.id}
                 onChange={(event: any) => setSelectedComponent(event.target.value)}

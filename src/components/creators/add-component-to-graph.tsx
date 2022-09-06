@@ -2,12 +2,11 @@ import React, { FC, useState } from 'react';
 import { Button, Tooltip, Icon, Progress } from '@equinor/eds-core-react';
 import { Component } from '../../models/v2';
 
+export type BUTTON_STATE = 'default' | 'loading' | 'success' | 'error';
 interface AddComponentToGraphProps {
   component: Component;
-  onAddComponent: any;
+  onAddComponent: (component: Component, setButtonState: React.Dispatch<React.SetStateAction<BUTTON_STATE>>) => void;
 }
-
-type BUTTON_STATE = 'default' | 'loading' | 'success' | 'error';
 
 export const AddComponentToGraph: FC<AddComponentToGraphProps> = (props: AddComponentToGraphProps) => {
   const { onAddComponent, component } = props;

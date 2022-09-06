@@ -3,6 +3,7 @@ import { Avatar, Stack } from '@mui/material';
 import { List, Typography } from '@equinor/eds-core-react';
 import { UserContextStore } from '../../common/context/user-context-store';
 import { Container, Layout } from '../../layout';
+import { Helmet } from 'react-helmet-async';
 
 const initials = (name: string): string => {
   if (!Array.isArray(name)) {
@@ -20,6 +21,9 @@ export const UserInfoPage: React.FC<UserInfoPageProps> = (props: UserInfoPagePro
 
   return (
     <Layout>
+      <Helmet>
+        <title>{user?.name} - Flowify</title>
+      </Helmet>
       <Container withMargins>
         {user && (
           <Stack spacing={4}>

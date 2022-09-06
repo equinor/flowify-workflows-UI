@@ -58,9 +58,11 @@ import {
   new_label,
   list,
   verified_user,
+  lock_open,
 } from '@equinor/eds-icons';
 
 export const ICONS = {
+  lock_open,
   verified_user,
   list,
   new_label,

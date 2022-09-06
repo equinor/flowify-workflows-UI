@@ -8,29 +8,29 @@ import ReactJson from 'react-json-view';
 import { INode } from '../../helpers/helpers';
 import { Brick, Graph } from '../../../../models/v2';
 
-interface NodePreviewModalProps {
+interface NodePreviewProps {
   open: boolean;
-  onClose: any;
+  onClose: (open: boolean) => void;
   node: NodeProps<INode>;
 }
 
-export const NodePreviewModal: FC<NodePreviewModalProps> = (props: NodePreviewModalProps) => {
+export const NodePreview: FC<NodePreviewProps> = (props: NodePreviewProps) => {
   const { node, onClose } = props;
   const { data, type } = node;
-  const inputParams = data?.inputs || [];
-  const outputParams = data?.outputs || [];
+  const inputParams = data?.component?.inputs || [];
+  const outputParams = data?.component?.outputs || [];
   return (
     <Drawer open={props.open} onClose={() => onClose(false)} anchor="right" sx={{ width: '400px' }}>
       <Stack spacing={2} sx={{ padding: '2rem', width: '440px' }}>
         <Typography variant="h4">
           <b>{data?.label}</b>
         </Typography>
-        <Typography variant="body_short">{data?.description}</Typography>
-        {data?.author && (
+        <Typography variant="body_short">{data?.component?.description}</Typography>
+        {data?.component?.modifiedBy && (
           <Stack spacing={1}>
             <Typography variant="body_short_bold">Author</Typography>
             <Typography variant="body_short_link">
-              <a href={`mailto: data?.author`}>{data?.author}</a>
+              <a href={`mailto: data?.author`}>{data?.component?.modifiedBy}</a>
             </Typography>
           </Stack>
         )}
@@ -40,7 +40,7 @@ export const NodePreviewModal: FC<NodePreviewModalProps> = (props: NodePreviewMo
         </Stack>
         <Stack spacing={1}>
           <Typography variant="body_short_bold">Published</Typography>
-          <code>{moment(data?.published).format('MMMM Do YYYY, H:mm:ss')}</code>
+          <code>{moment(data?.component?.timestamp).format('MMMM Do YYYY, H:mm:ss')}</code>
         </Stack>
         {type === 'taskNode' && (
           <Stack spacing={2}>
@@ -69,7 +69,7 @@ export const NodePreviewModal: FC<NodePreviewModalProps> = (props: NodePreviewMo
                 <Stack spacing={1}>
                   <Typography variant="body_short_bold">Container</Typography>
                   <ReactJson
-                    src={(data?.implementation as Brick)?.container}
+                    src={(data?.implementation as Brick)?.container || {}}
                     name="container"
                     collapsed
                     displayDataTypes={false}
@@ -78,7 +78,7 @@ export const NodePreviewModal: FC<NodePreviewModalProps> = (props: NodePreviewMo
                 <Stack spacing={1}>
                   <Typography variant="body_short_bold">Arguments</Typography>
                   <ReactJson
-                    src={(data?.implementation as Brick)?.args}
+                    src={(data?.implementation as Brick)?.args || {}}
                     name="args"
                     collapsed
                     displayDataTypes={false}
@@ -100,7 +100,7 @@ export const NodePreviewModal: FC<NodePreviewModalProps> = (props: NodePreviewMo
                 <Stack spacing={1}>
                   <Typography variant="body_short_bold">Nodes</Typography>
                   <ReactJson
-                    src={(data?.implementation as Graph)?.nodes}
+                    src={(data?.implementation as Graph)?.nodes || {}}
                     name="nodes"
                     collapsed
                     displayDataTypes={false}
@@ -111,11 +111,13 @@ export const NodePreviewModal: FC<NodePreviewModalProps> = (props: NodePreviewMo
           </Stack>
         )}
         <Stack alignItems="flex-end" sx={{ paddingTop: '2rem' }}>
-          <Link to={`/component/${data.componentId}`} target="_blank">
-            <Button as="span" color="secondary">
-              <Icon name="code" /> View component source
-            </Button>
-          </Link>
+          {!node.data?.isInlineComponent && (
+            <Link to={`/component/${data?.component?.uid}`} target="_blank">
+              <Button as="span" color="secondary">
+                <Icon name="code" /> View component source
+              </Button>
+            </Link>
+          )}
         </Stack>
       </Stack>
     </Drawer>

@@ -6,12 +6,12 @@ import { Argument, DraggableList, Result } from '../../components';
 
 interface BrickProps {
   component: Component | null | undefined;
-  setComponent: any;
-  onSave: any;
+  setComponent: React.Dispatch<React.SetStateAction<Component | undefined>>;
+  onSave?: (() => void) | null;
 }
 
 export const Brick: FC<BrickProps> = (props: BrickProps) => {
-  const { component, setComponent } = props;
+  const { component, setComponent, onSave } = props;
   if (!component) {
     return null;
   }
@@ -28,12 +28,12 @@ export const Brick: FC<BrickProps> = (props: BrickProps) => {
 
   function updateContainerStringValue(event: any, name: string) {
     const { value } = event.target;
-    setComponent((prev: Component) => ({
+    setComponent((prev) => ({
       ...prev,
       implementation: {
-        ...prev.implementation,
+        ...prev?.implementation,
         container: {
-          ...(prev.implementation as IBrick).container,
+          ...(prev?.implementation as IBrick).container,
           [name]: value,
         },
       },
@@ -46,12 +46,12 @@ export const Brick: FC<BrickProps> = (props: BrickProps) => {
   };
 
   function commandHandler(list: any[]) {
-    setComponent((prev: Component) => ({
+    setComponent((prev) => ({
       ...prev,
       implementation: {
-        ...prev.implementation,
+        ...prev?.implementation,
         container: {
-          ...(prev.implementation as IBrick).container,
+          ...(prev?.implementation as IBrick).container,
           command: list,
         },
       },
@@ -60,67 +60,67 @@ export const Brick: FC<BrickProps> = (props: BrickProps) => {
 
   function commandOnBlur(event: any, index: number) {
     const { value } = event.target;
-    setComponent((prev: Component) => ({
+    setComponent((prev) => ({
       ...prev,
       implementation: {
-        ...prev.implementation,
+        ...prev?.implementation,
         container: {
-          ...(prev.implementation as IBrick).container,
-          command: updateStringValueInArray((prev.implementation as IBrick).container?.command!, index, value),
+          ...(prev?.implementation as IBrick).container,
+          command: updateStringValueInArray((prev?.implementation as IBrick).container?.command || [], index, value),
         },
       },
     }));
   }
 
   function addCommand() {
-    setComponent((prev: Component) => ({
+    setComponent((prev) => ({
       ...prev,
       implementation: {
-        ...prev.implementation,
+        ...prev?.implementation,
         container: {
-          ...(prev.implementation as IBrick).container,
-          command: [...((prev.implementation as IBrick).container?.command || ''), ''],
+          ...(prev?.implementation as IBrick).container,
+          command: [...((prev?.implementation as IBrick).container?.command || ''), ''],
         },
       },
     }));
   }
 
   function argsHandler(list: object[]) {
-    setComponent((prev: Component) => ({
+    setComponent((prev) => ({
       ...prev,
       implementation: {
-        ...prev.implementation,
+        ...prev?.implementation,
         args: list,
       },
     }));
   }
 
   function addArgument() {
-    setComponent((prev: Component) => ({
+    setComponent((prev) => ({
       ...prev,
       implementation: {
-        ...prev.implementation,
-        args: [...((prev.implementation as IBrick).args || ''), { source: '' }],
+        ...prev?.implementation,
+        args: [...((prev?.implementation as IBrick).args || []), { source: '' }],
       },
     }));
   }
 
   function resultHandler(list: object[]) {
-    setComponent((prev: Component) => ({
+    setComponent((prev) => ({
       ...prev,
       implementation: {
-        ...prev.implementation,
+        ...prev?.implementation,
         results: list,
       },
     }));
   }
 
   function addResult() {
-    setComponent((prev: Component) => ({
+    setComponent((prev) => ({
       ...prev,
       implementation: {
-        ...prev.implementation,
-        results: [...((prev.implementation as IBrick).results || ''), { source: '', target: { port: '' } }],
+        ...prev?.implementation,
+        results: [...((prev?.implementation as IBrick).results || []), { source: '', target: { port: '' } }],
       },
     }));
   }
@@ -181,9 +181,11 @@ export const Brick: FC<BrickProps> = (props: BrickProps) => {
             </Stack>
           </Grid>
           <Grid item xs={6} sx={{ flexGrow: '1', overflowY: 'auto', minHeight: '0' }}>
-            <Button onClick={props.onSave} style={{ position: 'absolute', right: 16, marginTop: 16 }}>
-              Save changes
-            </Button>
+            {typeof onSave === 'function' && (
+              <Button onClick={onSave} style={{ position: 'absolute', right: 16, marginTop: 16 }}>
+                Save changes
+              </Button>
+            )}
           </Grid>
         </>
       )}
