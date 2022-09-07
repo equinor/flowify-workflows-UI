@@ -117,7 +117,7 @@ export const AdminPage: React.FC = (): React.ReactElement => {
             value={selectedWorkspace}
             placeholder="Select from workspaces you have admin access to"
           />
-          {secrets && (
+          {selectedWorkspace && (
             <>
               <Typography variant="h4">Secrets</Typography>
               <Table>
@@ -130,7 +130,7 @@ export const AdminPage: React.FC = (): React.ReactElement => {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {secrets.items?.map((key) => (
+                  {secrets?.items?.map((key) => (
                     <TableRow key={key}>
                       <TableCell>{key}</TableCell>
                       <TableCell></TableCell>
@@ -141,10 +141,6 @@ export const AdminPage: React.FC = (): React.ReactElement => {
                 </TableBody>
               </Table>
               <AddSecret addKey={onAdd} />
-            </>
-          )}
-          {volumes && (
-            <>
               <Typography variant="h4">Volumes</Typography>
               <Table>
                 <TableHead>
