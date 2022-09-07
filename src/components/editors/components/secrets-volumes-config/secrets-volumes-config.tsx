@@ -50,7 +50,10 @@ export const SecretsVolumesConfig: FC<SecretsVolumesConfigProps> = (props: Secre
 
   const mountOptions =
     type === 'workflow'
-      ? workspaceVolumes?.map((volume) => ({ value: volume?.uid, label: volume?.volume?.name }))
+      ? workspaceVolumes?.map((volume) => ({
+          value: volume?.uid,
+          label: `${volume?.volume?.name} (${volume?.volume?.csi?.volumeAttributes?.containerName})`,
+        }))
       : component?.inputs
           ?.filter((input) => input.type === 'volume')
           .map((input) => ({ value: input.name, label: input.name }));
