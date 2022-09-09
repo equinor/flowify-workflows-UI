@@ -15,3 +15,7 @@ export { MapConfig } from './functional-components/map/map-config/map-config';
 export { SecretsVolumesConfig } from './secrets-volumes-config/secrets-volumes-config';
 export * from './feedbacks/feedbacks';
 export * from './node-preview/node-preview';
+export * from './editor-menu/editor-menu';
+export * from './document-editor/document-editor';
+export * from './workflow-jobs/workflow-jobs';
+export * from './main-editor/main-editor';
