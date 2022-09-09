@@ -19,4 +19,9 @@ export const FEEDBACK_MESSAGES = {
     componentMessage: 'Error: Marketplace component could not be added to component graph.',
     workflowMessage: 'Error: Marketplace component could not be added to workflow graph.',
   },
+  PUBLISH_ERROR: {
+    type: 'error',
+    componentMessage: 'Error: Could not create new component version',
+    workflowMessage: 'Error: could not create new workflow version',
+  },
 };
