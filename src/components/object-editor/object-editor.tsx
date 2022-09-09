@@ -4,7 +4,7 @@ import { Dialog, Stack } from '@mui/material';
 import Editor from '@monaco-editor/react';
 import { StyledManifestWrapper } from '../editors/styles/styles';
 import { SettingsContextStore } from '../../common/context/editor-settings-context';
-import { Button, Icon, Typography } from '@equinor/eds-core-react';
+import { Button, Typography } from '@equinor/eds-core-react';
 
 function parse<T>(value: string): T {
   if (value.startsWith('{')) {
@@ -30,11 +30,10 @@ interface ObjectEditorProps {
   value: any;
   lang?: languages;
   onChange?: (value: any) => void;
-  onSave?: (() => void) | null;
 }
 
 export const ObjectEditor: FC<ObjectEditorProps> = (props: ObjectEditorProps) => {
-  const { value, onChange, onSave } = props;
+  const { value, onChange } = props;
 
   const { settings } = useContext(SettingsContextStore);
   const [error, setError] = useState<IError | null>();
@@ -82,16 +81,10 @@ export const ObjectEditor: FC<ObjectEditorProps> = (props: ObjectEditorProps) =>
           </Dialog>
         </>
       )}
-      {typeof onSave === 'function' && (
-        <Button onClick={onSave} style={{ position: 'absolute', right: 16, marginTop: 8 }}>
-          <Icon name="save" /> Save changes
-        </Button>
-      )}
     </StyledManifestWrapper>
   );
 };
 
 ObjectEditor.defaultProps = {
   onChange: undefined,
-  onSave: undefined,
 };
