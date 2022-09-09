@@ -17,7 +17,7 @@ import { Workflow } from '../../models/v2/workflow';
 import { services } from '../../services/v2';
 import { CreateWorkflow } from '../creators';
 import { IFilter } from '../../services/v2/filters';
-import { Paper, WorkflowIcon, ButtonLink, TextField, Select } from '../ui';
+import { Paper, WorkflowIcon, Button, TextField, Select } from '../ui';
 import { IPageInfo } from '../../models/v2';
 import { UserContextStore } from '../../common/context/user-context-store';
 
@@ -119,9 +119,9 @@ const WorkflowsListing: FC<IWorkflowsListing> = (props: IWorkflowsListing) => {
             target="_blank"
             rel="noopener noreferrer"
           >
-            <ButtonLink simple>
+            <Button theme="simple">
               <span>Creating a workflow</span> <Icon name="chevron_right" size={16} color="#004f55" />
-            </ButtonLink>
+            </Button>
           </a>
         </Stack>
         <Stack direction="row" spacing={2} justifyContent="stretch">

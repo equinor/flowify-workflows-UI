@@ -1,11 +1,12 @@
 import React, { FC, useEffect, useState } from 'react';
 import { Dialog, Stack, TextField } from '@mui/material';
-import { Button, Typography } from '@equinor/eds-core-react';
+import { Icon, Typography } from '@equinor/eds-core-react';
 import { Component, IVolume, Job, JobSubmit, Workflow } from '../../models/v2';
 import { Parameter } from '../editors/components';
 import { services } from '../../services/v2';
 import { useParams, useNavigate } from 'react-router-dom';
 import { isNotEmptyArray } from '../../common';
+import { Button } from '../ui';
 
 interface RunWorkflowProps {
   // Pass the entire workflow object or a string (uid)
@@ -110,7 +111,9 @@ export const RunWorkflow: FC<RunWorkflowProps> = (props: RunWorkflowProps) => {
 
   return (
     <>
-      <Button onClick={() => setModalOpen(true)}>Run workflow</Button>
+      <Button onClick={() => setModalOpen(true)} theme="create">
+        <Icon name="launch" style={{ marginRight: '0.75rem' }} /> Run workflow
+      </Button>
       <Dialog open={modalOpen} onClose={() => setModalOpen(false)} fullWidth maxWidth="md">
         <Stack sx={{ padding: '2rem' }} spacing={2}>
           <Typography variant="h5">Input values</Typography>
@@ -140,7 +143,8 @@ export const RunWorkflow: FC<RunWorkflowProps> = (props: RunWorkflowProps) => {
               rows={3}
             />
           </Stack>
-          <Button disabled={!workflow} style={{ alignSelf: 'flex-end' }} onClick={onRun}>
+          <Button theme="create" disabled={!workflow} style={{ alignSelf: 'flex-end' }} onClick={onRun}>
+            <Icon name="launch" style={{ marginRight: '0.75rem' }} />
             Run workflow
           </Button>
         </Stack>

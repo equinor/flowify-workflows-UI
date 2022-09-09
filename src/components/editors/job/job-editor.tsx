@@ -22,7 +22,7 @@ export const JobViewer: FC<JobViewerProps> = (props: JobViewerProps) => {
   return (
     <>
       <Helmet>
-        <title>{job?.metadata?.name} - Job viewer - Flowify</title>
+        <title>{job?.metadata?.name || ''} - Job viewer - Flowify</title>
       </Helmet>
       <Grid container sx={{ flexGrow: '1', minHeight: '0', flexWrap: 'nowrap' }}>
         {selectedNodeId && (
