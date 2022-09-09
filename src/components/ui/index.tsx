@@ -5,3 +5,4 @@ export * from './navigation';
 export * from './form';
 export * from './actions';
 export * from './multi-toggle';
+export * from './button/button';

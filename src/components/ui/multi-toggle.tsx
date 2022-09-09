@@ -1,4 +1,5 @@
 import { Typography } from '@equinor/eds-core-react';
+import { TypographyVariants } from '@equinor/eds-core-react/dist/types/components/Typography/Typography.tokens';
 import { Stack } from '@mui/material';
 import React, { FC } from 'react';
 import styled from 'styled-components';
@@ -9,6 +10,7 @@ interface MultiToggleProps {
   label?: string;
   'aria-label'?: string;
   id?: string;
+  labelVariant?: TypographyVariants;
 }
 
 interface ToggleButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
@@ -43,23 +45,27 @@ export const ToggleButton: FC<ToggleButtonProps> = (props: ToggleButtonProps) =>
 };
 
 export const MultiToggle: FC<MultiToggleProps> = (props: MultiToggleProps) => {
-  const { label, children } = props;
+  const { label, children, labelVariant } = props;
 
   const id = props.id || nanoid(6);
 
   return (
     <Stack id={id} spacing={1}>
       {label && (
-        <Typography id={`${id}--label`} variant="body_short_bold">
+        <Typography id={`${id}--label`} variant={labelVariant}>
           {label}
         </Typography>
       )}
       <StyledWrapper role="radiogroup" aria-label={props['aria-label']}>
         {children &&
-          React.Children.map(children, (child: any, index) => (
-            <StyledButton {...child.props} role="radio" aria-labelledby={`${id}--label`} />
-          ))}
+          React.Children.map(children, (child: any, index) =>
+            child ? <StyledButton {...child?.props} role="radio" aria-labelledby={`${id}--label`} /> : null,
+          )}
       </StyledWrapper>
     </Stack>
   );
+};
+
+MultiToggle.defaultProps = {
+  labelVariant: 'body_short_bold',
 };
