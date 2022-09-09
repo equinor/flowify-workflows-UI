@@ -59,9 +59,15 @@ import {
   list,
   verified_user,
   lock_open,
+  launch,
+  upload,
+  copy,
 } from '@equinor/eds-icons';
 
 export const ICONS = {
+  copy,
+  upload,
+  launch,
   lock_open,
   verified_user,
   list,
