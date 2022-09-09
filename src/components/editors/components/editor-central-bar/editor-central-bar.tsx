@@ -65,11 +65,7 @@ export const EditorCentralBar: FC<EditorCentralBarProps> = (props: EditorCentral
   }
 
   return (
-    <Stack
-      alignItems="center"
-      justifyContent="space-between"
-      sx={{ width: '70px', height: '100%', background: '#F7F7F7', padding: '1rem 0' }}
-    >
+    <Stack alignItems="center" justifyContent="space-between" sx={{ width: '70px', height: '100%', padding: '1rem 0' }}>
       <div />
       <Stack spacing={1}>
         {type !== 'job' && (
