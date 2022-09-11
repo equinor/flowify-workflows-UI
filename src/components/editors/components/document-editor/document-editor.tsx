@@ -1,7 +1,7 @@
 import React, { FC, useState } from 'react';
 import styled from 'styled-components';
 import { Chip, Icon, Pagination, Typography } from '@equinor/eds-core-react';
-import { Grid, Stack, TextField } from '@mui/material';
+import { Dialog, Grid, Stack, TextField } from '@mui/material';
 import moment from 'moment';
 import { Workflow, Component, WorkflowListRequest, ComponentListRequest } from '../../../../models/v2';
 import { Button, Paper } from '../../../ui';
@@ -13,6 +13,7 @@ interface DocumentEditorProps {
   setInstance: any;
   versionsResponse?: WorkflowListRequest | ComponentListRequest | undefined;
   onPublish: () => void;
+  onDelete: () => void;
   fetchVersions: (
     filters: IFilter[] | undefined,
     pagination: IPagination | undefined,
@@ -31,6 +32,7 @@ export const DocumentEditor: FC<DocumentEditorProps> = (props: DocumentEditorPro
   const { document, setInstance, versionsResponse, fetchVersions } = props;
   const [editName, setEditName] = useState<boolean>(false);
   const [editDescription, setEditDescription] = useState<boolean>(false);
+  const [deleteModalOpen, setDeleteModalOpen] = useState<boolean>(false);
 
   const { items: versions, pageInfo } = versionsResponse as WorkflowListRequest | ComponentListRequest;
 
@@ -160,10 +162,25 @@ export const DocumentEditor: FC<DocumentEditorProps> = (props: DocumentEditorPro
             </Stack>
           </Stack>
           <Stack direction="row" justifyContent="flex-end">
-            <Button theme="danger">
+            <Button theme="danger" onClick={() => setDeleteModalOpen(true)}>
               <Icon name="delete_to_trash" />
               Delete {document?.type}
             </Button>
+            <Dialog open={deleteModalOpen} onClose={() => setDeleteModalOpen(false)}>
+              <Stack padding={2} spacing={3}>
+                <Typography variant="body_long">
+                  Are you sure you want to delete {document?.type} "{document?.name}"?
+                </Typography>
+                <Stack direction="row" spacing={2} justifyContent="flex-end">
+                  <Button theme="simple" onClick={() => setDeleteModalOpen(false)}>
+                    Cancel
+                  </Button>
+                  <Button theme="danger" onClick={props.onDelete}>
+                    Delete {document?.type}
+                  </Button>
+                </Stack>
+              </Stack>
+            </Dialog>
           </Stack>
         </Stack>
       </Grid>

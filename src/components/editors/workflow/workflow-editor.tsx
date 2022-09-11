@@ -168,6 +168,20 @@ const WorkflowEditor: FC<IWorkflowEditor> = (props: IWorkflowEditor) => {
     }
   }
 
+  function onDelete() {
+    if (uid && workflow?.version?.current) {
+      services.workflows
+        .delete(uid, workflow?.version?.current)
+        .then(() => {
+          navigate(`/workspace/${workspace}`);
+        })
+        .catch((error) => {
+          console.error(error);
+          setFeedback('DELETE_ERROR');
+        });
+    }
+  }
+
   if (!workflow) {
     return null;
   }
@@ -218,6 +232,7 @@ const WorkflowEditor: FC<IWorkflowEditor> = (props: IWorkflowEditor) => {
             document={workflow}
             setInstance={setWorkflow}
             versionsResponse={versions}
+            onDelete={onDelete}
             onPublish={onPublish}
             fetchVersions={fetchWorkflowVersions}
           />

@@ -138,6 +138,20 @@ const Editor: React.FC<IEditor> = (props: IEditor) => {
     }
   }
 
+  function onDelete() {
+    if (uid && component?.version?.current) {
+      services.components
+        .delete(uid, component?.version?.current)
+        .then(() => {
+          navigate(`/marketplace`);
+        })
+        .catch((error) => {
+          console.error(error);
+          setFeedback('DELETE_ERROR');
+        });
+    }
+  }
+
   if (!component) {
     return null;
   }
@@ -172,6 +186,7 @@ const Editor: React.FC<IEditor> = (props: IEditor) => {
             setInstance={setComponent}
             versionsResponse={versions}
             onPublish={onPublish}
+            onDelete={onDelete}
             fetchVersions={fetchComponentVersions}
           />
         )}

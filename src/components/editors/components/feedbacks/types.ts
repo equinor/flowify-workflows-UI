@@ -3,7 +3,8 @@ export type FeedbackTypes =
   | 'SAVE_SUCCESS'
   | 'MARKETPLACE_SUCCESS'
   | 'MARKETPLACE_ERROR'
-  | 'PUBLISH_ERROR';
+  | 'PUBLISH_ERROR'
+  | 'DELETE_ERROR';
 
 export interface FeedbacksProps {
   feedback: FeedbackTypes | undefined;

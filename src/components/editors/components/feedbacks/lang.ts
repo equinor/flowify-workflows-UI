@@ -24,4 +24,9 @@ export const FEEDBACK_MESSAGES = {
     componentMessage: 'Error: Could not create new component version',
     workflowMessage: 'Error: could not create new workflow version',
   },
+  DELETE_ERROR: {
+    type: 'error',
+    componentMessage: 'Error when deleting component.',
+    workflowMessage: 'Error when deleting workflow.',
+  },
 };
