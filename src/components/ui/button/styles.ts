@@ -12,7 +12,7 @@ export const StyledButton = styled.button<{ theme: ButtonTheme }>`
       ? '#E6FAEC'
       : props.theme === 'danger'
       ? '#FFC1C1'
-      : '#ADE2E619'};
+      : '#DEEDEE'};
   color: #18252f;
   border-radius: 1rem;
   display: flex;

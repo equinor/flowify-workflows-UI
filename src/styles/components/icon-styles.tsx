@@ -17,22 +17,3 @@ export const IconsWrapper = styled.div`
 export const FlowifyIcon = styled(Icon)`
   fill: ${(props) => props.theme?.colors?.primary.resting};
 `;
-
-interface IProgressIcons {
-  error?: boolean;
-}
-
-export const ProgressIcons = styled.div<IProgressIcons>`
-  height: 1.25rem;
-  width: 1.25rem;
-  background-color: ${(props) => (props.error ? props.theme.colors.error.resting : props.theme.colors.success.resting)};
-  border-radius: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  svg {
-    height: 1rem;
-    width: 1rem;
-    fill: white;
-  }
-`;

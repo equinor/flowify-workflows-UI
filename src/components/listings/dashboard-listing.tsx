@@ -27,7 +27,7 @@ interface DashboardListingProps {
 export const DashboardListing: FC<DashboardListingProps> = (props: DashboardListingProps) => {
   const { sections, title, icon } = props;
   return (
-    <Paper padded>
+    <Paper padding={2}>
       <Stack sx={{ justifyContent: 'stretch' }}>
         <Stack
           direction="row"

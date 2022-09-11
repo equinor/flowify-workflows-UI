@@ -93,125 +93,119 @@ const WorkflowsListing: FC<IWorkflowsListing> = (props: IWorkflowsListing) => {
   }
 
   return (
-    <Paper>
-      <Stack sx={{ padding: '2rem' }} spacing={2}>
-        <Stack direction="row" spacing={5} alignContent="center">
-          <Stack
-            direction="row"
-            spacing={2}
-            sx={{ flexGrow: '1', height: '100%' }}
-            alignItems="center"
-            justifyContent="flex-start"
-          >
-            <Stack sx={{ padding: '1rem' }}>
-              <WorkflowIcon size={24} />
-            </Stack>
-            <Link to={`/workspace/${workspace}/workflows`}>
-              <Typography variant="h3">Workflows</Typography>
-            </Link>
+    <Paper spacing={2} padding={2}>
+      <Stack direction="row" spacing={5} alignContent="center">
+        <Stack
+          direction="row"
+          spacing={2}
+          sx={{ flexGrow: '1', height: '100%' }}
+          alignItems="center"
+          justifyContent="flex-start"
+        >
+          <Stack sx={{ padding: '1rem' }}>
+            <WorkflowIcon size={24} />
           </Stack>
-          <CreateWorkflow workspace={workspace} />
+          <Link to={`/workspace/${workspace}/workflows`}>
+            <Typography variant="h3">Workflows</Typography>
+          </Link>
         </Stack>
-        <Stack sx={{ padding: '1rem' }} spacing={1} alignItems="flex-start">
-          <Typography variant="h5">Docs</Typography>
-          <a
-            href="https://equinor.github.io/flowify-documentation/docs/workflow/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Button theme="simple">
-              <span>Creating a workflow</span> <Icon name="chevron_right" size={16} color="#004f55" />
-            </Button>
-          </a>
-        </Stack>
-        <Stack direction="row" spacing={2} justifyContent="stretch">
-          <Stack direction="row" sx={{ flexGrow: '2' }}>
-            <Select
-              id="workflows_searchbar--searchobject"
-              label="Search"
-              value={searchParam}
-              wrapperStyles={{ width: '200px' }}
-              options={[
-                { label: 'Name', value: 'name' },
-                { label: 'Uid', value: 'uid' },
-              ]}
-              onChange={(event: any) => setSearchParam(event.target.value)}
-            />
-            <TextField
-              id="workflows_searchbar"
-              label="&nbsp;"
-              wrapperStyles={{ flexGrow: '2' }}
-              placeholder={`Search workflow ${searchParam}`}
-              value={search}
-              onChange={(event: any) => setSearch(event.target.value)}
-            />
-          </Stack>
+        <CreateWorkflow workspace={workspace} />
+      </Stack>
+      <Stack sx={{ padding: '1rem' }} spacing={1} alignItems="flex-start">
+        <Typography variant="h5">Docs</Typography>
+        <a
+          href="https://equinor.github.io/flowify-documentation/docs/workflow/"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <Button theme="simple">
+            <span>Creating a workflow</span> <Icon name="chevron_right" size={16} color="#004f55" />
+          </Button>
+        </a>
+      </Stack>
+      <Stack direction="row" spacing={2} justifyContent="stretch">
+        <Stack direction="row" sx={{ flexGrow: '2' }}>
           <Select
-            id="workflows_created_by"
-            value={values.createdBy}
-            label="Created by"
-            icon="account_circle"
-            onChange={(event: any) => setValues((prev) => ({ ...prev, createdBy: event.target.value }))}
+            id="workflows_searchbar--searchobject"
+            label="Search"
+            value={searchParam}
+            wrapperStyles={{ width: '200px' }}
             options={[
-              { label: 'All users', value: 'default' },
-              { label: 'Me', value: 'me' },
+              { label: 'Name', value: 'name' },
+              { label: 'Uid', value: 'uid' },
             ]}
-            sx={{ width: '145px' }}
+            onChange={(event: any) => setSearchParam(event.target.value)}
+          />
+          <TextField
+            id="workflows_searchbar"
+            label="&nbsp;"
+            wrapperStyles={{ flexGrow: '2' }}
+            placeholder={`Search workflow ${searchParam}`}
+            value={search}
+            onChange={(event: any) => setSearch(event.target.value)}
           />
         </Stack>
-        <>
-          <StyledTable aria-rowcount={requestData?.totalNumber || 0} size="small">
-            <TableHead>
-              <TableRow>
-                {headers.map((header) => (
-                  <TableCell key={header.id} sortDirection={order}>
-                    {header.sortable ? (
-                      <TableSortLabel
-                        active={header.id === orderBy}
-                        direction={order}
-                        onClick={() => onSort(header.id)}
-                      >
-                        {header.label}
-                      </TableSortLabel>
-                    ) : (
-                      header.label
-                    )}
-                  </TableCell>
-                ))}
-              </TableRow>
-            </TableHead>
-            {requestData?.totalNumber && requestData.totalNumber > 0 ? (
-              <TableBody>
-                {Array.isArray(workflows) &&
-                  workflows.map((workflow) => (
-                    <WorkflowTableRow
-                      key={`${workflow?.uid}_${workflow?.version?.current}`}
-                      row={workflow}
-                      workspace={workspace}
-                    />
-                  ))}
-              </TableBody>
-            ) : (
-              !loadingWorkflows && (
-                <Stack sx={{ padding: '1rem' }}>
-                  <Typography variant="body_short">No workflows available.</Typography>
-                </Stack>
-              )
-            )}
-          </StyledTable>
-          {requestData && (
-            <TablePagination
-              sx={{ width: '100%' }}
-              component="div"
-              count={requestData.totalNumber}
-              page={page}
-              rowsPerPage={10}
-              onPageChange={(event, page) => setPage(page)}
-              rowsPerPageOptions={[10]}
-            />
-          )}
-        </>
+        <Select
+          id="workflows_created_by"
+          value={values.createdBy}
+          label="Created by"
+          icon="account_circle"
+          onChange={(event: any) => setValues((prev) => ({ ...prev, createdBy: event.target.value }))}
+          options={[
+            { label: 'All users', value: 'default' },
+            { label: 'Me', value: 'me' },
+          ]}
+          sx={{ width: '145px' }}
+        />
       </Stack>
+      <>
+        <StyledTable aria-rowcount={requestData?.totalNumber || 0} size="small">
+          <TableHead>
+            <TableRow>
+              {headers.map((header) => (
+                <TableCell key={header.id} sortDirection={order}>
+                  {header.sortable ? (
+                    <TableSortLabel active={header.id === orderBy} direction={order} onClick={() => onSort(header.id)}>
+                      {header.label}
+                    </TableSortLabel>
+                  ) : (
+                    header.label
+                  )}
+                </TableCell>
+              ))}
+            </TableRow>
+          </TableHead>
+          {requestData?.totalNumber && requestData.totalNumber > 0 ? (
+            <TableBody>
+              {Array.isArray(workflows) &&
+                workflows.map((workflow) => (
+                  <WorkflowTableRow
+                    key={`${workflow?.uid}_${workflow?.version?.current}`}
+                    row={workflow}
+                    workspace={workspace}
+                  />
+                ))}
+            </TableBody>
+          ) : (
+            !loadingWorkflows && (
+              <Stack sx={{ padding: '1rem' }}>
+                <Typography variant="body_short">No workflows available.</Typography>
+              </Stack>
+            )
+          )}
+        </StyledTable>
+        {requestData && (
+          <TablePagination
+            sx={{ width: '100%' }}
+            component="div"
+            count={requestData.totalNumber}
+            page={page}
+            rowsPerPage={10}
+            onPageChange={(event, page) => setPage(page)}
+            rowsPerPageOptions={[10]}
+          />
+        )}
+      </>
     </Paper>
   );
 };

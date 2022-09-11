@@ -4,7 +4,7 @@ import { Chip, Icon, Pagination, Typography } from '@equinor/eds-core-react';
 import { Grid, Stack, TextField } from '@mui/material';
 import moment from 'moment';
 import { Workflow, Component, WorkflowListRequest, ComponentListRequest } from '../../../../models/v2';
-import { Button } from '../../../ui';
+import { Button, Paper } from '../../../ui';
 import { Link } from 'react-router-dom';
 import { IFilter, IPagination } from '../../../../services/v2';
 
@@ -65,17 +65,7 @@ export const DocumentEditor: FC<DocumentEditorProps> = (props: DocumentEditorPro
             Create new version
           </Button>
           {versions?.map((version) => (
-            <Stack
-              key={`${version.uid}-${version?.version?.current}`}
-              spacing={1}
-              sx={{
-                padding: '2rem',
-                background: '#ADE2E619',
-                borderRadius: '10px',
-                borderBottom: '1px solid #97CACE',
-                borderRight: '1px solid #97CACE',
-              }}
-            >
+            <Paper key={`${version.uid}-${version?.version?.current}`} spacing={1} padding={2} theme="light">
               <Stack direction="row" spacing={2}>
                 <Typography variant="h5">{version.name}</Typography>
                 <Chip style={{ fontSize: '1rem' }}>v{version?.version?.current}</Chip>
@@ -107,7 +97,7 @@ export const DocumentEditor: FC<DocumentEditorProps> = (props: DocumentEditorPro
                   </Link>
                 </Stack>
               )}
-            </Stack>
+            </Paper>
           ))}
           <Pagination
             totalItems={pageInfo?.totalNumber}
