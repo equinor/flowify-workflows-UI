@@ -1,9 +1,10 @@
 import React, { FC } from 'react';
-import { Button, Chip } from '@equinor/eds-core-react';
+import { Chip } from '@equinor/eds-core-react';
 import { Stack, TableRow as TableRowUI, TableCell } from '@mui/material';
 import { Workflow } from '../../../models/v2/workflow';
 import { Timestamp } from '../../timestamp';
 import { RunWorkflow } from '../../creators';
+import { Button } from '../../ui';
 
 interface ITableRow {
   row: Workflow;
