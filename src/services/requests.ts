@@ -25,7 +25,7 @@ export class Request {
   }
 
   post(url: string) {
-    return auth(superagent.post(apiUrl(url)));
+    return auth(superagent.post(apiUrl(url)).set('Content-Type', 'application/json'));
   }
 
   put(url: string) {
