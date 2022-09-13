@@ -1,27 +1,23 @@
 import React, { FC } from 'react';
 import { Chip, Icon, Typography } from '@equinor/eds-core-react';
-import { Stack } from '@mui/material';
+import { Grid, Stack } from '@mui/material';
 import { Workflow } from '../../../../models';
 import { Timestamp } from '../../../timestamp';
 import { DurationPanel } from '../../../duration-panel';
-import styled from 'styled-components';
+import { Job } from '../../../../models/v2';
+import { Button, Paper } from '../../../ui';
+import { Link } from 'react-router-dom';
 
 interface IJobSidebar {
-  job: Workflow | undefined;
+  jobWatch: Workflow | undefined;
   inputs?: any;
+  job: Job | undefined;
+  onTerminate: () => void;
+  onDelete: () => void;
 }
 
-const ParameterWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  column-gap: 1rem;
-  padding: 0.75rem;
-  border-left: 3px solid #007079;
-`;
-
 const JobSidebar: FC<IJobSidebar> = (props: IJobSidebar) => {
-  const { job, inputs } = props;
+  const { jobWatch, inputs, job, onTerminate, onDelete } = props;
 
   type PhaseTheme = 'active' | 'error' | undefined;
 
@@ -33,26 +29,51 @@ const JobSidebar: FC<IJobSidebar> = (props: IJobSidebar) => {
     Error: 'error',
   };
   return (
-    <Stack spacing={1}>
-      <div>
-        <Typography variant="body_short_bold">Status</Typography>
-        <Chip variant={phaseTheme[job?.status?.phase as keyof typeof phaseTheme]}>{job?.status?.phase}</Chip>
-      </div>
-      <Typography variant="body_short">
-        <b>Run: </b>
-        <Timestamp date={job?.status?.finishedAt} />
-      </Typography>
-      <Typography variant="body_short">
-        <b>Duration: </b>
-        <DurationPanel status={job?.status!} />
-      </Typography>
-      <Typography variant="body_short">
-        <b>Workflow version: </b>v{job?.metadata.generation}
-      </Typography>
-      <Typography variant="h4">Parameters</Typography>
+    <Stack spacing={3}>
+      <Typography variant="h3">{job?.uid}</Typography>
+      <Typography variant="body_short">{job?.description}</Typography>
+      <Grid container spacing={1}>
+        <Grid item xs={8}>
+          Workflow
+        </Grid>
+        <Grid item xs={4}>
+          <Link target="_blank" to={`/workspace/${job?.workflow?.workspace}/workflow/${job?.workflow?.uid}`}>
+            <Button as="span" theme="simple">
+              {job?.workflow?.name} v{job?.workflow?.version?.current}
+            </Button>
+          </Link>
+        </Grid>
+        <Grid item xs={8}>
+          Status
+        </Grid>
+        <Grid item xs={4}>
+          <Chip variant={phaseTheme[jobWatch?.status?.phase as keyof typeof phaseTheme]}>
+            {jobWatch?.status?.phase}
+          </Chip>
+        </Grid>
+        <Grid item xs={8}>
+          Run
+        </Grid>
+        <Grid item xs={4}>
+          <Timestamp date={jobWatch?.status?.finishedAt} />
+        </Grid>
+        <Grid item xs={8}>
+          Duration
+        </Grid>
+        <Grid item xs={4}>
+          <DurationPanel status={jobWatch?.status!} />
+        </Grid>
+        <Grid item xs={8}>
+          Submitted by
+        </Grid>
+        <Grid item xs={4}>
+          {job?.modifiedBy}
+        </Grid>
+      </Grid>
       <Stack spacing={1}>
+        <Typography variant="h4">Parameters</Typography>
         {inputs?.parameters?.map((parameter: any) => (
-          <ParameterWrapper key={parameter.name}>
+          <Paper theme="light" padding={1} key={parameter.name}>
             <div style={{ flexGrow: '2' }}>
               <Typography variant="h5">{parameter.name}</Typography>
               <Stack
@@ -65,8 +86,14 @@ const JobSidebar: FC<IJobSidebar> = (props: IJobSidebar) => {
                 <Typography variant="caption">{parameter.value || 'undefined'}</Typography>
               </Stack>
             </div>
-          </ParameterWrapper>
+          </Paper>
         ))}
+      </Stack>
+      <Stack direction="row" spacing={2}>
+        {jobWatch?.status?.phase === 'Running' && <Button onClick={onTerminate}>Terminate job</Button>}
+        <Button theme="danger" onClick={onDelete}>
+          Delete job
+        </Button>
       </Stack>
     </Stack>
   );

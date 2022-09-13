@@ -38,4 +38,11 @@ export class WorkflowService {
         (reason) => reason,
       );
   }
+
+  public delete(id: string, version: string | number) {
+    return requests.delete(`api/v2/workflows/${id}/${version}`).then(
+      () => null,
+      (reason) => reason,
+    );
+  }
 }

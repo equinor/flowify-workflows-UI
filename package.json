@@ -39,6 +39,7 @@
     "react-scripts": "^5.0.1",
     "rxjs": "^7.3.0",
     "sass": "1.52.3",
+    "source-map-explorer": "^2.5.2",
     "styled-components": "^5.3.5",
     "superagent": "7.1.6",
     "superagent-promise": "^1.1.0",
@@ -50,7 +51,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "analyze": "source-map-explorer 'build/static/js/*.js' --gzip"
   },
   "eslintConfig": {
     "extends": [

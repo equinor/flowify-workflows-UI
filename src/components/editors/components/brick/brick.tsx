@@ -1,17 +1,16 @@
 import React, { FC } from 'react';
 import { Grid, Stack, TextField } from '@mui/material';
 import { Component, Brick as IBrick } from '../../../../models/v2';
-import { Button, Typography } from '@equinor/eds-core-react';
+import { Typography } from '@equinor/eds-core-react';
 import { Argument, DraggableList, Result } from '../../components';
 
 interface BrickProps {
   component: Component | null | undefined;
   setComponent: React.Dispatch<React.SetStateAction<Component | undefined>>;
-  onSave?: (() => void) | null;
 }
 
 export const Brick: FC<BrickProps> = (props: BrickProps) => {
-  const { component, setComponent, onSave } = props;
+  const { component, setComponent } = props;
   if (!component) {
     return null;
   }
@@ -180,13 +179,7 @@ export const Brick: FC<BrickProps> = (props: BrickProps) => {
               />
             </Stack>
           </Grid>
-          <Grid item xs={6} sx={{ flexGrow: '1', overflowY: 'auto', minHeight: '0' }}>
-            {typeof onSave === 'function' && (
-              <Button onClick={onSave} style={{ position: 'absolute', right: 16, marginTop: 16 }}>
-                Save changes
-              </Button>
-            )}
-          </Grid>
+          <Grid item xs={6} sx={{ flexGrow: '1', overflowY: 'auto', minHeight: '0' }}></Grid>
         </>
       )}
     </Grid>

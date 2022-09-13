@@ -1,13 +1,13 @@
 import React, { FC, useState, useEffect, useContext } from 'react';
 import { Grid, Stack } from '@mui/material';
-import { Button, Icon, Progress, Snackbar, Typography, Pagination } from '@equinor/eds-core-react';
+import { Button as EDSButton, Icon, Progress, Snackbar, Typography, Pagination } from '@equinor/eds-core-react';
 import moment from 'moment';
 import { Component, IPageInfo } from '../../models/v2';
 import { services, IFilter } from '../../services/v2';
 import { isNotEmptyArray } from '../../common/general-helpers';
 import { ComponentCard } from './components/component-card';
 import { AddComponentToGraph, CreateComponent } from '../creators';
-import { Select, TextField, ButtonLink } from '../ui';
+import { Select, TextField, Button } from '../ui';
 import { UserContextStore } from '../../common/context/user-context-store';
 import { Link } from 'react-router-dom';
 
@@ -82,9 +82,9 @@ export const Marketplace: FC<MarketplaceProps> = (props: MarketplaceProps) => {
       <Snackbar open={searchSnackbar} onClose={() => setSearchSnackbar(false)} placement="top">
         Search is not implemented yet. We are working on it!
         <Snackbar.Action>
-          <Button onClick={() => setSearchSnackbar(false)} variant="ghost">
+          <EDSButton onClick={() => setSearchSnackbar(false)} variant="ghost">
             Close
-          </Button>
+          </EDSButton>
         </Snackbar.Action>
       </Snackbar>
       <Stack spacing={3}>
@@ -96,10 +96,10 @@ export const Marketplace: FC<MarketplaceProps> = (props: MarketplaceProps) => {
                 <Typography variant="h3">Marketplace</Typography>
               </Link>
             </Stack>
-            <ButtonLink as="button" create onClick={() => setCreateModalOpen(true)}>
+            <Button theme="create" onClick={() => setCreateModalOpen(true)}>
               <Icon name="add" size={24} color="#709DA0" />
               Create new component
-            </ButtonLink>
+            </Button>
             <CreateComponent open={createModalOpen} setOpen={setCreateModalOpen} />
           </Stack>
         )}
@@ -196,10 +196,10 @@ export const Marketplace: FC<MarketplaceProps> = (props: MarketplaceProps) => {
         </Stack>
         {preview ? (
           <Stack alignItems="flex-end">
-            <ButtonLink simple>
+            <Button theme="simple">
               <Link to="/components">Visit marketplace</Link>
               <Icon name="chevron_right" size={16} />
-            </ButtonLink>
+            </Button>
           </Stack>
         ) : null}
       </Stack>

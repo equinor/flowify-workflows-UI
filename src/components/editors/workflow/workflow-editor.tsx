@@ -1,26 +1,23 @@
-import React, { useEffect, useState, FC } from 'react';
-import { Progress } from '@equinor/eds-core-react';
-import { Grid, Stack } from '@mui/material';
+import React, { useEffect, useState, FC, useCallback } from 'react';
+import { Stack } from '@mui/material';
 import { Helmet } from 'react-helmet-async';
 import { Workflow } from '../../../models/v2/workflow';
 import {
-  EditorCentralBar,
-  Sidebar,
-  Brick,
-  GraphEditor,
   MapConfig,
   SecretsVolumesConfig,
   FeedbackTypes,
   Feedbacks,
+  EditorMenu,
+  DocumentEditor,
+  WorkflowJobs,
+  MainEditor,
 } from '../components';
 import { createGraphElements, fetchInitialSubComponents, INode } from '../helpers';
-import { Component, IVolume } from '../../../models/v2';
-import { services } from '../../../services/v2';
-import { ObjectEditor } from '../../object-editor/object-editor';
+import { Component, IJobsListRequest, IVolume, WorkflowListRequest } from '../../../models/v2';
+import { IFilter, IPagination, services } from '../../../services/v2';
 import { useEdgesState, useNodesState } from 'react-flow-renderer';
 import { IfConfig } from '../components/functional-components/if/if-config';
 import { useNavigate, useParams } from 'react-router';
-import { VersionBar } from '../components/version-bar/version-bar';
 
 interface IWorkflowEditor {
   uid: string | null;
@@ -30,6 +27,7 @@ interface IWorkflowEditor {
 const WorkflowEditor: FC<IWorkflowEditor> = (props: IWorkflowEditor) => {
   const { workspace, uid } = props;
   const { version } = useParams();
+  const [activePage, setActivePage] = useState<'editor' | 'document' | 'runs'>('editor');
   const [configComponent, setConfigComponent] = useState<{ id: string; type: 'map' | 'if' }>();
   const [component, setComponent] = useState<Component | undefined>();
   const [dirty, setDirty] = useState<boolean>(false);
@@ -39,12 +37,30 @@ const WorkflowEditor: FC<IWorkflowEditor> = (props: IWorkflowEditor) => {
   const [nodes, setNodes, onNodesChange] = useNodesState<INode>([]);
   const [parameterConfig, setParameterConfig] = useState<{ type: 'secret' | 'volume'; id: string }>();
   const [subcomponents, setSubcomponents] = useState<Component[]>();
-  const [useManifest, setUseManifest] = useState<boolean>(false);
+  const [versions, setVersions] = useState<WorkflowListRequest>();
+  const [jobs, setJobs] = useState<IJobsListRequest>();
   const [workflow, setWorkflow] = useState<Workflow | undefined>();
   const [workspaceSecrets, setWorkspaceSecrets] = useState<string[]>([]);
   const [workspaceVolumes, setWorkspaceVolumes] = useState<IVolume[]>([]);
-  const isLatest = workflow?.version?.tags?.includes('latest');
   const navigate = useNavigate();
+
+  const fetchWorkflowVersions = useCallback(
+    (filters: IFilter[] | undefined, pagination: IPagination | undefined, sorting: string | undefined) => {
+      const searchFilter: IFilter[] = [{ name: 'uid', value: uid!, type: 'EQUALTO' }];
+      services.workflows
+        .list(filters || searchFilter, pagination, sorting || 'sort=-timestamp')
+        .then((res) => setVersions(res));
+    },
+    [uid],
+  );
+
+  const fetchJobs = useCallback(
+    (pagination: IPagination | undefined) => {
+      const jobsFilter: IFilter[] = [{ name: 'workflow.uid', value: uid || '', type: 'EQUALTO' }];
+      services.jobs.list(jobsFilter, pagination, 'sort=-timestamp').then((res) => setJobs(res));
+    },
+    [uid],
+  );
 
   useEffect(() => {
     console.log('component onMount');
@@ -75,7 +91,12 @@ const WorkflowEditor: FC<IWorkflowEditor> = (props: IWorkflowEditor) => {
     services.volumes.list(workspace!).then((res) => {
       setWorkspaceVolumes(res.items);
     });
-  }, [workspace, uid, version]);
+
+    // Fetch latest versions of workflow
+    fetchWorkflowVersions(undefined, undefined, undefined);
+    // Fetch jobs
+    fetchJobs(undefined);
+  }, [workspace, uid, version, fetchWorkflowVersions, fetchJobs]);
 
   useEffect(() => {
     if (workflow) {
@@ -147,6 +168,24 @@ const WorkflowEditor: FC<IWorkflowEditor> = (props: IWorkflowEditor) => {
     }
   }
 
+  function onDelete() {
+    if (uid && workflow?.version?.current) {
+      services.workflows
+        .delete(uid, workflow?.version?.current)
+        .then(() => {
+          navigate(`/workspace/${workspace}`);
+        })
+        .catch((error) => {
+          console.error(error);
+          setFeedback('DELETE_ERROR');
+        });
+    }
+  }
+
+  if (!workflow) {
+    return null;
+  }
+
   return (
     <>
       <Helmet>
@@ -183,72 +222,41 @@ const WorkflowEditor: FC<IWorkflowEditor> = (props: IWorkflowEditor) => {
         workspaceSecrets={workspaceSecrets}
         workspaceVolumes={workspaceVolumes}
       />
-      <Grid container sx={{ flexGrow: '1', minHeight: '0', flexWrap: 'nowrap' }}>
-        <Grid item xs={3} sx={{ flexGrow: '1', overflowY: 'auto', minHeight: '0' }}>
-          <Sidebar
-            component={component}
-            secrets={workspaceSecrets}
-            setComponent={setComponent}
+      <Stack direction="row" justifyContent="stretch" sx={{ flexGrow: '1', minHeight: '0', flexWrap: 'nowrap' }}>
+        <EditorMenu active={activePage} setActive={setActivePage} isWorkflow onSave={onSave} dirty={dirty} />
+        {activePage === 'runs' && (
+          <WorkflowJobs workflow={workflow} secrets={workspaceSecrets} jobs={jobs} fetchJobs={fetchJobs} />
+        )}
+        {activePage === 'document' && (
+          <DocumentEditor
+            document={workflow}
             setInstance={setWorkflow}
-            type="workflow"
-            workflow={workflow}
-            workspace={workspace}
+            versionsResponse={versions}
+            onDelete={onDelete}
+            onPublish={onPublish}
+            fetchVersions={fetchWorkflowVersions}
           />
-        </Grid>
-        <Grid item xs={9} sx={{ flexGrow: '1', minHeight: '0', flexWrap: 'nowrap' }}>
-          {loading && !workflow ? (
-            <Progress.Dots color="primary" />
-          ) : (
-            <Stack
-              direction="row"
-              sx={{ flexGrow: '1', minHeight: '0', flexWrap: 'nowrap', height: '100%', width: '100%' }}
-            >
-              <EditorCentralBar
-                component={workflow?.component}
-                setComponent={setComponent}
-                setFeedback={setFeedback}
-                setSubcomponents={setSubcomponents}
-                setUseManifest={setUseManifest}
-                subComponents={subcomponents}
-                type={workflow?.component?.implementation?.type}
-              />
-              <Stack sx={{ flexGrow: '1', minHeight: '0', flexWrap: 'nowrap', height: '100%', width: '100%' }}>
-                <VersionBar
-                  type="workflow"
-                  version={workflow?.version?.current}
-                  isLatest={isLatest || false}
-                  onSave={onSave}
-                  onPublish={onPublish}
-                />
-                {useManifest ? (
-                  <ObjectEditor
-                    onChange={(wf: Workflow) => {
-                      setWorkflow(wf);
-                      setComponent(wf.component);
-                      setDirty(true);
-                    }}
-                    value={workflow}
-                  />
-                ) : workflow?.component?.implementation?.type === 'graph' ? (
-                  <GraphEditor
-                    component={component || null}
-                    dirty={dirty}
-                    edges={edges}
-                    mapModalOpen={configComponent !== undefined}
-                    nodes={nodes}
-                    onChange={setComponent}
-                    onEdgesChange={onEdgesChange}
-                    onNodesChange={onNodesChange}
-                    subcomponents={subcomponents}
-                  />
-                ) : (
-                  <Brick component={component} setComponent={setComponent} />
-                )}
-              </Stack>
-            </Stack>
-          )}
-        </Grid>
-      </Grid>
+        )}
+        {activePage === 'editor' && (
+          <MainEditor
+            component={component}
+            document={workflow}
+            setComponent={setComponent}
+            setDocument={setWorkflow}
+            workspace={workspace}
+            secrets={workspaceSecrets}
+            setFeedback={setFeedback}
+            subcomponents={subcomponents}
+            setSubcomponents={setSubcomponents}
+            setDirty={setDirty}
+            nodes={nodes}
+            onNodesChange={onNodesChange}
+            edges={edges}
+            onEdgesChange={onEdgesChange}
+            configComponent={configComponent}
+          />
+        )}
+      </Stack>
     </>
   );
 };

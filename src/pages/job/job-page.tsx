@@ -5,23 +5,27 @@ import { WorkflowJob } from '../../models/workflow-jobs';
 import { services } from '../../services/v2';
 import { RetryWatch } from '../../common/retry-watch';
 import { Container, Layout } from '../../layout';
+import { Job } from '../../models/v2';
 
 interface JobPageProps {}
 
 // Fetch job from route.params then pass it down to JobView as prop
 export const JobPage: React.FC<JobPageProps> = (props: JobPageProps): React.ReactElement => {
   const { workspace, id } = useParams();
-  const [job, setWorkflow] = useState<WorkflowJob | undefined>();
+  const [job, setJob] = useState<Job | undefined>();
+  const [jobWatch, setJobWatch] = useState<WorkflowJob | undefined>();
   const [loading, setLoading] = useState<boolean>(true);
 
   // TODO: handle error and delete
   useEffect(() => {
+    services.jobs.get(id!).then((res) => setJob(res));
+
     const retryWatch = new RetryWatch<WorkflowJob>(
       () => services.jobs.watch(id!),
       () => {},
       (res) => {
         //@ts-expect-error
-        setWorkflow(res);
+        setJobWatch(res);
         setLoading(false);
       },
       () => {
@@ -34,7 +38,9 @@ export const JobPage: React.FC<JobPageProps> = (props: JobPageProps): React.Reac
 
   return (
     <Layout dashboard>
-      <Container>{<JobViewer workspace={workspace!} job={job} loading={loading} />}</Container>
+      <Container>
+        {<JobViewer uid={id} workspace={workspace!} jobWatch={jobWatch} job={job} loading={loading} />}
+      </Container>
     </Layout>
   );
 };

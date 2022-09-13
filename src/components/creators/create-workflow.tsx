@@ -1,10 +1,11 @@
 import React, { FC, useState } from 'react';
-import { Button, Icon, Progress, Snackbar } from '@equinor/eds-core-react';
+import { Icon, Progress, Snackbar } from '@equinor/eds-core-react';
 import { Card, Dialog, DialogTitle, Stack } from '@mui/material';
 import { ObjectEditor } from '../object-editor/object-editor';
 import { Workflow } from '../../models/v2/workflow';
 import { services } from '../../services/v2';
 import { useNavigate } from 'react-router';
+import { Button } from '../ui';
 
 const makeWorkflow = (workspace: string): Workflow => ({
   type: 'workflow',
@@ -58,12 +59,12 @@ const CreateWorkflow: FC<ICreateWorkflow> = (props: ICreateWorkflow) => {
       <Snackbar open={errorSnackbar} onClose={() => setErrorSnackbar(false)}>
         Could not create workflow.
         <Snackbar.Action>
-          <Button onClick={() => setErrorSnackbar(false)} variant="ghost">
+          <Button onClick={() => setErrorSnackbar(false)} theme="simple">
             Close
           </Button>
         </Snackbar.Action>
       </Snackbar>
-      <Button variant="outlined" onClick={() => setModalOpen(true)}>
+      <Button theme="create" onClick={() => setModalOpen(true)}>
         <Icon name="add" />
         Add new Workflow
       </Button>
@@ -76,7 +77,7 @@ const CreateWorkflow: FC<ICreateWorkflow> = (props: ICreateWorkflow) => {
           <Button onClick={() => setModalOpen(false)} color="secondary">
             Cancel
           </Button>
-          <Button onClick={onCreate}>
+          <Button theme="create" onClick={onCreate}>
             {posting ? (
               <>
                 <Progress.Circular color="neutral" size={16} /> Creating workflow…

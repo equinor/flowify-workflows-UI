@@ -39,4 +39,11 @@ export class ComponentService {
         (reason) => reason,
       );
   }
+
+  public delete(id: string, version: string | number) {
+    return requests.delete(`api/v2/components/${id}/${version}`).then(
+      () => null,
+      (reason) => reason,
+    );
+  }
 }

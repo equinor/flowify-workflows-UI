@@ -1,24 +1,20 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
-import { Progress } from '@equinor/eds-core-react';
-import { Grid, Stack } from '@mui/material';
+import { Stack } from '@mui/material';
 import { useEdgesState, useNodesState } from 'react-flow-renderer';
 import { Helmet } from 'react-helmet-async';
-import { Component } from '../../../models/v2';
-import { services } from '../../../services/v2';
+import { Component, ComponentListRequest } from '../../../models/v2';
+import { IFilter, IPagination, services } from '../../../services/v2';
 import {
-  EditorCentralBar,
-  GraphEditor,
-  Sidebar,
-  Brick,
   MapConfig,
   SecretsVolumesConfig,
   Feedbacks,
   FeedbackTypes,
+  EditorMenu,
+  DocumentEditor,
+  MainEditor,
 } from '../components';
 import { createGraphElements, fetchInitialSubComponents, INode } from '../helpers';
-import { ObjectEditor } from '../../object-editor/object-editor';
-import { VersionBar } from '../components/version-bar/version-bar';
 
 interface IEditor {
   uid: string | null;
@@ -33,6 +29,7 @@ interface IEditor {
 const Editor: React.FC<IEditor> = (props: IEditor) => {
   const { uid, workspace } = props;
   const { version } = useParams();
+  const [activePage, setActivePage] = useState<'editor' | 'document' | 'runs'>('editor');
   const [configComponent, setConfigComponent] = useState<{ id: string; type: 'map' | 'if' }>();
   const [component, setComponent] = useState<Component | undefined>();
   const [dirty, setDirty] = useState<boolean>(false);
@@ -40,11 +37,20 @@ const Editor: React.FC<IEditor> = (props: IEditor) => {
   const [feedback, setFeedback] = useState<FeedbackTypes>();
   const [loading, setLoading] = useState<boolean>(true);
   const [nodes, setNodes, onNodesChange] = useNodesState<INode>([]);
+  const [versions, setVersions] = useState<ComponentListRequest>();
   const [parameterConfig, setParameterConfig] = useState<{ type: 'secret' | 'volume'; id: string }>();
   const [subcomponents, setSubcomponents] = useState<Component[]>();
-  const [useManifest, setUseManifest] = useState<boolean>(false);
-  const isLatest = component?.version?.tags?.includes('latest');
   const navigate = useNavigate();
+
+  const fetchComponentVersions = useCallback(
+    (filters: IFilter[] | undefined, pagination: IPagination | undefined, sorting: string | undefined) => {
+      const searchFilter: IFilter[] = [{ name: 'uid', value: uid!, type: 'EQUALTO' }];
+      services.components
+        .list(filters || searchFilter, pagination, sorting || 'sort=-timestamp')
+        .then((res) => setVersions(res));
+    },
+    [uid],
+  );
 
   useEffect(() => {
     console.log('component on mount');
@@ -62,8 +68,10 @@ const Editor: React.FC<IEditor> = (props: IEditor) => {
           console.error(error);
           setLoading(false);
         });
+      // Fetch latest versions of workflow
+      fetchComponentVersions(undefined, undefined, undefined);
     }
-  }, [workspace, uid, version]);
+  }, [workspace, uid, version, fetchComponentVersions]);
 
   useEffect(() => {
     if (component) {
@@ -79,20 +87,15 @@ const Editor: React.FC<IEditor> = (props: IEditor) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [component]);
 
-  function editsOnChange(comp: Component) {
-    setComponent(() => ({
-      ...comp,
-    }));
-    setDirty(true);
-  }
-
   function onSave() {
     // TODO: Check if latest version
-    if (component) {
+    if (component && !loading) {
+      setLoading(true);
       services.components
         .update(component, component.uid!)
         .then((res) => {
           console.log(res);
+          setLoading(false);
           setFeedback('SAVE_SUCCESS');
         })
         .catch((error) => {
@@ -104,17 +107,20 @@ const Editor: React.FC<IEditor> = (props: IEditor) => {
             return;
           }
           // TODO: Handle 409 error
+          setLoading(false);
           setFeedback('UPDATE_ERROR');
         });
     }
   }
 
   function onPublish() {
-    if (component) {
+    if (component && !loading) {
+      setLoading(true);
       services.components
         .publish(component, component.uid!)
         .then((res) => {
           console.log(res);
+          setLoading(false);
           // TODO: Reroute to new component
         })
         .catch((error) => {
@@ -123,8 +129,25 @@ const Editor: React.FC<IEditor> = (props: IEditor) => {
           if (error?.code === 500) {
             setLoading(false);
             navigate(`/component/${component.uid}/${parseInt(version!, 10) + 1}`);
+            return;
           }
+          setFeedback('PUBLISH_ERROR');
+          setLoading(false);
           // TODO: Handle error
+        });
+    }
+  }
+
+  function onDelete() {
+    if (uid && component?.version?.current) {
+      services.components
+        .delete(uid, component?.version?.current)
+        .then(() => {
+          navigate(`/marketplace`);
+        })
+        .catch((error) => {
+          console.error(error);
+          setFeedback('DELETE_ERROR');
         });
     }
   }
@@ -155,64 +178,37 @@ const Editor: React.FC<IEditor> = (props: IEditor) => {
         subcomponents={subcomponents}
         type="component"
       />
-      <Grid container sx={{ flexGrow: '1', minHeight: '0', flexWrap: 'nowrap' }}>
-        <Grid item xs={3} sx={{ flexGrow: '1', overflowY: 'auto', minHeight: '0' }}>
-          <Sidebar
-            component={component}
-            setComponent={setComponent}
+      <Stack direction="row" justifyContent="stretch" sx={{ flexGrow: '1', minHeight: '0', flexWrap: 'nowrap' }}>
+        <EditorMenu active={activePage} setActive={setActivePage} onSave={onSave} dirty={dirty} />
+        {activePage === 'document' && (
+          <DocumentEditor
+            document={component}
             setInstance={setComponent}
-            type="component"
-            workspace={workspace}
-            isLatest={isLatest}
+            versionsResponse={versions}
+            onPublish={onPublish}
+            onDelete={onDelete}
+            fetchVersions={fetchComponentVersions}
           />
-        </Grid>
-        <Grid item xs={9} sx={{ flexGrow: '1', minHeight: '0', flexWrap: 'nowrap' }}>
-          {loading && !component ? (
-            <Progress.Dots color="primary" />
-          ) : (
-            <Stack
-              direction="row"
-              sx={{ flexGrow: '1', minHeight: '0', flexWrap: 'nowrap', height: '100%', width: '100%' }}
-            >
-              <EditorCentralBar
-                component={component}
-                setComponent={setComponent}
-                setFeedback={setFeedback}
-                setSubcomponents={setSubcomponents}
-                setUseManifest={setUseManifest}
-                subComponents={subcomponents}
-                type={component?.implementation?.type}
-              />
-              <Stack sx={{ flexGrow: '1', minHeight: '0', flexWrap: 'nowrap', height: '100%', width: '100%' }}>
-                <VersionBar
-                  type="component"
-                  version={component?.version?.current}
-                  isLatest={isLatest || false}
-                  onSave={onSave}
-                  onPublish={onPublish}
-                />
-                {useManifest ? (
-                  <ObjectEditor value={component} onChange={(comp: Component) => editsOnChange(comp)} />
-                ) : component?.implementation?.type === 'graph' ? (
-                  <GraphEditor
-                    component={component}
-                    dirty={dirty}
-                    edges={edges}
-                    mapModalOpen={configComponent !== undefined}
-                    nodes={nodes}
-                    onChange={editsOnChange}
-                    onEdgesChange={onEdgesChange}
-                    onNodesChange={onNodesChange}
-                    subcomponents={subcomponents}
-                  />
-                ) : (
-                  <Brick component={component} setComponent={setComponent} />
-                )}
-              </Stack>
-            </Stack>
-          )}
-        </Grid>
-      </Grid>
+        )}
+        {activePage === 'editor' && (
+          <MainEditor
+            component={component}
+            document={component}
+            setComponent={setComponent}
+            setDocument={setComponent}
+            workspace={workspace}
+            setFeedback={setFeedback}
+            subcomponents={subcomponents}
+            setSubcomponents={setSubcomponents}
+            setDirty={setDirty}
+            nodes={nodes}
+            onNodesChange={onNodesChange}
+            edges={edges}
+            onEdgesChange={onEdgesChange}
+            configComponent={configComponent}
+          />
+        )}
+      </Stack>
     </>
   );
 };

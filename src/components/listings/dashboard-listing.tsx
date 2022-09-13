@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import { Icon, Typography } from '@equinor/eds-core-react';
 import { Stack } from '@mui/material';
 import { Link } from 'react-router-dom';
-import { ButtonLink, Paper } from '../ui';
+import { Button, Paper } from '../ui';
 
 interface ISection {
   title?: string;
@@ -27,7 +27,7 @@ interface DashboardListingProps {
 export const DashboardListing: FC<DashboardListingProps> = (props: DashboardListingProps) => {
   const { sections, title, icon } = props;
   return (
-    <Paper padded>
+    <Paper padding={2}>
       <Stack sx={{ justifyContent: 'stretch' }}>
         <Stack
           direction="row"
@@ -46,26 +46,30 @@ export const DashboardListing: FC<DashboardListingProps> = (props: DashboardList
               <Stack direction="row" columnGap={3} rowGap={1} flexWrap="wrap" sx={{ maxWidth: '970px' }}>
                 {section.linklist?.map((item) =>
                   item.external ? (
-                    <a key={item.url} href={item.url} target={item.target} rel="noopener noreferrer">
-                      <ButtonLink simple>
-                        {item.icon && <Icon name={item.icon} size={16} color="#004f55" />}
-                        <span>{item.title}</span> <Icon name="chevron_right" size={16} color="#004f55" />
-                      </ButtonLink>
-                    </a>
+                    <Button
+                      key={item.url}
+                      href={item.url}
+                      target={item.target}
+                      rel="noopener noreferrer"
+                      theme="simple"
+                    >
+                      {item.icon && <Icon name={item.icon} size={16} color="#004f55" />}
+                      <span>{item.title}</span> <Icon name="chevron_right" size={16} color="#004f55" />
+                    </Button>
                   ) : item.button ? (
-                    <ButtonLink key={item.title} as="button" create onClick={item.onClick}>
+                    <Button key={item.title} theme="create" onClick={item.onClick}>
                       {item.icon && <Icon name={item.icon} size={16} color="#004f55" />}
                       <span>{item.title}</span>{' '}
                       <Icon name="chevron_right" size={16} color="#004f55" style={{ marginRight: '0.5rem' }} />
-                    </ButtonLink>
+                    </Button>
                   ) : (
                     <Link key={item.url} to={item.url!} target={item.target}>
-                      <ButtonLink>
+                      <Button as="span">
                         {item.icon && (
                           <Icon name={item.icon} size={16} color="#004f55" style={{ marginRight: '0.5rem' }} />
                         )}
                         <span>{item.title}</span> <Icon name="chevron_right" size={16} color="#004f55" />
-                      </ButtonLink>
+                      </Button>
                     </Link>
                   ),
                 )}

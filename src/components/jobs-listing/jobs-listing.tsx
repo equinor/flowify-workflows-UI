@@ -83,109 +83,102 @@ const JobsListing: FC<IJobsListing> = (props: IJobsListing) => {
   }
 
   return (
-    <Paper>
-      <Stack spacing={2} sx={{ padding: '2rem' }}>
-        <Stack direction="row" spacing={5} alignContent="center">
-          <Stack
-            direction="row"
-            spacing={2}
-            sx={{ flexGrow: '1', height: '100%' }}
-            alignItems="center"
-            justifyContent="flex-start"
-          >
-            <Stack sx={{ padding: '1rem' }}>
-              <Icon size={24} name="play_circle" color="#709DA0" />
-            </Stack>
-            <Link to={`/workspace/${workspace}/jobs`}>
-              <Typography variant="h3">Jobs</Typography>
-            </Link>
+    <Paper spacing={2} padding={2}>
+      <Stack direction="row" spacing={5} alignContent="center">
+        <Stack
+          direction="row"
+          spacing={2}
+          sx={{ flexGrow: '1', height: '100%' }}
+          alignItems="center"
+          justifyContent="flex-start"
+        >
+          <Stack sx={{ padding: '1rem' }}>
+            <Icon size={24} name="play_circle" color="#709DA0" />
           </Stack>
+          <Link to={`/workspace/${workspace}/jobs`}>
+            <Typography variant="h3">Jobs</Typography>
+          </Link>
         </Stack>
-        <Stack direction="row" spacing={2} justifyContent="stretch">
-          <Stack direction="row" sx={{ flexGrow: '2' }}>
-            <Select
-              id="jobs_searchbar--searchobject"
-              label="Search"
-              value={searchParam}
-              wrapperStyles={{ width: '200px' }}
-              options={[
-                { label: 'Job ID', value: 'uid' },
-                { label: 'Description', value: 'description' },
-              ]}
-              onChange={(event: any) => setSearchParam(event.target.value)}
-            />
-            <TextField
-              id="jobs_searchbar"
-              label="&nbsp;"
-              wrapperStyles={{ flexGrow: '2' }}
-              placeholder={`Search job ${searchParam}`}
-              value={search}
-              onChange={(event: any) => setSearch(event.target.value)}
-            />
-          </Stack>
+      </Stack>
+      <Stack direction="row" spacing={2} justifyContent="stretch">
+        <Stack direction="row" sx={{ flexGrow: '2' }}>
           <Select
-            id="jobs_created_by"
-            value={values.createdBy}
-            label="Submitted by"
-            icon="account_circle"
-            onChange={(event: any) => setValues((prev) => ({ ...prev, createdBy: event.target.value }))}
+            id="jobs_searchbar--searchobject"
+            label="Search"
+            value={searchParam}
+            wrapperStyles={{ width: '200px' }}
             options={[
-              { label: 'All users', value: 'default' },
-              { label: 'Me', value: 'me' },
+              { label: 'Job ID', value: 'uid' },
+              { label: 'Description', value: 'description' },
             ]}
-            sx={{ width: '145px' }}
+            onChange={(event: any) => setSearchParam(event.target.value)}
+          />
+          <TextField
+            id="jobs_searchbar"
+            label="&nbsp;"
+            wrapperStyles={{ flexGrow: '2' }}
+            placeholder={`Search job ${searchParam}`}
+            value={search}
+            onChange={(event: any) => setSearch(event.target.value)}
           />
         </Stack>
-        <>
-          <StyledTable size="small">
-            <TableHead>
-              <TableRow>
-                <TableCell width={80}>&nbsp;</TableCell>
-                <TableCell width={80}>&nbsp;</TableCell>
-                {headers.map((header) => (
-                  <TableCell key={header.id} sortDirection={order}>
-                    {header.sortable ? (
-                      <TableSortLabel
-                        active={header.id === orderBy}
-                        direction={order}
-                        onClick={() => onSort(header.id)}
-                      >
-                        {header.label}
-                      </TableSortLabel>
-                    ) : (
-                      header.label
-                    )}
-                  </TableCell>
-                ))}
-                <TableCell>&nbsp;</TableCell>
-              </TableRow>
-            </TableHead>
-            {!loadingJobs && requestData?.totalNumber && requestData?.totalNumber > 0 ? (
-              <TableBody>
-                {Array.isArray(jobs) &&
-                  jobs.map((job) => <JobTableRow key={job?.uid} workspace={workspace} row={job} />)}
-              </TableBody>
-            ) : (
-              <TableBody sx={{ padding: '1rem' }}>
-                <TableRow>
-                  <TableCell>No jobs available.</TableCell>
-                </TableRow>
-              </TableBody>
-            )}
-          </StyledTable>
-          {requestData && (
-            <TablePagination
-              sx={{ width: '100%' }}
-              component="div"
-              count={requestData.totalNumber}
-              page={page}
-              rowsPerPage={10}
-              onPageChange={(event, page) => setPage(page)}
-              rowsPerPageOptions={[10]}
-            />
-          )}
-        </>
+        <Select
+          id="jobs_created_by"
+          value={values.createdBy}
+          label="Submitted by"
+          icon="account_circle"
+          onChange={(event: any) => setValues((prev) => ({ ...prev, createdBy: event.target.value }))}
+          options={[
+            { label: 'All users', value: 'default' },
+            { label: 'Me', value: 'me' },
+          ]}
+          sx={{ width: '145px' }}
+        />
       </Stack>
+      <>
+        <StyledTable size="small">
+          <TableHead>
+            <TableRow>
+              <TableCell width={80}>&nbsp;</TableCell>
+              <TableCell width={80}>&nbsp;</TableCell>
+              {headers.map((header) => (
+                <TableCell key={header.id} sortDirection={order}>
+                  {header.sortable ? (
+                    <TableSortLabel active={header.id === orderBy} direction={order} onClick={() => onSort(header.id)}>
+                      {header.label}
+                    </TableSortLabel>
+                  ) : (
+                    header.label
+                  )}
+                </TableCell>
+              ))}
+              <TableCell>&nbsp;</TableCell>
+            </TableRow>
+          </TableHead>
+          {!loadingJobs && requestData?.totalNumber && requestData?.totalNumber > 0 ? (
+            <TableBody>
+              {Array.isArray(jobs) && jobs.map((job) => <JobTableRow key={job?.uid} workspace={workspace} row={job} />)}
+            </TableBody>
+          ) : (
+            <TableBody sx={{ padding: '1rem' }}>
+              <TableRow>
+                <TableCell>No jobs available.</TableCell>
+              </TableRow>
+            </TableBody>
+          )}
+        </StyledTable>
+        {requestData && (
+          <TablePagination
+            sx={{ width: '100%' }}
+            component="div"
+            count={requestData.totalNumber}
+            page={page}
+            rowsPerPage={10}
+            onPageChange={(event, page) => setPage(page)}
+            rowsPerPageOptions={[10]}
+          />
+        )}
+      </>
     </Paper>
   );
 };

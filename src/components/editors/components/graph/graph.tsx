@@ -3,7 +3,7 @@ import { useState } from 'react';
 import ReactFlow, { Connection, Controls, Edge, Node, ReactFlowProvider } from 'react-flow-renderer/nocss';
 import { StartNode, TaskNode, EndNode, ConditionalNode, MapNode } from '.';
 import { Component } from '../../../../models/v2';
-import { Button, Icon, Snackbar } from '@equinor/eds-core-react';
+import { Button, Snackbar } from '@equinor/eds-core-react';
 import {
   removeConnection,
   ICustomConnection,
@@ -25,15 +25,13 @@ interface IGraphEditor {
   edges?: any;
   setElements?: any;
   subcomponents?: Component[];
-  onSave?: any;
-  dirty?: boolean;
   onNodesChange?: any;
   onEdgesChange?: any;
   mapModalOpen?: boolean;
 }
 
 export const GraphEditor: React.FC<IGraphEditor> = (props: IGraphEditor) => {
-  const { component, onChange, onSave, nodes, edges, mapModalOpen } = props;
+  const { component, onChange, nodes, edges, mapModalOpen } = props;
   const [wrongConnectionAlert, setWrongConnectionAlert] = useState<boolean>(false);
 
   const nodeTypes = React.useMemo(
@@ -160,16 +158,6 @@ export const GraphEditor: React.FC<IGraphEditor> = (props: IGraphEditor) => {
           <Controls style={{ right: 10, left: 'auto' }} fitViewOptions={{ duration: 1000 }}>
             {/*<NodesDebugger />*/}
           </Controls>
-          {typeof onSave === 'function' && (
-            <Button
-              //disabled={!props.dirty}
-              onClick={onSave}
-              style={{ position: 'fixed', right: '1rem', marginTop: '1rem', zIndex: 1000 }}
-            >
-              <Icon name="save" />
-              Save changes
-            </Button>
-          )}
         </ReactFlow>
       </ReactFlowProvider>
     </div>

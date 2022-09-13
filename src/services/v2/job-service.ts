@@ -29,4 +29,18 @@ export class JobService {
       map((data) => JSON.parse(data) as kubernetes.WatchEvent<WorkflowJob>),
     );
   }
+
+  public delete(uid: string) {
+    return requests
+      .delete(`api/v2/jobs/${uid}`)
+      .then((res) => res.body as string)
+      .catch((reason) => reason);
+  }
+
+  public terminate(uid: string) {
+    return requests
+      .post(`api/v2/jobs/${uid}/terminate`)
+      .then((res) => res.body as string)
+      .catch((reason) => reason);
+  }
 }

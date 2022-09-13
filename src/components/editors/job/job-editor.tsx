@@ -7,29 +7,55 @@ import { EditorCentralBar, EditorHeader } from '../components';
 import { JobSidebar, JobGraph } from './components';
 import { NodeDetails } from './components/job-node-preview/job-node-preview';
 import { Helmet } from 'react-helmet-async';
+import { Job } from '../../../models/v2';
+import { services } from '../../../services/v2';
+import { useNavigate } from 'react-router';
 
 interface JobViewerProps {
-  job: Workflow | undefined;
+  job: Job | undefined;
+  jobWatch: Workflow | undefined;
   workspace: string;
   loading: boolean;
+  uid: string | undefined;
 }
 
 export const JobViewer: FC<JobViewerProps> = (props: JobViewerProps) => {
-  const { job, loading } = props;
+  const { jobWatch, loading, uid, job, workspace } = props;
   const [useManifest, setUseManifest] = useState<boolean>(false);
   const [selectedNodeId, setSelectedNodeId] = useState<string | undefined>(undefined);
-  console.log(job);
+  const navigate = useNavigate();
+  console.log(jobWatch);
+
+  function onTerminate() {
+    services.jobs
+      .terminate(uid!)
+      .then((res) => console.log(res))
+      .catch((error) => console.error(error));
+  }
+
+  function onDelete() {
+    services.jobs
+      .delete(uid!)
+      .then(
+        () => {
+          navigate(`/workspace/${workspace}`);
+        },
+        (error) => console.error(error),
+      )
+      .catch((error) => console.error(error));
+  }
+
   return (
     <>
       <Helmet>
-        <title>{job?.metadata?.name} - Job viewer - Flowify</title>
+        <title>{jobWatch?.metadata?.name || ''} - Job viewer - Flowify</title>
       </Helmet>
       <Grid container sx={{ flexGrow: '1', minHeight: '0', flexWrap: 'nowrap' }}>
         {selectedNodeId && (
           <NodeDetails
-            workflowName={job?.metadata!.name!}
-            nodeStatus={job?.status!.nodes[selectedNodeId]!}
-            workflow={job!}
+            workflowName={jobWatch?.metadata!.name!}
+            nodeStatus={jobWatch?.status!.nodes[selectedNodeId]!}
+            workflow={jobWatch!}
             onClose={() => setSelectedNodeId(undefined)}
             open
           />
@@ -44,16 +70,22 @@ export const JobViewer: FC<JobViewerProps> = (props: JobViewerProps) => {
           }}
         >
           <Stack spacing={2} padding="1rem">
-            <EditorHeader name={job?.metadata?.name} type="Job" workspace={props.workspace} loading={loading} />
-            {loading && !job ? (
+            <EditorHeader name={jobWatch?.metadata?.name} type="Job" workspace={props.workspace} loading={loading} />
+            {loading && !jobWatch ? (
               <Progress.Dots color="primary" />
             ) : (
-              <JobSidebar job={job} inputs={job?.spec.arguments} />
+              <JobSidebar
+                jobWatch={jobWatch}
+                job={job}
+                inputs={jobWatch?.spec.arguments}
+                onTerminate={onTerminate}
+                onDelete={onDelete}
+              />
             )}
           </Stack>
         </Grid>
         <Grid item xs={9} sx={{ flexGrow: '1', minHeight: '0', flexWrap: 'nowrap' }}>
-          {loading && !job ? (
+          {loading && !jobWatch ? (
             <Progress.Dots color="primary" />
           ) : (
             <Stack
@@ -62,11 +94,11 @@ export const JobViewer: FC<JobViewerProps> = (props: JobViewerProps) => {
             >
               <EditorCentralBar setUseManifest={setUseManifest} type="job" />
               {useManifest ? (
-                <ObjectEditor value={job} lang="yaml" />
+                <ObjectEditor value={jobWatch} lang="yaml" />
               ) : (
                 <JobGraph
-                  workflowName={job?.metadata?.name!}
-                  nodes={job?.status?.nodes!}
+                  workflowName={jobWatch?.metadata?.name!}
+                  nodes={jobWatch?.status?.nodes!}
                   nodeClicked={(nodeId) => {
                     setSelectedNodeId(nodeId);
                   }}

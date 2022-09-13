@@ -1,10 +1,11 @@
 import React, { FC, useState } from 'react';
-import { Icon, Button, Typography } from '@equinor/eds-core-react';
+import { Icon, Button as EDSButton, Typography } from '@equinor/eds-core-react';
 import { TableRow as TableRowUI, TableCell, Collapse, Stack } from '@mui/material';
 //import { Timestamp } from '../../timestamp';
 //import { DurationPanel } from '../../duration-panel';
 import { Job } from '../../../models/v2';
 import { Timestamp } from '../../timestamp';
+import { Button } from '../../ui';
 //import { ProgressCircle } from '../../ui';
 //import moment from 'moment';
 
@@ -34,9 +35,9 @@ const TableRow: FC<ITableRow> = (props: ITableRow) => {
     <>
       <TableRowUI>
         <TableCell>
-          <Button onClick={() => setOpen((prev) => !prev)} variant="ghost_icon">
+          <EDSButton onClick={() => setOpen((prev) => !prev)} variant="ghost_icon">
             {open ? <Icon name="chevron_up" /> : <Icon name="chevron_down" />}
-          </Button>
+          </EDSButton>
         </TableCell>
         <TableCell style={{ paddingTop: '4px' }}>{/* {progress(row?.status?.phase)} */}</TableCell>
         <TableCell>{row.uid || ''}</TableCell>
@@ -48,9 +49,7 @@ const TableRow: FC<ITableRow> = (props: ITableRow) => {
           {/* <DurationPanel status={row?.status!} /> */}
         </TableCell>
         <TableCell>
-          <Button href={`/workspace/${workspace}/job/${row?.uid}`} variant="ghost">
-            View job
-          </Button>
+          <Button href={`/workspace/${workspace}/job/${row?.uid}`}>View job</Button>
         </TableCell>
       </TableRowUI>
       <TableRowUI>

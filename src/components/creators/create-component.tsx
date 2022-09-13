@@ -1,10 +1,10 @@
 import React, { FC, useState } from 'react';
 import { Dialog, Stack } from '@mui/material';
-import { Button, Progress, Snackbar } from '@equinor/eds-core-react';
+import { Button as EDSButton, Progress, Snackbar } from '@equinor/eds-core-react';
 import { useNavigate } from 'react-router-dom';
 import { Component } from '../../models/v2';
 import { services } from '../../services/v2';
-import { ButtonLink, TextField } from '../ui';
+import { Button, TextField } from '../ui';
 
 const makeComponent = (): Component => ({
   type: 'component',
@@ -58,9 +58,9 @@ const CreateComponent: FC<ICreateComponent> = (props: ICreateComponent) => {
         <Snackbar open={error} onClose={() => setError(false)}>
           Could not create component. {error}
           <Snackbar.Action>
-            <Button onClick={() => setError(false)} variant="ghost">
+            <EDSButton onClick={() => setError(false)} variant="ghost">
               Close
-            </Button>
+            </EDSButton>
           </Snackbar.Action>
         </Snackbar>
       )}
@@ -73,10 +73,10 @@ const CreateComponent: FC<ICreateComponent> = (props: ICreateComponent) => {
             onBlur={(event: any) => onNameChange(event.target.value)}
           />
           <Stack direction="row" spacing={2} justifyContent="flex-end">
-            <ButtonLink simple as="button" onClick={() => setOpen(false)} color="secondary">
+            <Button theme="simple" onClick={() => setOpen(false)} color="secondary">
               Cancel
-            </ButtonLink>
-            <ButtonLink as="button" create onClick={onSubmit}>
+            </Button>
+            <Button theme="create" onClick={onSubmit}>
               {submitting ? (
                 <>
                   <Progress.Circular size={16} color="neutral" />
@@ -85,7 +85,7 @@ const CreateComponent: FC<ICreateComponent> = (props: ICreateComponent) => {
               ) : (
                 'Create component'
               )}
-            </ButtonLink>
+            </Button>
           </Stack>
         </Stack>
       </Dialog>
