@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React, { FC, useState } from 'react';
 import { Stack } from '@mui/material';
 import { Tooltip, Button, Menu, Icon, Typography } from '@equinor/eds-core-react';
@@ -77,7 +78,6 @@ export const EditorCentralBar: FC<EditorCentralBarProps> = (props: EditorCentral
               <Button
                 onClick={() => setMenuOpen(true)}
                 variant="ghost_icon"
-                // @ts-ignore
                 ref={setAnchorEl}
                 aria-haspopup="true"
                 aria-expanded={menuOpen}
