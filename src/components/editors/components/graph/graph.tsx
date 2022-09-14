@@ -13,8 +13,7 @@ import {
   addConnection,
   removeEndNode,
   updateTaskNodePostion,
-  updateInputPosition,
-  updateOutputPosition,
+  updateParameterPosition,
 } from '../../helpers';
 
 interface IGraphEditor {
@@ -117,13 +116,8 @@ export const GraphEditor: React.FC<IGraphEditor> = (props: IGraphEditor) => {
       onChange(moved);
       return;
     }
-    if (type === 'startNode') {
-      const moved = updateInputPosition(component!, node);
-      onChange(moved);
-      return;
-    }
-    if (type === 'endNode') {
-      const moved = updateOutputPosition(component!, node);
+    if (type === 'startNode' || type === 'endNode') {
+      const moved = updateParameterPosition(component!, node, type === 'startNode' ? 'inputs' : 'outputs');
       onChange(moved);
       return;
     }

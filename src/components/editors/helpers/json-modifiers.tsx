@@ -183,28 +183,13 @@ export function updateTaskNodePostion(component: Component, node: Node) {
   return component;
 }
 
-export function updateInputPosition(component: Component, node: Node) {
-  const inputPlacement = component?.inputs?.findIndex((input) => input.name === node.id);
-  if (inputPlacement !== -1 && inputPlacement !== undefined) {
-    if (!component!.inputs![inputPlacement].userdata) {
-      component.inputs![inputPlacement].userdata = {};
+export function updateParameterPosition(component: Component, node: Node, type: 'inputs' | 'outputs'): Component {
+  const placement = component?.[type]?.findIndex((param) => param.name === node.id);
+  if (placement !== -1 && placement !== undefined) {
+    if (!component[type]?.[placement].userdata) {
+      component[type]![placement].userdata = {};
     }
-    component.inputs![inputPlacement].userdata!.graphPosition = {
-      x: node.position.x,
-      y: node.position.y,
-    };
-    return component;
-  }
-  return component;
-}
-
-export function updateOutputPosition(component: Component, node: Node) {
-  const outputPlacement = component?.outputs?.findIndex((output) => output.name === node.id);
-  if (outputPlacement !== -1 && outputPlacement !== undefined) {
-    if (!component!.outputs![outputPlacement].userdata) {
-      component.outputs![outputPlacement].userdata = {};
-    }
-    component.outputs![outputPlacement].userdata!.graphPosition = {
+    component[type]![placement].userdata!.graphPosition = {
       x: node.position.x,
       y: node.position.y,
     };
