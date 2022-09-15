@@ -8,7 +8,6 @@ export const ParameterWrapper = styled.button`
   padding: 0.75rem;
   background-color: #ade2e619;
   border: none;
-  //border-left: 3px solid #007079;
   border-radius: 1rem;
   &:hover {
     cursor: pointer;

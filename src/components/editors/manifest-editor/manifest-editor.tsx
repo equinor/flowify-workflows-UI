@@ -1,38 +1,13 @@
 import React, { useState, useContext, FC } from 'react';
-import jsyaml from 'js-yaml';
 import { Dialog, Stack } from '@mui/material';
 import Editor from '@monaco-editor/react';
-import { StyledManifestWrapper } from '../editors/styles/styles';
-import { SettingsContextStore } from '../../common/context/editor-settings-context';
 import { Button, Typography } from '@equinor/eds-core-react';
+import { StyledManifestWrapper } from './styles';
+import { SettingsContextStore } from '../../../common/context/editor-settings-context';
+import { DEFAULT_LANGUAGE, IError, ManifestEditorProps } from './types';
+import { parse, stringify } from './helpers';
 
-function parse<T>(value: string): T {
-  if (value.startsWith('{')) {
-    return JSON.parse(value);
-  }
-  return jsyaml.load(value) as T;
-}
-
-type languages = 'json' | 'yaml';
-const defaultLang: languages = 'yaml';
-
-function stringify<T>(value: T, lang: languages): string {
-  return lang === 'yaml' ? jsyaml.dump(value, { noRefs: true }) : JSON.stringify(value, null, '  ');
-}
-
-interface IError {
-  message: string;
-  name: string;
-  reason: string;
-}
-
-interface ObjectEditorProps {
-  value: any;
-  lang?: languages;
-  onChange?: (value: any) => void;
-}
-
-export const ObjectEditor: FC<ObjectEditorProps> = (props: ObjectEditorProps) => {
+export const ManifestEditor: FC<ManifestEditorProps> = (props: ManifestEditorProps) => {
   const { value, onChange } = props;
 
   const { settings } = useContext(SettingsContextStore);
@@ -42,7 +17,7 @@ export const ObjectEditor: FC<ObjectEditorProps> = (props: ObjectEditorProps) =>
   return (
     <StyledManifestWrapper error={error !== null}>
       <Editor
-        value={stringify(value, settings.language ?? defaultLang)}
+        value={stringify(value, settings.language ?? DEFAULT_LANGUAGE)}
         language={settings.language}
         theme={settings.darkTheme ? 'vs-dark' : 'vs-light'}
         options={{
@@ -85,6 +60,6 @@ export const ObjectEditor: FC<ObjectEditorProps> = (props: ObjectEditorProps) =>
   );
 };
 
-ObjectEditor.defaultProps = {
+ManifestEditor.defaultProps = {
   onChange: undefined,
 };

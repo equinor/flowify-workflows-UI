@@ -1,7 +1,7 @@
 import React, { FC, useState } from 'react';
 import { Progress } from '@equinor/eds-core-react';
 import { Grid, Stack } from '@mui/material';
-import { ObjectEditor } from '../../object-editor/object-editor';
+import { ManifestEditor } from '../manifest-editor/manifest-editor';
 import { Workflow } from '../../../models';
 import { EditorCentralBar, EditorHeader } from '../components';
 import { JobSidebar, JobGraph } from './components';
@@ -94,7 +94,7 @@ export const JobViewer: FC<JobViewerProps> = (props: JobViewerProps) => {
             >
               <EditorCentralBar setUseManifest={setUseManifest} type="job" />
               {useManifest ? (
-                <ObjectEditor value={jobWatch} lang="yaml" />
+                <ManifestEditor value={jobWatch} lang="yaml" />
               ) : (
                 <JobGraph
                   workflowName={jobWatch?.metadata?.name!}

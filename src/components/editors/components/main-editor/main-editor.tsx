@@ -1,10 +1,10 @@
 import React, { FC, useState } from 'react';
 import { Grid, Stack } from '@mui/material';
+import { Node } from 'react-flow-renderer';
 import { Component, Workflow } from '../../../../models/v2';
 import { EditorCentralBar, Sidebar, Brick, GraphEditor } from '..';
 import { FeedbackTypes } from '../feedbacks/types';
-import { ObjectEditor } from '../../../object-editor/object-editor';
-import { Node } from 'react-flow-renderer';
+import { ManifestEditor } from '../../manifest-editor/manifest-editor';
 import { INode } from '../../helpers';
 
 interface MainEditorProps {
@@ -76,7 +76,7 @@ export const MainEditor: FC<MainEditorProps> = (props: MainEditorProps) => {
                   onPublish={onPublish}
                 /> */}
             {useManifest ? (
-              <ObjectEditor onChange={(doc: Workflow | Component) => onManifestChange(doc)} value={document} />
+              <ManifestEditor onChange={(doc: Workflow | Component) => onManifestChange(doc)} value={document} />
             ) : component?.implementation?.type === 'graph' ? (
               <GraphEditor
                 component={component || null}
