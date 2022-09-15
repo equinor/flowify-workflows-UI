@@ -36,6 +36,7 @@ const Editor: React.FC<IEditor> = (props: IEditor) => {
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
   const [feedback, setFeedback] = useState<FeedbackTypes>();
   const [loading, setLoading] = useState<boolean>(true);
+  const [mounted, setMounted] = useState<boolean>(false);
   const [nodes, setNodes, onNodesChange] = useNodesState<INode>([]);
   const [versions, setVersions] = useState<ComponentListRequest>();
   const [parameterConfig, setParameterConfig] = useState<{ type: 'secret' | 'volume'; id: string }>();
@@ -75,6 +76,9 @@ const Editor: React.FC<IEditor> = (props: IEditor) => {
 
   useEffect(() => {
     if (component) {
+      if (mounted) {
+        setDirty(true);
+      }
       console.log('on component update');
       const awaitElements = async () => {
         return await createGraphElements(component, subcomponents, setParameterConfig, setConfigComponent);
@@ -83,6 +87,7 @@ const Editor: React.FC<IEditor> = (props: IEditor) => {
         setNodes(res.nodes);
         setEdges(res.edges);
       });
+      setMounted(true);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [component]);

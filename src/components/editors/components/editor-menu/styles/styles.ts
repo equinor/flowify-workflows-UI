@@ -12,4 +12,8 @@ export const StyledMenuButton = styled.button<{ active: boolean; create?: boolea
   &:hover {
     background: ${(props) => (props.create ? '#E6FAEC' : 'rgb(222, 237, 238)')};
   }
+  &:disabled {
+    opacity: 0.65;
+    cursor: not-allowed;
+  }
 `;

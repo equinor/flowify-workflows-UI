@@ -1,6 +1,8 @@
 import React, { useEffect, useState, FC, useCallback } from 'react';
 import { Stack } from '@mui/material';
 import { Helmet } from 'react-helmet-async';
+import { useNavigate, useParams } from 'react-router';
+import { useEdgesState, useNodesState } from 'react-flow-renderer';
 import { Workflow } from '../../../models/v2/workflow';
 import {
   MapConfig,
@@ -15,9 +17,7 @@ import {
 import { createGraphElements, fetchInitialSubComponents, INode } from '../helpers';
 import { Component, IJobsListRequest, IVolume, WorkflowListRequest } from '../../../models/v2';
 import { IFilter, IPagination, services } from '../../../services/v2';
-import { useEdgesState, useNodesState } from 'react-flow-renderer';
 import { IfConfig } from '../components/functional-components/if/if-config';
-import { useNavigate, useParams } from 'react-router';
 
 interface IWorkflowEditor {
   uid: string | null;
@@ -34,6 +34,7 @@ const WorkflowEditor: FC<IWorkflowEditor> = (props: IWorkflowEditor) => {
   const [edges, setEdges, onEdgesChange] = useEdgesState<any>([]);
   const [feedback, setFeedback] = useState<FeedbackTypes>();
   const [loading, setLoading] = useState<boolean>(false);
+  const [mounted, setMounted] = useState<boolean>(false);
   const [nodes, setNodes, onNodesChange] = useNodesState<INode>([]);
   const [parameterConfig, setParameterConfig] = useState<{ type: 'secret' | 'volume'; id: string }>();
   const [subcomponents, setSubcomponents] = useState<Component[]>();
@@ -101,6 +102,9 @@ const WorkflowEditor: FC<IWorkflowEditor> = (props: IWorkflowEditor) => {
   useEffect(() => {
     if (workflow) {
       console.log('on workflow update');
+      if (mounted) {
+        setDirty(true);
+      }
       const awaitElements = async () => {
         return await createGraphElements(workflow?.component, subcomponents, setParameterConfig, setConfigComponent);
       };
@@ -108,6 +112,7 @@ const WorkflowEditor: FC<IWorkflowEditor> = (props: IWorkflowEditor) => {
         setNodes(res.nodes);
         setEdges(res.edges);
       });
+      setMounted(true);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [workflow]);
