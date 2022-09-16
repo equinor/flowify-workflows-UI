@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { SelectChangeEvent, Stack, Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
-import { Button, Icon, Typography } from '@equinor/eds-core-react';
+import { Icon, Typography } from '@equinor/eds-core-react';
+import { Helmet } from 'react-helmet-async';
+import { Link } from 'react-router-dom';
 import { services } from '../../services/v2';
 import { Container, Layout } from '../../layout';
 import { AddSecret } from '../../components';
 import { ISecret, ISecretsList, IUserVolume, IVolume, Workspace, WorkspaceList } from '../../models/v2';
-import { Breadcrumbs, Select } from '../../components/ui';
-import { Link } from 'react-router-dom';
+import { Breadcrumbs, Select, Button } from '../../components/ui';
 import { VolumeEditor } from '../../components/editors/volume/volume-editor';
-import { Helmet } from 'react-helmet-async';
+import { Feedbacks, FeedbackTypes } from '../../components/editors/components';
 
 function CREATE_VOLUME_TEMPLATE(workspace: string) {
   return {
@@ -33,8 +34,9 @@ export const AdminPage: React.FC = (): React.ReactElement => {
   const [workspaces, setWorkspaces] = useState<Workspace[]>([]);
   const [selectedWorkspace, setSelectedWorkspace] = useState<string>('');
   const [editableVolume, setEditableVolume] = useState<{ volume: IUserVolume; mode: 'edit' | 'create' }>();
+  const [feedback, setFeedback] = useState<FeedbackTypes>();
 
-  function getSecrets(workspace: string) {
+  function fetchSecrets(workspace: string) {
     services.secrets
       .list(workspace)
       .then((x) => setSecrets(x))
@@ -43,7 +45,7 @@ export const AdminPage: React.FC = (): React.ReactElement => {
       });
   }
 
-  function getVolumes(workspace: string) {
+  function fetchVolumes(workspace: string) {
     services.volumes
       .list(workspace)
       .then((x) => setVolumes(x.items))
@@ -54,8 +56,8 @@ export const AdminPage: React.FC = (): React.ReactElement => {
 
   useEffect(() => {
     if (selectedWorkspace !== '') {
-      getSecrets(selectedWorkspace);
-      getVolumes(selectedWorkspace);
+      fetchSecrets(selectedWorkspace);
+      fetchVolumes(selectedWorkspace);
     }
   }, [selectedWorkspace]);
 
@@ -75,7 +77,8 @@ export const AdminPage: React.FC = (): React.ReactElement => {
       return services.secrets
         .create(secret, selectedWorkspace)
         .then(() => {
-          getSecrets(selectedWorkspace);
+          fetchSecrets(selectedWorkspace);
+          setFeedback('SECRET_SUCCESS');
           return 'SUCCESSFUL';
         })
         .catch((_) => {
@@ -84,6 +87,17 @@ export const AdminPage: React.FC = (): React.ReactElement => {
         });
     }
     return 'ERROR';
+  }
+
+  function onVolumeDelete(uid: string) {
+    if (uid) {
+      services.volumes
+        .delete(selectedWorkspace, uid)
+        .then(() => {
+          fetchVolumes(selectedWorkspace);
+        })
+        .catch((error) => console.error(error));
+    }
   }
 
   function onWorkspaceChange(e: SelectChangeEvent) {
@@ -101,6 +115,7 @@ export const AdminPage: React.FC = (): React.ReactElement => {
       <Helmet>
         <title>Admin - Flowify</title>
       </Helmet>
+      <Feedbacks feedback={feedback} setFeedback={setFeedback} />
       <Container withMargins>
         <Stack spacing={4}>
           <Breadcrumbs>
@@ -123,7 +138,7 @@ export const AdminPage: React.FC = (): React.ReactElement => {
               <Table>
                 <TableHead>
                   <TableRow>
-                    <TableCell>Volume name</TableCell>
+                    <TableCell>Secret name</TableCell>
                     <TableCell>Description</TableCell>
                     <TableCell>Edit</TableCell>
                     <TableCell>Delete</TableCell>
@@ -145,9 +160,9 @@ export const AdminPage: React.FC = (): React.ReactElement => {
               <Table>
                 <TableHead>
                   <TableRow>
+                    <TableCell>Container name</TableCell>
                     <TableCell>Volume Name</TableCell>
                     <TableCell>Description</TableCell>
-                    <TableCell>Container name</TableCell>
                     <TableCell>Edit</TableCell>
                     <TableCell>Delete</TableCell>
                   </TableRow>
@@ -155,22 +170,26 @@ export const AdminPage: React.FC = (): React.ReactElement => {
                 <TableBody>
                   {volumes?.map((volume) => (
                     <TableRow key={volume?.uid}>
+                      <TableCell>{volume?.volume?.csi?.volumeAttributes?.containerName}</TableCell>
                       <TableCell>{volume?.volume?.name}</TableCell>
                       <TableCell></TableCell>
-                      <TableCell>{volume?.volume?.csi?.volumeAttributes?.containerName}</TableCell>
                       <TableCell>
-                        <Button variant="ghost" onClick={() => setEditableVolume({ volume: volume, mode: 'edit' })}>
+                        <Button theme="simple" onClick={() => setEditableVolume({ volume: volume, mode: 'edit' })}>
                           Edit
                         </Button>
                       </TableCell>
-                      <TableCell></TableCell>
+                      <TableCell>
+                        <Button theme="danger" onClick={() => onVolumeDelete(volume.uid)}>
+                          Delete
+                        </Button>
+                      </TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
               </Table>
               <div>
                 <Button
-                  variant="outlined"
+                  theme="create"
                   onClick={() =>
                     setEditableVolume({ volume: CREATE_VOLUME_TEMPLATE(selectedWorkspace), mode: 'create' })
                   }
@@ -186,7 +205,7 @@ export const AdminPage: React.FC = (): React.ReactElement => {
                   volume={editableVolume?.volume}
                   mode={editableVolume?.mode}
                   workspace={selectedWorkspace}
-                  getVolumes={getVolumes}
+                  getVolumes={fetchVolumes}
                 />
               )}
             </>

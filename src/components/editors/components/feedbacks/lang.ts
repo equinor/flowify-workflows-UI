@@ -1,32 +1,56 @@
-export const FEEDBACK_MESSAGES = {
-  UPDATE_ERROR: {
+import { FeedbackLang } from './types';
+
+export const FEEDBACK_MESSAGES: FeedbackLang = {
+  UPDATE_WF_ERROR: {
     type: 'error',
-    componentMessage: 'Error when updating component. Changes were not saved.',
-    workflowMessage: 'Error when updating workflow. Changes were not saved.',
+    message: 'Error when updating workflow. Changes were not saved.',
   },
-  SAVE_SUCCESS: {
+  UPDATE_COMP_ERROR: {
+    type: 'error',
+    message: 'Error when updating component. Changes were not saved.',
+  },
+  UPDATE_WF_SUCCESS: {
     type: 'success',
-    componentMessage: 'Component was successfully updated.',
-    workflowMessage: 'Workflow was successfully updated.',
+    message: 'Workflow was successfully updated.',
   },
-  MARKETPLACE_SUCCESS: {
+  UPDATE_COMP_SUCCESS: {
     type: 'success',
-    componentMessage: 'Marketplace component was successfully added to component graph.',
-    workflowMessage: 'Marketplace component was successfully added to workflow graph.',
+    message: 'Component was successfully updated.',
   },
-  MARKETPLACE_ERROR: {
+  ADD_COMP_TO_WF_SUCCESS: {
+    type: 'success',
+    message: 'Marketplace component was successfully added to workflow graph.',
+  },
+  ADD_COMP_TO_COMP_SUCCESS: {
+    type: 'success',
+    message: 'Marketplace component was successfully added to component graph.',
+  },
+  ADD_COMP_TO_WF_ERROR: {
     type: 'error',
-    componentMessage: 'Error: Marketplace component could not be added to component graph.',
-    workflowMessage: 'Error: Marketplace component could not be added to workflow graph.',
+    message: 'Error: Marketplace component could not be added to workflow graph.',
   },
-  PUBLISH_ERROR: {
+  ADD_COMP_TO_COMP_ERROR: {
     type: 'error',
-    componentMessage: 'Error: Could not create new component version',
-    workflowMessage: 'Error: could not create new workflow version',
+    message: 'Error: Marketplace component could not be added to component graph.',
   },
-  DELETE_ERROR: {
+  PUBLISH_COMP_ERROR: {
     type: 'error',
-    componentMessage: 'Error when deleting component.',
-    workflowMessage: 'Error when deleting workflow.',
+    message: 'Error: Could not create new component version',
   },
-};
+  PUBLISH_WF_ERROR: {
+    type: 'error',
+    message: 'Error: could not create new workflow version',
+  },
+  DELETE_COMP_ERROR: {
+    type: 'error',
+    message: 'Error when deleting component.',
+  },
+  DELETE_WF_ERROR: {
+    type: 'error',
+    message: 'Error when deleting workflow.',
+  },
+  SECRET_SUCCESS: {
+    type: 'error',
+    message: 'Secret was successfully added',
+  },
+} as const;

@@ -1,7 +1,8 @@
 import React, { FC, useEffect, useState } from 'react';
-import { Button, Icon, Snackbar, Banner, Progress } from '@equinor/eds-core-react';
-import { Dialog, DialogTitle, Stack, TextField } from '@mui/material';
+import { Icon, Banner, Progress } from '@equinor/eds-core-react';
+import { Dialog, DialogTitle, Stack } from '@mui/material';
 import { ISecret } from '../../models/v2';
+import { Button, TextField } from '../ui';
 
 interface IAddSecret {
   addKey: (values: ISecret) => Promise<string> | string;
@@ -10,7 +11,6 @@ interface IAddSecret {
 const AddSecret: FC<IAddSecret> = (props: IAddSecret) => {
   const [modalOpen, setModalOpen] = useState<boolean>(false);
   const [inputValues, setInputValues] = useState<ISecret>({ key: '', value: '' });
-  const [successSnackbar, setSuccessSnackbar] = useState<boolean>(false);
   const [endsWithSpace, setEndsWithSpace] = useState<boolean>(false);
   const [error, setError] = useState<boolean>(false);
   const [submitting, setSubmitting] = useState<boolean>(false);
@@ -23,7 +23,6 @@ const AddSecret: FC<IAddSecret> = (props: IAddSecret) => {
     setSubmitting(true);
     const result = await props.addKey(inputValues);
     if (result === 'SUCCESSFUL') {
-      setSuccessSnackbar(true);
       setModalOpen(false);
       setInputValues({ key: '', value: '' });
       setSubmitting(false);
@@ -53,17 +52,9 @@ const AddSecret: FC<IAddSecret> = (props: IAddSecret) => {
 
   return (
     <div>
-      <Snackbar open={successSnackbar} onClose={() => setSuccessSnackbar(false)}>
-        Secret was successfully added
-        <Snackbar.Action>
-          <Button onClick={() => setSuccessSnackbar(false)} variant="ghost">
-            Close
-          </Button>
-        </Snackbar.Action>
-      </Snackbar>
-      <Button variant="outlined" onClick={() => setModalOpen(true)}>
+      <Button theme="create" onClick={() => setModalOpen(true)}>
         <Icon name="add" />
-        Add secret
+        Add new secret
       </Button>
       <Dialog fullWidth open={modalOpen} onClose={onClose}>
         <DialogTitle>Add secret</DialogTitle>
@@ -103,10 +94,10 @@ const AddSecret: FC<IAddSecret> = (props: IAddSecret) => {
             </Banner>
           )}
           <Stack spacing={2} direction="row" justifyContent="flex-end">
-            <Button color="secondary" onClick={onClose}>
+            <Button theme="simple" onClick={onClose}>
               Close
             </Button>
-            <Button onClick={handlePost}>
+            <Button theme="create" onClick={handlePost}>
               {submitting ? (
                 <>
                   <Progress.Circular size={16} color="neutral" /> Adding secret…

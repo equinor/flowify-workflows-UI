@@ -101,19 +101,19 @@ const Editor: React.FC<IEditor> = (props: IEditor) => {
         .then((res) => {
           console.log(res);
           setLoading(false);
-          setFeedback('SAVE_SUCCESS');
+          setFeedback('UPDATE_COMP_SUCCESS');
         })
         .catch((error) => {
           console.error(error);
           // HACK UNTIL WE FIX COSMOSDB ISSUES
           if (error?.code === 500) {
-            setFeedback('SAVE_SUCCESS');
+            setFeedback('UPDATE_COMP_SUCCESS');
             setLoading(false);
             return;
           }
           // TODO: Handle 409 error
           setLoading(false);
-          setFeedback('UPDATE_ERROR');
+          setFeedback('UPDATE_COMP_ERROR');
         });
     }
   }
@@ -136,7 +136,7 @@ const Editor: React.FC<IEditor> = (props: IEditor) => {
             navigate(`/component/${component.uid}/${parseInt(version!, 10) + 1}`);
             return;
           }
-          setFeedback('PUBLISH_ERROR');
+          setFeedback('PUBLISH_COMP_ERROR');
           setLoading(false);
           // TODO: Handle error
         });
@@ -152,7 +152,7 @@ const Editor: React.FC<IEditor> = (props: IEditor) => {
         })
         .catch((error) => {
           console.error(error);
-          setFeedback('DELETE_ERROR');
+          setFeedback('DELETE_COMP_ERROR');
         });
     }
   }
@@ -166,7 +166,7 @@ const Editor: React.FC<IEditor> = (props: IEditor) => {
       <Helmet>
         <title>{component?.name || ''} - Component editor - Flowify</title>
       </Helmet>
-      <Feedbacks feedback={feedback} setFeedback={setFeedback} type="component" />
+      <Feedbacks feedback={feedback} setFeedback={setFeedback} />
       <MapConfig
         component={component}
         mapConfigComponent={configComponent?.id}

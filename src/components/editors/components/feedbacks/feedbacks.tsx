@@ -4,15 +4,13 @@ import { FeedbacksProps, FeedbackTypes } from './types';
 import { FEEDBACK_MESSAGES } from './lang';
 
 const Feedbacks: FC<FeedbacksProps> = (props: FeedbacksProps) => {
-  const { feedback, setFeedback, type } = props;
+  const { feedback, setFeedback } = props;
   if (!feedback) {
     return null;
   }
   return (
     <Snackbar open={feedback !== undefined} onClose={() => setFeedback(undefined)} placement="top">
-      {type === 'component'
-        ? FEEDBACK_MESSAGES[feedback]?.componentMessage
-        : FEEDBACK_MESSAGES[feedback]?.workflowMessage}
+      {FEEDBACK_MESSAGES[feedback]?.message}
       <Snackbar.Action>
         <Button onClick={() => setFeedback(undefined)} variant="ghost">
           Close

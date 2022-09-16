@@ -11,7 +11,8 @@ import { BUTTON_STATE } from '../../../creators/add-component-to-graph';
 
 interface EditorCentralBarProps {
   setUseManifest?: any;
-  type?: string;
+  type: 'job' | 'workflow' | 'component' | undefined;
+  implementationType?: 'brick' | 'graph' | 'any';
   component?: Component | undefined;
   subComponents?: Component[];
   setComponent?: React.Dispatch<React.SetStateAction<Component | undefined>>;
@@ -20,7 +21,7 @@ interface EditorCentralBarProps {
 }
 
 export const EditorCentralBar: FC<EditorCentralBarProps> = (props: EditorCentralBarProps) => {
-  const { type, setSubcomponents, setFeedback, setComponent } = props;
+  const { type, setSubcomponents, setFeedback, setComponent, implementationType } = props;
   const [menuOpen, setMenuOpen] = useState<boolean>(false);
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement>();
   const [marketplaceOpen, setMarketplaceOpen] = useState<boolean>(false);
@@ -37,7 +38,7 @@ export const EditorCentralBar: FC<EditorCentralBarProps> = (props: EditorCentral
         .then((res) => setSubcomponents((prev) => [...(prev || []), res]))
         .then(() => {
           setButtonState('success');
-          setFeedback('MARKETPLACE_SUCCESS');
+          setFeedback(type === 'component' ? 'ADD_COMP_TO_COMP_SUCCESS' : 'ADD_COMP_TO_WF_SUCCESS');
           setTimeout(() => {
             setButtonState('default');
           }, 3000);
@@ -56,7 +57,7 @@ export const EditorCentralBar: FC<EditorCentralBarProps> = (props: EditorCentral
         })
         .catch((error) => {
           console.error(error);
-          setFeedback('MARKETPLACE_ERROR');
+          setFeedback(type === 'component' ? 'ADD_COMP_TO_COMP_ERROR' : 'ADD_COMP_TO_WF_ERROR');
           setButtonState('error');
           setTimeout(() => {
             setButtonState('default');
@@ -72,7 +73,7 @@ export const EditorCentralBar: FC<EditorCentralBarProps> = (props: EditorCentral
         {type !== 'job' && (
           <>
             <Tooltip
-              title={type === 'graph' ? 'Add component' : 'Implementation needs to be a graph'}
+              title={implementationType === 'graph' ? 'Add component' : 'Implementation needs to be a graph'}
               style={{ fontSize: '1rem' }}
             >
               <Button
@@ -83,7 +84,7 @@ export const EditorCentralBar: FC<EditorCentralBarProps> = (props: EditorCentral
                 aria-expanded={menuOpen}
                 aria-controls="add-menu"
                 style={{ flexShrink: '0' }}
-                disabled={!(type === 'graph')}
+                disabled={!(implementationType === 'graph')}
               >
                 <Icon name="add" />
               </Button>

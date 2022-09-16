@@ -134,7 +134,7 @@ const WorkflowEditor: FC<IWorkflowEditor> = (props: IWorkflowEditor) => {
         .update(workflow, workflow.uid!)
         .then((res) => {
           console.log(res);
-          setFeedback('SAVE_SUCCESS');
+          setFeedback('UPDATE_WF_SUCCESS');
           setLoading(false);
           setDirty(false);
         })
@@ -142,12 +142,12 @@ const WorkflowEditor: FC<IWorkflowEditor> = (props: IWorkflowEditor) => {
           console.error(error);
           // HACK UNTIL WE FIX COSMOSDB ISSUES
           if (error?.code === 500) {
-            setFeedback('SAVE_SUCCESS');
+            setFeedback('UPDATE_WF_SUCCESS');
             setLoading(false);
             return;
           }
           setLoading(false);
-          setFeedback('UPDATE_ERROR');
+          setFeedback('UPDATE_WF_ERROR');
         });
     }
   }
@@ -182,7 +182,7 @@ const WorkflowEditor: FC<IWorkflowEditor> = (props: IWorkflowEditor) => {
         })
         .catch((error) => {
           console.error(error);
-          setFeedback('DELETE_ERROR');
+          setFeedback('DELETE_WF_ERROR');
         });
     }
   }
@@ -199,7 +199,7 @@ const WorkflowEditor: FC<IWorkflowEditor> = (props: IWorkflowEditor) => {
           editor - Flowify
         </title>
       </Helmet>
-      <Feedbacks feedback={feedback} setFeedback={setFeedback} type="workflow" />
+      <Feedbacks feedback={feedback} setFeedback={setFeedback} />
       <MapConfig
         component={component}
         mapConfigComponent={configComponent?.id}

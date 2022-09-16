@@ -65,7 +65,8 @@ export const MainEditor: FC<MainEditorProps> = (props: MainEditorProps) => {
             setSubcomponents={setSubcomponents}
             setUseManifest={setUseManifest}
             subComponents={subcomponents}
-            type={component?.implementation?.type}
+            type={document?.type}
+            implementationType={component?.implementation?.type}
           />
           <Stack sx={{ flexGrow: '1', minHeight: '0', flexWrap: 'nowrap', height: '100%', width: '100%' }}>
             {/*  <VersionBar
