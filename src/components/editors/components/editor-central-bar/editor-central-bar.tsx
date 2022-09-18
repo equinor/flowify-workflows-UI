@@ -6,7 +6,6 @@ import { EditorSettings, MarketplaceModal, FunctionalComponents } from '..';
 import { Component, Graph } from '../../../../models/v2';
 import { nanoid } from '../../helpers';
 import { services } from '../../../../services/v2';
-import { FeedbackTypes } from '../feedbacks/feedbacks';
 import { BUTTON_STATE } from '../../../creators/add-component-to-graph';
 
 interface EditorCentralBarProps {
@@ -17,7 +16,7 @@ interface EditorCentralBarProps {
   subComponents?: Component[];
   setComponent?: React.Dispatch<React.SetStateAction<Component | undefined>>;
   setSubcomponents?: React.Dispatch<React.SetStateAction<Component[] | undefined>>;
-  setFeedback?: (message: FeedbackTypes) => void;
+  setFeedback?: (feedback: Feedback) => void;
 }
 
 export const EditorCentralBar: FC<EditorCentralBarProps> = (props: EditorCentralBarProps) => {
@@ -38,7 +37,10 @@ export const EditorCentralBar: FC<EditorCentralBarProps> = (props: EditorCentral
         .then((res) => setSubcomponents((prev) => [...(prev || []), res]))
         .then(() => {
           setButtonState('success');
-          setFeedback(type === 'component' ? 'ADD_COMP_TO_COMP_SUCCESS' : 'ADD_COMP_TO_WF_SUCCESS');
+          setFeedback({
+            message: `Component ${component?.name || ''} was successfully added to ${type} graph`,
+            type: 'success',
+          });
           setTimeout(() => {
             setButtonState('default');
           }, 3000);
@@ -57,7 +59,7 @@ export const EditorCentralBar: FC<EditorCentralBarProps> = (props: EditorCentral
         })
         .catch((error) => {
           console.error(error);
-          setFeedback(type === 'component' ? 'ADD_COMP_TO_COMP_ERROR' : 'ADD_COMP_TO_WF_ERROR');
+          setFeedback({ message: `Error: Component could not be added to ${type} graph.`, type: 'error' });
           setButtonState('error');
           setTimeout(() => {
             setButtonState('default');

@@ -1,7 +1,6 @@
 import React, { FC } from 'react';
 import { Button, Snackbar } from '@equinor/eds-core-react';
-import { FeedbacksProps, FeedbackTypes } from './types';
-import { FEEDBACK_MESSAGES } from './lang';
+import { FeedbacksProps, Feedback } from './types';
 
 const Feedbacks: FC<FeedbacksProps> = (props: FeedbacksProps) => {
   const { feedback, setFeedback } = props;
@@ -10,7 +9,7 @@ const Feedbacks: FC<FeedbacksProps> = (props: FeedbacksProps) => {
   }
   return (
     <Snackbar open={feedback !== undefined} onClose={() => setFeedback(undefined)} placement="top">
-      {FEEDBACK_MESSAGES[feedback]?.message}
+      {feedback?.message}
       <Snackbar.Action>
         <Button onClick={() => setFeedback(undefined)} variant="ghost">
           Close
@@ -21,4 +20,4 @@ const Feedbacks: FC<FeedbacksProps> = (props: FeedbacksProps) => {
 };
 
 export { Feedbacks };
-export type { FeedbackTypes };
+export type { Feedback };

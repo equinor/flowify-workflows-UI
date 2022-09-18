@@ -3,7 +3,7 @@ import { Grid, Stack } from '@mui/material';
 import { Node } from 'react-flow-renderer';
 import { Component, Workflow } from '../../../../models/v2';
 import { EditorCentralBar, Sidebar, Brick, GraphEditor } from '..';
-import { FeedbackTypes } from '../feedbacks/types';
+import { Feedback } from '../feedbacks/types';
 import { ManifestEditor } from '../../manifest-editor/manifest-editor';
 import { INode } from '../../helpers';
 
@@ -14,7 +14,7 @@ interface MainEditorProps {
   setDocument: React.Dispatch<React.SetStateAction<any | undefined>>;
   workspace: string;
   secrets?: string[];
-  setFeedback: (type: FeedbackTypes) => void;
+  setFeedback: (feedback: Feedback) => void;
   subcomponents: Component[] | undefined;
   setSubcomponents: React.Dispatch<React.SetStateAction<Component[] | undefined>>;
   setDirty: (dirty: boolean) => void;

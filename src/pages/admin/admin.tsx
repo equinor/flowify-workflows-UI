@@ -5,11 +5,11 @@ import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
 import { services } from '../../services/v2';
 import { Container, Layout } from '../../layout';
-import { AddSecret } from '../../components';
 import { ISecret, ISecretsList, IUserVolume, IVolume, Workspace, WorkspaceList } from '../../models/v2';
 import { Breadcrumbs, Select, Button } from '../../components/ui';
 import { VolumeEditor } from '../../components/editors/volume/volume-editor';
-import { Feedbacks, FeedbackTypes } from '../../components/editors/components';
+import { Feedback, Feedbacks } from '../../components/editors/components';
+import { SecretEditor } from '../../components/editors/secret-editor/secret-editor';
 
 function CREATE_VOLUME_TEMPLATE(workspace: string) {
   return {
@@ -28,20 +28,26 @@ function CREATE_VOLUME_TEMPLATE(workspace: string) {
   };
 }
 
+const SECRET_TEMPLATE = {
+  key: '',
+  value: '',
+};
+
 export const AdminPage: React.FC = (): React.ReactElement => {
   const [secrets, setSecrets] = useState<ISecretsList>();
   const [volumes, setVolumes] = useState<IVolume[]>();
   const [workspaces, setWorkspaces] = useState<Workspace[]>([]);
   const [selectedWorkspace, setSelectedWorkspace] = useState<string>('');
   const [editableVolume, setEditableVolume] = useState<{ volume: IUserVolume; mode: 'edit' | 'create' }>();
-  const [feedback, setFeedback] = useState<FeedbackTypes>();
+  const [editableSecret, setEditableSecret] = useState<{ secret: ISecret; mode: 'edit' | 'create' }>();
+  const [feedback, setFeedback] = useState<Feedback>();
 
   function fetchSecrets(workspace: string) {
     services.secrets
       .list(workspace)
       .then((x) => setSecrets(x))
       .catch((e) => {
-        console.log('call to getSecrets failed reason: ' + e);
+        console.log('call to fetch Secrets failed reason: ' + e);
       });
   }
 
@@ -50,7 +56,7 @@ export const AdminPage: React.FC = (): React.ReactElement => {
       .list(workspace)
       .then((x) => setVolumes(x.items))
       .catch((e) => {
-        console.log('call to getSecrets failed reason: ' + e);
+        console.log('call to fetch Volumes failed reason: ' + e);
       });
   }
 
@@ -71,23 +77,6 @@ export const AdminPage: React.FC = (): React.ReactElement => {
         console.warn('Unable to read data from workspaces');
       });
   }, []);
-
-  function onAdd(secret: ISecret) {
-    if (secret.key !== undefined && secret.value !== undefined) {
-      return services.secrets
-        .create(secret, selectedWorkspace)
-        .then(() => {
-          fetchSecrets(selectedWorkspace);
-          setFeedback('SECRET_SUCCESS');
-          return 'SUCCESSFUL';
-        })
-        .catch((_) => {
-          console.log('adding secret failed');
-          return 'ERROR';
-        });
-    }
-    return 'ERROR';
-  }
 
   function onVolumeDelete(uid: string) {
     if (uid) {
@@ -149,13 +138,33 @@ export const AdminPage: React.FC = (): React.ReactElement => {
                     <TableRow key={key}>
                       <TableCell>{key}</TableCell>
                       <TableCell></TableCell>
-                      <TableCell></TableCell>
+                      <TableCell>
+                        <Button onClick={() => setEditableSecret({ secret: { key: key, value: '' }, mode: 'edit' })}>
+                          Edit
+                        </Button>
+                      </TableCell>
                       <TableCell></TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
               </Table>
-              <AddSecret addKey={onAdd} />
+              <div>
+                <Button theme="create" onClick={() => setEditableSecret({ secret: SECRET_TEMPLATE, mode: 'create' })}>
+                  <Icon name="add" />
+                  Add new secret
+                </Button>
+              </div>
+              {editableSecret && (
+                <SecretEditor
+                  open={editableSecret !== undefined}
+                  onClose={() => setEditableSecret(undefined)}
+                  secret={editableSecret?.secret}
+                  mode={editableSecret?.mode}
+                  workspace={selectedWorkspace}
+                  getSecrets={fetchSecrets}
+                  setFeedback={setFeedback}
+                />
+              )}
               <Typography variant="h4">Volumes</Typography>
               <Table>
                 <TableHead>

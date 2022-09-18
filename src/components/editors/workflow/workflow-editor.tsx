@@ -7,12 +7,12 @@ import { Workflow } from '../../../models/v2/workflow';
 import {
   MapConfig,
   SecretsVolumesConfig,
-  FeedbackTypes,
   Feedbacks,
   EditorMenu,
   DocumentEditor,
   WorkflowJobs,
   MainEditor,
+  Feedback,
 } from '../components';
 import { createGraphElements, fetchInitialSubComponents, INode } from '../helpers';
 import { Component, IJobsListRequest, IVolume, WorkflowListRequest } from '../../../models/v2';
@@ -32,7 +32,7 @@ const WorkflowEditor: FC<IWorkflowEditor> = (props: IWorkflowEditor) => {
   const [component, setComponent] = useState<Component | undefined>();
   const [dirty, setDirty] = useState<boolean>(false);
   const [edges, setEdges, onEdgesChange] = useEdgesState<any>([]);
-  const [feedback, setFeedback] = useState<FeedbackTypes>();
+  const [feedback, setFeedback] = useState<Feedback>();
   const [loading, setLoading] = useState<boolean>(false);
   const [mounted, setMounted] = useState<boolean>(false);
   const [nodes, setNodes, onNodesChange] = useNodesState<INode>([]);
@@ -134,7 +134,7 @@ const WorkflowEditor: FC<IWorkflowEditor> = (props: IWorkflowEditor) => {
         .update(workflow, workflow.uid!)
         .then((res) => {
           console.log(res);
-          setFeedback('UPDATE_WF_SUCCESS');
+          setFeedback({ message: 'Workflow was successfully updated', type: 'success' });
           setLoading(false);
           setDirty(false);
         })
@@ -142,12 +142,12 @@ const WorkflowEditor: FC<IWorkflowEditor> = (props: IWorkflowEditor) => {
           console.error(error);
           // HACK UNTIL WE FIX COSMOSDB ISSUES
           if (error?.code === 500) {
-            setFeedback('UPDATE_WF_SUCCESS');
+            setFeedback({ message: 'Workflow was successfully updated', type: 'success' });
             setLoading(false);
             return;
           }
           setLoading(false);
-          setFeedback('UPDATE_WF_ERROR');
+          setFeedback({ message: 'Workflow could not be updated', type: 'error' });
         });
     }
   }
@@ -182,7 +182,7 @@ const WorkflowEditor: FC<IWorkflowEditor> = (props: IWorkflowEditor) => {
         })
         .catch((error) => {
           console.error(error);
-          setFeedback('DELETE_WF_ERROR');
+          setFeedback({ message: 'Error when deleting workflow', type: 'error' });
         });
     }
   }

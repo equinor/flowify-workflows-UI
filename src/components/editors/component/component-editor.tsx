@@ -9,10 +9,10 @@ import {
   MapConfig,
   SecretsVolumesConfig,
   Feedbacks,
-  FeedbackTypes,
   EditorMenu,
   DocumentEditor,
   MainEditor,
+  Feedback,
 } from '../components';
 import { createGraphElements, fetchInitialSubComponents, INode } from '../helpers';
 
@@ -34,7 +34,7 @@ const Editor: React.FC<IEditor> = (props: IEditor) => {
   const [component, setComponent] = useState<Component | undefined>();
   const [dirty, setDirty] = useState<boolean>(false);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
-  const [feedback, setFeedback] = useState<FeedbackTypes>();
+  const [feedback, setFeedback] = useState<Feedback>();
   const [loading, setLoading] = useState<boolean>(true);
   const [mounted, setMounted] = useState<boolean>(false);
   const [nodes, setNodes, onNodesChange] = useNodesState<INode>([]);
@@ -101,19 +101,19 @@ const Editor: React.FC<IEditor> = (props: IEditor) => {
         .then((res) => {
           console.log(res);
           setLoading(false);
-          setFeedback('UPDATE_COMP_SUCCESS');
+          setFeedback({ message: 'Component was successfully updated.', type: 'success' });
         })
         .catch((error) => {
           console.error(error);
           // HACK UNTIL WE FIX COSMOSDB ISSUES
           if (error?.code === 500) {
-            setFeedback('UPDATE_COMP_SUCCESS');
+            setFeedback({ message: 'Component was successfully updated.', type: 'success' });
             setLoading(false);
             return;
           }
           // TODO: Handle 409 error
           setLoading(false);
-          setFeedback('UPDATE_COMP_ERROR');
+          setFeedback({ message: "'Error when updating component. Changes were not saved.", type: 'error' });
         });
     }
   }
@@ -136,7 +136,7 @@ const Editor: React.FC<IEditor> = (props: IEditor) => {
             navigate(`/component/${component.uid}/${parseInt(version!, 10) + 1}`);
             return;
           }
-          setFeedback('PUBLISH_COMP_ERROR');
+          setFeedback({ message: 'Error: Could not create new component version.', type: 'error' });
           setLoading(false);
           // TODO: Handle error
         });
@@ -152,7 +152,7 @@ const Editor: React.FC<IEditor> = (props: IEditor) => {
         })
         .catch((error) => {
           console.error(error);
-          setFeedback('DELETE_COMP_ERROR');
+          setFeedback({ message: 'Error when deleting component.', type: 'error' });
         });
     }
   }
