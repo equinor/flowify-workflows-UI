@@ -1,5 +1,5 @@
 FROM node:lts as base
-
+LABEL org.opencontainers.image.source = "https://github.com/equinor/flowify-workflows-UI"
 WORKDIR /app
 COPY package*.json ./
 COPY yarn.lock ./
