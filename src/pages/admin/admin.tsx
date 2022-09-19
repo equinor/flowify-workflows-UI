@@ -89,6 +89,18 @@ export const AdminPage: React.FC = (): React.ReactElement => {
     }
   }
 
+  function onSecretDelete(key: string) {
+    if (key) {
+      services.secrets
+        .delete(key, selectedWorkspace)
+        .then(() => {
+          fetchSecrets(selectedWorkspace);
+          setFeedback({ message: `Secret ${key} was successfully deleted.`, type: 'success' });
+        })
+        .catch((error) => console.error(error));
+    }
+  }
+
   function onWorkspaceChange(e: SelectChangeEvent) {
     const { value } = e.target as HTMLInputElement;
     setSelectedWorkspace(value);
@@ -143,7 +155,11 @@ export const AdminPage: React.FC = (): React.ReactElement => {
                           Edit
                         </Button>
                       </TableCell>
-                      <TableCell></TableCell>
+                      <TableCell>
+                        <Button theme="danger" onClick={() => onSecretDelete(key)}>
+                          Delete
+                        </Button>
+                      </TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
