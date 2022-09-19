@@ -1,10 +1,10 @@
 import React, { FC, useState } from 'react';
 import styled from 'styled-components';
 import { Chip, Icon, Pagination, Typography } from '@equinor/eds-core-react';
-import { Dialog, Grid, Stack, TextField } from '@mui/material';
+import { Dialog, Grid, TextField as MUITextField } from '@mui/material';
 import moment from 'moment';
 import { Workflow, Component, WorkflowListRequest, ComponentListRequest } from '../../../../models/v2';
-import { Button, Paper } from '../../../ui';
+import { Button, Paper, TextField, Stack } from '../../../ui';
 import { Link } from 'react-router-dom';
 import { IFilter, IPagination } from '../../../../services/v2';
 
@@ -33,6 +33,7 @@ export const DocumentEditor: FC<DocumentEditorProps> = (props: DocumentEditorPro
   const [editName, setEditName] = useState<boolean>(false);
   const [editDescription, setEditDescription] = useState<boolean>(false);
   const [deleteModalOpen, setDeleteModalOpen] = useState<boolean>(false);
+  const [tagInput, setTagInput] = useState<string>('');
 
   const { items: versions, pageInfo } = versionsResponse as WorkflowListRequest | ComponentListRequest;
 
@@ -52,6 +53,40 @@ export const DocumentEditor: FC<DocumentEditorProps> = (props: DocumentEditorPro
       description: value,
     }));
     setEditDescription(false);
+  }
+
+  function tagEventHandler(event: any) {
+    function addTag(list: string[] | undefined) {
+      if (!list) {
+        return [tagInput];
+      }
+      list.push(tagInput);
+      return list;
+    }
+    if (event.key === 'Enter' && tagInput) {
+      setInstance((prev: Component | Workflow) => ({
+        ...prev,
+        version: {
+          ...prev?.version,
+          tags: addTag(prev?.version?.tags),
+        },
+      }));
+      setTagInput('');
+    }
+  }
+
+  function removeTagFromList(list: string[] | undefined, value: string) {
+    return list?.filter((tag) => tag !== value) || [];
+  }
+
+  function removeTag(value: string) {
+    setInstance((prev: Component | Workflow) => ({
+      ...prev,
+      version: {
+        ...prev?.version,
+        tags: removeTagFromList(prev?.version?.tags, value),
+      },
+    }));
   }
 
   return (
@@ -110,23 +145,23 @@ export const DocumentEditor: FC<DocumentEditorProps> = (props: DocumentEditorPro
         </Stack>
       </Grid>
       <Grid item xs={4} sx={{ flexGrow: '1', overflowY: 'auto', minHeight: '0' }}>
-        <Stack padding="2rem" spacing={2} justifyContent="space-between" sx={{ minHeight: '100%' }}>
+        <Stack padding={2} spacing={2} justifyContent="space-between" style={{ minHeight: '100%' }}>
           <Stack direction="row" alignItems="flex-start" justifyContent="space-between" spacing={2}>
-            <Stack spacing={2} sx={{ flexGrow: '1' }}>
+            <Stack spacing={1} grow={1}>
               {editName ? (
-                <TextField autoFocus defaultValue={document?.name} onBlur={(event) => updateName(event)} />
+                <MUITextField autoFocus defaultValue={document?.name} onBlur={(event: any) => updateName(event)} />
               ) : (
                 <StyledTextButton onClick={() => setEditName(true)}>
                   <Typography variant="h3">{document?.name}</Typography>
                 </StyledTextButton>
               )}
               {editDescription ? (
-                <TextField
+                <MUITextField
                   autoFocus
                   multiline
                   rows={3}
                   defaultValue={document?.description}
-                  onBlur={(event) => updateDescription(event)}
+                  onBlur={(event: any) => updateDescription(event)}
                 />
               ) : (
                 <StyledTextButton onClick={() => setEditDescription(true)}>
@@ -148,16 +183,28 @@ export const DocumentEditor: FC<DocumentEditorProps> = (props: DocumentEditorPro
                 <Typography variant="body_long">
                   <b>Tags</b>
                 </Typography>
-                <Stack direction="row">
-                  {document?.version?.tags?.map((tag) => (
-                    <Chip key={tag} style={{ fontSize: '1rem' }}>
-                      {tag}
-                    </Chip>
-                  ))}
-                  <Chip variant="active" onClick={() => null} style={{ fontSize: '1rem' }}>
-                    <Icon name="add" size={16} color="#709DA0" /> Add tag
-                  </Chip>
-                </Stack>
+                <div>
+                  <Stack direction="row" spacing={1} wrap="wrap">
+                    {document?.version?.tags?.map((tag) => (
+                      <Chip
+                        key={tag}
+                        style={{ fontSize: '1rem', marginBottom: '1rem' }}
+                        onDelete={tag === 'latest' ? undefined : () => removeTag(tag)}
+                      >
+                        {tag}
+                      </Chip>
+                    ))}
+                  </Stack>
+                  <TextField
+                    icon="add"
+                    id="add_tag"
+                    name="add_tag"
+                    onKeyDown={tagEventHandler}
+                    onChange={(event: any) => setTagInput(event.target.value)}
+                    value={tagInput}
+                    placeholder="Add tag and press Enter"
+                  />
+                </div>
               </Stack>
             </Stack>
           </Stack>
