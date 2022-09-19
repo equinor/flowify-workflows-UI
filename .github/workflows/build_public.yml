@@ -37,5 +37,5 @@ jobs:
         context: .
         push: true
         tags: |
-          ghcr.io/equinor/flowify-workflows-UI:${{ env.SHORT_SHA}} 
-          ghcr.io/equinor/flowify-workflows-UI:latest
+          ghcr.io/equinor/flowify-workflows-ui:${{ env.SHORT_SHA}} 
+          ghcr.io/equinor/flowify-workflows-ui:latest
