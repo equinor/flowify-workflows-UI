@@ -1,7 +1,7 @@
 import React, { FC, useState } from 'react';
 import { Icon, Progress, Snackbar } from '@equinor/eds-core-react';
 import { Card, Dialog, DialogTitle, Stack } from '@mui/material';
-import { ObjectEditor } from '../object-editor/object-editor';
+import { ManifestEditor } from '../editors/manifest-editor/manifest-editor';
 import { Workflow } from '../../models/v2/workflow';
 import { services } from '../../services/v2';
 import { useNavigate } from 'react-router';
@@ -71,7 +71,7 @@ const CreateWorkflow: FC<ICreateWorkflow> = (props: ICreateWorkflow) => {
       <Dialog fullWidth open={modalOpen} onClose={() => setModalOpen(false)}>
         <DialogTitle>Create new workflow</DialogTitle>
         <Card sx={{ margin: '1rem', height: '50vh' }}>
-          <ObjectEditor value={workflow} lang="yaml" onChange={(w: Workflow) => setWorkflow(w)} />
+          <ManifestEditor value={workflow} lang="yaml" onChange={(w: Workflow) => setWorkflow(w)} />
         </Card>
         <Stack direction="row" spacing={2} justifyContent="flex-end" sx={{ padding: '1rem' }}>
           <Button onClick={() => setModalOpen(false)} color="secondary">

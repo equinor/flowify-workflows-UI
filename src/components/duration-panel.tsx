@@ -1,3 +1,4 @@
+import React from 'react';
 import { WorkflowStatus } from '../models';
 import { formatDuration, wfDuration } from '../common';
 import { Ticker } from './ticker';

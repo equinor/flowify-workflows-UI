@@ -13,8 +13,7 @@ export class SecretService {
       .then((res) => res.body as ISecret);
   }
 
-  public delete(secret: ISecret, workspace: string) {
-    const { key } = secret;
-    return requests.delete(`api/v2/secrets/${workspace}/${key}`).then((res) => res.body);
+  public delete(secretKey: string, workspace: string) {
+    return requests.delete(`api/v2/secrets/${workspace}/${secretKey}`).then((res) => res.body);
   }
 }

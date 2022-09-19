@@ -1,8 +1,8 @@
 import React, { FC } from 'react';
-import { TextField as MUITextField, Stack, InputAdornment } from '@mui/material';
+import { TextField as MUITextField, Stack, InputAdornment, StandardTextFieldProps } from '@mui/material';
 import { Icon, Typography } from '@equinor/eds-core-react';
 
-interface TextFieldProps {
+interface TextFieldProps extends StandardTextFieldProps {
   id: string;
   value?: string;
   icon?: string;

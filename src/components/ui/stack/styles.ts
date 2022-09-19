@@ -11,6 +11,7 @@ export const StyledStack = styled.div<StyledStackProps>`
   padding: ${(props) => (props.padding ? `${props.padding}rem` : 0)};
   flex-grow: ${(props) => props.flexGrow};
   flex-shrink: ${(props) => props.flexShrink};
+  flex-wrap: ${(props) => props.flexWrap};
   ${(props) =>
     props.spacing &&
     `

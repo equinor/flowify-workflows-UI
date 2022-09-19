@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React, { FC, useState } from 'react';
 import { Stack } from '@mui/material';
 import { Tooltip, Button, Menu, Icon, Typography } from '@equinor/eds-core-react';
@@ -5,21 +6,21 @@ import { EditorSettings, MarketplaceModal, FunctionalComponents } from '..';
 import { Component, Graph } from '../../../../models/v2';
 import { nanoid } from '../../helpers';
 import { services } from '../../../../services/v2';
-import { FeedbackTypes } from '../feedbacks/feedbacks';
 import { BUTTON_STATE } from '../../../creators/add-component-to-graph';
 
 interface EditorCentralBarProps {
   setUseManifest?: any;
-  type?: string;
+  type: 'job' | 'workflow' | 'component' | undefined;
+  implementationType?: 'brick' | 'graph' | 'any';
   component?: Component | undefined;
   subComponents?: Component[];
   setComponent?: React.Dispatch<React.SetStateAction<Component | undefined>>;
   setSubcomponents?: React.Dispatch<React.SetStateAction<Component[] | undefined>>;
-  setFeedback?: (message: FeedbackTypes) => void;
+  setFeedback?: (feedback: Feedback) => void;
 }
 
 export const EditorCentralBar: FC<EditorCentralBarProps> = (props: EditorCentralBarProps) => {
-  const { type, setSubcomponents, setFeedback, setComponent } = props;
+  const { type, setSubcomponents, setFeedback, setComponent, implementationType } = props;
   const [menuOpen, setMenuOpen] = useState<boolean>(false);
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement>();
   const [marketplaceOpen, setMarketplaceOpen] = useState<boolean>(false);
@@ -36,7 +37,10 @@ export const EditorCentralBar: FC<EditorCentralBarProps> = (props: EditorCentral
         .then((res) => setSubcomponents((prev) => [...(prev || []), res]))
         .then(() => {
           setButtonState('success');
-          setFeedback('MARKETPLACE_SUCCESS');
+          setFeedback({
+            message: `Component ${component?.name || ''} was successfully added to ${type} graph`,
+            type: 'success',
+          });
           setTimeout(() => {
             setButtonState('default');
           }, 3000);
@@ -55,7 +59,7 @@ export const EditorCentralBar: FC<EditorCentralBarProps> = (props: EditorCentral
         })
         .catch((error) => {
           console.error(error);
-          setFeedback('MARKETPLACE_ERROR');
+          setFeedback({ message: `Error: Component could not be added to ${type} graph.`, type: 'error' });
           setButtonState('error');
           setTimeout(() => {
             setButtonState('default');
@@ -71,19 +75,18 @@ export const EditorCentralBar: FC<EditorCentralBarProps> = (props: EditorCentral
         {type !== 'job' && (
           <>
             <Tooltip
-              title={type === 'graph' ? 'Add component' : 'Implementation needs to be a graph'}
+              title={implementationType === 'graph' ? 'Add component' : 'Implementation needs to be a graph'}
               style={{ fontSize: '1rem' }}
             >
               <Button
                 onClick={() => setMenuOpen(true)}
                 variant="ghost_icon"
-                // @ts-ignore
                 ref={setAnchorEl}
                 aria-haspopup="true"
                 aria-expanded={menuOpen}
                 aria-controls="add-menu"
                 style={{ flexShrink: '0' }}
-                disabled={!(type === 'graph')}
+                disabled={!(implementationType === 'graph')}
               >
                 <Icon name="add" />
               </Button>

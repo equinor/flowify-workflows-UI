@@ -1,10 +1,10 @@
 import React, { FC, useState } from 'react';
 import { Grid, Stack } from '@mui/material';
+import { Node } from 'react-flow-renderer';
 import { Component, Workflow } from '../../../../models/v2';
 import { EditorCentralBar, Sidebar, Brick, GraphEditor } from '..';
-import { FeedbackTypes } from '../feedbacks/types';
-import { ObjectEditor } from '../../../object-editor/object-editor';
-import { Node } from 'react-flow-renderer';
+import { Feedback } from '../feedbacks/types';
+import { ManifestEditor } from '../../manifest-editor/manifest-editor';
 import { INode } from '../../helpers';
 
 interface MainEditorProps {
@@ -14,7 +14,7 @@ interface MainEditorProps {
   setDocument: React.Dispatch<React.SetStateAction<any | undefined>>;
   workspace: string;
   secrets?: string[];
-  setFeedback: (type: FeedbackTypes) => void;
+  setFeedback: (feedback: Feedback) => void;
   subcomponents: Component[] | undefined;
   setSubcomponents: React.Dispatch<React.SetStateAction<Component[] | undefined>>;
   setDirty: (dirty: boolean) => void;
@@ -65,7 +65,8 @@ export const MainEditor: FC<MainEditorProps> = (props: MainEditorProps) => {
             setSubcomponents={setSubcomponents}
             setUseManifest={setUseManifest}
             subComponents={subcomponents}
-            type={component?.implementation?.type}
+            type={document?.type}
+            implementationType={component?.implementation?.type}
           />
           <Stack sx={{ flexGrow: '1', minHeight: '0', flexWrap: 'nowrap', height: '100%', width: '100%' }}>
             {/*  <VersionBar
@@ -76,7 +77,7 @@ export const MainEditor: FC<MainEditorProps> = (props: MainEditorProps) => {
                   onPublish={onPublish}
                 /> */}
             {useManifest ? (
-              <ObjectEditor onChange={(doc: Workflow | Component) => onManifestChange(doc)} value={document} />
+              <ManifestEditor onChange={(doc: Workflow | Component) => onManifestChange(doc)} value={document} />
             ) : component?.implementation?.type === 'graph' ? (
               <GraphEditor
                 component={component || null}

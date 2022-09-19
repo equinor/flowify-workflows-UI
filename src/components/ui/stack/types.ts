@@ -43,7 +43,7 @@ export interface StackProps extends React.ComponentPropsWithoutRef<'div'> {
   grow?: number;
   shrink?: number;
   direction?: 'row' | 'column' | 'row-reverse' | 'column-reverse';
-  wrap?: boolean | 'reverse';
+  wrap?: 'initial' | 'no-wrap' | 'wrap' | 'wrap-reverse';
   order?: number;
   className?: string;
   style?: React.CSSProperties;
@@ -62,5 +62,5 @@ export interface StyledStackProps {
   inline?: boolean;
   padding?: number;
   spacing?: number;
-  wrap?: boolean | 'reverse';
+  flexWrap?: 'initial' | 'no-wrap' | 'wrap' | 'wrap-reverse';
 }

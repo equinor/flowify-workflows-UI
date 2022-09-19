@@ -1,3 +1,4 @@
+import React from 'react';
 import { ago } from '../common';
 import { Ticker } from './ticker';
 

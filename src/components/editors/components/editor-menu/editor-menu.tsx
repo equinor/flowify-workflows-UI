@@ -20,7 +20,7 @@ export const EditorMenu: FC<EditorMenuProps> = (props: EditorMenuProps) => {
       spacing={1}
       sx={{ backgroundColor: '#ADE2E619', padding: '0.25rem' }}
     >
-      <MenuButton create onClick={props.onSave} icon="save" label="Save" />
+      <MenuButton disabled={!props.dirty} create onClick={props.onSave} icon="save" label="Save" />
       <Stack spacing={0.5}>
         <MenuButton
           active={active === 'editor'}
