@@ -1,11 +1,13 @@
-import React, { FC, useState, useEffect } from 'react';
-import { Banner, Icon, Progress } from '@equinor/eds-core-react';
+import React, { FC, useState } from 'react';
 import { Dialog } from '@mui/material';
+import { Formik, Form } from 'formik';
+import * as Yup from 'yup';
 import { ISecret } from '../../../models/v2';
-import { Button, TextField } from '../../ui';
 import { Stack } from '../../ui/stack/stack';
 import { services } from '../../../services/v2';
 import { Feedback } from '../components';
+import { TextInputFormik } from '../../form/formik/text-input-formik';
+import { Submitter } from './components/submitter';
 
 interface SecretEditorProps {
   open: boolean;
@@ -19,21 +21,9 @@ interface SecretEditorProps {
 
 export const SecretEditor: FC<SecretEditorProps> = (props: SecretEditorProps) => {
   const { open, onClose, mode, workspace, getSecrets, setFeedback } = props;
-  const [secret, setSecret] = useState<ISecret>(props.secret);
-  const [endsWithSpace, setEndsWithSpace] = useState<boolean>(false);
   const [submitting, setSubmitting] = useState<boolean>(false);
 
-  useEffect(() => {
-    setEndsWithSpace(false);
-    if (secret.value !== '') {
-      const end = secret?.value?.slice(-1);
-      if (end === ' ') {
-        setEndsWithSpace(true);
-      }
-    }
-  }, [secret.value]);
-
-  function saveSecret() {
+  function saveSecret(secret: ISecret) {
     if (secret && !submitting) {
       // Check if no change has happened to the secret
       if (props.secret === secret || !secret.key || !secret.value) {
@@ -41,7 +31,6 @@ export const SecretEditor: FC<SecretEditorProps> = (props: SecretEditorProps) =>
         onClose();
         return;
       }
-      // Updating existing secret
       setSubmitting(true);
       services.secrets
         .create(secret, workspace)
@@ -71,64 +60,24 @@ export const SecretEditor: FC<SecretEditorProps> = (props: SecretEditorProps) =>
     }
   }
 
+  const validationSchema = Yup.object({
+    key: Yup.string().required('Secret/Token name is a required field.').noWhitespace(),
+    value: Yup.string().required(),
+  });
+
   return (
     <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth>
       <Stack padding={2}>
         <Stack spacing={2}>
-          <TextField
-            id="secrets_key_input"
-            label="Secret key"
-            autoFocus
-            inputProps={{ readOnly: mode === 'edit' }}
-            defaultValue={secret?.key}
-            onBlur={(event: any) =>
-              setSecret((prev) => ({
-                ...prev,
-                key: event?.target.value,
-              }))
-            }
-          />
-          <TextField
-            id="secrets_value_input"
-            label="Secret value"
-            multiline
-            rows={3}
-            style={{ resize: 'none' }}
-            defaultValue={secret?.value}
-            onBlur={(event: any) =>
-              setSecret((prev) => ({
-                ...prev,
-                value: event?.target.value,
-              }))
-            }
-          />
-          {endsWithSpace && (
-            <Banner>
-              <Banner.Icon variant="info">
-                <Icon name="warning_outlined" />
-              </Banner.Icon>
-              <Banner.Message>
-                The secret you have written ends with a space character. Please make sure this is on purpose.
-              </Banner.Message>
-            </Banner>
-          )}
-          <Stack spacing={2} direction="row" justifyContent="flex-end">
-            <Button theme="simple" onClick={onClose}>
-              Close
-            </Button>
-            <Button theme="create" onClick={saveSecret}>
-              {submitting ? (
-                <>
-                  <Progress.Circular size={16} color="neutral" />{' '}
-                  {mode === 'create' ? 'Adding secret…' : 'Updating secret…'}
-                </>
-              ) : mode === 'create' ? (
-                'Add secret'
-              ) : (
-                'Update secret'
-              )}
-            </Button>
-          </Stack>
+          <Formik initialValues={props.secret} onSubmit={saveSecret} validateOnBlur validationSchema={validationSchema}>
+            <Form>
+              <Stack spacing={1}>
+                <TextInputFormik name="key" label="Secret/Token name" readOnly={mode === 'edit'} />
+                <TextInputFormik name="value" label="Value" multiline rows={3} />
+                <Submitter mode={mode} submitting={submitting} onClose={onClose} />
+              </Stack>
+            </Form>
+          </Formik>
         </Stack>
       </Stack>
     </Dialog>
