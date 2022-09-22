@@ -3,6 +3,7 @@ import { SnackbarProvider } from 'notistack';
 import { HelmetProvider } from 'react-helmet-async';
 import './common/icons';
 import './styles/scss/index.scss';
+import './common/validation/yup-config';
 import Pages from './routes';
 import { CurrentUserProvider } from './common/context/user-context-store';
 import { EditorSettingsProvider } from './common/context/editor-settings-context';
