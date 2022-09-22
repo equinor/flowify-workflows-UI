@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import { MenuItem, Select as MUISelect, Stack } from '@mui/material';
 import { Icon, Typography } from '@equinor/eds-core-react';
 
-interface SelectProps {
+export interface SelectProps {
   id: string;
   icon?: string;
   options: { label?: string; value?: string }[] | undefined;
@@ -15,13 +15,14 @@ interface SelectProps {
 }
 
 export const Select: FC<SelectProps> = (props: SelectProps) => {
-  const { id, value, options, icon, onChange, label, wrapperStyles, placeholder, ...selectProps } = props;
+  const { id, value, options, icon, onChange, label, wrapperStyles, placeholder, errorMessage, ...selectProps } = props;
   return (
     <Stack spacing={1} sx={wrapperStyles}>
       <Typography id={`${id}--label`} variant="body_short_bold">
         {label}
       </Typography>
       <MUISelect
+        error={errorMessage !== undefined}
         aria-labelledby={`${id}--label`}
         displayEmpty
         id={id}
