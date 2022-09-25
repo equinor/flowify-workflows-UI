@@ -88,9 +88,13 @@ export const BaseInput: FC<BaseInputProps> = (props: BaseInputProps) => {
   const Tag = multiline ? 'textarea' : 'input';
 
   return (
-    <Stack spacing={0.5}>
+    <Stack spacing={0.5} grow={1}>
       <label id={id}>
-        <Typography variant="body_short_bold">{label}</Typography>
+        {label && (
+          <Typography variant="body_short_bold" style={{ marginBottom: '0.5rem' }}>
+            {label}
+          </Typography>
+        )}
         <StyledInputWrapper
           error={errorMessage !== undefined}
           positive={positive}

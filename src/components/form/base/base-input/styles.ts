@@ -14,7 +14,6 @@ export const StyledInputWrapper = styled.div<InputWrapperProps>`
   border: 1px solid #9ca6ac;
   border-radius: 0.5rem;
   padding: 0.5rem;
-  margin-top: 0.5rem;
   ${(props) =>
     props.focused &&
     css`

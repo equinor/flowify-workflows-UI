@@ -1,9 +1,10 @@
-import React, { FC, useState } from 'react';
-import { Button, Icon, Typography } from '@equinor/eds-core-react';
+import React, { FC } from 'react';
+import { Icon, Typography } from '@equinor/eds-core-react';
 import { Stack } from '@mui/material';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import { removeItem, reorder } from './helpers';
 import { nanoid } from '../../helpers';
+import { Button } from '../../../ui';
 
 interface DraggableListProps {
   list: any[] | undefined | null;
@@ -12,11 +13,13 @@ interface DraggableListProps {
   addItem: () => void;
   child?: (item: any, index: number) => React.ReactNode;
   onChange: (list: any[]) => void;
+  name?: string;
+  customDragEnd?: (indexA: number, indexB: number) => void;
+  customRemove?: (index: number) => void;
 }
 
 export const DraggableList: FC<DraggableListProps> = (props: DraggableListProps) => {
-  const { list, type, child, onChange } = props;
-  const [isDragging, setIsDragging] = useState<boolean>(false);
+  const { list, type, child, onChange, name, customDragEnd, customRemove } = props;
 
   const getItemStyle = (isDragging: boolean, draggableStyle: any) => ({
     display: 'flex',
@@ -36,39 +39,38 @@ export const DraggableList: FC<DraggableListProps> = (props: DraggableListProps)
     border: isDraggingOver ? '2px dashed #4BB748' : 'none',
   });
 
-  const getDeleteBoxStyle = (isDraggingOver: boolean) => ({
-    display: 'flex',
-    padding: '1rem',
-    alignItems: 'center',
-    justifyContent: 'center',
-    border: '2px dashed #FFAEBF',
-    background: isDraggingOver ? '#FFE0E7' : 'white',
-  });
-
   function onDragEnd(result: any) {
-    setIsDragging(false);
     const { source, destination } = result;
+    if (typeof customDragEnd === 'function') {
+      customDragEnd(source.index, destination.index);
+      return;
+    }
     if (destination.droppableId === `container-${type}`) {
       const updatedList = reorder(list!, source.index, destination.index);
       onChange(updatedList);
       return;
     }
-    if (destination.droppableId === `trash-${type}`) {
-      const updatedList = removeItem(list!, source.index);
-      onChange(updatedList);
+  }
+
+  function onRemove(index: number) {
+    if (typeof customRemove === 'function') {
+      customRemove(index);
+      return;
     }
+    const updatedList = removeItem(list!, index);
+    onChange(updatedList);
   }
 
   return (
     <div>
-      <Typography variant="h6">{props.label}</Typography>
-      <DragDropContext onBeforeCapture={() => setIsDragging(true)} onDragEnd={onDragEnd}>
+      <Typography variant="body_short_bold">{props.label}</Typography>
+      <DragDropContext onDragEnd={onDragEnd}>
         <Droppable droppableId={`container-${type}`}>
           {(provided, snapshot) => (
             <div {...provided.droppableProps} ref={provided.innerRef} style={getListStyle(snapshot.isDraggingOver)}>
               {list?.map((item, index) => (
                 <Draggable
-                  key={`draggable_item_${nanoid(4)}_${index}`}
+                  key={`draggable_item_${name || nanoid(4)}_${index}`}
                   draggableId={`draggable_item_${type}_${index}`}
                   index={index}
                 >
@@ -81,6 +83,9 @@ export const DraggableList: FC<DraggableListProps> = (props: DraggableListProps)
                     >
                       <Icon name="drag_handle" />
                       {typeof child === 'function' ? child(item, index) : null}
+                      <Button theme="simple" onClick={() => onRemove(index)}>
+                        <Icon name="clear" />
+                      </Button>
                     </div>
                   )}
                 </Draggable>
@@ -89,21 +94,8 @@ export const DraggableList: FC<DraggableListProps> = (props: DraggableListProps)
             </div>
           )}
         </Droppable>
-        {isDragging && (
-          <Droppable droppableId={`trash-${type}`}>
-            {(provided, snapshot) => (
-              <div
-                {...provided.droppableProps}
-                ref={provided.innerRef}
-                style={getDeleteBoxStyle(snapshot.isDraggingOver)}
-              >
-                <Icon name="delete_to_trash" color="#EB0037" size={32} />
-              </div>
-            )}
-          </Droppable>
-        )}
         <Stack alignItems="flex-end">
-          <Button variant="ghost" onClick={props.addItem}>
+          <Button theme="simple" onClick={props.addItem}>
             <Icon name="add" /> Add {type}
           </Button>
         </Stack>
