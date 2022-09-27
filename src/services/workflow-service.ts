@@ -1,5 +1,5 @@
-import { Workflow, WorkflowListRequest } from '../../models/v2/workflow';
-import { requests } from '../requests';
+import { Workflow, WorkflowListRequest } from '../models/v2/workflow';
+import { requests } from './requests';
 import { createFiltersString, IFilter, IPagination } from './filters';
 
 export class WorkflowService {

@@ -1,5 +1,5 @@
-import { WorkspaceList } from '../../models/v2';
-import { requests } from '../requests';
+import { WorkspaceList } from '../models/v2';
+import { requests } from './requests';
 
 export class WorkspaceService {
   public list() {

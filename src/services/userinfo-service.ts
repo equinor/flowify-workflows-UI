@@ -1,5 +1,5 @@
-import { UserInfo } from '../../models/v2/userinfo';
-import { requests } from '../requests';
+import { UserInfo } from '../models/v2/userinfo';
+import { requests } from './requests';
 
 export class UserInfoService {
   public getUserInfo() {

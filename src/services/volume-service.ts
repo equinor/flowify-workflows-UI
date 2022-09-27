@@ -1,5 +1,5 @@
-import { IVolume, IVolumesRequest, IUserVolume } from '../../models/v2/volume';
-import { requests } from '../requests';
+import { IVolume, IVolumesRequest, IUserVolume } from '../models/v2/volume';
+import { requests } from './requests';
 
 export class VolumeService {
   public list(workspace: string) {

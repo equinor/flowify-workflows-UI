@@ -1,5 +1,5 @@
-import { ISecret, ISecretsList } from '../../models/v2';
-import { requests } from '../requests';
+import { ISecret, ISecretsList } from '../models/v2';
+import { requests } from './requests';
 
 export class SecretService {
   public list(workspace: string) {
