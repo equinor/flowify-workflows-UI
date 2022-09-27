@@ -3,7 +3,7 @@ import { Icon, Progress, Snackbar } from '@equinor/eds-core-react';
 import { Card, Dialog, DialogTitle, Stack } from '@mui/material';
 import { ManifestEditor } from '../editors/manifest-editor/manifest-editor';
 import { Workflow } from '../../models/v2/workflow';
-import { services } from '../../services/v2';
+import { services } from '../../services';
 import { useNavigate } from 'react-router';
 import { Button } from '../ui';
 

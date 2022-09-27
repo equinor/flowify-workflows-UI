@@ -14,9 +14,9 @@ import {
 import { Icon, Typography } from '@equinor/eds-core-react';
 import WorkflowTableRow from './components/table-row';
 import { Workflow } from '../../models/v2/workflow';
-import { services } from '../../services/v2';
+import { services } from '../../services';
 import { CreateWorkflow } from '../creators';
-import { IFilter } from '../../services/v2/filters';
+import { IFilter } from '../../services/filters';
 import { Paper, WorkflowIcon, Button, TextField, Select } from '../ui';
 import { IPageInfo } from '../../models/v2';
 import { UserContextStore } from '../../common/context/user-context-store';

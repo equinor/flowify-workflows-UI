@@ -3,7 +3,7 @@ import { Grid, Stack } from '@mui/material';
 import { Button as EDSButton, Icon, Progress, Snackbar, Typography, Pagination } from '@equinor/eds-core-react';
 import moment from 'moment';
 import { Component, IPageInfo } from '../../models/v2';
-import { services, IFilter } from '../../services/v2';
+import { services, IFilter } from '../../services';
 import { isNotEmptyArray } from '../../common/general-helpers';
 import { ComponentCard } from './components/component-card';
 import { AddComponentToGraph, CreateComponent } from '../creators';

@@ -28,3 +28,5 @@ export const services: Services = {
   workspace: new WorkspaceService(),
   volumes: new VolumeService(),
 };
+
+export * from './filters';

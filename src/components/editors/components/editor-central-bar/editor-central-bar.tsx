@@ -5,7 +5,7 @@ import { Tooltip, Button, Menu, Icon, Typography } from '@equinor/eds-core-react
 import { EditorSettings, MarketplaceModal, FunctionalComponents } from '..';
 import { Component, Graph } from '../../../../models/v2';
 import { nanoid } from '../../helpers';
-import { services } from '../../../../services/v2';
+import { services } from '../../../../services';
 import { BUTTON_STATE } from '../../../creators/add-component-to-graph';
 
 interface EditorCentralBarProps {

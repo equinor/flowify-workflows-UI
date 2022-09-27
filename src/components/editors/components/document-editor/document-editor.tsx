@@ -6,7 +6,7 @@ import moment from 'moment';
 import { Workflow, Component, WorkflowListRequest, ComponentListRequest } from '../../../../models/v2';
 import { Button, Paper, TextField, Stack } from '../../../ui';
 import { Link } from 'react-router-dom';
-import { IFilter, IPagination } from '../../../../services/v2';
+import { IFilter, IPagination } from '../../../../services';
 
 interface DocumentEditorProps {
   document: Workflow | Component | undefined;

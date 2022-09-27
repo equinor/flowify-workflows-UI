@@ -8,7 +8,7 @@ import { JobSidebar, JobGraph } from './components';
 import { NodeDetails } from './components/job-node-preview/job-node-preview';
 import { Helmet } from 'react-helmet-async';
 import { Job } from '../../../models/v2';
-import { services } from '../../../services/v2';
+import { services } from '../../../services';
 import { useNavigate } from 'react-router';
 
 interface JobViewerProps {

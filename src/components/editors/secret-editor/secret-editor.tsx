@@ -4,7 +4,7 @@ import { Dialog } from '@mui/material';
 import { ISecret } from '../../../models/v2';
 import { Button, TextField } from '../../ui';
 import { Stack } from '../../ui/stack/stack';
-import { services } from '../../../services/v2';
+import { services } from '../../../services';
 import { Feedback } from '../components';
 
 interface SecretEditorProps {

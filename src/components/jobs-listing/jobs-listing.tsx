@@ -13,9 +13,9 @@ import {
 } from '@mui/material';
 import { Icon, Typography } from '@equinor/eds-core-react';
 import JobTableRow from './components/table-row';
-import { services } from '../../services/v2';
+import { services } from '../../services';
 import { Job, IPageInfo } from '../../models/v2';
-import { IFilter } from '../../services/v2/filters';
+import { IFilter } from '../../services/filters';
 import { Paper, Select, TextField } from '../ui';
 import { UserContextStore } from '../../common/context/user-context-store';
 

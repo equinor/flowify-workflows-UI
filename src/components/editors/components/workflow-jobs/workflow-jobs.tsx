@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import { Grid, Stack } from '@mui/material';
 import { Button, Icon, Pagination, Typography } from '@equinor/eds-core-react';
 import { IJobsListRequest, Workflow } from '../../../../models/v2';
-import { IPagination } from '../../../../services/v2';
+import { IPagination } from '../../../../services';
 import { RunWorkflow } from '../../../creators';
 import moment from 'moment';
 //import { Select, TextField } from '../../../ui';

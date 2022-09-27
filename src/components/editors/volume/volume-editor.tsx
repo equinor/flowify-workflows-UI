@@ -4,7 +4,7 @@ import { Dialog, Stack } from '@mui/material';
 import { IUserVolume, IVolume } from '../../../models/v2';
 import { MultiToggle, TextField, ToggleButton } from '../../ui';
 import Editor from '@monaco-editor/react';
-import { services } from '../../../services/v2';
+import { services } from '../../../services';
 
 interface VolumeEditorProps {
   open: boolean;

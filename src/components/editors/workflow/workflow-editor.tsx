@@ -16,7 +16,7 @@ import {
 } from '../components';
 import { createGraphElements, fetchInitialSubComponents, INode } from '../helpers';
 import { Component, IJobsListRequest, IVolume, WorkflowListRequest } from '../../../models/v2';
-import { IFilter, IPagination, services } from '../../../services/v2';
+import { IFilter, IPagination, services } from '../../../services';
 import { IfConfig } from '../components/functional-components/if/if-config';
 
 interface IWorkflowEditor {

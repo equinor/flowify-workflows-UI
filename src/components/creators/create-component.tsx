@@ -3,7 +3,7 @@ import { Dialog, Stack } from '@mui/material';
 import { Button as EDSButton, Progress, Snackbar } from '@equinor/eds-core-react';
 import { useNavigate } from 'react-router-dom';
 import { Component } from '../../models/v2';
-import { services } from '../../services/v2';
+import { services } from '../../services';
 import { Button, TextField } from '../ui';
 
 const makeComponent = (): Component => ({
