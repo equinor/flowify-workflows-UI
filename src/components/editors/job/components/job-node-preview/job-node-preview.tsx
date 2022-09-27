@@ -44,7 +44,7 @@ export const NodeDetails: React.FC<NodeDetailsProps> = (props: NodeDetailsProps)
     const selectedNode = workflow && workflow.status && workflow.status.nodes && workflow.status.nodes[nodeId];
     const podName = ensurePodName(workflow, selectedNode!, nodeId);
 
-    services.workflows.getContainerLogs(workflow, podName, nodeId, 'main', '', false).subscribe({
+    services.workflows_deprecated.getContainerLogs(workflow, podName, nodeId, 'main', '', false).subscribe({
       next: (next) => {
         setLoading(false);
         if (next) {

@@ -1,5 +1,5 @@
-import { Component, ComponentListRequest } from '../../models/v2';
-import { requests } from '../requests';
+import { Component, ComponentListRequest } from '../models/v2';
+import { requests } from './requests';
 import { createFiltersString, IFilter, IPagination } from './filters';
 
 export class ComponentService {

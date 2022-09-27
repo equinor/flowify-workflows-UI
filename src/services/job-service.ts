@@ -1,8 +1,8 @@
-import { IJobsListRequest, Job, JobSubmit } from '../../models/v2';
-import { requests } from '../requests';
+import { IJobsListRequest, Job, JobSubmit } from '../models/v2';
+import { requests } from './requests';
 import { Observable, map, filter } from 'rxjs';
-import { kubernetes } from '../../models';
-import { WorkflowJob } from '../../models/workflow-jobs';
+import { kubernetes } from '../models';
+import { WorkflowJob } from '../models/workflow-jobs';
 import { IFilter, createFiltersString, IPagination } from './filters';
 
 export class JobService {
