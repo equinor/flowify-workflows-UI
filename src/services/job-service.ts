@@ -8,22 +8,22 @@ import { IFilter, createFiltersString, IPagination } from './filters';
 export class JobService {
   public list(filters?: IFilter[], pagination?: IPagination, sorting?: string) {
     const parsedFilters = filters ? createFiltersString(filters, pagination, sorting) : '';
-    return requests.get(`api/v2/jobs/${parsedFilters}`).then((res) => res.body as IJobsListRequest);
+    return requests.get(`api/v1/jobs/${parsedFilters}`).then((res) => res.body as IJobsListRequest);
   }
 
   public get(id: string) {
-    return requests.get(`api/v2/jobs/${id}`).then((res) => res.body as Job);
+    return requests.get(`api/v1/jobs/${id}`).then((res) => res.body as Job);
   }
 
   public submit(job: JobSubmit) {
     return requests
-      .post(`api/v2/jobs/`)
+      .post(`api/v1/jobs/`)
       .send({ job })
       .then((res) => res.headers.location);
   }
 
   public watch(id: string): Observable<kubernetes.WatchEvent<WorkflowJob>> {
-    const url = `api/v2/jobs/${id}/events/`;
+    const url = `api/v1/jobs/${id}/events/`;
     return requests.loadEventSource(url).pipe(
       filter((d) => d !== null),
       map((data) => JSON.parse(data) as kubernetes.WatchEvent<WorkflowJob>),
@@ -32,14 +32,14 @@ export class JobService {
 
   public delete(uid: string) {
     return requests
-      .delete(`api/v2/jobs/${uid}`)
+      .delete(`api/v1/jobs/${uid}`)
       .then((res) => res.body as string)
       .catch((reason) => reason);
   }
 
   public terminate(uid: string) {
     return requests
-      .post(`api/v2/jobs/${uid}/terminate`)
+      .post(`api/v1/jobs/${uid}/terminate`)
       .then((res) => res.body as string)
       .catch((reason) => reason);
   }
