@@ -13,11 +13,15 @@ import {
   WorkflowJobs,
   MainEditor,
   Feedback,
+  ValidationModal,
 } from '../components';
 import { createGraphElements, fetchInitialSubComponents, INode } from '../helpers';
 import { Component, IJobsListRequest, IVolume, WorkflowListRequest } from '../../../models/v2';
 import { IFilter, IPagination, services } from '../../../services/v2';
 import { IfConfig } from '../components/functional-components/if/if-config';
+import { isNotEmptyArray } from '../../../common';
+import { checkWorkflowValidtion } from '../../../common/validation/workflow-validation';
+import { IValidationError } from '../components/validaiton-modal/types';
 
 interface IWorkflowEditor {
   uid: string | null;
@@ -41,8 +45,11 @@ const WorkflowEditor: FC<IWorkflowEditor> = (props: IWorkflowEditor) => {
   const [versions, setVersions] = useState<WorkflowListRequest>();
   const [jobs, setJobs] = useState<IJobsListRequest>();
   const [workflow, setWorkflow] = useState<Workflow | undefined>();
+  const [initialWorkflow, setInitialWorkflow] = useState<Workflow | undefined>();
   const [workspaceSecrets, setWorkspaceSecrets] = useState<string[]>([]);
   const [workspaceVolumes, setWorkspaceVolumes] = useState<IVolume[]>([]);
+  const [validationErrors, setValidationErrors] = useState<IValidationError[]>();
+  const [validationModal, setValidationModal] = useState<boolean>(false);
   const navigate = useNavigate();
 
   const fetchWorkflowVersions = useCallback(
@@ -63,8 +70,17 @@ const WorkflowEditor: FC<IWorkflowEditor> = (props: IWorkflowEditor) => {
     [uid],
   );
 
+  async function onValidate() {
+    const validationErrors = await checkWorkflowValidtion(workflow, initialWorkflow, workspaceSecrets);
+    setValidationErrors(validationErrors);
+    if (isNotEmptyArray(validationErrors)) {
+      return true;
+    }
+    return false;
+  }
+
   useEffect(() => {
-    console.log('component onMount');
+    console.log('workflow onMount');
     if (uid) {
       services.workflows
         .get(uid, version)
@@ -73,6 +89,7 @@ const WorkflowEditor: FC<IWorkflowEditor> = (props: IWorkflowEditor) => {
             fetchInitialSubComponents(res?.component).then((subs) => {
               setSubcomponents(subs);
               setComponent(res.component);
+              setInitialWorkflow(res);
               setWorkflow(res);
             });
           }
@@ -112,6 +129,7 @@ const WorkflowEditor: FC<IWorkflowEditor> = (props: IWorkflowEditor) => {
         setNodes(res.nodes);
         setEdges(res.edges);
       });
+      onValidate();
       setMounted(true);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -127,7 +145,12 @@ const WorkflowEditor: FC<IWorkflowEditor> = (props: IWorkflowEditor) => {
     }
   }, [component]);
 
-  function onSave() {
+  async function onSave() {
+    const hasErrors = await onValidate();
+    if (hasErrors) {
+      return;
+    }
+
     if (workflow && !loading) {
       setLoading(true);
       services.workflows
@@ -200,6 +223,12 @@ const WorkflowEditor: FC<IWorkflowEditor> = (props: IWorkflowEditor) => {
         </title>
       </Helmet>
       <Feedbacks feedback={feedback} setFeedback={setFeedback} />
+      <ValidationModal
+        open={validationModal}
+        onClose={() => setValidationModal(false)}
+        validationErrors={validationErrors}
+        onValidate={onValidate}
+      />
       <MapConfig
         component={component}
         mapConfigComponent={configComponent?.id}
@@ -228,7 +257,15 @@ const WorkflowEditor: FC<IWorkflowEditor> = (props: IWorkflowEditor) => {
         workspaceVolumes={workspaceVolumes}
       />
       <Stack direction="row" justifyContent="stretch" sx={{ flexGrow: '1', minHeight: '0', flexWrap: 'nowrap' }}>
-        <EditorMenu active={activePage} setActive={setActivePage} isWorkflow onSave={onSave} dirty={dirty} />
+        <EditorMenu
+          active={activePage}
+          setActive={setActivePage}
+          isWorkflow
+          onSave={onSave}
+          dirty={dirty}
+          openValidation={() => setValidationModal(true)}
+          errorsLength={validationErrors?.length || 0}
+        />
         {activePage === 'runs' && (
           <WorkflowJobs workflow={workflow} secrets={workspaceSecrets} jobs={jobs} fetchJobs={fetchJobs} />
         )}

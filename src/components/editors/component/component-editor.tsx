@@ -13,8 +13,11 @@ import {
   DocumentEditor,
   MainEditor,
   Feedback,
+  ValidationModal,
 } from '../components';
 import { createGraphElements, fetchInitialSubComponents, INode } from '../helpers';
+import { checkComponentValidtion, isNotEmptyArray } from '../../../common';
+import { IValidationError } from '../components/validaiton-modal/types';
 
 interface IEditor {
   uid: string | null;
@@ -32,12 +35,15 @@ const Editor: React.FC<IEditor> = (props: IEditor) => {
   const [activePage, setActivePage] = useState<'editor' | 'document' | 'runs'>('editor');
   const [configComponent, setConfigComponent] = useState<{ id: string; type: 'map' | 'if' }>();
   const [component, setComponent] = useState<Component | undefined>();
+  const [initialComponent, setInitialComponent] = useState<Component | undefined>();
   const [dirty, setDirty] = useState<boolean>(false);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
   const [feedback, setFeedback] = useState<Feedback>();
   const [loading, setLoading] = useState<boolean>(true);
   const [mounted, setMounted] = useState<boolean>(false);
   const [nodes, setNodes, onNodesChange] = useNodesState<INode>([]);
+  const [validationErrors, setValidationErrors] = useState<IValidationError[]>();
+  const [validationModal, setValidationModal] = useState<boolean>(false);
   const [versions, setVersions] = useState<ComponentListRequest>();
   const [parameterConfig, setParameterConfig] = useState<{ type: 'secret' | 'volume'; id: string }>();
   const [subcomponents, setSubcomponents] = useState<Component[]>();
@@ -62,6 +68,7 @@ const Editor: React.FC<IEditor> = (props: IEditor) => {
           fetchInitialSubComponents(res).then((subs) => {
             setSubcomponents(subs);
             setComponent(res);
+            setInitialComponent(res);
             setLoading(false);
           });
         })
@@ -76,6 +83,7 @@ const Editor: React.FC<IEditor> = (props: IEditor) => {
 
   useEffect(() => {
     if (component) {
+      var startTime = performance.now();
       if (mounted) {
         setDirty(true);
       }
@@ -87,12 +95,29 @@ const Editor: React.FC<IEditor> = (props: IEditor) => {
         setNodes(res.nodes);
         setEdges(res.edges);
       });
+      onValidate();
       setMounted(true);
+      var endTime = performance.now();
+      console.log(`Call to doSomething took ${endTime - startTime} milliseconds`);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [component]);
 
-  function onSave() {
+  async function onValidate() {
+    const validationErrors = await checkComponentValidtion(component, initialComponent);
+    setValidationErrors(validationErrors);
+    if (isNotEmptyArray(validationErrors)) {
+      return true;
+    }
+    return false;
+  }
+
+  async function onSave() {
+    const hasErrors = await onValidate();
+    if (hasErrors) {
+      return;
+    }
+
     // TODO: Check if latest version
     if (component && !loading) {
       setLoading(true);
@@ -167,6 +192,12 @@ const Editor: React.FC<IEditor> = (props: IEditor) => {
         <title>{component?.name || ''} - Component editor - Flowify</title>
       </Helmet>
       <Feedbacks feedback={feedback} setFeedback={setFeedback} />
+      <ValidationModal
+        open={validationModal}
+        onClose={() => setValidationModal(false)}
+        validationErrors={validationErrors}
+        onValidate={onValidate}
+      />
       <MapConfig
         component={component}
         mapConfigComponent={configComponent?.id}
@@ -184,7 +215,14 @@ const Editor: React.FC<IEditor> = (props: IEditor) => {
         type="component"
       />
       <Stack direction="row" justifyContent="stretch" sx={{ flexGrow: '1', minHeight: '0', flexWrap: 'nowrap' }}>
-        <EditorMenu active={activePage} setActive={setActivePage} onSave={onSave} dirty={dirty} />
+        <EditorMenu
+          active={activePage}
+          setActive={setActivePage}
+          onSave={onSave}
+          dirty={dirty}
+          openValidation={() => setValidationModal(true)}
+          errorsLength={validationErrors?.length || 0}
+        />
         {activePage === 'document' && (
           <DocumentEditor
             document={component}
