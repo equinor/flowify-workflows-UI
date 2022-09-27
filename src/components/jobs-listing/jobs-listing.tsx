@@ -47,7 +47,7 @@ const JobsListing: FC<IJobsListing> = (props: IJobsListing) => {
       jobsFilters.push({ name: searchParam, type: 'SEARCH', value: search });
     }
     if (values.createdBy !== 'default') {
-      jobsFilters.push({ name: 'modifiedBy', type: 'EQUALTO', value: user.userInfo.email });
+      jobsFilters.push({ name: 'modifiedBy.email', type: 'EQUALTO', value: user.userInfo.email });
     }
     const pagination = { limit: 10, offset: page * 10 };
     const sorting =
@@ -67,7 +67,7 @@ const JobsListing: FC<IJobsListing> = (props: IJobsListing) => {
 
   const headers = [
     { label: 'Job ID', id: 'uid', sortable: true },
-    { label: 'Submitted by', id: 'modifiedBy', sortable: true },
+    { label: 'Submitted by', id: 'modifiedBy.email', sortable: true },
     { label: 'Submitted', id: 'timestamp', sortable: true },
     { label: 'Name', id: 'name', sortable: true },
     { label: 'Description', id: 'description', sortable: false },

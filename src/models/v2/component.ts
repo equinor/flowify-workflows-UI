@@ -116,7 +116,10 @@ export interface Graph extends ComponentImplementationBase {
 export interface Metadata {
   name?: string;
   description?: string;
-  modifiedBy?: string;
+  modifiedBy?: {
+    oid?: string;
+    email?: string;
+  };
   uid?: string;
   previous?: CRef;
   timestamp?: Time;

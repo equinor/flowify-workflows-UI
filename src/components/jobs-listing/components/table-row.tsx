@@ -41,7 +41,7 @@ const TableRow: FC<ITableRow> = (props: ITableRow) => {
         </TableCell>
         <TableCell style={{ paddingTop: '4px' }}>{/* {progress(row?.status?.phase)} */}</TableCell>
         <TableCell>{row.uid || ''}</TableCell>
-        <TableCell>{row.modifiedBy}</TableCell>
+        <TableCell>{row.modifiedBy?.email}</TableCell>
         <TableCell>{<Timestamp date={row.timestamp} />}</TableCell>
         <TableCell>{row.name || ''}</TableCell>
         <TableCell>

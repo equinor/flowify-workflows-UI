@@ -114,7 +114,7 @@ export const DocumentEditor: FC<DocumentEditorProps> = (props: DocumentEditorPro
                 )}
               </Stack>
               <Typography variant="caption">
-                {moment(version?.timestamp).format('MMMM Do YYYY, H:mm:ss')} by {version?.modifiedBy}
+                {moment(version?.timestamp).format('MMMM Do YYYY, H:mm:ss')} by {version?.modifiedBy?.email}
               </Typography>
               <Typography variant="body_short">{version?.description}</Typography>
               {document?.version?.current !== version?.version?.current && (
@@ -169,7 +169,7 @@ export const DocumentEditor: FC<DocumentEditorProps> = (props: DocumentEditorPro
                 </StyledTextButton>
               )}
               <Typography variant="body_long">
-                <b>Author</b> <br /> {document?.modifiedBy}
+                <b>Author</b> <br /> {document?.modifiedBy?.email}
               </Typography>
               {document?.type === 'workflow' && (
                 <Typography variant="body_long">

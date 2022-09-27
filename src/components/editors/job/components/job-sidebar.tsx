@@ -67,7 +67,7 @@ const JobSidebar: FC<IJobSidebar> = (props: IJobSidebar) => {
           Submitted by
         </Grid>
         <Grid item xs={4}>
-          {job?.modifiedBy}
+          {job?.modifiedBy?.email}
         </Grid>
       </Grid>
       <Stack spacing={1}>

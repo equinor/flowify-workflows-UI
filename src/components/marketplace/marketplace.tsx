@@ -38,7 +38,7 @@ export const Marketplace: FC<MarketplaceProps> = (props: MarketplaceProps) => {
     function createFilterObjects() {
       const filters: IFilter[] = [];
       if (values.createdBy !== 'default') {
-        filters.push({ name: 'modifiedBy', type: 'EQUALTO', value: user.userInfo.email });
+        filters.push({ name: 'modifiedBy.email', type: 'EQUALTO', value: user.userInfo.email });
       }
       if (values.type !== 'default') {
         filters.push({ name: 'implementation.type', type: 'EQUALTO', value: values.type });

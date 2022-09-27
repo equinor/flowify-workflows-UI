@@ -55,7 +55,7 @@ export const WorkflowJobs: FC<WorkflowJobsProps> = (props: WorkflowJobsProps) =>
                 <Typography variant="h5">
                   {job.uid} {job.name}
                 </Typography>
-                <Typography variant="body_short">Submitted by {job?.modifiedBy}</Typography>
+                <Typography variant="body_short">Submitted by {job?.modifiedBy?.email}</Typography>
                 <Typography variant="caption">
                   <Timestamp date={job?.timestamp} /> ({moment(job?.timestamp).format('MMMM Do YYYY, H:mm:ss')})
                 </Typography>
