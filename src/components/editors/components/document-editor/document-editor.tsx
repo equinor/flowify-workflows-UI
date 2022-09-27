@@ -148,8 +148,13 @@ export const DocumentEditor: FC<DocumentEditorProps> = (props: DocumentEditorPro
         <Stack padding={2} spacing={2} justifyContent="space-between" style={{ minHeight: '100%' }}>
           <Stack direction="row" alignItems="flex-start" justifyContent="space-between" spacing={2}>
             <Stack spacing={1} grow={1}>
-              {editName ? (
-                <MUITextField autoFocus defaultValue={document?.name} onBlur={(event: any) => updateName(event)} />
+              {editName || !document?.name ? (
+                <MUITextField
+                  autoFocus
+                  defaultValue={document?.name}
+                  onBlur={(event: any) => updateName(event)}
+                  placeholder={`Enter ${document?.type} name`}
+                />
               ) : (
                 <StyledTextButton onClick={() => setEditName(true)}>
                   <Typography variant="h3">{document?.name}</Typography>

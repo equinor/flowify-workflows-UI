@@ -105,7 +105,11 @@ export const Parameter: FC<ParameterProps> = (props: ParameterProps) => {
             </div>
           </Stack>
           <Formik
-            initialValues={{ ...props.parameter, value: props?.parameter?.userdata?.value || '' }}
+            initialValues={{
+              ...props.parameter,
+              value: props?.parameter?.userdata?.value || '',
+              description: props?.parameter?.userdata?.description || '',
+            }}
             onSubmit={onClose}
             validationSchema={validationSchema}
             validateOnBlur

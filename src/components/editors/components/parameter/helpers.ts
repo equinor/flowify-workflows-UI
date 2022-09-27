@@ -29,6 +29,7 @@ function updateParameter(list: Data[] | undefined, index: number, parameter: Dat
     userdata: {
       ...parameter?.userdata,
       value: values?.value,
+      description: values?.description,
     },
   };
   return list;
