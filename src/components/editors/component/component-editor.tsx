@@ -4,7 +4,7 @@ import { Stack } from '@mui/material';
 import { useEdgesState, useNodesState } from 'react-flow-renderer';
 import { Helmet } from 'react-helmet-async';
 import { Component, ComponentListRequest } from '../../../models/v2';
-import { IFilter, IPagination, services } from '../../../services/v2';
+import { IFilter, IPagination, services } from '../../../services';
 import {
   MapConfig,
   SecretsVolumesConfig,

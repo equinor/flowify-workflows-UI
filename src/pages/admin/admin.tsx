@@ -3,7 +3,7 @@ import { SelectChangeEvent, Stack, Table, TableBody, TableCell, TableHead, Table
 import { Icon, Typography } from '@equinor/eds-core-react';
 import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
-import { services } from '../../services/v2';
+import { services } from '../../services';
 import { Container, Layout } from '../../layout';
 import { ISecret, ISecretsList, IUserVolume, IVolume, Workspace, WorkspaceList } from '../../models/v2';
 import { Breadcrumbs, Select, Button } from '../../components/ui';

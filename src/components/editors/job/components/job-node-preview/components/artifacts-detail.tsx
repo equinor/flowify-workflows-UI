@@ -20,7 +20,13 @@ export const ArtifactsDetail: React.FC<ArtifactsProps> = ({
   const artifactsDetails =
     artifacts?.map((artifact) =>
       Object.assign({}, artifact, {
-        downloadUrl: services.workflows.getArtifactDownloadUrl(workflow, node.id, artifact.name, false, isInput),
+        downloadUrl: services.workflows_deprecated.getArtifactDownloadUrl(
+          workflow,
+          node.id,
+          artifact.name,
+          false,
+          isInput,
+        ),
         stepName: node.name,
         dateCreated: node.finishedAt,
         nodeName: node.name,

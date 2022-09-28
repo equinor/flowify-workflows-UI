@@ -3,7 +3,7 @@ import { Grid, Stack } from '@mui/material';
 import { Button as EDSButton, Icon, Progress, Snackbar, Typography, Pagination } from '@equinor/eds-core-react';
 import moment from 'moment';
 import { Component, IPageInfo } from '../../models/v2';
-import { services, IFilter } from '../../services/v2';
+import { services, IFilter } from '../../services';
 import { isNotEmptyArray } from '../../common/general-helpers';
 import { ComponentCard } from './components/component-card';
 import { AddComponentToGraph, CreateComponent } from '../creators';
@@ -38,7 +38,7 @@ export const Marketplace: FC<MarketplaceProps> = (props: MarketplaceProps) => {
     function createFilterObjects() {
       const filters: IFilter[] = [];
       if (values.createdBy !== 'default') {
-        filters.push({ name: 'modifiedBy', type: 'EQUALTO', value: user.userInfo.email });
+        filters.push({ name: 'modifiedBy.email', type: 'EQUALTO', value: user.userInfo.email });
       }
       if (values.type !== 'default') {
         filters.push({ name: 'implementation.type', type: 'EQUALTO', value: values.type });

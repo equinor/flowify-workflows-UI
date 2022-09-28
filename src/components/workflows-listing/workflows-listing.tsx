@@ -14,9 +14,9 @@ import {
 import { Icon, Typography } from '@equinor/eds-core-react';
 import WorkflowTableRow from './components/table-row';
 import { Workflow } from '../../models/v2/workflow';
-import { services } from '../../services/v2';
+import { services } from '../../services';
 import { CreateWorkflow } from '../creators';
-import { IFilter } from '../../services/v2/filters';
+import { IFilter } from '../../services/filters';
 import { Paper, WorkflowIcon, Button, TextField, Select } from '../ui';
 import { IPageInfo } from '../../models/v2';
 import { UserContextStore } from '../../common/context/user-context-store';
@@ -51,7 +51,7 @@ const WorkflowsListing: FC<IWorkflowsListing> = (props: IWorkflowsListing) => {
       workflowFilters.push({ name: searchParam, type: 'SEARCH', value: search });
     }
     if (values.createdBy !== 'default') {
-      workflowFilters.push({ name: 'modifiedBy', type: 'EQUALTO', value: user.userInfo.email });
+      workflowFilters.push({ name: 'modifiedBy.email', type: 'EQUALTO', value: user.userInfo.email });
     }
     const pagination = { limit: 10, offset: page * 10 };
     const sorting =
@@ -78,7 +78,7 @@ const WorkflowsListing: FC<IWorkflowsListing> = (props: IWorkflowsListing) => {
     { label: 'Name', id: 'name', sortable: true },
     { label: 'Description', id: 'description', sortable: false },
     { label: 'Version', id: 'version', sortable: false },
-    { label: 'Last modified by', id: 'modifiedBy', sortable: true },
+    { label: 'Last modified by', id: 'modifiedBy.email', sortable: true },
     { label: 'Last modified', id: 'timestamp', sortable: true },
     { label: 'Actions', id: 'actions', sortable: false },
   ];
