@@ -1,6 +1,6 @@
 import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { UserInfo } from '../../models/v2';
-import { services } from '../../services/v2';
+import { services } from '../../services';
 
 export const initialUserState: UserInfo = {
   name: '',

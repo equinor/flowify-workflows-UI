@@ -33,7 +33,7 @@ export const ComponentCard: FC<IComponentCard> = (props: IComponentCard) => {
               </Stack>
               <Typography variant="caption">
                 Last updated: <Timestamp date={component?.timestamp} />{' '}
-                {component?.modifiedBy ? <>by {component?.modifiedBy}</> : ''}
+                {component?.modifiedBy?.email ? <>by {component?.modifiedBy?.email}</> : ''}
               </Typography>
             </Stack>
             <Typography variant="body_short">{component?.description}</Typography>

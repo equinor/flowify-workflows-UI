@@ -20,7 +20,7 @@ const TableRow: FC<ITableRow> = (props: ITableRow) => {
       <TableCell>
         <Chip style={{ fontSize: '1rem' }}>v{row?.version?.current}</Chip>
       </TableCell>
-      <TableCell>{row?.modifiedBy}</TableCell>
+      <TableCell>{row?.modifiedBy?.email}</TableCell>
       <TableCell>
         <Timestamp date={row?.timestamp!} />
       </TableCell>

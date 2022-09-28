@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import { Grid, Stack } from '@mui/material';
 import { Button, Icon, Pagination, Typography } from '@equinor/eds-core-react';
 import { IJobsListRequest, Workflow } from '../../../../models/v2';
-import { IPagination } from '../../../../services/v2';
+import { IPagination } from '../../../../services';
 import { RunWorkflow } from '../../../creators';
 import moment from 'moment';
 //import { Select, TextField } from '../../../ui';
@@ -55,7 +55,7 @@ export const WorkflowJobs: FC<WorkflowJobsProps> = (props: WorkflowJobsProps) =>
                 <Typography variant="h5">
                   {job.uid} {job.name}
                 </Typography>
-                <Typography variant="body_short">Submitted by {job?.modifiedBy}</Typography>
+                <Typography variant="body_short">Submitted by {job?.modifiedBy?.email}</Typography>
                 <Typography variant="caption">
                   <Timestamp date={job?.timestamp} /> ({moment(job?.timestamp).format('MMMM Do YYYY, H:mm:ss')})
                 </Typography>

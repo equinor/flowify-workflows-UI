@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router';
 import { Container, Layout } from './layout';
 import { Workspace, WorkspaceList } from './models/v2';
-import { services } from './services/v2';
+import { services } from './services';
 
 interface AuthContextInterface {
   items?: Workspace[];

@@ -30,7 +30,7 @@ export const NodePreview: FC<NodePreviewProps> = (props: NodePreviewProps) => {
           <Stack spacing={1}>
             <Typography variant="body_short_bold">Author</Typography>
             <Typography variant="body_short_link">
-              <a href={`mailto: data?.author`}>{data?.component?.modifiedBy}</a>
+              <a href={`mailto: ${data?.component?.modifiedBy?.email}`}>{data?.component?.modifiedBy?.email}</a>
             </Typography>
           </Stack>
         )}

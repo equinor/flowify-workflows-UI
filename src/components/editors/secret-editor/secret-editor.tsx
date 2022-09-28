@@ -4,7 +4,7 @@ import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import { ISecret } from '../../../models/v2';
 import { Stack } from '../../ui/stack/stack';
-import { services } from '../../../services/v2';
+import { services } from '../../../services';
 import { Feedback } from '../components';
 import { TextInputFormik } from '../../form/formik/text-input-formik';
 import { Submitter } from './components/submitter';

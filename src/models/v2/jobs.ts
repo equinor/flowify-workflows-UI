@@ -11,7 +11,10 @@ export interface Job {
   workflow: Workflow;
   name?: string;
   description?: string;
-  modifiedBy?: string;
+  modifiedBy?: {
+    email?: string;
+    oid?: string;
+  };
   uid?: string;
   previous?: string;
   timestamp?: string;

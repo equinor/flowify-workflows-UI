@@ -3,7 +3,7 @@ import { Dialog, Stack, TextField } from '@mui/material';
 import { Icon, Typography } from '@equinor/eds-core-react';
 import { Component, IVolume, Job, JobSubmit, Workflow } from '../../models/v2';
 import { Parameter } from '../editors/components';
-import { services } from '../../services/v2';
+import { services } from '../../services';
 import { useParams, useNavigate } from 'react-router-dom';
 import { isNotEmptyArray } from '../../common';
 import { Button } from '../ui';

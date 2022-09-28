@@ -1,6 +1,6 @@
 import React, { FC, useEffect, useState } from 'react';
 import { Icon, Progress } from '@equinor/eds-core-react';
-import { services } from '../../services/v2';
+import { services } from '../../services';
 import { Workspace } from '../../models/v2';
 import { DashboardListing } from '../listings/dashboard-listing';
 

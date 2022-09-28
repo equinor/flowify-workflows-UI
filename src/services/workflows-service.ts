@@ -1,134 +1,10 @@
 import { Observable, map, filter, from, of, switchMap, mergeMap } from 'rxjs';
-import {
-  kubernetes,
-  Workflow,
-  WorkflowList,
-  WorkflowPhase,
-  SubmitOpts,
-  Parameter,
-  LogEntry,
-  NodeStatus,
-  NODE_PHASE,
-  Annotation,
-} from '../models';
-import { Pagination } from './pagination';
+import { Workflow, WorkflowPhase, LogEntry, NodeStatus, NODE_PHASE } from '../models';
 import { requests } from './requests';
 
 export class WorkflowsService {
-  public create(workflow: Workflow, namespace: string) {
-    return requests
-      .post(`api/v1/workflows/${namespace}`)
-      .send({ workflow })
-      .then((res) => res.body as Workflow);
-  }
-
-  public list(
-    namespace: string,
-    phases: WorkflowPhase[],
-    labels: string[],
-    pagination: Pagination,
-    fields = [
-      'metadata',
-      'items.metadata.uid',
-      'items.metadata.name',
-      'items.metadata.namespace',
-      'items.metadata.creationTimestamp',
-      'items.metadata.labels',
-      'items.status.phase',
-      'items.status.message',
-      'items.status.finishedAt',
-      'items.status.startedAt',
-      'items.status.estimatedDuration',
-      'items.status.progress',
-      'items.spec.suspend',
-    ],
-  ) {
-    const params = this.queryParams({ phases, labels });
-    if (pagination) {
-      if (pagination.offset) {
-        params.push(`listOptions.continue=${pagination.offset}`);
-      }
-      if (pagination.limit) {
-        params.push(`listOptions.limit=${pagination.limit}`);
-      }
-    }
-    params.push(`fields=${fields.join(',')}`);
-    return requests.get(`api/v1/workflows/${namespace}?${params.join('&')}`).then((res) => res.body as WorkflowList);
-  }
-
   public get = (namespace: string, name: string) =>
     requests.get(`api/v1/workflows/${namespace}/${name}`).then((res) => res.body as Workflow);
-
-  public submit(kind: string, name: string, namespace: string, submitOptions?: SubmitOpts, version?: string) {
-    const textOpts = submitOptions
-      ? {
-          parameters: submitOptions.parameters?.map((p: Parameter) => `${p.name}=${p.value}`),
-          labels: submitOptions.labels?.join(','),
-          annotations: submitOptions.annotations?.map((a: Annotation) => `${a.name}=${a.value}`).join(','),
-          entryPoint: submitOptions.entryPoint,
-        }
-      : undefined;
-    return requests
-      .post(`api/v1/workflows/${namespace}/submit`)
-      .send({ namespace, resourceKind: kind, resourceName: name, submitOptions: textOpts, version: version })
-      .then((res) => res.body as Workflow);
-  }
-
-  public watch(filterParam: {
-    namespace?: string;
-    name?: string;
-    phases?: Array<WorkflowPhase>;
-    labels?: Array<string>;
-    resourceVersion?: string;
-  }): Observable<kubernetes.WatchEvent<Workflow>> {
-    const url = `api/v1/workflow-events/${filterParam.namespace || ''}?${this.queryParams(filterParam).join('&')}`;
-    return requests.loadEventSource(url).pipe(
-      filter((d) => d !== null),
-      map((data) => JSON.parse(data).result as kubernetes.WatchEvent<Workflow>),
-    );
-  }
-
-  // public watchEvents(namespace: string, fieldSelector: string): Observable<Event> {
-  //     return requests.loadEventSource(`api/v1/stream/events/${namespace}?listOptions.fieldSelector=${fieldSelector}`).map(data => data && (JSON.parse(data).result as Event));
-  // }
-
-  public watchFields(filterParam: {
-    namespace?: string;
-    name?: string;
-    phases?: Array<WorkflowPhase>;
-    labels?: Array<string>;
-    resourceVersion?: string;
-  }): Observable<kubernetes.WatchEvent<Workflow>> {
-    const params = this.queryParams(filterParam);
-    const fields = [
-      'result.object.metadata.name',
-      'result.object.metadata.namespace',
-      'result.object.metadata.resourceVersion',
-      'result.object.metadata.creationTimestamp',
-      'result.object.metadata.uid',
-      'result.object.status.finishedAt',
-      'result.object.status.phase',
-      'result.object.status.message',
-      'result.object.status.startedAt',
-      'result.object.status.estimatedDuration',
-      'result.object.status.progress',
-      'result.type',
-      'result.object.metadata.labels',
-      'result.object.metadata.annotations',
-      'result.object.spec.suspend',
-    ];
-    params.push(`fields=${fields.join(',')}`);
-    const url = `api/v1/workflow-events/${filterParam.namespace || ''}?${params.join('&')}`;
-    return requests.loadEventSource(url).pipe(
-      filter((d) => d !== null),
-      map((data) => JSON.parse(data).result as kubernetes.WatchEvent<Workflow>),
-    );
-    // .pipe data => data && (JSON.parse(data).result as kubernetes.WatchEvent<Workflow>) //.map(data => data && (JSON.parse(data).result as kubernetes.WatchEvent<Workflow>));
-  }
-
-  public resubmit(name: string, namespace: string) {
-    return requests.put(`api/v1/workflows/${namespace}/${name}/resubmit`).then((res) => res.body as Workflow);
-  }
 
   public getContainerLogsFromCluster(
     workflow: Workflow,
@@ -164,26 +40,6 @@ export class WorkflowsService {
   }
 
   // the following code is heavily inspired by argo :)
-  private queryParams(filter: {
-    namespace?: string;
-    name?: string;
-    phases?: Array<WorkflowPhase>;
-    labels?: Array<string>;
-    resourceVersion?: string;
-  }) {
-    const queryParams: string[] = [];
-    if (filter.name) {
-      queryParams.push(`listOptions.fieldSelector=metadata.name=${filter.name}`);
-    }
-    const labelSelector = this.labelSelectorParams(filter.phases, filter.labels);
-    if (labelSelector.length > 0) {
-      queryParams.push(`listOptions.labelSelector=${labelSelector}`);
-    }
-    if (filter.resourceVersion) {
-      queryParams.push(`listOptions.resourceVersion=${filter.resourceVersion}`);
-    }
-    return queryParams;
-  }
 
   private labelSelectorParams(phases?: Array<WorkflowPhase>, labels?: Array<string>) {
     let labelSelector = '';

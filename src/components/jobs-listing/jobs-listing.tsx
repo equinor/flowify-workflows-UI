@@ -13,9 +13,9 @@ import {
 } from '@mui/material';
 import { Icon, Typography } from '@equinor/eds-core-react';
 import JobTableRow from './components/table-row';
-import { services } from '../../services/v2';
+import { services } from '../../services';
 import { Job, IPageInfo } from '../../models/v2';
-import { IFilter } from '../../services/v2/filters';
+import { IFilter } from '../../services/filters';
 import { Paper, Select, TextField } from '../ui';
 import { UserContextStore } from '../../common/context/user-context-store';
 
@@ -47,7 +47,7 @@ const JobsListing: FC<IJobsListing> = (props: IJobsListing) => {
       jobsFilters.push({ name: searchParam, type: 'SEARCH', value: search });
     }
     if (values.createdBy !== 'default') {
-      jobsFilters.push({ name: 'modifiedBy', type: 'EQUALTO', value: user.userInfo.email });
+      jobsFilters.push({ name: 'modifiedBy.email', type: 'EQUALTO', value: user.userInfo.email });
     }
     const pagination = { limit: 10, offset: page * 10 };
     const sorting =
@@ -67,7 +67,7 @@ const JobsListing: FC<IJobsListing> = (props: IJobsListing) => {
 
   const headers = [
     { label: 'Job ID', id: 'uid', sortable: true },
-    { label: 'Submitted by', id: 'modifiedBy', sortable: true },
+    { label: 'Submitted by', id: 'modifiedBy.email', sortable: true },
     { label: 'Submitted', id: 'timestamp', sortable: true },
     { label: 'Name', id: 'name', sortable: true },
     { label: 'Description', id: 'description', sortable: false },
