@@ -24,26 +24,19 @@ export class ComponentService {
     return requests
       .put(`api/v1/components/${id}`)
       .send({ component })
-      .then(
-        (res) => res.body as Component,
-        (reason) => reason,
-      );
+      .then((res) => res.body as Component)
+      .catch((error) => error);
   }
 
   public update(component: Component, id: string) {
     return requests
       .patch(`api/v1/components/${id}`)
       .send({ component })
-      .then(
-        (res) => res.body as Component,
-        (reason) => reason,
-      );
+      .then((res) => res.body as Component)
+      .catch((error) => error);
   }
 
   public delete(id: string, version: string | number) {
-    return requests.delete(`api/v1/components/${id}/${version}`).then(
-      () => null,
-      (reason) => reason,
-    );
+    return requests.delete(`api/v1/components/${id}/${version}`).then(() => null);
   }
 }

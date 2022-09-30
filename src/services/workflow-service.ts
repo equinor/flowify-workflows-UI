@@ -23,26 +23,22 @@ export class WorkflowService {
     return requests
       .patch(`api/v1/workflows/${id}`)
       .send({ workflow })
-      .then(
-        (res) => res.body as Workflow,
-        (reason) => reason,
-      );
+      .then((res) => res.body as Workflow)
+      .catch((error) => error);
   }
 
   public publish(workflow: Workflow, id: string) {
     return requests
       .put(`api/v1/workflows/${id}`)
       .send({ workflow })
-      .then(
-        (res) => res.body as Workflow,
-        (reason) => reason,
-      );
+      .then((res) => res.body as Workflow)
+      .catch((error) => error);
   }
 
   public delete(id: string, version: string | number) {
-    return requests.delete(`api/v1/workflows/${id}/${version}`).then(
-      () => null,
-      (reason) => reason,
-    );
+    return requests
+      .delete(`api/v1/workflows/${id}/${version}`)
+      .then(() => null)
+      .catch((error) => error);
   }
 }
