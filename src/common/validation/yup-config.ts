@@ -27,12 +27,6 @@ yup.addMethod(yup.string, 'noWhitespace', function (message) {
   return this.test('noWhitespace', message || 'Whitespace is not allowed', noWhitespace);
 });
 
-yup.addMethod(yup.array, 'unique', function (mapper = (a: any) => a, message: string) {
-  return this.test('unique', message, (list) => {
-    return list?.length === new Set(list?.map(mapper)).size;
-  });
-});
-
 yup.addMethod(yup.object, 'uniqueProperty', function (propertyName, message) {
   return this.test('unique', message, function (value) {
     if (!value || !value[propertyName]) {
@@ -69,6 +63,9 @@ yup.addMethod(yup.string, 'validSecret', function (type, secrets, message) {
     throw this.createError({
       path: `${this.path}`,
       message: `Secret chosen for node with id «${nodeid}»: input «${inputName}» references a workspace secret that does not exist. The secret may have been deleted. Please re-select a valid secret.`,
+      params: {
+        nodeid,
+      },
     });
   });
 });

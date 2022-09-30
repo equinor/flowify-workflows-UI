@@ -1,5 +1,5 @@
 import * as Yup from 'yup';
-export function DATA_VALIDATION(type: 'component' | 'workflow', secrets?: string[]) {
+export function DataSchema(type: 'component' | 'workflow', secrets?: string[]) {
   return Yup.array()
     .of(
       Yup.object({
@@ -20,23 +20,59 @@ export function DATA_VALIDATION(type: 'component' | 'workflow', secrets?: string
     .nullable();
 }
 
+const PortSchema = Yup.object({
+  port: Yup.string().required(),
+  node: Yup.string(),
+});
+
 export const EdgeSchema = Yup.array().of(
   Yup.object({
-    target: Yup.object({
-      port: Yup.string().required(),
-      node: Yup.string(),
-    }).required(),
-    source: Yup.object({
-      port: Yup.string().required(),
-      node: Yup.string(),
-    }).required(),
+    target: PortSchema.required(),
+    source: PortSchema.required(),
   }),
 );
 
 export const BrickSchema = Yup.object({
   type: Yup.string().oneOf(['brick']).required(),
   container: Yup.object().required(),
-});
+  args: Yup.array().of(
+    Yup.object({
+      source: Yup.lazy((value) => (typeof value === 'string' ? Yup.string() : PortSchema)),
+      target: Yup.object({
+        type: Yup.string().required(),
+        prefix: Yup.string(),
+        suffix: Yup.string(),
+      })
+        .noUnknown(true)
+        .strict(),
+    }),
+  ),
+  results: Yup.array().of(
+    Yup.object({
+      source: Yup.mixed()
+        .test(
+          'validResult',
+          'Result object needs to be a valid string or object with a `volume` or `file` field. Check out JSON Schema in Flowify docs for more information.',
+          function (value) {
+            if (typeof value === 'string') {
+              return true;
+            }
+            if (value?.file) {
+              return true;
+            }
+            if (value?.volume) {
+              return value;
+            }
+            return false;
+          },
+        )
+        .required(),
+      target: PortSchema.required(),
+    }),
+  ),
+})
+  .noUnknown(true)
+  .strict();
 
 export const AnySchema = Yup.object({
   type: Yup.string().oneOf(['any']).required(),
@@ -52,4 +88,6 @@ export const GraphSchema = Yup.object({
       id: Yup.string().required().startsWithLetter(),
     }),
   ),
-});
+})
+  .noUnknown(true)
+  .strict();

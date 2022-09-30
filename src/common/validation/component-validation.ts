@@ -1,6 +1,6 @@
 import * as Yup from 'yup';
 import { Component } from '../../models/v2';
-import { AnySchema, BrickSchema, DATA_VALIDATION, GraphSchema } from './schemas';
+import { AnySchema, BrickSchema, DataSchema, GraphSchema } from './schemas';
 
 export async function checkComponentValidtion(component: Component | undefined, previous: Component | undefined) {
   const ComponentValidtionSchema = Yup.object({
@@ -22,8 +22,8 @@ export async function checkComponentValidtion(component: Component | undefined, 
         type: Yup.string().required().oneOf(['brick', 'any', 'graph']),
       }).required();
     }),
-    inputs: DATA_VALIDATION('component'),
-    outputs: DATA_VALIDATION('component'),
+    inputs: DataSchema('component'),
+    outputs: DataSchema('component'),
   });
 
   const errors = await ComponentValidtionSchema.validate(component, { abortEarly: false }).catch((error) => {

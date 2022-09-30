@@ -1,6 +1,6 @@
 import * as Yup from 'yup';
 import { Workflow } from '../../models/v2';
-import { AnySchema, BrickSchema, DATA_VALIDATION, GraphSchema } from './schemas';
+import { AnySchema, BrickSchema, DataSchema, GraphSchema } from './schemas';
 
 export async function checkWorkflowValidation(
   workflow: Workflow | undefined,
@@ -28,8 +28,8 @@ export async function checkWorkflowValidation(
           type: Yup.string().required().oneOf(['brick', 'any', 'graph']),
         }).required();
       }),
-      inputs: DATA_VALIDATION('workflow', secrets),
-      outputs: DATA_VALIDATION('workflow', secrets),
+      inputs: DataSchema('workflow', secrets),
+      outputs: DataSchema('workflow', secrets),
     }),
   });
 

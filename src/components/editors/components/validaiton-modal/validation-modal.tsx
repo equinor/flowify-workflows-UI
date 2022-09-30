@@ -26,7 +26,12 @@ export const ValidationModal: FC<ValidationModalProps> = (props: ValidationModal
                   <Typography variant="body_short_bold">{error?.message}</Typography>
                   <Typography variant="body_short">
                     Current value of {error?.path} is «
-                    {error?.params?.parsedValue ? error?.params?.parsedValue : error?.value}»
+                    {error?.params?.parsedValue
+                      ? error?.params?.parsedValue
+                      : typeof error?.value === 'string'
+                      ? error?.value
+                      : JSON.stringify(error?.value)}
+                    »
                   </Typography>
                 </List.Item>
               ))
