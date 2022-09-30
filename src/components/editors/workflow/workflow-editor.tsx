@@ -14,14 +14,14 @@ import {
   MainEditor,
   Feedback,
   ValidationModal,
+  IValidationError,
 } from '../components';
 import { createGraphElements, fetchInitialSubComponents, INode } from '../helpers';
 import { Component, IJobsListRequest, IVolume, WorkflowListRequest } from '../../../models/v2';
 import { IFilter, IPagination, services } from '../../../services';
 import { IfConfig } from '../components/functional-components/if/if-config';
 import { isNotEmptyArray } from '../../../common';
-import { checkWorkflowValidtion } from '../../../common/validation/workflow-validation';
-import { IValidationError } from '../components/validaiton-modal/types';
+import { checkWorkflowValidation } from '../../../common/validation/workflow-validation';
 
 interface IWorkflowEditor {
   uid: string | null;
@@ -31,16 +31,16 @@ interface IWorkflowEditor {
 const WorkflowEditor: FC<IWorkflowEditor> = (props: IWorkflowEditor) => {
   const { workspace, uid } = props;
   const { version } = useParams();
+  const navigate = useNavigate();
+
+  // UI states
   const [activePage, setActivePage] = useState<'editor' | 'document' | 'runs'>('editor');
-  const [configComponent, setConfigComponent] = useState<{ id: string; type: 'map' | 'if' }>();
-  const [component, setComponent] = useState<Component | undefined>();
   const [dirty, setDirty] = useState<boolean>(false);
-  const [edges, setEdges, onEdgesChange] = useEdgesState<any>([]);
-  const [feedback, setFeedback] = useState<Feedback>();
   const [loading, setLoading] = useState<boolean>(false);
   const [mounted, setMounted] = useState<boolean>(false);
-  const [nodes, setNodes, onNodesChange] = useNodesState<INode>([]);
-  const [parameterConfig, setParameterConfig] = useState<{ type: 'secret' | 'volume'; id: string }>();
+
+  // Data
+  const [component, setComponent] = useState<Component | undefined>();
   const [subcomponents, setSubcomponents] = useState<Component[]>();
   const [versions, setVersions] = useState<WorkflowListRequest>();
   const [jobs, setJobs] = useState<IJobsListRequest>();
@@ -48,10 +48,26 @@ const WorkflowEditor: FC<IWorkflowEditor> = (props: IWorkflowEditor) => {
   const [initialWorkflow, setInitialWorkflow] = useState<Workflow | undefined>();
   const [workspaceSecrets, setWorkspaceSecrets] = useState<string[]>([]);
   const [workspaceVolumes, setWorkspaceVolumes] = useState<IVolume[]>([]);
+
+  // Graph
+  const [edges, setEdges, onEdgesChange] = useEdgesState<any>([]);
+  const [nodes, setNodes, onNodesChange] = useNodesState<INode>([]);
+
+  // Configs
+  const [configComponent, setConfigComponent] = useState<{ id: string; type: 'map' | 'if' }>();
+  const [parameterConfig, setParameterConfig] = useState<{ type: 'secret' | 'volume'; id: string }>();
+
+  // Validation
+  const [feedback, setFeedback] = useState<Feedback>();
   const [validationErrors, setValidationErrors] = useState<IValidationError[]>();
   const [validationModal, setValidationModal] = useState<boolean>(false);
-  const navigate = useNavigate();
 
+  /**
+   * fetchWorkflowVersions
+   * Fetch latest versions of workflow
+   * @returns void
+   * @updates versions state
+   */
   const fetchWorkflowVersions = useCallback(
     (filters: IFilter[] | undefined, pagination: IPagination | undefined, sorting: string | undefined) => {
       const searchFilter: IFilter[] = [{ name: 'uid', value: uid!, type: 'EQUALTO' }];
@@ -62,6 +78,12 @@ const WorkflowEditor: FC<IWorkflowEditor> = (props: IWorkflowEditor) => {
     [uid],
   );
 
+  /**
+   * fetchJobs
+   * Fetch latest run jobs
+   * @returns void
+   * @updates jobs state
+   */
   const fetchJobs = useCallback(
     (pagination: IPagination | undefined) => {
       const jobsFilter: IFilter[] = [{ name: 'workflow.uid', value: uid || '', type: 'EQUALTO' }];
@@ -70,8 +92,13 @@ const WorkflowEditor: FC<IWorkflowEditor> = (props: IWorkflowEditor) => {
     [uid],
   );
 
+  /**
+   * onValidate
+   * Calls yup validation on manifest, sets errors to validationErrors state and returns boolean
+   * @returns Promise<boolean>
+   */
   async function onValidate() {
-    const validationErrors = await checkWorkflowValidtion(workflow, initialWorkflow, workspaceSecrets);
+    const validationErrors = await checkWorkflowValidation(workflow, initialWorkflow, workspaceSecrets);
     setValidationErrors(validationErrors);
     if (isNotEmptyArray(validationErrors)) {
       return true;
@@ -79,6 +106,18 @@ const WorkflowEditor: FC<IWorkflowEditor> = (props: IWorkflowEditor) => {
     return false;
   }
 
+  /**
+   * On mount hook
+   * Only called when workflow is mounted. Hook dependecies won't change unless uri changes
+   * Fetches and sets to state
+   *  - Main workflow
+   *  - Sets workflow component to own state to use in combined workflow and component editor ReactComponents
+   *  - Subcomponents if implementation type is graph
+   *  - Component versions for component history
+   *  - Latest jobs for job history
+   *  - Secrets for use in editor
+   *  - Volumes for use in editor
+   */
   useEffect(() => {
     console.log('workflow onMount');
     if (uid) {
@@ -116,6 +155,12 @@ const WorkflowEditor: FC<IWorkflowEditor> = (props: IWorkflowEditor) => {
     fetchJobs(undefined);
   }, [workspace, uid, version, fetchWorkflowVersions, fetchJobs]);
 
+  /**
+   * Workflow update hook - called when workflow updates
+   *  - Sets dirty state to true if workflow is already mounted
+   *  - Creates and sets graph elements (nodes and edges)
+   *  - Validates workflow manifest
+   */
   useEffect(() => {
     if (workflow) {
       console.log('on workflow update');
@@ -135,6 +180,10 @@ const WorkflowEditor: FC<IWorkflowEditor> = (props: IWorkflowEditor) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [workflow]);
 
+  /**
+   * Update workflow when component updates hook
+   * To be able to reuse React components for both workflow and component editor, this is a workaround that allows us to pass only component and setComponent to those React components. When component updates in those editor components, we use this hook and update workflow by updating the entire component within the workflow object with the changes.
+   */
   useEffect(() => {
     if (component) {
       console.log('component updates workflow');
@@ -145,6 +194,11 @@ const WorkflowEditor: FC<IWorkflowEditor> = (props: IWorkflowEditor) => {
     }
   }, [component]);
 
+  /**
+   * onSave
+   * Save workflow to database (only latest version). Only runs when manifest passes validation
+   * @returns void
+   */
   async function onSave() {
     const hasErrors = await onValidate();
     if (hasErrors) {
@@ -175,7 +229,17 @@ const WorkflowEditor: FC<IWorkflowEditor> = (props: IWorkflowEditor) => {
     }
   }
 
-  function onPublish() {
+  /**
+   * onPublish
+   * Create new version in db. Only runs when manifest passes validation
+   * @returns void
+   */
+  async function onPublish() {
+    const hasErrors = await onValidate();
+    if (hasErrors) {
+      return;
+    }
+
     if (workflow && !loading) {
       setLoading(true);
       services.workflows
@@ -196,6 +260,11 @@ const WorkflowEditor: FC<IWorkflowEditor> = (props: IWorkflowEditor) => {
     }
   }
 
+  /**
+   * onDelete
+   * Delete workflow from db.
+   * @returns void
+   */
   function onDelete() {
     if (uid && workflow?.version?.current) {
       services.workflows

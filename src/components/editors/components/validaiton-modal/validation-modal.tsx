@@ -39,3 +39,5 @@ export const ValidationModal: FC<ValidationModalProps> = (props: ValidationModal
     </Dialog>
   );
 };
+
+export type { IValidationError };

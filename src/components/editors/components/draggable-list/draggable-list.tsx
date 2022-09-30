@@ -94,7 +94,7 @@ export const DraggableList: FC<DraggableListProps> = (props: DraggableListProps)
             </div>
           )}
         </Droppable>
-        <Stack alignItems="flex-end">
+        <Stack alignItems="flex-end" paddingTop="1rem">
           <Button theme="simple" onClick={props.addItem}>
             <Icon name="add" /> Add {type}
           </Button>

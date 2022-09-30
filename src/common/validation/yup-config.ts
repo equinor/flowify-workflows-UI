@@ -5,6 +5,7 @@ declare module 'yup' {
   interface StringSchema {
     startsWithLetter(message?: string): yup.StringSchema;
     noWhitespace(message?: string): yup.StringSchema;
+    validSecret(type: 'workflow' | 'component', secrets: string[], message?: string): yup.StringSchema;
   }
   interface ArraySchema<T> {
     unique(mapper: (a: T) => T, message?: any): ArraySchema<T>;
@@ -48,5 +49,26 @@ yup.addMethod(yup.object, 'uniqueProperty', function (propertyName, message) {
     }
 
     return true;
+  });
+});
+
+yup.addMethod(yup.string, 'validSecret', function (type, secrets, message) {
+  return this.test('validSecret', message, function (value) {
+    // @ts-expect-error
+    const { from } = this;
+    if (type === 'component') {
+      return true;
+    }
+    if (!(from[1]?.value?.type === 'env_secret')) {
+      return true;
+    }
+    if (secrets.includes(value)) {
+      return true;
+    }
+    const [nodeid, inputName] = from[1]?.value?.name?.split('@');
+    throw this.createError({
+      path: `${this.path}`,
+      message: `Secret chosen for node with id «${nodeid}»: input «${inputName}» references a workspace secret that does not exist. The secret may have been deleted. Please re-select a valid secret.`,
+    });
   });
 });

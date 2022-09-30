@@ -1,6 +1,6 @@
 import * as Yup from 'yup';
 import { Component } from '../../models/v2';
-import { DATA_VALIDATION } from './schemas';
+import { AnySchema, BrickSchema, DATA_VALIDATION, GraphSchema } from './schemas';
 
 export async function checkComponentValidtion(component: Component | undefined, previous: Component | undefined) {
   const ComponentValidtionSchema = Yup.object({
@@ -8,9 +8,20 @@ export async function checkComponentValidtion(component: Component | undefined, 
     uid: Yup.string().required().oneOf([previous?.uid]),
     timestamp: Yup.string().required().oneOf([previous?.timestamp]),
     type: Yup.string().required().oneOf(['component'], 'Component type must be of type «component»'),
-    implementation: Yup.object({
-      type: Yup.string().required().oneOf(['brick', 'graph', 'any']),
-    }).required(),
+    implementation: Yup.lazy((value) => {
+      if (value?.type === 'brick') {
+        return BrickSchema;
+      }
+      if (value?.type === 'graph') {
+        return GraphSchema;
+      }
+      if (value?.type === 'any') {
+        return AnySchema;
+      }
+      return Yup.object({
+        type: Yup.string().required().oneOf(['brick', 'any', 'graph']),
+      }).required();
+    }),
     inputs: DATA_VALIDATION('component'),
     outputs: DATA_VALIDATION('component'),
   });
