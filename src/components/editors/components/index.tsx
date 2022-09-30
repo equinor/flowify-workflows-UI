@@ -19,3 +19,4 @@ export * from './editor-menu/editor-menu';
 export * from './document-editor/document-editor';
 export * from './workflow-jobs/workflow-jobs';
 export * from './main-editor/main-editor';
+export * from './validaiton-modal/validation-modal';

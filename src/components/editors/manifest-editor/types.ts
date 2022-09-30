@@ -1,5 +1,5 @@
 export type Languages = 'json' | 'yaml';
-export const DEFAULT_LANGUAGE: Languages = 'yaml';
+export const DEFAULT_LANGUAGE: Languages = 'json';
 
 export interface IError {
   message: string;

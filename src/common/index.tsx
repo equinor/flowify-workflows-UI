@@ -3,3 +3,4 @@ export { getResolvedTemplates } from './template-resolution';
 export { getPodName, getTemplateNameFromNode } from './pod-name';
 export * from './general-helpers';
 export * from './date-helpers';
+export * from './validation/component-validation';

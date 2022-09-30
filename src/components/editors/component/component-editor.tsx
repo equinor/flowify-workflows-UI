@@ -13,8 +13,11 @@ import {
   DocumentEditor,
   MainEditor,
   Feedback,
+  ValidationModal,
+  IValidationError,
 } from '../components';
 import { createGraphElements, fetchInitialSubComponents, INode } from '../helpers';
+import { checkComponentValidtion, isNotEmptyArray } from '../../../common';
 
 interface IEditor {
   uid: string | null;
@@ -22,26 +25,37 @@ interface IEditor {
 }
 
 /**
- * Component Editor: containing
- * @param props
- * @returns
+ * Component Editor
  */
 const Editor: React.FC<IEditor> = (props: IEditor) => {
   const { uid, workspace } = props;
   const { version } = useParams();
+  const navigate = useNavigate();
+
+  // UI states
   const [activePage, setActivePage] = useState<'editor' | 'document' | 'runs'>('editor');
-  const [configComponent, setConfigComponent] = useState<{ id: string; type: 'map' | 'if' }>();
-  const [component, setComponent] = useState<Component | undefined>();
   const [dirty, setDirty] = useState<boolean>(false);
-  const [edges, setEdges, onEdgesChange] = useEdgesState([]);
-  const [feedback, setFeedback] = useState<Feedback>();
   const [loading, setLoading] = useState<boolean>(true);
   const [mounted, setMounted] = useState<boolean>(false);
-  const [nodes, setNodes, onNodesChange] = useNodesState<INode>([]);
+
+  // Data
+  const [component, setComponent] = useState<Component | undefined>();
+  const [initialComponent, setInitialComponent] = useState<Component | undefined>();
   const [versions, setVersions] = useState<ComponentListRequest>();
-  const [parameterConfig, setParameterConfig] = useState<{ type: 'secret' | 'volume'; id: string }>();
   const [subcomponents, setSubcomponents] = useState<Component[]>();
-  const navigate = useNavigate();
+
+  // Graph
+  const [edges, setEdges, onEdgesChange] = useEdgesState([]);
+  const [nodes, setNodes, onNodesChange] = useNodesState<INode>([]);
+
+  // Config
+  const [configComponent, setConfigComponent] = useState<{ id: string; type: 'map' | 'if' }>();
+  const [parameterConfig, setParameterConfig] = useState<{ type: 'secret' | 'volume'; id: string }>();
+
+  // Validation
+  const [feedback, setFeedback] = useState<Feedback>();
+  const [validationErrors, setValidationErrors] = useState<IValidationError[]>();
+  const [validationModal, setValidationModal] = useState<boolean>(false);
 
   const fetchComponentVersions = useCallback(
     (filters: IFilter[] | undefined, pagination: IPagination | undefined, sorting: string | undefined) => {
@@ -53,6 +67,14 @@ const Editor: React.FC<IEditor> = (props: IEditor) => {
     [uid],
   );
 
+  /**
+   * On mount useEffect
+   * Only called when component is mounted. Hook dependecies won't change unless uri changes
+   * Fetches and sets to state
+   *  - Main component,
+   *  - Subcomponents if implementation type is graph
+   *  - Component versions for component history
+   */
   useEffect(() => {
     console.log('component on mount');
     if (uid) {
@@ -62,6 +84,7 @@ const Editor: React.FC<IEditor> = (props: IEditor) => {
           fetchInitialSubComponents(res).then((subs) => {
             setSubcomponents(subs);
             setComponent(res);
+            setInitialComponent(res);
             setLoading(false);
           });
         })
@@ -74,6 +97,12 @@ const Editor: React.FC<IEditor> = (props: IEditor) => {
     }
   }, [workspace, uid, version, fetchComponentVersions]);
 
+  /**
+   * Component update useEffect - called when component updates
+   *  - Sets dirty state to true if component is already mounted
+   *  - Creates and sets graph elements (nodes and edges)
+   *  - Validates component manifest
+   */
   useEffect(() => {
     if (component) {
       if (mounted) {
@@ -87,12 +116,37 @@ const Editor: React.FC<IEditor> = (props: IEditor) => {
         setNodes(res.nodes);
         setEdges(res.edges);
       });
+      onValidate();
       setMounted(true);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [component]);
 
-  function onSave() {
+  /**
+   * onValidate
+   * Calls yup validation on manifest, sets errors to validationErrors state and returns boolean
+   * @returns Promise<boolean>
+   */
+  async function onValidate(): Promise<boolean> {
+    const validationErrors = await checkComponentValidtion(component, initialComponent);
+    setValidationErrors(validationErrors);
+    if (isNotEmptyArray(validationErrors)) {
+      return true;
+    }
+    return false;
+  }
+
+  /**
+   * onSave
+   * Save component to database (only latest version). Only runs when manifest passes validation
+   * @returns void
+   */
+  async function onSave() {
+    const hasErrors = await onValidate();
+    if (hasErrors) {
+      return;
+    }
+
     // TODO: Check if latest version
     if (component && !loading) {
       setLoading(true);
@@ -105,6 +159,7 @@ const Editor: React.FC<IEditor> = (props: IEditor) => {
         })
         .catch((error) => {
           console.error(error);
+          console.log(error?.code);
           // HACK UNTIL WE FIX COSMOSDB ISSUES
           if (error?.code === 500) {
             setFeedback({ message: 'Component was successfully updated.', type: 'success' });
@@ -118,7 +173,16 @@ const Editor: React.FC<IEditor> = (props: IEditor) => {
     }
   }
 
-  function onPublish() {
+  /**
+   * onPublish
+   * Create new version in db. Only runs when manifest passes validation
+   * @returns void
+   */
+  async function onPublish() {
+    const hasErrors = await onValidate();
+    if (hasErrors) {
+      return;
+    }
     if (component && !loading) {
       setLoading(true);
       services.components
@@ -143,6 +207,11 @@ const Editor: React.FC<IEditor> = (props: IEditor) => {
     }
   }
 
+  /**
+   * onDelete
+   * Delete component from db.
+   * @returns void
+   */
   function onDelete() {
     if (uid && component?.version?.current) {
       services.components
@@ -167,6 +236,12 @@ const Editor: React.FC<IEditor> = (props: IEditor) => {
         <title>{component?.name || ''} - Component editor - Flowify</title>
       </Helmet>
       <Feedbacks feedback={feedback} setFeedback={setFeedback} />
+      <ValidationModal
+        open={validationModal}
+        onClose={() => setValidationModal(false)}
+        validationErrors={validationErrors}
+        onValidate={onValidate}
+      />
       <MapConfig
         component={component}
         mapConfigComponent={configComponent?.id}
@@ -184,7 +259,14 @@ const Editor: React.FC<IEditor> = (props: IEditor) => {
         type="component"
       />
       <Stack direction="row" justifyContent="stretch" sx={{ flexGrow: '1', minHeight: '0', flexWrap: 'nowrap' }}>
-        <EditorMenu active={activePage} setActive={setActivePage} onSave={onSave} dirty={dirty} />
+        <EditorMenu
+          active={activePage}
+          setActive={setActivePage}
+          onSave={onSave}
+          dirty={dirty}
+          openValidation={() => setValidationModal(true)}
+          errorsLength={validationErrors?.length || 0}
+        />
         {activePage === 'document' && (
           <DocumentEditor
             document={component}
