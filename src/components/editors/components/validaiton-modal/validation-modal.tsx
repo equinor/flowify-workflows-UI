@@ -1,8 +1,10 @@
-import { List, Typography } from '@equinor/eds-core-react';
+import { Table, Typography } from '@equinor/eds-core-react';
 import { Dialog } from '@mui/material';
 import React, { FC } from 'react';
 import { isNotEmptyArray } from '../../../../common';
 import { Stack } from '../../../ui';
+import { IParameterConfig } from '../../types';
+import { ErrorRow } from './components/error-row';
 import { IValidationError } from './types';
 
 interface ValidationModalProps {
@@ -10,35 +12,38 @@ interface ValidationModalProps {
   open: boolean;
   onClose: () => void;
   onValidate: () => void;
+  setParameterConfig: (config: IParameterConfig) => void;
 }
 
 export const ValidationModal: FC<ValidationModalProps> = (props: ValidationModalProps) => {
   const { open, onClose, validationErrors } = props;
+
   return (
     <Dialog open={open} onClose={onClose} fullWidth maxWidth="lg">
       <Stack padding={2} spacing={1}>
         <Typography variant="h4">Validation</Typography>
         <Stack spacing={0.5}>
-          <List>
-            {isNotEmptyArray(validationErrors) ? (
-              validationErrors?.map((error) => (
-                <List.Item style={{ marginBottom: '0.25rem' }}>
-                  <Typography variant="body_short_bold">{error?.message}</Typography>
-                  <Typography variant="body_short">
-                    Current value of {error?.path} is «
-                    {error?.params?.parsedValue
-                      ? error?.params?.parsedValue
-                      : typeof error?.value === 'string'
-                      ? error?.value
-                      : JSON.stringify(error?.value)}
-                    »
-                  </Typography>
-                </List.Item>
-              ))
-            ) : (
-              <Typography variant="body_short">No errors found</Typography>
-            )}
-          </List>
+          <Table>
+            <Table.Head>
+              <Table.Row>
+                <Table.Cell>Error message</Table.Cell>
+                <Table.Cell>Current value</Table.Cell>
+                <Table.Cell>Manifest path</Table.Cell>
+                <Table.Cell>Quick fix</Table.Cell>
+              </Table.Row>
+            </Table.Head>
+            <Table.Body>
+              {isNotEmptyArray(validationErrors) ? (
+                validationErrors?.map((error) => (
+                  <ErrorRow error={error} setParameterConfig={props.setParameterConfig} />
+                ))
+              ) : (
+                <Table.Row>
+                  <Table.Cell colSpan={4}>No errors found</Table.Cell>
+                </Table.Row>
+              )}
+            </Table.Body>
+          </Table>
         </Stack>
       </Stack>
     </Dialog>

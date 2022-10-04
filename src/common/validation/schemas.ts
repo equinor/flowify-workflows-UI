@@ -1,5 +1,6 @@
 import * as Yup from 'yup';
-export function DataSchema(type: 'component' | 'workflow', secrets?: string[]) {
+
+export function DataSchema(type: 'component' | 'workflow', secrets?: string[], volumes?: string[]) {
   return Yup.array()
     .of(
       Yup.object({
@@ -12,7 +13,14 @@ export function DataSchema(type: 'component' | 'workflow', secrets?: string[]) {
         mediatype: Yup.array().of(Yup.string().oneOf(['string', 'integer', 'file', 'volume', 'env_secret'])),
         type: Yup.string().required().oneOf(['parameter', 'artifact', 'env_secret', 'volume', 'parameter_array']),
         userdata: Yup.object({
-          value: Yup.string().validSecret(type, secrets || []),
+          value: Yup.lazy((value) => {
+            if (Array.isArray(value)) {
+              return Yup.array().of(Yup.string());
+            }
+            return Yup.string()
+              .validSecret(type, secrets || [])
+              .validVolume(type, volumes || []);
+          }),
           description: Yup.string(),
         }),
       }).uniqueProperty('name', 'Input name is duplicate. Name has to be a unique value.'),

@@ -6,6 +6,7 @@ export async function checkWorkflowValidation(
   workflow: Workflow | undefined,
   previous: Workflow | undefined,
   secrets: string[],
+  volumes: string[],
 ) {
   const WorkflowValidationSchema = Yup.object({
     name: Yup.string().required(),
@@ -28,8 +29,8 @@ export async function checkWorkflowValidation(
           type: Yup.string().required().oneOf(['brick', 'any', 'graph']),
         }).required();
       }),
-      inputs: DataSchema('workflow', secrets),
-      outputs: DataSchema('workflow', secrets),
+      inputs: DataSchema('workflow', secrets, volumes),
+      outputs: DataSchema('workflow', secrets, volumes),
     }),
   });
 

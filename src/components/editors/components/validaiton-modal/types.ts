@@ -4,5 +4,7 @@ export interface IValidationError {
   value: any;
   params: {
     parsedValue?: string | undefined;
+    nodeid?: string;
   };
+  type: string;
 }

@@ -6,6 +6,7 @@ declare module 'yup' {
     startsWithLetter(message?: string): yup.StringSchema;
     noWhitespace(message?: string): yup.StringSchema;
     validSecret(type: 'workflow' | 'component', secrets: string[], message?: string): yup.StringSchema;
+    validVolume(type: 'workflow' | 'component', volumes: string[], message?: string): yup.StringSchema;
   }
   interface ArraySchema<T> {
     unique(mapper: (a: T) => T, message?: any): ArraySchema<T>;
@@ -61,8 +62,32 @@ yup.addMethod(yup.string, 'validSecret', function (type, secrets, message) {
     }
     const [nodeid, inputName] = from[1]?.value?.name?.split('@');
     throw this.createError({
-      path: `${this.path}`,
+      path: this.path,
       message: `Secret chosen for node with id «${nodeid}»: input «${inputName}» references a workspace secret that does not exist. The secret may have been deleted. Please re-select a valid secret.`,
+      params: {
+        nodeid,
+      },
+    });
+  });
+});
+
+yup.addMethod(yup.string, 'validVolume', function (type, volumes, message) {
+  return this.test('validVolume', message, function (value) {
+    // @ts-expect-error
+    const { from } = this;
+    if (type === 'component') {
+      return true;
+    }
+    if (!(from[1]?.value?.type === 'volume')) {
+      return true;
+    }
+    if (volumes.includes(value)) {
+      return true;
+    }
+    const [nodeid, inputName] = from[1]?.value?.name?.split('@');
+    throw this.createError({
+      path: this.path,
+      message: `Volume chosen for node with id «${nodeid}»: input «${inputName}» references a workspace volume that does not exist. The volume may have been deleted. Please re-select a valid volume.`,
       params: {
         nodeid,
       },
