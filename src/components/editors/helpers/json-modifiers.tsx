@@ -19,7 +19,8 @@ export function removeConnection(removedObject: ICustomConnection, component: Co
     if (inputMappings) {
       const edgeIndex = inputMappings?.findIndex(
         (input) =>
-          input.source.port === removedObject.source && input.target.port === removedObject.targetHandle.slice(2),
+          input.source.port === removedObject.source?.slice(2) &&
+          input.target.port === removedObject.targetHandle.slice(2),
       );
       if (edgeIndex === -1) {
         throw new Error('Could not find deleted connection in component object');
@@ -33,7 +34,8 @@ export function removeConnection(removedObject: ICustomConnection, component: Co
     if (outputMappings) {
       const edgeIndex = outputMappings?.findIndex(
         (output) =>
-          output.target.port === removedObject.target && output.source.port === removedObject.sourceHandle.slice(2),
+          output.target.port === removedObject.target?.slice(2) &&
+          output.source.port === removedObject.sourceHandle.slice(2),
       );
       if (edgeIndex === -1) {
         throw new Error('Could not find deleted connection in component object');
@@ -140,7 +142,7 @@ export function addConnection(
     }
     const { inputMappings } = component.implementation as Graph;
     inputMappings?.push({
-      source: { port: params.source },
+      source: { port: params.source.slice(2) },
       target: { node: params.target, port: params.targetHandle.slice(2) },
     });
     return component;
@@ -152,7 +154,7 @@ export function addConnection(
     const { outputMappings } = component.implementation as Graph;
     outputMappings?.push({
       source: { node: params.source, port: params.sourceHandle.slice(2) },
-      target: { port: params.target },
+      target: { port: params.target.slice(2) },
     });
     return component;
   }

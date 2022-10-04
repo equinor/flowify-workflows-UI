@@ -29,7 +29,7 @@ export const StartNode = memo((props: IStartNode) => {
       <Tooltip title={`Input | Type: ${data?.type}`} style={{ fontSize: '1rem' }}>
         <Handle
           type="source"
-          id={`i-${props.id}`}
+          id={`${props.id}`}
           key={`i-${props.id}`}
           position={Position.Right}
           isConnectable

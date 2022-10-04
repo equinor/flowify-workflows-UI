@@ -13,4 +13,7 @@ export const ParameterWrapper = styled.button`
     cursor: pointer;
     background-color: rgba(0, 112, 121, 0.2);
   }
+  &:focus {
+    outline: 3px dotted #007079;
+  }
 `;

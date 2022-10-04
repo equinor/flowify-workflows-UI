@@ -29,7 +29,7 @@ export const EndNode: FC<IEndNode> = (props: IEndNode) => {
       <Tooltip title={`Output | Type: ${data?.type}`} style={{ fontSize: '1rem' }}>
         <Handle
           type="target"
-          id={`o-${props.id}`}
+          id={props.id}
           key={`o-${props.id}`}
           position={Position.Left}
           isConnectable
