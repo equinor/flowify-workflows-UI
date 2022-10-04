@@ -52,6 +52,17 @@ export const Sidebar: FC<SidebarProps> = (props: SidebarProps) => {
   }
 
   function setImplementationType(type: 'any' | 'brick' | 'graph') {
+    if (type === 'brick') {
+      setComponent((prev: Component) => ({
+        ...prev,
+        implementation: {
+          ...prev.implementation,
+          type,
+          container: {},
+        },
+      }));
+      return;
+    }
     setComponent((prev: Component) => ({
       ...prev,
       implementation: {
