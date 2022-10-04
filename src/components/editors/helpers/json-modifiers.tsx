@@ -94,7 +94,7 @@ export function removeStartNode(removedElement: Node, component: Component): Com
   const { inputs } = component;
   const { inputMappings } = component.implementation as Graph;
   if (inputs) {
-    const nodeIndex = inputs.findIndex((input) => input.name === removedElement.id);
+    const nodeIndex = inputs.findIndex((input) => input.name === removedElement.id?.slice(2));
     if (nodeIndex === -1) {
       throw new Error('Could not find deleted node in component object');
     }
@@ -102,7 +102,7 @@ export function removeStartNode(removedElement: Node, component: Component): Com
     // Remove all connections that belongs to the start/input node
     if (Array.isArray(inputMappings) && inputMappings.length > 0) {
       (component.implementation as Graph).inputMappings = inputMappings.filter(
-        (inputMapping) => inputMapping.source.port !== removedElement.id,
+        (inputMapping) => inputMapping.source.port !== removedElement.id?.slice(2),
       );
     }
     return component;
@@ -114,14 +114,14 @@ export function removeEndNode(removedElement: Node, component: Component): Compo
   const { outputs } = component;
   const { outputMappings } = component.implementation as Graph;
   if (outputs) {
-    const nodeIndex = outputs.findIndex((output) => output.name === removedElement.id);
+    const nodeIndex = outputs.findIndex((output) => output.name === removedElement.id?.slice(2));
     if (nodeIndex === -1) {
       throw new Error('Could not find deleted node in component object');
     }
     outputs.splice(nodeIndex, 1);
     if (Array.isArray(outputMappings) && outputMappings.length > 0) {
       (component.implementation as Graph).outputMappings = outputMappings.filter(
-        (outputMapping) => outputMapping.target.port !== removedElement.id,
+        (outputMapping) => outputMapping.target.port !== removedElement.id?.slice(2),
       );
     }
     return component;

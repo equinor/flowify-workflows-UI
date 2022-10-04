@@ -87,7 +87,7 @@ export const Parameter: FC<ParameterProps> = (props: ParameterProps) => {
             <div style={{ flexGrow: '2' }}>
               <Typography variant="h5">{parameter.name}</Typography>
               <Typography variant="body_short">{parameter.userdata?.description}</Typography>
-              {editableValue && (
+              {editableValue && type === 'input' && (
                 <Stack
                   direction="row"
                   alignItems="center"
@@ -123,6 +123,7 @@ export const Parameter: FC<ParameterProps> = (props: ParameterProps) => {
                 volume={props.volume}
                 onClose={() => setOpen(false)}
                 removeInput={removeInput}
+                type={type}
               />
             </Form>
           </Formik>

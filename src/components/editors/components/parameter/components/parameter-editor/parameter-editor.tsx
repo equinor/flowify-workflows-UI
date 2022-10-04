@@ -17,10 +17,11 @@ interface ParameterEditorProps {
   editableValue: boolean | undefined;
   secret?: boolean;
   volume?: boolean;
+  type?: 'input' | 'output';
 }
 
 export const ParameterEditor: FC<ParameterEditorProps> = (props: ParameterEditorProps) => {
-  const { open, onlyEditableValue, removeInput } = props;
+  const { open, onlyEditableValue, removeInput, type } = props;
   const { values, setTouched, submitForm, isValid } = useFormikContext();
 
   function trySubmit() {
@@ -41,11 +42,12 @@ export const ParameterEditor: FC<ParameterEditorProps> = (props: ParameterEditor
     <Dialog open={open} onClose={trySubmit} fullWidth maxWidth="sm">
       <Stack padding={2} spacing={2}>
         <>
-          <Typography variant="h5">Edit input</Typography>
+          <Typography variant="h5">Edit {type}</Typography>
           <TextInputFormik name="name" label="Name" readOnly={onlyEditableValue} />
           {props.editableValue &&
+            type === 'input' &&
             ((values as Data)?.type === 'parameter_array' ? (
-              <TextListFormik name="value" />
+              <TextListFormik name="value" label="Value" />
             ) : (
               <TextInputFormik name="value" label="Value" />
             ))}
