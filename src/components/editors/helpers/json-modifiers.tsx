@@ -171,22 +171,25 @@ export function addConnection(
 }
 
 export function updateTaskNodePostion(component: Component, node: Node) {
-  const nodePlacement = (component?.implementation as Graph)?.nodes?.findIndex((comp) => comp.id === node.id) || -1;
-  if ((component?.implementation as Graph)?.nodes?.[nodePlacement]) {
-    if (!(component.implementation as Graph).nodes?.[nodePlacement].userdata) {
-      (component.implementation as Graph).nodes![nodePlacement].userdata = {};
+  const nodePlacement = (component?.implementation as Graph).nodes?.findIndex((comp) => comp.id === node.id);
+  if (nodePlacement !== -1 && nodePlacement !== undefined) {
+    if ((component?.implementation as Graph)?.nodes?.[nodePlacement]) {
+      console.log('is ndoe');
+      if (!(component.implementation as Graph).nodes?.[nodePlacement].userdata) {
+        (component.implementation as Graph).nodes![nodePlacement].userdata = {};
+      }
+      (component.implementation as Graph).nodes![nodePlacement].userdata!.graphPosition = {
+        x: node.position.x,
+        y: node.position.y,
+      };
+      return component;
     }
-    (component.implementation as Graph).nodes![nodePlacement].userdata!.graphPosition = {
-      x: node.position.x,
-      y: node.position.y,
-    };
-    return component;
   }
   return component;
 }
 
 export function updateParameterPosition(component: Component, node: Node, type: 'inputs' | 'outputs'): Component {
-  const placement = component?.[type]?.findIndex((param) => param.name === node.id);
+  const placement = component?.[type]?.findIndex((param) => param.name === node.id?.slice(2));
   if (placement !== -1 && placement !== undefined) {
     if (!component[type]?.[placement].userdata) {
       component[type]![placement].userdata = {};
