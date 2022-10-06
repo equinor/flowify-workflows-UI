@@ -37,6 +37,9 @@ export const Sidebar: FC<SidebarProps> = (props: SidebarProps) => {
   const inputSecrets = component?.inputs?.filter((input) => input.type === 'env_secret');
   const inputVolumes = component?.inputs?.filter((input) => input.type === 'volume');
 
+  const inputNames: string[] = component?.inputs?.map((input) => input.name || '') || [];
+  const outputNames: string[] = component?.outputs?.map((output) => output.name || '') || [];
+
   function addParameter(type: 'inputs' | 'outputs', paramType: 'parameter' | 'env_secret' | 'volume') {
     setComponent((prev: Component) => ({
       ...prev,
@@ -138,6 +141,7 @@ export const Sidebar: FC<SidebarProps> = (props: SidebarProps) => {
               type="input"
               editableValue={document?.type === 'workflow'}
               secrets={secrets}
+              names={inputNames}
             />
           ))
         ) : (
@@ -162,6 +166,7 @@ export const Sidebar: FC<SidebarProps> = (props: SidebarProps) => {
                   editableValue={false}
                   secrets={secrets}
                   secret
+                  names={inputNames}
                 />
               ))
             ) : (
@@ -189,6 +194,7 @@ export const Sidebar: FC<SidebarProps> = (props: SidebarProps) => {
                   editableValue={false}
                   secrets={secrets}
                   volume
+                  names={inputNames}
                 />
               ))
             ) : (
@@ -211,6 +217,7 @@ export const Sidebar: FC<SidebarProps> = (props: SidebarProps) => {
               setComponent={setComponent}
               type="output"
               editableValue={document?.type === 'workflow'}
+              names={outputNames}
             />
           ))
         ) : (

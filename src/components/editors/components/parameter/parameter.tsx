@@ -11,11 +11,16 @@ import { updateArgs, updateParameter, updateResults } from './helpers';
 import { ParameterEditor } from './components/parameter-editor/parameter-editor';
 
 export const Parameter: FC<ParameterProps> = (props: ParameterProps) => {
-  const { index, setComponent, type, onlyEditableValue, editableValue, parameter } = props;
+  const { index, setComponent, type, onlyEditableValue, editableValue, parameter, names } = props;
   const [open, setOpen] = useState<boolean>(false);
 
   const validationSchema = yup.object({
-    name: yup.string().required('Parameter name is required').startsWithLetter().noWhitespace(),
+    name: yup
+      .string()
+      .required('Parameter name is required')
+      .startsWithLetter()
+      .noWhitespace()
+      .noDuplicateValues(names || [], props.parameter?.name, `An ${type} parameter with this name already exists.`),
   });
 
   const parameterType = type === 'input' ? 'inputs' : 'outputs';

@@ -7,6 +7,7 @@ declare module 'yup' {
     noWhitespace(message?: string): yup.StringSchema;
     validSecret(type: 'workflow' | 'component', secrets: string[], message?: string): yup.StringSchema;
     validVolume(type: 'workflow' | 'component', volumes: string[], message?: string): yup.StringSchema;
+    noDuplicateValues(list: string[], oldValue: string | undefined, message?: string): yup.StringSchema;
   }
   interface ArraySchema<T> {
     unique(mapper: (a: T) => T, message?: any): ArraySchema<T>;
@@ -92,5 +93,20 @@ yup.addMethod(yup.string, 'validVolume', function (type, volumes, message) {
         nodeid,
       },
     });
+  });
+});
+
+yup.addMethod(yup.string, 'noDuplicateValues', function (list: string[], oldValue: string, message) {
+  return this.test('noDuplicateValues', message || 'Value already exists', function (value) {
+    if (!value) {
+      return true;
+    }
+    if (value === oldValue) {
+      return true;
+    }
+    if (list?.includes(value)) {
+      return false;
+    }
+    return true;
   });
 });
