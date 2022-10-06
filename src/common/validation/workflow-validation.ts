@@ -9,7 +9,7 @@ export async function checkWorkflowValidation(
   volumes: string[],
 ) {
   const WorkflowValidationSchema = Yup.object({
-    name: Yup.string().required(),
+    name: Yup.string().required('Workflow name is required'),
     uid: Yup.string().required().oneOf([previous?.uid]),
     timestamp: Yup.string().required().oneOf([previous?.timestamp]),
     type: Yup.string().required().oneOf(['workflow'], 'Workflow type must be of type «workflow»'),

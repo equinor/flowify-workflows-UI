@@ -4,7 +4,7 @@ import { AnySchema, BrickSchema, DataSchema, GraphSchema } from './schemas';
 
 export async function checkComponentValidtion(component: Component | undefined, previous: Component | undefined) {
   const ComponentValidtionSchema = Yup.object({
-    name: Yup.string().required(),
+    name: Yup.string().required('Component name is required'),
     uid: Yup.string().required().oneOf([previous?.uid]),
     timestamp: Yup.string().required().oneOf([previous?.timestamp]),
     type: Yup.string().required().oneOf(['component'], 'Component type must be of type «component»'),

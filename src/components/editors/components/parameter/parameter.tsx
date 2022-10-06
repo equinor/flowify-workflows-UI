@@ -18,8 +18,8 @@ export const Parameter: FC<ParameterProps> = (props: ParameterProps) => {
     name: yup
       .string()
       .required('Parameter name is required')
-      .startsWithLetter()
-      .noWhitespace()
+      .startsWithLetter('Parameter name nees to start with alpabetical letters [a…z]')
+      .noWhitespace('Whitespace is not allowed in parameter names')
       .noDuplicateValues(names || [], props.parameter?.name, `An ${type} parameter with this name already exists.`),
   });
 
