@@ -47,7 +47,7 @@ export const ParameterEditor: FC<ParameterEditorProps> = (props: ParameterEditor
           {props.editableValue &&
             type === 'input' &&
             ((values as Data)?.type === 'parameter_array' ? (
-              <TextListFormik name="value" label="Value" />
+              <TextListFormik name="value" label="Value" addButtonLabel="Add value" />
             ) : (
               <TextInputFormik name="value" label="Value" />
             ))}
