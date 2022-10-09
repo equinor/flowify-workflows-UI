@@ -1,17 +1,7 @@
 import React, { FC } from 'react';
 import { Stack } from '@mui/material';
 import { MenuButton } from './components/menu-button';
-
-type ActiveType = 'editor' | 'document' | 'runs';
-interface EditorMenuProps {
-  active: ActiveType;
-  setActive: (type: ActiveType) => void;
-  isWorkflow?: boolean;
-  onSave: () => void;
-  dirty: boolean;
-  openValidation?: () => void;
-  errorsLength?: number;
-}
+import { EditorMenuProps } from './types';
 
 export const EditorMenu: FC<EditorMenuProps> = (props: EditorMenuProps) => {
   const { active, setActive, isWorkflow } = props;
