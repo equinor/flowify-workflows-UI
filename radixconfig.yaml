@@ -27,7 +27,7 @@ spec:
             OAUTH2_PROXY_HTTP_ADDRESS: "http://:8000"
             OAUTH2_PROXY_OIDC_ISSUER_URL: "https://login.microsoftonline.com/3aa4a235-b6e2-48d5-9195-7fcf05b459b0/v2.0"
             OAUTH2_PROXY_PROVIDER: "oidc"
-            OAUTH2_PROXY_REDIRECT_URL: "https://flowify-radix-test.app.playground.radix.equinor.com/authproxy/oauth/callback"
+            OAUTH2_PROXY_REDIRECT_URL: "https://oauth-proxy-flowify-dev.playground.radix.equinor.com/oauth2/callback"
             OAUTH2_PROXY_UPSTREAMS: "http://main:8080/"
             OAUTH2_PROXY_SESSION_STORE_TYPE: "cookie"
             OAUTH2_PROXY_REDIS_CONNECTION_URL: "redis://redis:6379"
