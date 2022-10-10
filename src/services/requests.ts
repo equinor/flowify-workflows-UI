@@ -6,15 +6,19 @@ import { apiUrl } from './base';
 
 const superagentPromise = require('superagent-promise');
 
+/**
+ * If node environment is development add Bearer token for test user to request
+ * @param req
+ * @returns req
+ */
 const auth = (req: SuperAgentRequest) => {
-  return req.on('error', handle);
-};
-
-const handle = (err: any) => {
-  // check URL to prevent redirect loop
-  if (err.status === 403) {
-    //document.location.href = '/forbidden-403';
+  if (process.env.NODE_ENV === 'development') {
+    return req.set(
+      'Authorization',
+      'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJzYW5kYm94IiwiYXVkIjoiZmxvd2lmeSIsImlhdCI6MTY2MzY3NDU0NywibmJmIjoxNjYzNjc0NTQ3LCJleHAiOjI2MTA0NDU3NDcsIm9pZCI6IjgwNDgiLCJuYW1lIjoiRi4gTG93ZSIsImVtYWlsIjoiZmxvd0BzYW5kLmJveCIsInJvbGVzIjpbInNhbmRib3gtZGV2ZWxvcGVyIl19.Hc4gXrL6hsE91S6qlJpFfsONq7L-jTN9WsHxtC1fhGk',
+    );
   }
+  return req;
 };
 
 const superagent: _superagent.SuperAgentStatic = superagentPromise(_superagent, global.Promise);

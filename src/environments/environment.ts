@@ -1,4 +1,5 @@
 export const environment = {
-  usingFlowifyServer: JSON.parse(process.env.REACT_APP_USING_FLOWIFY_SERVER ?? 'true') as boolean,
-  baseUri: process.env.REACT_APP_BASE_URI ?? '/flowify-server/',
+  baseUri: process.env.NODE_ENV === 'development' ? '' : '/flowify-server/',
 };
+
+// dev api uri: https://flowify.dev.aurora.equinor.com/flowify-server/
