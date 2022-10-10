@@ -9,6 +9,8 @@ interface EditorMenuProps {
   isWorkflow?: boolean;
   onSave: () => void;
   dirty: boolean;
+  openValidation?: () => void;
+  errorsLength?: number;
 }
 
 export const EditorMenu: FC<EditorMenuProps> = (props: EditorMenuProps) => {
@@ -20,7 +22,15 @@ export const EditorMenu: FC<EditorMenuProps> = (props: EditorMenuProps) => {
       spacing={1}
       sx={{ backgroundColor: '#ADE2E619', padding: '0.25rem' }}
     >
-      <MenuButton disabled={!props.dirty} create onClick={props.onSave} icon="save" label="Save" />
+      <Stack spacing={0.5}>
+        <MenuButton disabled={!props.dirty} create onClick={props.onSave} icon="save" label="Save" />
+        <MenuButton
+          onClick={props.openValidation}
+          label={`${props.errorsLength} Errors`}
+          icon="error_outlined"
+          danger={(props.errorsLength || 0) > 0}
+        />
+      </Stack>
       <Stack spacing={0.5}>
         <MenuButton
           active={active === 'editor'}
@@ -41,4 +51,8 @@ export const EditorMenu: FC<EditorMenuProps> = (props: EditorMenuProps) => {
       <div />
     </Stack>
   );
+};
+
+EditorMenu.defaultProps = {
+  errorsLength: 0,
 };

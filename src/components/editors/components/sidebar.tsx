@@ -118,9 +118,9 @@ export const Sidebar: FC<SidebarProps> = (props: SidebarProps) => {
       <Stack spacing={1}>
         <Typography variant="h5">Inputs</Typography>
         {isNotEmptyArray(inputs) ? (
-          inputs?.map((input) => (
+          inputs?.map((input, index) => (
             <Parameter
-              key={input?.name}
+              key={`${input?.name}_${index}`}
               parameter={input}
               index={component?.inputs?.findIndex((param) => param.name === input?.name) || 0}
               setComponent={setComponent}

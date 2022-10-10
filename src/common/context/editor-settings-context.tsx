@@ -11,7 +11,7 @@ const initialSettings: IEditorSettings = {
   miniMap: false,
   wordWrap: false,
   darkTheme: false,
-  language: 'yaml',
+  language: 'json',
 };
 
 interface IProvider {

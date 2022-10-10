@@ -17,13 +17,20 @@ function getMediaType(value: string | undefined, mediatypes: string[] | undefine
   return [];
 }
 
-function updateParameter(list: Data[] | undefined, index: number, parameter: Data) {
+function updateParameter(list: Data[] | undefined, index: number, parameter: Data, values: any) {
   if (!list) {
     return [];
   }
   list[index] = {
     ...parameter,
-    mediatype: getMediaType(parameter?.type, parameter?.mediatype),
+    name: values?.name,
+    type: values?.type,
+    mediatype: getMediaType(values?.type, values?.mediatype),
+    userdata: {
+      ...parameter?.userdata,
+      value: values?.value,
+      description: values?.description,
+    },
   };
   return list;
 }
