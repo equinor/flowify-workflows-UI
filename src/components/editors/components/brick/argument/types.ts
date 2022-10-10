@@ -1,4 +1,4 @@
-import { Arg, Component, Data } from '../../../../../../models/v2';
+import { Arg, Component, Data } from '../../../../../models/v2';
 
 export const TYPE_ICONS = {
   parameter: 'swap_horizontal',

@@ -8,7 +8,7 @@ import { Brick, Data, Edge, Graph } from '../../../../models/v2';
 import { ParameterWrapper } from './styles';
 import { ParameterProps, TYPE_ICONS } from './types';
 import { updateArgs, updateParameter, updateResults } from './helpers';
-import { ParameterEditor } from './components/parameter-editor/parameter-editor';
+import { ParameterEditor } from './parameter-editor/parameter-editor';
 
 export const Parameter: FC<ParameterProps> = (props: ParameterProps) => {
   const { index, setComponent, type, onlyEditableValue, editableValue, parameter, names } = props;
@@ -26,7 +26,7 @@ export const Parameter: FC<ParameterProps> = (props: ParameterProps) => {
   const parameterType = type === 'input' ? 'inputs' : 'outputs';
   const parameterMappings = type === 'input' ? 'inputMappings' : 'outputMappings';
 
-  async function onClose(values: Data) {
+  async function onParameterUpdate(values: Data) {
     setComponent((prev) =>
       prev?.implementation?.type === 'brick'
         ? {
@@ -115,7 +115,7 @@ export const Parameter: FC<ParameterProps> = (props: ParameterProps) => {
               value: props?.parameter?.userdata?.value || '',
               description: props?.parameter?.userdata?.description || '',
             }}
-            onSubmit={onClose}
+            onSubmit={onParameterUpdate}
             validationSchema={validationSchema}
             validateOnBlur
           >

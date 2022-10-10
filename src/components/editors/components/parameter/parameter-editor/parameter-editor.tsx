@@ -2,12 +2,12 @@ import React, { FC } from 'react';
 import { Icon, Typography } from '@equinor/eds-core-react';
 import { Dialog } from '@mui/material';
 import { useFormikContext } from 'formik';
-import { SelectFormik, createOptionsFromSingleValue } from '../../../../../form/formik/select-formik';
-import { TextInputFormik } from '../../../../../form/formik/text-input-formik';
-import { Button, Stack } from '../../../../../ui';
-import { MEDIATYPES, TYPES } from '../../types';
-import { Data } from '../../../../../../models/v2';
-import { TextListFormik } from '../../../../../form/formik/text-list-formik';
+import { SelectFormik, createOptionsFromSingleValue } from '../../../../form/formik/select-formik';
+import { TextInputFormik } from '../../../../form/formik/text-input-formik';
+import { Button, Stack } from '../../../../ui';
+import { MEDIATYPES, TYPES } from '../types';
+import { Data } from '../../../../../models/v2';
+import { TextListFormik } from '../../../../form/formik/text-list-formik';
 
 interface ParameterEditorProps {
   open: boolean;

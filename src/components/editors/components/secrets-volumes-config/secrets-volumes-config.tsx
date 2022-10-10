@@ -1,21 +1,10 @@
 import React, { FC } from 'react';
 import { Stack, Dialog } from '@mui/material';
 import { Typography } from '@equinor/eds-core-react';
-import { Component, Data, Edge, Graph, IVolume } from '../../../../models/v2';
+import { Data, Edge, Graph } from '../../../../models/v2';
 import { Select } from '../../../ui';
 import { getComponentFromRef } from '../../helpers';
-
-interface SecretsVolumesConfigProps {
-  parameterConfig: { type: 'secret' | 'volume'; id: string } | undefined;
-  setParameterConfig: any;
-  component: Component | undefined;
-  setComponent: React.Dispatch<React.SetStateAction<Component | undefined>>;
-  subcomponents: Component[] | undefined;
-  type: 'workflow' | 'component';
-  workspace?: string;
-  workspaceSecrets?: string[];
-  workspaceVolumes?: IVolume[];
-}
+import { SecretsVolumesConfigProps } from './types';
 
 export const SecretsVolumesConfig: FC<SecretsVolumesConfigProps> = (props: SecretsVolumesConfigProps) => {
   const {

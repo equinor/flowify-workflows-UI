@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import { Stack } from '@mui/material';
-import { MenuButton } from './components/menu-button';
+import { MenuButton } from './menu-button/menu-button';
 import { EditorMenuProps } from './types';
 
 export const EditorMenu: FC<EditorMenuProps> = (props: EditorMenuProps) => {

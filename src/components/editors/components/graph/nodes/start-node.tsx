@@ -1,12 +1,12 @@
-import React, { FC } from 'react';
+import React, { memo } from 'react';
 import { Icon, Tooltip, Typography } from '@equinor/eds-core-react';
-import { Handle, NodeProps, Position } from 'react-flow-renderer/nocss';
-import { INode } from '../../helpers/helpers';
+import { Handle, Position, NodeProps } from 'react-flow-renderer/nocss';
 import { Storage } from '@mui/icons-material';
+import { INode } from '../../../helpers';
 
-interface IEndNode extends NodeProps<INode> {}
+interface IStartNode extends NodeProps<INode> {}
 
-export const EndNode: FC<IEndNode> = (props: IEndNode) => {
+export const StartNode = memo((props: IStartNode) => {
   const { data } = props;
 
   const ICON = {
@@ -17,7 +17,7 @@ export const EndNode: FC<IEndNode> = (props: IEndNode) => {
   };
 
   return (
-    <div className="react-flow__node-endNode__wrapper">
+    <div className="react-flow__node-startNode__wrapper">
       <Typography variant="body_short_bold">
         {data?.type === 'volume' ? (
           <Storage sx={{ color: '#999' }} />
@@ -26,12 +26,12 @@ export const EndNode: FC<IEndNode> = (props: IEndNode) => {
         )}{' '}
         <b>{data?.label}</b>
       </Typography>
-      <Tooltip title={`Output | Type: ${data?.type}`} style={{ fontSize: '1rem' }}>
+      <Tooltip title={`Input | Type: ${data?.type}`} style={{ fontSize: '1rem' }}>
         <Handle
-          type="target"
-          id={props.id}
-          key={`o-${props.id}`}
-          position={Position.Left}
+          type="source"
+          id={`${props.id}`}
+          key={`i-${props.id}`}
+          position={Position.Right}
           isConnectable
           style={{
             height: 10,
@@ -43,4 +43,4 @@ export const EndNode: FC<IEndNode> = (props: IEndNode) => {
       </Tooltip>
     </div>
   );
-};
+});

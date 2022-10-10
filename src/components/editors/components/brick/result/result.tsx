@@ -3,7 +3,7 @@ import { Icon, Radio, Typography } from '@equinor/eds-core-react';
 import { Dialog, MenuItem, Select, Stack, TextField } from '@mui/material';
 import { ResultProps } from './types';
 import { ResultButton, ResultWrapper } from './styles';
-import { Brick, FilePath, Result as IResult } from '../../../../../../models/v2';
+import { Brick, FilePath, Result as IResult } from '../../../../../models/v2';
 
 export const Result: FC<ResultProps> = (props: ResultProps) => {
   const { outputs, result, setComponent, index, setWorkflow } = props;

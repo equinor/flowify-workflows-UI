@@ -4,7 +4,7 @@ import { Dialog, MenuItem, Select, Stack, TextField } from '@mui/material';
 import { Storage } from '@mui/icons-material';
 import { TYPE_ICONS, ArgumentProps } from './types';
 import { ArgumentButton, ArgumentWrapper } from './styles';
-import { Brick, Port } from '../../../../../../models/v2';
+import { Brick, Port } from '../../../../../models/v2';
 
 export const Argument: FC<ArgumentProps> = (props: ArgumentProps) => {
   const { arg, inputs, setComponent, index } = props;

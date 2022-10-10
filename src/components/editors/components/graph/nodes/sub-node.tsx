@@ -4,9 +4,9 @@ import { Stack } from '@mui/material';
 import { NodeProps } from 'react-flow-renderer/nocss';
 import { DragIndicator as DragIcon } from '@mui/icons-material';
 import { Link } from 'react-router-dom';
-import { INode } from '../../helpers/helpers';
-import { Handles } from '.';
-import { NodePreview } from '..';
+import { INode } from '../../../helpers/helpers';
+import { Handles } from '..';
+import { NodePreview } from '../..';
 
 interface ISubNode extends NodeProps<INode> {}
 

@@ -1,9 +1,9 @@
-export { StartNode } from './start-node';
-export { TaskNode } from './task-node';
-export { EndNode } from './end-node';
-export { MapNode } from './map-node';
-export { AddNode } from './add-node';
-export { SubNode } from './sub-node';
+export { StartNode } from './nodes/start-node';
+export { TaskNode } from './nodes/task-node';
+export { EndNode } from './nodes/end-node';
+export { MapNode } from './nodes/map-node';
+export { AddNode } from './nodes/add-node';
+export { SubNode } from './nodes/sub-node';
 export { GraphEditor } from './graph';
 export { Handles } from './handles';
-export { ConditionalNode } from './conditional-node';
+export { ConditionalNode } from './nodes/conditional-node';
