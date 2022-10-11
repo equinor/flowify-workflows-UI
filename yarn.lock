@@ -1329,10 +1329,10 @@
   resolved "https://registry.npmjs.org/@equinor/eds-icons/-/eds-icons-0.12.0.tgz#7eecd1494a1ee5d507d08ae83f04d7be7ecb01b9"
   integrity sha512-82jmcWWzySvl/yhQ+VXT7a8lJnV7N/HrB72VQh1LrL/KojDY7MorOITthyLcSHdaMZ/UQx9z/JjCOmpZZjTIpA==
 
-"@equinor/eds-icons@0.13.0":
-  version "0.13.0"
-  resolved "https://registry.npmjs.org/@equinor/eds-icons/-/eds-icons-0.13.0.tgz#0e64a3c3f7ea55d3f48c2a2f01dd5cffaf31085c"
-  integrity sha512-0EsUVTUXvhGjI0+ef4g4s+5iX929AKQ0UhjCFZ1yI0rnl0mTPz4eLz7L5fEcvnIoPtRucm+kPcwY/VgyYq7AOw==
+"@equinor/eds-icons@0.14.0":
+  version "0.14.0"
+  resolved "https://registry.yarnpkg.com/@equinor/eds-icons/-/eds-icons-0.14.0.tgz#881f4c1351725f1bff63a975c21b803dd4f09c09"
+  integrity sha512-a0IzvOX3sYOhwso33gcv7EtS/pv/2EEVfPmA01yCD+QTU4kyS0/B0OUg3otQnGeLL4rk0z3YNCTHYe4d0BP7sQ==
 
 "@equinor/eds-tokens@0.7.1":
   version "0.7.1"
