@@ -4,43 +4,41 @@ The Flowify project front end - flowify.equinor.com
 
 ## Getting started
 
+To get things started, make sure you have any version of node above `16.14.0` installed on your computer and then run
+
 ```
 yarn install
+```
+
+### Run frontend using Node (recommended for frontend development)
+
+To run the frontend using Node, simply run
+
+```
 yarn start
 ```
 
-### Connecting to a backend
+### Build frontend using Docker
 
-#### Connecting to Flowify dev backend
+From the root path you can build Flowify using [docker](https://www.docker.com/). This is more recommended for when you are developing the flowify-server backend and need a frontend to test the changes.
 
-For full functionality a connection to a running backend is required. The easiest is to connect directly to the dev instance of the [Aurora-hosted service](https://flowify.dev.aurora.equinor.com). To achieve this the locally running frontend must authenticate towards the Aurora service's backend. This can be done from a browser session that is logged in directly to the Aurora frontend. Visit the [dev instance](https://flowify.dev.aurora.equinor.com) and authenticate. Copy the `cookie` header (it's listed in Developer tools, in the Networks tab in Chrome) and _inject_ the header into the requests the frontend sends, for example using [Modheader](https://chrome.google.com/webstore/detail/modheader/idgpnmonknjnojddfkpgkljpfnnfcklj).
-
-The Aurora service proxy reads the `cookie` header in a request in order to perform authentication, then it appends the corresponding `Authorization` header token used internally for authorization in Flowify. For this to work you also need to open the project in a browser with CORS disabled.
-
-Example using Chrome:
-
-```
-// Powershell
-> & 'C:\Program Files (x86)\Google\Chrome\Application\chrome.exe' --disable-web-security --disable-gpu --user-data-dir=c:\chromeTemp
-
-// Bash
-open -n -a /Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --args --user-data-dir="/tmp/chrome_dev_test" --disable-web-security
-```
-
-For a complete local-hosted environment build and deploy the [flowify-workflows-server](https://github.com/equinor/flowify-workflows-server) locally. This requires some setup and tooling.
-
-## Docker
-
-From the root path you can run Flowify using [docker](https://www.docker.com/)
-
-### Build your image
+##### Build your image
 
 ```
 docker build -t flowify:latest .
 ```
 
-### Run your image
+##### Run your image
 
 ```
-docker run --name flowify -d -p 3000:3000 flowify:latest
+docker run -d --rm --name flowify -p 8080:8080 --network kind -e FLOWIFY_AUTH_TOKEN="Bearer <token>" flowify
+
+// Example bearer token
+eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJzYW5kYm94IiwiYXVkIjoiZmxvd2lmeSIsImlhdCI6MTY2MzY3NDU0NywibmJmIjoxNjYzNjc0NTQ3LCJleHAiOjI2MTA0NDU3NDcsIm9pZCI6IjgwNDgiLCJuYW1lIjoiRi4gTG93ZSIsImVtYWlsIjoiZmxvd0BzYW5kLmJveCIsInJvbGVzIjpbInNhbmRib3gtZGV2ZWxvcGVyIl19.Hc4gXrL6hsE91S6qlJpFfsONq7L-jTN9WsHxtC1fhGk
 ```
+
+## Connecting to a locally run flowify-server
+
+For a complete local-hosted environment build, deploy the [flowify-workflows-server](https://github.com/equinor/flowify-workflows-server) locally using Docker.
+
+Make sure that the whatever port the flowify-server runs on matches the port set in `proxy` field in `package.json`.
