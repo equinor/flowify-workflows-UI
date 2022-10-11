@@ -5,21 +5,22 @@ COPY package*.json ./
 COPY yarn.lock ./
 COPY tsconfig*.json ./
 
-
 FROM base as builder
 RUN yarn install
 COPY public public
 COPY src src
 RUN yarn run build
 
-
-
-
-FROM bitnami/nginx:latest
-WORKDIR /opt/bitnami/nginx/html
-COPY --from=builder /app/build .
-COPY nginx.conf /opt/bitnami/nginx/conf/nginx.conf
-USER 1001
+FROM nginx
+ARG API_SERVER_PORT=8842
+ARG API_SERVER_HOST=flowify_server
+ENV FLOWIFY_SERVER_PORT=$API_SERVER_PORT
+ENV FLOWIFY_SERVER_HOST=$API_SERVER_HOST
+RUN mkdir -p /var/tmp/nginx
+COPY --from=builder /app/build /usr/share/nginx/html
+WORKDIR /root
+COPY nginx.conf .
+COPY setup_nginx_conf.sh .
+RUN chmod +x ./setup_nginx_conf.sh
 EXPOSE 8080
-ENTRYPOINT ["nginx", "-g", "daemon off;"]
-
+ENTRYPOINT ["/bin/bash", "-c", "/root/setup_nginx_conf.sh && nginx -g 'daemon off;'"]

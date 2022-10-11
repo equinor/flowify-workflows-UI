@@ -1,5 +1,6 @@
 {
   "name": "flowify",
+  "proxy": "http://localhost:8842/",
   "version": "0.1.0",
   "private": true,
   "dependencies": {

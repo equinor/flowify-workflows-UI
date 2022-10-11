@@ -1,0 +1,67 @@
+apiVersion: radix.equinor.com/v1
+kind: RadixApplication
+metadata:
+  name: flowify
+spec:
+  environments:
+    - name: dev
+      build:
+        from: main
+  components:
+    - name: oauth-proxy
+      image: quay.io/oauth2-proxy/oauth2-proxy:v7.3.0
+      publicPort: http
+      secrets:
+        - OAUTH2_PROXY_CLIENT_SECRET # client secret for the UI. Application exist under Azure Active Directory -> App registration
+        - OAUTH2_PROXY_COOKIE_SECRET # a secret key used to encrypt the auth tokens sent to browser in cookie 
+      ports:
+        - name: http
+          port: 8000
+      environmentConfig:
+        - environment: dev
+          variables:
+            OAUTH2_PROXY_AZURE_TENANT_STRING: "3aa4a235-b6e2-48d5-9195-7fcf05b459b0"
+            OAUTH2_PROXY_CLIENT_ID: "e16f0edc-2fe5-4154-a3b4-8858ecad4030"
+            OAUTH2_PROXY_COOKIE_REFRESH: "60m"
+            OAUTH2_PROXY_EMAIL_DOMAINS: "*"
+            OAUTH2_PROXY_HTTP_ADDRESS: "http://:8000"
+            OAUTH2_PROXY_OIDC_ISSUER_URL: "https://login.microsoftonline.com/3aa4a235-b6e2-48d5-9195-7fcf05b459b0/v2.0"
+            OAUTH2_PROXY_PROVIDER: "oidc"
+            OAUTH2_PROXY_REDIRECT_URL: "https://oauth-proxy-flowify-dev.playground.radix.equinor.com/oauth2/callback"
+            OAUTH2_PROXY_UPSTREAMS: "http://main:8080/"
+            OAUTH2_PROXY_SESSION_STORE_TYPE: "cookie"
+            OAUTH2_PROXY_REDIS_CONNECTION_URL: "redis://redis:6379"
+            OAUTH2_PROXY_SKIP_JWT_BEARER_TOKENS: "true"
+            OAUTH2_PROXY_SKIP_PROVIDER_BUTTON: "true"
+            OAUTH2_PROXY_SET_XAUTHREQUEST: "true"
+            OAUTH2_PROXY_PASS_ACCESS_TOKEN: "true"
+            OAUTH2_PROXY_PASS_BASIC_AUTH: "false"
+            OAUTH2_PROXY_PASS_USER_HEADERS: "false"
+            OAUTH2_PROXY_COOKIE_DOMAINS: ".radix.equinor.com"
+            OAUTH2_PROXY_WHITELIST_DOMAINS: ".radix.equinor.com"
+    - name: main
+      src: "."
+      ports:
+       - name: http
+         port: 8080
+      environmentConfig:
+        - environment: dev
+          resources:
+            requests:
+              memory: "4Gi"
+              cpu: "500m"
+            limits:
+              memory: "16Gi"
+              cpu: "800m"
+    - name: auth-state
+      image: bitnami/redis
+      ports:
+       - name: redis
+         port: 6379
+      environmentConfig:
+      - environment: dev
+        variables:
+          ALLOW_EMPTY_PASSWORD: "yes"
+  dnsAppAlias:
+    environment: dev
+    component: oauth-proxy
