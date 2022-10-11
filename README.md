@@ -31,7 +31,10 @@ docker build -t flowify:latest .
 ##### Run your image
 
 ```
-docker run --rm --name flowify -p 3000:3000 -p 8080:8080 -p 8443:8443
+docker run -d --rm --name flowify -p 8080:8080 --network kind -e FLOWIFY_AUTH_TOKEN="Bearer <token>" dev_frontend
+
+// Example bearer token
+eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJzYW5kYm94IiwiYXVkIjoiZmxvd2lmeSIsImlhdCI6MTY2MzY3NDU0NywibmJmIjoxNjYzNjc0NTQ3LCJleHAiOjI2MTA0NDU3NDcsIm9pZCI6IjgwNDgiLCJuYW1lIjoiRi4gTG93ZSIsImVtYWlsIjoiZmxvd0BzYW5kLmJveCIsInJvbGVzIjpbInNhbmRib3gtZGV2ZWxvcGVyIl19.Hc4gXrL6hsE91S6qlJpFfsONq7L-jTN9WsHxtC1fhGk
 ```
 
 ## Connecting to a locally run flowify-server
