@@ -18,9 +18,14 @@ ENV FLOWIFY_SERVER_PORT=$API_SERVER_PORT
 ENV FLOWIFY_SERVER_HOST=$API_SERVER_HOST
 RUN mkdir -p /var/tmp/nginx
 COPY --from=builder /app/build /usr/share/nginx/html
-WORKDIR /root
+RUN mkdir /app
+WORKDIR /app
 COPY nginx.conf .
 COPY setup_nginx_conf.sh .
 RUN chmod +x ./setup_nginx_conf.sh
+RUN chown 1000:1000 ./setup_nginx_conf.sh
+RUN chown 1000:1000 /etc/nginx/nginx.conf
+RUN chown -R 1000:1000 /var/tmp/nginx
+USER 1000
 EXPOSE 8080
-ENTRYPOINT ["/bin/bash", "-c", "/root/setup_nginx_conf.sh && nginx -g 'daemon off;'"]
+ENTRYPOINT ["/bin/bash", "-c", "/app/setup_nginx_conf.sh && nginx -g 'daemon off;'"]
