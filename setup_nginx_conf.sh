@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-input_file="/root/nginx.conf"
+input_file="/home/user/nginx.conf"
 output_file="/etc/nginx/nginx.conf"
 
 nginx_config=`cat $input_file`
