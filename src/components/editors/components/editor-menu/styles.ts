@@ -16,4 +16,7 @@ export const StyledMenuButton = styled.button<{ active: boolean; create?: boolea
     opacity: 0.65;
     cursor: not-allowed;
   }
+  &:focus {
+    outline: 3px dotted #007079;
+  }
 `;

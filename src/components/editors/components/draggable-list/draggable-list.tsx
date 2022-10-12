@@ -3,41 +3,16 @@ import { Icon, Typography } from '@equinor/eds-core-react';
 import { Stack } from '@mui/material';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import { removeItem, reorder } from './helpers';
-import { nanoid } from '../../helpers';
 import { Button } from '../../../ui';
+import { getItemStyle, getListStyle } from './styles';
+import { DraggableListProps } from './types';
 
-interface DraggableListProps {
-  list: any[] | undefined | null;
-  type: string;
-  label: string;
-  addItem: () => void;
-  child?: (item: any, index: number) => React.ReactNode;
-  onChange: (list: any[]) => void;
-  name?: string;
-  customDragEnd?: (indexA: number, indexB: number) => void;
-  customRemove?: (index: number) => void;
-}
-
+/**
+ * DraggableList. Takes a list of items (object or string) and maps the item to draggable items. Inside the draggable the function you passed to the child prop will be called with the item from the map and the index as parameters. It will then print whatever you return in this function as a child of the draggable.
+ * @returns React.ReactNode
+ */
 export const DraggableList: FC<DraggableListProps> = (props: DraggableListProps) => {
-  const { list, type, child, onChange, name, customDragEnd, customRemove } = props;
-
-  const getItemStyle = (isDragging: boolean, draggableStyle: any) => ({
-    display: 'flex',
-    alignItems: 'center',
-    columnGap: '1rem',
-    borderRadius: '10px',
-    userSelect: 'none',
-    padding: '0.5rem 1rem',
-    background: isDragging ? 'rgba(255, 255, 255, 0.8)' : 'white',
-    ...draggableStyle,
-  });
-
-  const getListStyle = (isDraggingOver: boolean) => ({
-    display: 'flex',
-    flexDirection: 'column' as 'column',
-    background: isDraggingOver ? '#E6FAEC' : 'white',
-    border: isDraggingOver ? '2px dashed #4BB748' : 'none',
-  });
+  const { list, child, onChange, customDragEnd, customRemove, addButtonLabel, id } = props;
 
   function onDragEnd(result: any) {
     const { source, destination } = result;
@@ -45,7 +20,7 @@ export const DraggableList: FC<DraggableListProps> = (props: DraggableListProps)
       customDragEnd(source.index, destination.index);
       return;
     }
-    if (destination.droppableId === `container-${type}`) {
+    if (destination.droppableId === `container-${id}`) {
       const updatedList = reorder(list!, source.index, destination.index);
       onChange(updatedList);
       return;
@@ -65,13 +40,13 @@ export const DraggableList: FC<DraggableListProps> = (props: DraggableListProps)
     <div>
       <Typography variant="body_short_bold">{props.label}</Typography>
       <DragDropContext onDragEnd={onDragEnd}>
-        <Droppable droppableId={`container-${type}`}>
+        <Droppable droppableId={`container-${id}`}>
           {(provided, snapshot) => (
             <div {...provided.droppableProps} ref={provided.innerRef} style={getListStyle(snapshot.isDraggingOver)}>
               {list?.map((item, index) => (
                 <Draggable
-                  key={`draggable_item_${name || nanoid(4)}_${index}`}
-                  draggableId={`draggable_item_${type}_${index}`}
+                  key={`draggable_item_${id}_${index}`}
+                  draggableId={`draggable_item_${id}_${index}`}
                   index={index}
                 >
                   {(prov, snapshot) => (
@@ -96,10 +71,14 @@ export const DraggableList: FC<DraggableListProps> = (props: DraggableListProps)
         </Droppable>
         <Stack alignItems="flex-end" paddingTop="1rem">
           <Button theme="simple" onClick={props.addItem}>
-            <Icon name="add" /> Add {type}
+            <Icon name="add" /> {addButtonLabel}
           </Button>
         </Stack>
       </DragDropContext>
     </div>
   );
+};
+
+DraggableList.defaultProps = {
+  addButtonLabel: 'Add item',
 };

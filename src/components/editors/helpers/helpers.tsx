@@ -33,7 +33,7 @@ function newStartNodes(inputs: Data[]): Node<INode>[] {
     .filter((i) => i.name)
     .filter((i) => i.type !== 'env_secret' && i.type !== 'volume')
     .map((input, index) => ({
-      id: input.name || nanoid(6),
+      id: `i-${input.name}` || nanoid(6),
       type: 'startNode',
       data: {
         label: input.name,
@@ -56,7 +56,7 @@ function newStartNodes(inputs: Data[]): Node<INode>[] {
  */
 function newEndNodes(outputs: Data[]): Node<INode>[] {
   const nodes = outputs.map((output, index) => ({
-    id: output.name || nanoid(6),
+    id: `o-${output.name}` || nanoid(6),
     type: 'endNode',
     data: {
       label: output.name,
@@ -198,10 +198,10 @@ function buildConnections(component: Component) {
         if (edge.source?.node && edge.source?.port && edge.target?.node && edge.target?.port) {
           connections.push({
             id: `${edge.source.port}-${edge.target.port}_${index}`,
-            source: edge.source.node!,
+            source: edge.source.node,
             sourceHandle: `p-${edge.source.port}`,
             targetHandle: `p-${edge.target.port}`,
-            target: edge.target.node!,
+            target: edge.target.node,
             data: {
               connectionType: 'node',
             },
@@ -214,7 +214,7 @@ function buildConnections(component: Component) {
         if (edge.source?.port && edge.target?.node && edge.target?.port) {
           connections.push({
             id: `${edge.source.port}-${edge.target.port}_${index}`,
-            source: edge.source.port,
+            source: `i-${edge.source.port}`,
             sourceHandle: `i-${edge.source.port}`,
             targetHandle: `p-${edge.target.port}`,
             target: edge.target.node!,
@@ -230,9 +230,9 @@ function buildConnections(component: Component) {
         if (edge.source?.port && edge.source?.node && edge.target?.port) {
           connections.push({
             id: `${edge.source.port}-${edge.target.port}_${index}`,
-            source: edge.source.node!,
+            source: edge.source.node,
             sourceHandle: `p-${edge.source.port}`,
-            target: edge.target.port,
+            target: `o-${edge.target.port}`,
             targetHandle: `o-${edge.target.port}`,
             data: {
               connectionType: 'output',

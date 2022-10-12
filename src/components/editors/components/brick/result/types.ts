@@ -1,5 +1,5 @@
 import React from 'react';
-import { Component, Data, Result, Workflow } from '../../../../../../models/v2';
+import { Component, Data, Result, Workflow } from '../../../../../models/v2';
 export interface ResultProps {
   result: Result;
   outputs?: Data[];

@@ -149,7 +149,8 @@ export const Brick: FC<BrickProps> = (props: BrickProps) => {
               </div>
               <DraggableList
                 label="Command"
-                type="command"
+                id="command"
+                addButtonLabel="Add command"
                 onChange={commandHandler}
                 list={brick?.container?.command}
                 addItem={addCommand}
@@ -159,7 +160,8 @@ export const Brick: FC<BrickProps> = (props: BrickProps) => {
               />
               <DraggableList
                 label="Args"
-                type="argument"
+                id="args"
+                addButtonLabel="Add argument"
                 onChange={argsHandler}
                 list={brick?.args}
                 addItem={addArgument}
@@ -169,7 +171,8 @@ export const Brick: FC<BrickProps> = (props: BrickProps) => {
               />
               <DraggableList
                 label="Results"
-                type="result"
+                id="result"
+                addButtonLabel="Add result"
                 onChange={resultHandler}
                 list={brick?.results}
                 addItem={addResult}

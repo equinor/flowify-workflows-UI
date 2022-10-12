@@ -1,8 +1,8 @@
 import React, { FC } from 'react';
 import { Icon, Tooltip, Typography } from '@equinor/eds-core-react';
 import { Handle, NodeProps, Position } from 'react-flow-renderer/nocss';
-import { INode } from '../../helpers/helpers';
 import { Storage } from '@mui/icons-material';
+import { INode } from '../../../helpers/helpers';
 
 interface IEndNode extends NodeProps<INode> {}
 
@@ -29,7 +29,7 @@ export const EndNode: FC<IEndNode> = (props: IEndNode) => {
       <Tooltip title={`Output | Type: ${data?.type}`} style={{ fontSize: '1rem' }}>
         <Handle
           type="target"
-          id={`o-${props.id}`}
+          id={props.id}
           key={`o-${props.id}`}
           position={Position.Left}
           isConnectable

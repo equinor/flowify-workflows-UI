@@ -241,6 +241,7 @@ const Editor: React.FC<IEditor> = (props: IEditor) => {
         onClose={() => setValidationModal(false)}
         validationErrors={validationErrors}
         onValidate={onValidate}
+        setParameterConfig={setParameterConfig}
       />
       <MapConfig
         component={component}

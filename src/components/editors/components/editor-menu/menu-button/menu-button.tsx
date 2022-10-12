@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import { Icon, Typography } from '@equinor/eds-core-react';
-import { StyledMenuButton } from '../styles/styles';
+import { StyledMenuButton } from '../styles';
 
 interface MenuButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   active?: boolean;

@@ -2,12 +2,12 @@ import React, { FC } from 'react';
 import { Icon, Typography } from '@equinor/eds-core-react';
 import { Dialog } from '@mui/material';
 import { useFormikContext } from 'formik';
-import { SelectFormik, createOptionsFromSingleValue } from '../../../../../form/formik/select-formik';
-import { TextInputFormik } from '../../../../../form/formik/text-input-formik';
-import { Button, Stack } from '../../../../../ui';
-import { MEDIATYPES, TYPES } from '../../types';
-import { Data } from '../../../../../../models/v2';
-import { TextListFormik } from '../../../../../form/formik/text-list-formik';
+import { SelectFormik, createOptionsFromSingleValue } from '../../../../form/formik/select-formik';
+import { TextInputFormik } from '../../../../form/formik/text-input-formik';
+import { Button, Stack } from '../../../../ui';
+import { MEDIATYPES, TYPES } from '../types';
+import { Data } from '../../../../../models/v2';
+import { TextListFormik } from '../../../../form/formik/text-list-formik';
 
 interface ParameterEditorProps {
   open: boolean;
@@ -17,10 +17,11 @@ interface ParameterEditorProps {
   editableValue: boolean | undefined;
   secret?: boolean;
   volume?: boolean;
+  type?: 'input' | 'output';
 }
 
 export const ParameterEditor: FC<ParameterEditorProps> = (props: ParameterEditorProps) => {
-  const { open, onlyEditableValue, removeInput } = props;
+  const { open, onlyEditableValue, removeInput, type } = props;
   const { values, setTouched, submitForm, isValid } = useFormikContext();
 
   function trySubmit() {
@@ -41,11 +42,12 @@ export const ParameterEditor: FC<ParameterEditorProps> = (props: ParameterEditor
     <Dialog open={open} onClose={trySubmit} fullWidth maxWidth="sm">
       <Stack padding={2} spacing={2}>
         <>
-          <Typography variant="h5">Edit input</Typography>
+          <Typography variant="h5">Edit {type}</Typography>
           <TextInputFormik name="name" label="Name" readOnly={onlyEditableValue} />
           {props.editableValue &&
+            type === 'input' &&
             ((values as Data)?.type === 'parameter_array' ? (
-              <TextListFormik name="value" />
+              <TextListFormik name="value" label="Value" addButtonLabel="Add value" />
             ) : (
               <TextInputFormik name="value" label="Value" />
             ))}

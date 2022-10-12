@@ -22,6 +22,7 @@ import { IFilter, IPagination, services } from '../../../services';
 import { IfConfig } from '../components/functional-components/if/if-config';
 import { isNotEmptyArray } from '../../../common';
 import { checkWorkflowValidation } from '../../../common/validation/workflow-validation';
+import { IFunctionalCompConfig, IParameterConfig } from '../types';
 
 interface IWorkflowEditor {
   uid: string | null;
@@ -54,8 +55,8 @@ const WorkflowEditor: FC<IWorkflowEditor> = (props: IWorkflowEditor) => {
   const [nodes, setNodes, onNodesChange] = useNodesState<INode>([]);
 
   // Configs
-  const [configComponent, setConfigComponent] = useState<{ id: string; type: 'map' | 'if' }>();
-  const [parameterConfig, setParameterConfig] = useState<{ type: 'secret' | 'volume'; id: string }>();
+  const [configComponent, setConfigComponent] = useState<IFunctionalCompConfig>();
+  const [parameterConfig, setParameterConfig] = useState<IParameterConfig>();
 
   // Validation
   const [feedback, setFeedback] = useState<Feedback>();
@@ -98,7 +99,8 @@ const WorkflowEditor: FC<IWorkflowEditor> = (props: IWorkflowEditor) => {
    * @returns Promise<boolean>
    */
   async function onValidate() {
-    const validationErrors = await checkWorkflowValidation(workflow, initialWorkflow, workspaceSecrets);
+    const volumes: string[] = workspaceVolumes.map((volume) => volume.uid);
+    const validationErrors = await checkWorkflowValidation(workflow, initialWorkflow, workspaceSecrets, volumes);
     setValidationErrors(validationErrors);
     if (isNotEmptyArray(validationErrors)) {
       return true;
@@ -297,6 +299,7 @@ const WorkflowEditor: FC<IWorkflowEditor> = (props: IWorkflowEditor) => {
         onClose={() => setValidationModal(false)}
         validationErrors={validationErrors}
         onValidate={onValidate}
+        setParameterConfig={setParameterConfig}
       />
       <MapConfig
         component={component}

@@ -1,7 +1,7 @@
 import { Icon, Typography } from '@equinor/eds-core-react';
 import React from 'react';
 import { NodeProps } from 'react-flow-renderer/nocss';
-import { INode } from '../../helpers/helpers';
+import { INode } from '../../../helpers/helpers';
 
 interface AddNodeProps extends NodeProps<INode> {}
 

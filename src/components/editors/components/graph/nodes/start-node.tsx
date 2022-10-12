@@ -1,8 +1,8 @@
 import React, { memo } from 'react';
 import { Icon, Tooltip, Typography } from '@equinor/eds-core-react';
 import { Handle, Position, NodeProps } from 'react-flow-renderer/nocss';
-import { INode } from '../../helpers';
 import { Storage } from '@mui/icons-material';
+import { INode } from '../../../helpers';
 
 interface IStartNode extends NodeProps<INode> {}
 
@@ -29,7 +29,7 @@ export const StartNode = memo((props: IStartNode) => {
       <Tooltip title={`Input | Type: ${data?.type}`} style={{ fontSize: '1rem' }}>
         <Handle
           type="source"
-          id={`i-${props.id}`}
+          id={`${props.id}`}
           key={`i-${props.id}`}
           position={Position.Right}
           isConnectable

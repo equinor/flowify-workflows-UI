@@ -1,32 +1,11 @@
 import React, { FC, useState } from 'react';
-import styled from 'styled-components';
+import { Link } from 'react-router-dom';
 import { Chip, Icon, Pagination, Typography } from '@equinor/eds-core-react';
 import { Dialog, Grid, TextField as MUITextField } from '@mui/material';
 import moment from 'moment';
-import { Workflow, Component, WorkflowListRequest, ComponentListRequest } from '../../../../models/v2';
 import { Button, Paper, TextField, Stack } from '../../../ui';
-import { Link } from 'react-router-dom';
-import { IFilter, IPagination } from '../../../../services';
-
-interface DocumentEditorProps {
-  document: Workflow | Component | undefined;
-  setInstance: any;
-  versionsResponse?: WorkflowListRequest | ComponentListRequest | undefined;
-  onPublish: () => void;
-  onDelete: () => void;
-  fetchVersions: (
-    filters: IFilter[] | undefined,
-    pagination: IPagination | undefined,
-    sorting: string | undefined,
-  ) => void;
-}
-
-const StyledTextButton = styled.button`
-  background: none;
-  border: none;
-  cursor: text;
-  padding: 0;
-`;
+import { DocumentEditorProps } from './types';
+import { StyledTextButton } from './styles';
 
 export const DocumentEditor: FC<DocumentEditorProps> = (props: DocumentEditorProps) => {
   const { document, setInstance, versionsResponse, fetchVersions } = props;
@@ -35,11 +14,11 @@ export const DocumentEditor: FC<DocumentEditorProps> = (props: DocumentEditorPro
   const [deleteModalOpen, setDeleteModalOpen] = useState<boolean>(false);
   const [tagInput, setTagInput] = useState<string>('');
 
-  const { items: versions, pageInfo } = versionsResponse as WorkflowListRequest | ComponentListRequest;
+  const { items: versions, pageInfo } = versionsResponse || {};
 
   function updateName(event: any) {
     const { value } = event.target;
-    setInstance((prev: Component | Workflow) => ({
+    setInstance((prev: any) => ({
       ...prev,
       name: value,
     }));
@@ -48,7 +27,7 @@ export const DocumentEditor: FC<DocumentEditorProps> = (props: DocumentEditorPro
 
   function updateDescription(event: any) {
     const { value } = event.target;
-    setInstance((prev: Component | Workflow) => ({
+    setInstance((prev: any) => ({
       ...prev,
       description: value,
     }));
@@ -64,7 +43,7 @@ export const DocumentEditor: FC<DocumentEditorProps> = (props: DocumentEditorPro
       return list;
     }
     if (event.key === 'Enter' && tagInput) {
-      setInstance((prev: Component | Workflow) => ({
+      setInstance((prev: any) => ({
         ...prev,
         version: {
           ...prev?.version,
@@ -80,7 +59,7 @@ export const DocumentEditor: FC<DocumentEditorProps> = (props: DocumentEditorPro
   }
 
   function removeTag(value: string) {
-    setInstance((prev: Component | Workflow) => ({
+    setInstance((prev: any) => ({
       ...prev,
       version: {
         ...prev?.version,
@@ -137,7 +116,7 @@ export const DocumentEditor: FC<DocumentEditorProps> = (props: DocumentEditorPro
             </Paper>
           ))}
           <Pagination
-            totalItems={pageInfo?.totalNumber}
+            totalItems={pageInfo?.totalNumber || 0}
             itemsPerPage={10}
             withItemIndicator
             onChange={(event, page) => fetchVersions(undefined, { offset: (page - 1) * 10, limit: 10 }, undefined)}
