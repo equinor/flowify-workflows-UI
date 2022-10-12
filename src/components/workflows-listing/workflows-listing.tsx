@@ -114,7 +114,7 @@ const WorkflowsListing: FC<IWorkflowsListing> = (props: IWorkflowsListing) => {
       <Stack sx={{ padding: '1rem' }} spacing={1} alignItems="flex-start">
         <Typography variant="h5">Docs</Typography>
         <a
-          href="https://equinor.github.io/flowify-documentation/docs/workflow/"
+          href="https://equinor.github.io/flowify-documentation/workflows/"
           target="_blank"
           rel="noopener noreferrer"
         >
