@@ -32,6 +32,7 @@ export const Result: FC<ResultProps> = (props: ResultProps) => {
           results: updateValues((prev?.implementation as Brick)?.results || []),
         },
       }));
+      setOpen(false);
       return;
     }
     if (typeof setWorkflow === 'function') {
@@ -45,6 +46,7 @@ export const Result: FC<ResultProps> = (props: ResultProps) => {
           },
         },
       }));
+      setOpen(false);
     }
   }
 

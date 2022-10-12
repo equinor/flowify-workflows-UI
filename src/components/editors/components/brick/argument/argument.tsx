@@ -41,6 +41,7 @@ export const Argument: FC<ArgumentProps> = (props: ArgumentProps) => {
         },
       }));
     }
+    setOpen(false);
   }
 
   const selectedInputType = inputs?.find((input) => input.name === selectValue)?.type;
