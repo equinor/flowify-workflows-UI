@@ -1,19 +1,16 @@
 import React, { FC, useEffect, useState } from 'react';
-import { Icon, Radio, Typography } from '@equinor/eds-core-react';
-import { Dialog, MenuItem, Select, Stack, TextField } from '@mui/material';
+import { Icon, Typography } from '@equinor/eds-core-react';
+import { Stack } from '@mui/material';
 import { Storage } from '@mui/icons-material';
 import { TYPE_ICONS, ArgumentProps } from './types';
 import { ArgumentButton, ArgumentWrapper } from './styles';
-import { Brick, Port } from '../../../../../models/v2';
+import { Port } from '../../../../../models/v2';
+import { ArgumentEditor } from './argument-editor/argument-editor';
 
 export const Argument: FC<ArgumentProps> = (props: ArgumentProps) => {
-  const { arg, inputs, setComponent, index } = props;
+  const { arg, inputs } = props;
   const [open, setOpen] = useState<boolean>(false);
   const isConst = typeof arg?.source === 'string';
-  const [isConstant, setIsConstant] = useState<boolean>(isConst);
-  const [prefixValue, setPrefixValue] = useState<string>(arg?.target?.prefix || '');
-  const [suffixValue, setSuffixValue] = useState<string>(arg?.target?.suffix || '');
-  const [inputValue, setInputValue] = useState<any>(isConst ? arg?.source : '');
   const [selectValue, setSelectValue] = useState<string | undefined>(isConst ? '' : (arg?.source as Port)?.port);
   const [type, setType] = useState<string>('');
 
@@ -22,84 +19,20 @@ export const Argument: FC<ArgumentProps> = (props: ArgumentProps) => {
     setType(inputType || '');
   }, [selectValue, inputs]);
 
-  function updateValue(list: object[]) {
-    if (isConstant) {
-      list[index] = { source: inputValue };
-      return list;
-    }
-    list[index] = { source: { port: selectValue }, target: { type, prefix: prefixValue, suffix: suffixValue } };
-    return list;
-  }
-
-  function onChange() {
-    if (typeof setComponent === 'function') {
-      setComponent((prev) => ({
-        ...prev,
-        implementation: {
-          ...prev?.implementation,
-          args: updateValue((prev?.implementation as Brick)?.args || []),
-        },
-      }));
-    }
-    setOpen(false);
-  }
-
-  const selectedInputType = inputs?.find((input) => input.name === selectValue)?.type;
-
   return (
     <ArgumentWrapper>
-      <Dialog open={open} onClose={() => onChange()} fullWidth maxWidth="sm">
-        <Stack sx={{ padding: '2rem' }} spacing={2}>
-          <Typography variant="h5">Edit argument</Typography>
-          <Stack direction="row" spacing={2}>
-            <Radio label="Constant" value="constant" checked={isConstant} onChange={() => setIsConstant(true)} />
-            <Radio
-              label="Parameter input"
-              value="parameter"
-              checked={!isConstant}
-              onChange={() => setIsConstant(false)}
-            />
-          </Stack>
-          {!isConstant && (
-            <div>
-              <Typography variant="h6">Prefix</Typography>
-              <TextField fullWidth value={prefixValue} onChange={(event) => setPrefixValue(event.target.value)} />
-            </div>
-          )}
-          <div>
-            <Typography variant="h6">{isConstant ? 'Source' : 'Source input'}</Typography>
-            {isConstant ? (
-              <TextField fullWidth value={inputValue} onChange={(event) => setInputValue(event.target.value)} />
-            ) : (
-              <Select fullWidth value={selectValue} onChange={(event) => setSelectValue(event.target.value)}>
-                {inputs?.map((input) => (
-                  <MenuItem key={input.name} value={input.name}>
-                    {input.name}
-                  </MenuItem>
-                ))}
-              </Select>
-            )}
-          </div>
-          {!isConstant && (
-            <div>
-              <Typography variant="h6">Suffix</Typography>
-              <TextField fullWidth value={suffixValue} onChange={(event) => setSuffixValue(event.target.value)} />
-            </div>
-          )}
-          {selectedInputType === 'volume' && (
-            <Stack direction="row" alignItems="center" spacing={2} sx={{ background: '#ADE2E619', padding: '1rem' }}>
-              <Icon name="info_circle" color="#007079" />
-              <Typography variant="body_short">
-                <b>Mount path: </b>
-                <br />
-                {prefixValue}
-                {selectValue}
-                {suffixValue}
-              </Typography>
-            </Stack>
-          )}
-        </Stack>
-      </Dialog>
+      <ArgumentEditor
+        arg={arg}
+        index={props.index}
+        inputs={inputs || []}
+        isConst={isConst}
+        onClose={() => setOpen(false)}
+        open={open}
+        setComponent={props.setComponent!}
+        selectValue={selectValue}
+        setSelectValue={setSelectValue}
+        type={type}
+      />
       <ArgumentButton onClick={() => setOpen(true)}>
         {isConst ? (
           <Icon name="text_field" />

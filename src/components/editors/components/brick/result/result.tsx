@@ -1,9 +1,10 @@
 import React, { FC, useState } from 'react';
 import { Icon, Radio, Typography } from '@equinor/eds-core-react';
-import { Dialog, MenuItem, Select, Stack, TextField } from '@mui/material';
+import { Dialog, MenuItem, Select, Stack } from '@mui/material';
 import { ResultProps } from './types';
-import { ResultButton, ResultWrapper } from './styles';
+import { ResultButton, ResultWrapper, EditorWrapper } from './styles';
 import { Brick, FilePath, Result as IResult } from '../../../../../models/v2';
+import { BaseInput } from '../../../../form/base';
 
 export const Result: FC<ResultProps> = (props: ResultProps) => {
   const { outputs, result, setComponent, index, setWorkflow } = props;
@@ -53,21 +54,25 @@ export const Result: FC<ResultProps> = (props: ResultProps) => {
   return (
     <ResultWrapper>
       <Dialog open={open} onClose={() => onChange()} fullWidth maxWidth="sm">
-        <Stack sx={{ padding: '2rem' }} spacing={2}>
-          <Typography variant="h6">Edit result</Typography>
+        <EditorWrapper padding={2} spacing={2}>
+          <Typography variant="h5">Edit result</Typography>
           <Stack>
-            <Typography variant="caption">Source type</Typography>
+            <Typography variant="body_short_bold">Source type</Typography>
             <Stack direction="row" spacing={2}>
               <Radio label="Constant" value="constant" checked={!isFilePath} onChange={() => setIsFilePath(false)} />
               <Radio label="File path" value="parameter" checked={isFilePath} onChange={() => setIsFilePath(true)} />
             </Stack>
           </Stack>
           <Stack spacing={1}>
-            <Typography variant="caption">{isFilePath ? 'Source file path' : 'Source'}</Typography>
-            <TextField value={inputValue} onChange={(event) => setInputValue(event.target.value)} />
+            <BaseInput
+              label={isFilePath ? 'Source file path' : 'Source'}
+              name="source"
+              value={inputValue as string}
+              onChange={(event: any) => setInputValue(event.target.value)}
+            />
           </Stack>
           <Stack spacing={1}>
-            <Typography variant="caption">Target port</Typography>
+            <Typography variant="body_short_bold">Target port</Typography>
             <Select label="Target port" value={selectValue} onChange={(event) => setSelectValue(event.target.value)}>
               {outputs?.map((output) => (
                 <MenuItem key={output.name} value={output.name}>
@@ -76,7 +81,7 @@ export const Result: FC<ResultProps> = (props: ResultProps) => {
               ))}
             </Select>
           </Stack>
-        </Stack>
+        </EditorWrapper>
       </Dialog>
       <ResultButton onClick={() => setOpen(true)}>
         <Stack direction="row" justifyContent="center" spacing={2}>

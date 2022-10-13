@@ -10,5 +10,5 @@ export interface ArgumentProps {
   arg: Arg;
   inputs?: Data[];
   index: number;
-  setComponent?: React.Dispatch<React.SetStateAction<Component | undefined>>;
+  setComponent: React.Dispatch<React.SetStateAction<Component | undefined>>;
 }
