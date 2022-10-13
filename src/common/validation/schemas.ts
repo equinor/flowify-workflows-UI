@@ -47,7 +47,7 @@ export const BrickSchema = Yup.object({
     Yup.object({
       source: Yup.lazy((value) => (typeof value === 'string' ? Yup.string() : PortSchema)),
       target: Yup.object({
-        type: Yup.string().required(),
+        type: Yup.string(),
         prefix: Yup.string(),
         suffix: Yup.string(),
       })
@@ -78,9 +78,7 @@ export const BrickSchema = Yup.object({
       target: PortSchema.required(),
     }),
   ),
-})
-  .noUnknown(true)
-  .strict();
+});
 
 export const AnySchema = Yup.object({
   type: Yup.string().oneOf(['any']).required(),
@@ -96,6 +94,4 @@ export const GraphSchema = Yup.object({
       id: Yup.string().required().startsWithLetter(),
     }),
   ),
-})
-  .noUnknown(true)
-  .strict();
+});

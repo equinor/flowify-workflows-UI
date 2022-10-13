@@ -99,7 +99,7 @@ const WorkflowEditor: FC<IWorkflowEditor> = (props: IWorkflowEditor) => {
    * @returns Promise<boolean>
    */
   async function onValidate() {
-    const volumes: string[] = workspaceVolumes.map((volume) => volume.uid);
+    const volumes: string[] = workspaceVolumes?.map((volume) => volume.uid);
     const validationErrors = await checkWorkflowValidation(workflow, initialWorkflow, workspaceSecrets, volumes);
     setValidationErrors(validationErrors);
     if (isNotEmptyArray(validationErrors)) {
@@ -187,13 +187,14 @@ const WorkflowEditor: FC<IWorkflowEditor> = (props: IWorkflowEditor) => {
    * To be able to reuse React components for both workflow and component editor, this is a workaround that allows us to pass only component and setComponent to those React components. When component updates in those editor components, we use this hook and update workflow by updating the entire component within the workflow object with the changes.
    */
   useEffect(() => {
-    if (component) {
+    if (component && mounted) {
       console.log('component updates workflow');
       setWorkflow((prev) => ({
         ...prev,
         component: component,
       }));
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [component]);
 
   /**
