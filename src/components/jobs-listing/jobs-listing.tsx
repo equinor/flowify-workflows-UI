@@ -12,7 +12,7 @@ import {
   TableSortLabel,
 } from '@mui/material';
 import { Icon, Typography } from '@equinor/eds-core-react';
-import JobTableRow from './components/table-row';
+import JobTableRow from './table-row/table-row';
 import { services } from '../../services';
 import { Job, IPageInfo } from '../../models/v2';
 import { IFilter } from '../../services/filters';
