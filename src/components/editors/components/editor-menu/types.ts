@@ -8,3 +8,5 @@ export interface EditorMenuProps {
   openValidation?: () => void;
   errorsLength?: number;
 }
+
+export type ButtonTheme = 'active' | 'create' | 'danger' | 'default';
