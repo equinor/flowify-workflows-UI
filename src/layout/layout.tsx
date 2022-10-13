@@ -13,6 +13,23 @@ const StyledPageWrapper = styled.div<ILayout>`
   flex-direction: column;
   min-height: 100%;
   max-height: ${(props) => (props.dashboard ? '100vh' : 'none')};
+  background: ${({ theme }) => theme?.layout?.background};
+  color: ${({ theme }) => theme.defaults.color};
+  svg {
+    fill: ${({ theme }) => theme.defaults.iconColor};
+  }
+  h6,
+  h5,
+  h4,
+  h3,
+  h2,
+  h1,
+  li,
+  td,
+  th,
+  p {
+    color: ${({ theme }) => theme.defaults.color};
+  }
 `;
 
 const StyledMain = styled.main<ILayout>`

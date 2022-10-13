@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 const StyledMultiToggle = styled.div`
-  background-color: #deedee;
+  background-color: ${({ theme }) => theme?.multiToggle?.background};
   border-radius: 50px;
   display: flex;
   row-gap: 1rem;
@@ -10,7 +10,8 @@ const StyledMultiToggle = styled.div`
 `;
 
 const StyledToggleButton = styled.button<{ active?: boolean }>`
-  background: ${(props) => (props.active ? '#97CACE' : 'none')};
+  background: ${(props) => (props.active ? props?.theme?.multiToggle?.button?.background : 'none')};
+  color: ${({ theme }) => theme?.multiToggle?.button?.color};
   border: none;
   outline: none;
   padding: 0.75rem 1rem;
@@ -18,7 +19,7 @@ const StyledToggleButton = styled.button<{ active?: boolean }>`
   font-size: 1rem;
   cursor: pointer;
   &:focus {
-    outline: 3px dotted #007079;
+    outline: ${({ theme }) => theme?.defaults?.focusOutline};
     outline-offset: 3px;
   }
 `;

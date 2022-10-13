@@ -8,6 +8,7 @@ import { EditorHeader } from '../components';
 import { Component, Workflow } from '../../../models/v2';
 import { Parameter } from '.';
 import { MultiToggle, ToggleButton } from '../../ui';
+import { BaseInput } from '../../form/base';
 
 interface SidebarProps {
   component: Component | null | undefined;
@@ -92,7 +93,12 @@ export const Sidebar: FC<SidebarProps> = (props: SidebarProps) => {
       ></EditorHeader>
       <Stack spacing={1}>
         {editName ? (
-          <TextField autoFocus defaultValue={document?.name} onBlur={(event) => updateName(event)} />
+          <BaseInput
+            name="document_name"
+            autoFocus
+            defaultValue={document?.name}
+            onBlur={(event) => updateName(event)}
+          />
         ) : (
           <StyledTextButton onClick={() => setEditName(true)}>
             <Typography variant="h3">{document?.name}</Typography>

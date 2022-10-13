@@ -1,45 +1,34 @@
 import styled from 'styled-components';
 import { ButtonTheme } from './types';
 
-export const StyledButton = styled.button<{ theme: ButtonTheme }>`
+export const StyledButton = styled.button<{ buttonTheme: ButtonTheme }>`
   appearance: none;
   border: none;
   outline: none;
-  padding: ${(props) => (props.theme === 'simple' ? '0' : '1rem')};
-  background-color: ${(props) =>
-    props.theme === 'simple'
-      ? 'transparent'
-      : props.theme === 'create'
-      ? '#E6FAEC'
-      : props.theme === 'danger'
-      ? '#FFC1C1'
-      : '#DEEDEE'};
-  color: #18252f;
+  padding: ${(props) => (props.buttonTheme === 'simple' ? '0' : '1rem')};
+  background-color: ${(props) => props?.theme?.button?.background?.[props.buttonTheme]};
+  color: ${(props) => props?.theme?.button?.color?.[props.buttonTheme]};
   border-radius: 1rem;
   display: flex;
   align-items: center;
   column-gap: 0.25rem;
   font-size: 1rem;
-  font-weight: ${(props) => (props.theme === 'simple' ? 'inherit' : '500')};
+  font-weight: ${(props) => (props.buttonTheme === 'simple' ? 'inherit' : '500')};
   cursor: pointer;
   transition: ease-in-out all 0.2s;
+  svg {
+    fill: ${(props) => props?.theme?.button?.color?.[props.buttonTheme]};
+  }
 
   &:hover {
-    background-color: ${(props) => (props.theme === 'simple' ? 'transparent' : '#C3F3D2')};
-    background-color: ${(props) =>
-      props.theme === 'simple'
-        ? 'transparent'
-        : props.theme === 'create'
-        ? '#C3F3D2'
-        : props.theme === 'danger'
-        ? '#FF6670'
-        : '#C9E0E2'};
-    color: ${(props) => (props.theme === 'danger' ? 'white' : 'black')};
-    text-decoration: ${(props) => (props.theme === 'simple' ? 'underline' : 'none')};
+    background-color: ${(props) => (props.buttonTheme === 'simple' ? 'transparent' : '#C3F3D2')};
+    background-color: ${(props) => props?.theme?.button?.hover?.background?.[props.buttonTheme]};
+    color: ${(props) => props?.theme?.button?.hover?.color?.[props.buttonTheme]};
+    text-decoration: ${(props) => (props.buttonTheme === 'simple' ? 'underline' : 'none')};
   }
 
   &:focus {
-    outline: 3px dotted #007079;
+    outline: ${(props) => props?.theme?.defaults?.focusOutline};
     outline-offset: 3px;
   }
 `;
