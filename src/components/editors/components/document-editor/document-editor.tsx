@@ -1,11 +1,12 @@
 import React, { FC, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Chip, Icon, Pagination, Typography } from '@equinor/eds-core-react';
-import { Dialog, Grid, TextField as MUITextField } from '@mui/material';
+import { Dialog, Grid } from '@mui/material';
 import moment from 'moment';
 import { Button, Paper, TextField, Stack } from '../../../ui';
 import { DocumentEditorProps } from './types';
 import { StyledTextButton } from './styles';
+import { BaseInput } from '../../../form/base';
 
 export const DocumentEditor: FC<DocumentEditorProps> = (props: DocumentEditorProps) => {
   const { document, setInstance, versionsResponse, fetchVersions } = props;
@@ -128,7 +129,8 @@ export const DocumentEditor: FC<DocumentEditorProps> = (props: DocumentEditorPro
           <Stack direction="row" alignItems="flex-start" justifyContent="space-between" spacing={2}>
             <Stack spacing={1} grow={1}>
               {editName || !document?.name ? (
-                <MUITextField
+                <BaseInput
+                  name="document_name"
                   autoFocus
                   defaultValue={document?.name}
                   onBlur={(event: any) => updateName(event)}
@@ -140,7 +142,8 @@ export const DocumentEditor: FC<DocumentEditorProps> = (props: DocumentEditorPro
                 </StyledTextButton>
               )}
               {editDescription ? (
-                <MUITextField
+                <BaseInput
+                  name="document_desc"
                   autoFocus
                   multiline
                   rows={3}

@@ -1,8 +1,9 @@
 import React, { FC } from 'react';
-import { Grid, Stack, TextField } from '@mui/material';
+import { Grid, Stack } from '@mui/material';
 import { Component, Brick as IBrick } from '../../../../models/v2';
 import { Typography } from '@equinor/eds-core-react';
 import { Argument, DraggableList, Result } from '../../components';
+import { BaseInput } from '../../../form/base';
 
 interface BrickProps {
   component: Component | null | undefined;
@@ -131,22 +132,20 @@ export const Brick: FC<BrickProps> = (props: BrickProps) => {
           <Grid item xs={6} sx={{ flexGrow: '1', overflowY: 'auto', minHeight: '0' }}>
             <Stack spacing={2} sx={{ padding: '2rem' }}>
               <Typography variant="h4">Container</Typography>
-              <div>
-                <Typography variant="h6">Name</Typography>
-                <TextField
-                  defaultValue={brick?.container?.name}
-                  onBlur={(event) => updateContainerStringValue(event, 'name')}
-                  fullWidth
-                />
-              </div>
-              <div>
-                <Typography variant="h6">Image</Typography>
-                <TextField
-                  defaultValue={brick?.container?.image}
-                  onBlur={(event) => updateContainerStringValue(event, 'image')}
-                  fullWidth
-                />
-              </div>
+              <BaseInput
+                label="Name"
+                name="container_name"
+                id="container_name"
+                defaultValue={brick?.container?.name}
+                onBlur={(event) => updateContainerStringValue(event, 'name')}
+              />
+              <BaseInput
+                label="Image"
+                name="container_image"
+                id="container_image"
+                defaultValue={brick?.container?.image}
+                onBlur={(event) => updateContainerStringValue(event, 'image')}
+              />
               <DraggableList
                 label="Command"
                 id="command"
@@ -155,7 +154,12 @@ export const Brick: FC<BrickProps> = (props: BrickProps) => {
                 list={brick?.container?.command}
                 addItem={addCommand}
                 child={(item, index) => (
-                  <TextField fullWidth defaultValue={item} onBlur={(event) => commandOnBlur(event, index)} />
+                  <BaseInput
+                    id={`command_item_${item}`}
+                    name={`command_item_${item}`}
+                    defaultValue={item}
+                    onBlur={(event) => commandOnBlur(event, index)}
+                  />
                 )}
               />
               <DraggableList
