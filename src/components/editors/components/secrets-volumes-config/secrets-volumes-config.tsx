@@ -88,7 +88,7 @@ export const SecretsVolumesConfig: FC<SecretsVolumesConfigProps> = (props: Secre
       (mapping) => mapping?.target?.node === id && mapping?.target?.port === name,
     );
     if (type === 'workflow') {
-      const inputId = `${id}@${name}`;
+      const inputId = `${id}-${name}`;
       const existingInputIndex = component?.inputs?.findIndex((input) => input.name === inputId);
       setComponent((prev) => ({
         ...prev,

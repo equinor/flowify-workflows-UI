@@ -9,7 +9,13 @@ export const EditorMenu: FC<EditorMenuProps> = (props: EditorMenuProps) => {
   return (
     <StyledEditorMenu alignItems="stretch" justifyContent="space-between" spacing={1}>
       <Stack spacing={0.5}>
-        <MenuButton disabled={!props.dirty} create onClick={props.onSave} icon="save" label="Save" />
+        <MenuButton
+          disabled={!props.dirty || !(props.errorsLength === 0)}
+          create
+          onClick={props.onSave}
+          icon="save"
+          label="Save"
+        />
         <MenuButton
           onClick={props.openValidation}
           label={`${props.errorsLength} Errors`}
