@@ -44,9 +44,13 @@ import {
   list,
   verified_user,
   launch,
+  checkbox,
+  checkbox_outline,
 } from '@equinor/eds-icons';
 
 export const ICONS = {
+  checkbox,
+  checkbox_outline,
   launch,
   verified_user,
   list,

@@ -12,7 +12,7 @@ export const StyledInputWrapper = styled.div<InputWrapperProps>`
   display: flex;
   justify-content: space-between;
   border: ${({ theme }) => theme?.input?.border?.default};
-  border-radius: 0.5rem;
+  border-radius: ${({ theme }) => theme?.defaults?.borderRadius};
   padding: 0.5rem;
   background: ${({ theme }) => theme?.input?.background?.default};
   color: ${({ theme }) => theme?.input?.color?.default};
