@@ -6,15 +6,6 @@ export const theme: DefaultTheme = {
     elevated: '0px 2px 4px rgba(0, 0, 0, 0.14), 0px 3px 4px rgba(0, 0, 0, 0.12)',
   },
   colors: {
-    themes: {
-      flowify: 'linear-gradient(180deg, #007079 0%, #97CACE 100%)',
-      teal: 'linear-gradient(135deg, #E6FAEE 30.21%, #97CACE 100%)',
-      red: 'linear-gradient(135deg, #FFE7D6 30.21%, #FFC1C1 100%)',
-      orange: 'linear-gradient(135deg, #FFECD2 30.21%, #FFC67A 100%)',
-      blue: 'linear-gradient(135deg, #D5EAF4 30.21%, #0084C4 100%)',
-      green: 'linear-gradient(135deg, #C1E7C1 30.21%, #4BB748 100%)',
-      pink: 'linear-gradient(135deg, #FFCDD7 30.21%, #FF7D98 100%)',
-    },
     primary: {
       resting: 'rgb(0, 112, 121)',
       hover: 'rgb(0, 79, 85)',
@@ -46,6 +37,10 @@ export const theme: DefaultTheme = {
       text: 'rgb(53, 129, 50)',
     },
   },
+};
+
+export const defaults = {
+  borderRadius: '0.75rem',
 };
 
 export const addTheme = (children: React.ReactNode) => <ThemeProvider theme={theme}>{children}</ThemeProvider>;
