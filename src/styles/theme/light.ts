@@ -1,8 +1,9 @@
+import { DefaultTheme } from 'styled-components';
 import { defaults } from './theme';
 
 const defaultTextColor = 'rgba(61,61,61,1)';
 
-export const lightTheme = {
+export const lightTheme: DefaultTheme = {
   defaults: {
     ...defaults,
     focusOutline: '3px dotted #007079',

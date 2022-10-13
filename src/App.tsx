@@ -9,7 +9,7 @@ import Pages from './routes';
 import { CurrentUserProvider } from './common/context/user-context-store';
 import { EditorSettingsProvider } from './common/context/editor-settings-context';
 import { AuthProvider } from './auth';
-import { lightTheme } from './styles/theme';
+import { lightTheme, darkTheme } from './styles/theme';
 
 function App() {
   return (
@@ -18,7 +18,7 @@ function App() {
         <HelmetProvider>
           <EditorSettingsProvider>
             <SnackbarProvider maxSnack={3}>
-              <ThemeProvider theme={lightTheme}>
+              <ThemeProvider theme={darkTheme}>
                 <Pages />
               </ThemeProvider>
             </SnackbarProvider>

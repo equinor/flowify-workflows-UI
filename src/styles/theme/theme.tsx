@@ -1,7 +1,7 @@
 import React from 'react';
-import { DefaultTheme, ThemeProvider } from 'styled-components';
+import { ThemeProvider } from 'styled-components';
 
-export const theme: DefaultTheme = {
+export const theme = {
   shadows: {
     elevated: '0px 2px 4px rgba(0, 0, 0, 0.14), 0px 3px 4px rgba(0, 0, 0, 0.12)',
   },

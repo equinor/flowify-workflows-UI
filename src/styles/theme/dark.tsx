@@ -1,9 +1,10 @@
+import { DefaultTheme } from 'styled-components';
 import { defaults } from './theme';
 
 const defaultTextColor = '#ffffff';
 const defaultIconColor = '#97CACE';
 
-export const darkTheme = {
+export const darkTheme: DefaultTheme = {
   defaults: {
     ...defaults,
     focusOutline: '3px dotted #007079',
@@ -81,6 +82,7 @@ export const darkTheme = {
       enhancer: '#007079',
     },
     focusedOutline: '1px solid #C3F3D2',
+    selectItemHover: 'rgba(161, 218, 160, 0.2)',
   },
   editorMenu: {
     background: '#2E3F4D',
