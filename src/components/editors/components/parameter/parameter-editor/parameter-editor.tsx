@@ -9,6 +9,7 @@ import { MEDIATYPES, TYPES } from '../types';
 import { Data } from '../../../../../models/v2';
 import { TextListFormik } from '../../../../form/formik/text-list-formik';
 import { StyledParameterWrapper } from './styles';
+import { MultiSelectFormik } from '../../../../form/formik/multi-select-formik';
 
 interface ParameterEditorProps {
   open: boolean;
@@ -66,17 +67,15 @@ export const ParameterEditor: FC<ParameterEditorProps> = (props: ParameterEditor
           }
         />
         {(values as Data)?.type === 'parameter' || (values as Data)?.type === 'parameter_array' ? (
-          <SelectFormik
+          <MultiSelectFormik
             name="mediatype"
             label="Mediatype"
-            multiple
             placeholder="Select mediatype"
-            renderValue={(selected: any) => selected.join(', ')}
             disabled={onlyEditableValue}
             options={createOptionsFromSingleValue(MEDIATYPES)}
           />
         ) : null}
-        <Stack direction="row" spacing={2} justifyContent="space-between">
+        <Stack style={{ paddingTop: '2rem' }} direction="row" spacing={2} justifyContent="space-between">
           {!onlyEditableValue ? (
             <Button theme="danger" onClick={() => removeInput()}>
               <Icon name="delete_forever" /> Delete
