@@ -16,8 +16,9 @@ import JobTableRow from './table-row/table-row';
 import { services } from '../../services';
 import { Job, IPageInfo } from '../../models/v2';
 import { IFilter } from '../../services/filters';
-import { Paper, Select, TextField } from '../ui';
+import { Paper } from '../ui';
 import { UserContextStore } from '../../common/context/user-context-store';
+import { BaseInput, Select } from '../form';
 
 interface IJobsListing {
   workspace: string;
@@ -101,38 +102,38 @@ const JobsListing: FC<IJobsListing> = (props: IJobsListing) => {
         </Stack>
       </Stack>
       <Stack direction="row" spacing={2} justifyContent="stretch">
-        <Stack direction="row" sx={{ flexGrow: '2' }}>
+        <Stack direction="row" sx={{ flexGrow: '2' }} spacing={1}>
           <Select
-            id="jobs_searchbar--searchobject"
+            name="jobs_searchbar--searchobject"
             label="Search"
             value={searchParam}
-            wrapperStyles={{ width: '200px' }}
+            style={{ width: '200px' }}
             options={[
               { label: 'Job ID', value: 'uid' },
               { label: 'Description', value: 'description' },
             ]}
-            onChange={(event: any) => setSearchParam(event.target.value)}
+            onChange={(item) => setSearchParam(item)}
           />
-          <TextField
-            id="jobs_searchbar"
+          <BaseInput
+            name="jobs_searchbar"
             label="&nbsp;"
-            wrapperStyles={{ flexGrow: '2' }}
+            style={{ flexGrow: '2' }}
             placeholder={`Search job ${searchParam}`}
             value={search}
             onChange={(event: any) => setSearch(event.target.value)}
           />
         </Stack>
         <Select
-          id="jobs_created_by"
+          name="jobs_created_by"
           value={values.createdBy}
           label="Submitted by"
           icon="account_circle"
-          onChange={(event: any) => setValues((prev) => ({ ...prev, createdBy: event.target.value }))}
+          onChange={(item) => setValues((prev) => ({ ...prev, createdBy: item }))}
           options={[
             { label: 'All users', value: 'default' },
             { label: 'Me', value: 'me' },
           ]}
-          sx={{ width: '145px' }}
+          style={{ width: '195px' }}
         />
       </Stack>
       <>

@@ -80,6 +80,7 @@ export const lightTheme: DefaultTheme = {
       enhancer: '#007079',
     },
     focusedOutline: '1px solid #007079',
+    selectItemHover: 'rgba(161, 218, 160, 0.2)',
   },
   editorMenu: {
     background: '#ADE2E619',

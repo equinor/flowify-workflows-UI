@@ -17,9 +17,10 @@ import { Workflow } from '../../models/v2/workflow';
 import { services } from '../../services';
 import { CreateWorkflow } from '../creators';
 import { IFilter } from '../../services/filters';
-import { Paper, WorkflowIcon, Button, TextField, Select } from '../ui';
+import { Paper, WorkflowIcon, Button } from '../ui';
 import { IPageInfo } from '../../models/v2';
 import { UserContextStore } from '../../common/context/user-context-store';
+import { Select, BaseInput } from '../form';
 
 interface IWorkflowsListing {
   workspace: string;
@@ -124,38 +125,38 @@ const WorkflowsListing: FC<IWorkflowsListing> = (props: IWorkflowsListing) => {
         </a>
       </Stack>
       <Stack direction="row" spacing={2} justifyContent="stretch">
-        <Stack direction="row" sx={{ flexGrow: '2' }}>
+        <Stack direction="row" sx={{ flexGrow: '2' }} spacing={1}>
           <Select
-            id="workflows_searchbar--searchobject"
+            name="workflows_searchbar--searchobject"
             label="Search"
             value={searchParam}
-            wrapperStyles={{ width: '200px' }}
+            style={{ width: '200px' }}
             options={[
               { label: 'Name', value: 'name' },
               { label: 'Uid', value: 'uid' },
             ]}
-            onChange={(event: any) => setSearchParam(event.target.value)}
+            onChange={(item: any) => setSearchParam(item)}
           />
-          <TextField
-            id="workflows_searchbar"
+          <BaseInput
+            name="workflows_searchbar"
             label="&nbsp;"
-            wrapperStyles={{ flexGrow: '2' }}
+            style={{ flexGrow: '2' }}
             placeholder={`Search workflow ${searchParam}`}
             value={search}
             onChange={(event: any) => setSearch(event.target.value)}
           />
         </Stack>
         <Select
-          id="workflows_created_by"
+          name="workflows_created_by"
           value={values.createdBy}
           label="Created by"
           icon="account_circle"
-          onChange={(event: any) => setValues((prev) => ({ ...prev, createdBy: event.target.value }))}
+          onChange={(item: any) => setValues((prev) => ({ ...prev, createdBy: item }))}
           options={[
             { label: 'All users', value: 'default' },
             { label: 'Me', value: 'me' },
           ]}
-          sx={{ width: '145px' }}
+          style={{ width: '195px' }}
         />
       </Stack>
       <>
