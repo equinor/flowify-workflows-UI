@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import styled from 'styled-components';
-import Header from './components/header';
+import Header from './header/header';
 
 interface ILayout {
   classes?: string;
