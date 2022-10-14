@@ -28,7 +28,7 @@
     "react-router-dom": "^6.3.0",
     "react-scripts": "^5.0.1",
     "rxjs": "^7.3.0",
-    "sass": "1.54.9",
+    "sass": "1.55.0",
     "source-map-explorer": "^2.5.2",
     "styled-components": "^5.3.5",
     "superagent": "8.0.0",
