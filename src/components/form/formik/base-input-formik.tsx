@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { useField } from 'formik';
 import { BaseInputProps } from '../base/base-input/types';
-import { BaseInput } from '../base';
+import { BaseInput } from '..';
 
 export interface BaseInputFormikProps extends BaseInputProps {}
 

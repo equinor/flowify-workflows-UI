@@ -1,6 +1,5 @@
 import React, { FC } from 'react';
 import { useField } from 'formik';
-import { createOptionsFromSingleValue } from '../../ui/form/select';
 import { SelectProps } from '../base/select/types';
 import { Select } from '../base/select/select';
 
@@ -23,5 +22,3 @@ export const SelectFormik: FC<SelectFormikProps> = (props: SelectFormikProps) =>
     />
   );
 };
-
-export { createOptionsFromSingleValue };

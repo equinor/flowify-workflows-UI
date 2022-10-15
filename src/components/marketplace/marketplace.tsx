@@ -10,8 +10,7 @@ import { AddComponentToGraph, CreateComponent } from '../creators';
 import { Button } from '../ui';
 import { UserContextStore } from '../../common/context/user-context-store';
 import { Link } from 'react-router-dom';
-import { Select } from '../form/base/select/select';
-import { BaseInput } from '../form/base';
+import { Select, BaseInput } from '../form';
 
 interface MarketplaceProps {
   onAddComponent?: any;

@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import { Icon, Typography } from '@equinor/eds-core-react';
 import { Dialog } from '@mui/material';
 import { useFormikContext } from 'formik';
-import { SelectFormik, createOptionsFromSingleValue } from '../../../../form/formik/select-formik';
+import { SelectFormik, createOptionsFromSingleValue } from '../../../../form';
 import { TextInputFormik } from '../../../../form/formik/text-input-formik';
 import { Button, Stack } from '../../../../ui';
 import { MEDIATYPES, TYPES } from '../types';

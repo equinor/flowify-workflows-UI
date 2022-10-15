@@ -6,7 +6,7 @@ import moment from 'moment';
 import { Button, Paper, TextField, Stack } from '../../../ui';
 import { DocumentEditorProps } from './types';
 import { StyledTextButton } from './styles';
-import { BaseInput } from '../../../form/base';
+import { BaseInput } from '../../../form';
 
 export const DocumentEditor: FC<DocumentEditorProps> = (props: DocumentEditorProps) => {
   const { document, setInstance, versionsResponse, fetchVersions } = props;

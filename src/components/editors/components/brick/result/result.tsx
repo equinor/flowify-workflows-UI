@@ -1,10 +1,10 @@
 import React, { FC, useState } from 'react';
 import { Icon, Radio, Typography } from '@equinor/eds-core-react';
-import { Dialog, MenuItem, Select, Stack } from '@mui/material';
+import { Dialog, Stack } from '@mui/material';
 import { ResultProps } from './types';
 import { ResultButton, ResultWrapper, EditorWrapper } from './styles';
 import { Brick, FilePath, Result as IResult } from '../../../../../models/v2';
-import { BaseInput } from '../../../../form/base';
+import { BaseInput, Select, createOptionsFromObjectValue } from '../../../../form';
 
 export const Result: FC<ResultProps> = (props: ResultProps) => {
   const { outputs, result, setComponent, index, setWorkflow } = props;
@@ -63,24 +63,20 @@ export const Result: FC<ResultProps> = (props: ResultProps) => {
               <Radio label="File path" value="parameter" checked={isFilePath} onChange={() => setIsFilePath(true)} />
             </Stack>
           </Stack>
-          <Stack spacing={1}>
-            <BaseInput
-              label={isFilePath ? 'Source file path' : 'Source'}
-              name="source"
-              value={inputValue as string}
-              onChange={(event: any) => setInputValue(event.target.value)}
-            />
-          </Stack>
-          <Stack spacing={1}>
-            <Typography variant="body_short_bold">Target port</Typography>
-            <Select label="Target port" value={selectValue} onChange={(event) => setSelectValue(event.target.value)}>
-              {outputs?.map((output) => (
-                <MenuItem key={output.name} value={output.name}>
-                  {output.name}
-                </MenuItem>
-              ))}
-            </Select>
-          </Stack>
+          <BaseInput
+            label={isFilePath ? 'Source file path' : 'Source'}
+            name="source"
+            value={inputValue as string}
+            onChange={(event: any) => setInputValue(event.target.value)}
+          />
+          <Select
+            style={{ paddingBottom: '11rem' }}
+            name="target_port"
+            label="Target port"
+            value={selectValue}
+            onChange={(item) => setSelectValue(item)}
+            options={createOptionsFromObjectValue(outputs, 'name')}
+          />
         </EditorWrapper>
       </Dialog>
       <ResultButton onClick={() => setOpen(true)}>

@@ -1,13 +1,11 @@
 import styled from 'styled-components';
 
 export const SelectWrapper = styled.div`
-  display: inline-flex;
-  flex-direction: column;
-  row-gap: 0.5rem;
   position: relative;
 `;
 
 export const SelectButton = styled.button`
+  width: 100%;
   -webkit-appearance: none;
   appearance: none;
   padding: 0.85rem 0.5rem 0.85rem 1rem;
@@ -23,6 +21,9 @@ export const SelectButton = styled.button`
   column-gap: 1rem;
   cursor: pointer;
   position: relative;
+  &:focus {
+    outline: ${({ theme }) => theme?.input?.focusedOutline};
+  }
 `;
 
 export const OptionsWrapper = styled.ul`
@@ -30,14 +31,13 @@ export const OptionsWrapper = styled.ul`
   padding-inline-start: 0px;
   margin-block-start: 0;
   background: ${({ theme }) => theme?.layout?.background};
-  overflow-y: hidden;
+  overflow-y: scroll;
   list-style: none;
   margin: 0;
   padding: 0;
   width: 100%;
   z-index: 3;
   overflow-y: auto;
-  top: 100%;
   border-radius: ${({ theme }) => theme?.defaults?.borderRadius};
 `;
 

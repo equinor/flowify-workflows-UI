@@ -36,7 +36,7 @@ export const SingleSelect: FC<SelectProps> = (props: SelectProps) => {
   return (
     <SelectWrapper style={props?.style}>
       {label && (
-        <Typography {...getLabelProps({ label: label })} variant="body_short_bold">
+        <Typography style={{ paddingBottom: '0.5rem' }} {...getLabelProps({ label: label })} variant="body_short_bold">
           {label}
         </Typography>
       )}

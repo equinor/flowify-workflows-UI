@@ -1,6 +1,5 @@
 import React, { FC } from 'react';
 import { FieldArray, useField, useFormikContext } from 'formik';
-import { createOptionsFromSingleValue } from '../../ui/form/select';
 import { MultiSelectProps } from '../base/multi-select/types';
 import { MultiSelect } from '../base/multi-select/multi-select';
 
@@ -31,5 +30,3 @@ export const MultiSelectFormik: FC<SelectFormikProps> = (props: SelectFormikProp
     />
   );
 };
-
-export { createOptionsFromSingleValue };
