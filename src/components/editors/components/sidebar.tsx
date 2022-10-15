@@ -1,14 +1,14 @@
 import React, { FC, useState } from 'react';
-import { Button, Chip, Icon, Typography } from '@equinor/eds-core-react';
-import { Stack, TextField } from '@mui/material';
+import { Chip, Icon, Typography } from '@equinor/eds-core-react';
+import { Stack } from '@mui/material';
 import styled from 'styled-components';
 import { isNotEmptyArray } from '../../../common';
 import { nanoid } from '../helpers';
 import { EditorHeader } from '../components';
 import { Component, Workflow } from '../../../models/v2';
 import { Parameter } from '.';
-import { MultiToggle, ToggleButton } from '../../ui';
-import { BaseInput } from '../../form/base';
+import { MultiToggle, ToggleButton, Button } from '../../ui';
+import { BaseInput } from '../../form';
 
 interface SidebarProps {
   component: Component | null | undefined;
@@ -153,7 +153,7 @@ export const Sidebar: FC<SidebarProps> = (props: SidebarProps) => {
         ) : (
           <Typography variant="body_short">No inputs exists for this {document?.type}</Typography>
         )}
-        <Button onClick={() => addParameter('inputs', 'parameter')} variant="ghost" style={{ alignSelf: 'flex-end' }}>
+        <Button onClick={() => addParameter('inputs', 'parameter')} theme="simple" style={{ alignSelf: 'flex-end' }}>
           <Icon name="add" /> Add input
         </Button>
       </Stack>
@@ -180,7 +180,7 @@ export const Sidebar: FC<SidebarProps> = (props: SidebarProps) => {
             )}
             <Button
               onClick={() => addParameter('inputs', 'env_secret')}
-              variant="ghost"
+              theme="simple"
               style={{ alignSelf: 'flex-end' }}
             >
               <Icon name="add" /> Add secret
@@ -206,7 +206,7 @@ export const Sidebar: FC<SidebarProps> = (props: SidebarProps) => {
             ) : (
               <Typography variant="body_short">No volumes exists for this {document?.type}</Typography>
             )}
-            <Button onClick={() => addParameter('inputs', 'volume')} variant="ghost" style={{ alignSelf: 'flex-end' }}>
+            <Button onClick={() => addParameter('inputs', 'volume')} theme="simple" style={{ alignSelf: 'flex-end' }}>
               <Icon name="add" /> Add volume
             </Button>
           </Stack>
@@ -229,7 +229,7 @@ export const Sidebar: FC<SidebarProps> = (props: SidebarProps) => {
         ) : (
           <Typography variant="body_short">No outputs exists for this {document?.type}</Typography>
         )}
-        <Button onClick={() => addParameter('outputs', 'parameter')} variant="ghost" style={{ alignSelf: 'flex-end' }}>
+        <Button onClick={() => addParameter('outputs', 'parameter')} theme="simple" style={{ alignSelf: 'flex-end' }}>
           <Icon name="add" /> Add output
         </Button>
       </Stack>

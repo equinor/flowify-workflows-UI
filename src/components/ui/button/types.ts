@@ -1,6 +1,7 @@
 import React from 'react';
+import { ICONS } from '../../../common/icons';
 
-export type ButtonTheme = 'default' | 'simple' | 'create' | 'danger';
+export type ButtonTheme = 'default' | 'simple' | 'create' | 'danger' | 'link' | 'icon';
 
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   label?: string;
@@ -9,4 +10,7 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
   rel?: string;
   as?: keyof JSX.IntrinsicElements;
   target?: string;
+  leftIcon?: keyof typeof ICONS;
+  rightIcon?: keyof typeof ICONS;
+  icon?: keyof typeof ICONS;
 }
