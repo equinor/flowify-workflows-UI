@@ -1,10 +1,14 @@
 import React, { FC, useState } from 'react';
-import { Dialog, Stack } from '@mui/material';
-import { Button as EDSButton, Progress, Snackbar } from '@equinor/eds-core-react';
+import { Dialog } from '@mui/material';
+import { Button as EDSButton, Snackbar } from '@equinor/eds-core-react';
 import { useNavigate } from 'react-router-dom';
-import { Component } from '../../models/v2';
-import { services } from '../../services';
-import { Button, TextField } from '../ui';
+import { Form, Formik } from 'formik';
+import * as yup from 'yup';
+import { Component } from '../../../models/v2';
+import { services } from '../../../services';
+import { DialogWrapper } from '../../ui';
+import { BaseInputFormik } from '../../form';
+import { Submitter } from './submitter';
 
 const makeComponent = (): Component => ({
   type: 'component',
@@ -21,18 +25,21 @@ interface ICreateComponent {
 
 const CreateComponent: FC<ICreateComponent> = (props: ICreateComponent) => {
   const { open, setOpen } = props;
-  const [component, setComponent] = useState<Component>(makeComponent());
   const [submitting, setSubmitting] = useState<boolean>(false);
   const [error, setError] = useState<boolean>(false);
   const navigate = useNavigate();
 
-  const onSubmit = () => {
-    if (!component || submitting) {
+  const validationSchema = yup.object({
+    name: yup.string().required('Component name is a required field'),
+  });
+
+  const onSubmit = (values: Component) => {
+    if (!values || submitting) {
       return Promise.resolve();
     }
     setSubmitting(true);
     services.components
-      .create(component)
+      .create(values)
       .then((res) => {
         if (res) {
           navigate(`/component/${res.uid}`);
@@ -44,13 +51,6 @@ const CreateComponent: FC<ICreateComponent> = (props: ICreateComponent) => {
         setError(true);
       });
   };
-
-  function onNameChange(value: string) {
-    setComponent((prev: Component) => ({
-      ...prev,
-      name: value,
-    }));
-  }
 
   return (
     <>
@@ -65,29 +65,14 @@ const CreateComponent: FC<ICreateComponent> = (props: ICreateComponent) => {
         </Snackbar>
       )}
       <Dialog fullWidth open={open} onClose={() => setOpen(false)}>
-        <Stack sx={{ padding: '2rem' }} spacing={2}>
-          <TextField
-            id="new-component-name"
-            label="Component name"
-            defaultValue={component?.name}
-            onBlur={(event: any) => onNameChange(event.target.value)}
-          />
-          <Stack direction="row" spacing={2} justifyContent="flex-end">
-            <Button theme="simple" onClick={() => setOpen(false)} color="secondary">
-              Cancel
-            </Button>
-            <Button theme="create" onClick={onSubmit}>
-              {submitting ? (
-                <>
-                  <Progress.Circular size={16} color="neutral" />
-                  Creating…
-                </>
-              ) : (
-                'Create component'
-              )}
-            </Button>
-          </Stack>
-        </Stack>
+        <DialogWrapper padding={2}>
+          <Formik initialValues={{ ...makeComponent() }} onSubmit={onSubmit} validationSchema={validationSchema}>
+            <Form>
+              <BaseInputFormik name="name" label="Component name" />
+              <Submitter onClose={() => setOpen(false)} submitting={submitting} />
+            </Form>
+          </Formik>
+        </DialogWrapper>
       </Dialog>
     </>
   );

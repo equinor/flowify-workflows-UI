@@ -1,5 +1,5 @@
 import React, { FC, useState } from 'react';
-import { Chip, Icon, Typography } from '@equinor/eds-core-react';
+import { Icon, Typography } from '@equinor/eds-core-react';
 import { Stack } from '@mui/material';
 import styled from 'styled-components';
 import { isNotEmptyArray } from '../../../common';
@@ -7,7 +7,7 @@ import { nanoid } from '../helpers';
 import { EditorHeader } from '../components';
 import { Component, Workflow } from '../../../models/v2';
 import { Parameter } from '.';
-import { MultiToggle, ToggleButton, Button } from '../../ui';
+import { MultiToggle, ToggleButton, Button, Chip } from '../../ui';
 import { BaseInput } from '../../form';
 
 interface SidebarProps {
@@ -104,7 +104,9 @@ export const Sidebar: FC<SidebarProps> = (props: SidebarProps) => {
             <Typography variant="h3">{document?.name}</Typography>
           </StyledTextButton>
         )}
-        <Chip style={{ fontSize: '1rem' }}>v{document?.version?.current || ''}</Chip>
+        <div>
+          <Chip>v{document?.version?.current || ''}</Chip>
+        </div>
       </Stack>
       <Stack spacing={1}>
         <MultiToggle label="Implementation type" labelVariant="h5">

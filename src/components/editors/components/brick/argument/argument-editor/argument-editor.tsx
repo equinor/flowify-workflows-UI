@@ -1,11 +1,10 @@
 import React, { FC, useState } from 'react';
 import { Icon, Radio, Typography } from '@equinor/eds-core-react';
-import { Dialog, MenuItem, Stack } from '@mui/material';
+import { Dialog, Stack } from '@mui/material';
 import { ArgumentEditorProps } from './types';
 import { Brick } from '../../../../../../models/v2';
-import { EditorWrapper } from './styles';
-import { BaseInput } from '../../../../../form/base';
-import { Select } from '../../../../../ui';
+import { BaseInput, Select } from '../../../../../form';
+import { DialogWrapper } from '../../../../../ui';
 
 export const ArgumentEditor: FC<ArgumentEditorProps> = (props: ArgumentEditorProps) => {
   const { arg, isConst, index, open, onClose, setComponent, inputs, selectValue, setSelectValue, type } = props;
@@ -38,11 +37,11 @@ export const ArgumentEditor: FC<ArgumentEditorProps> = (props: ArgumentEditorPro
   }
 
   const selectedInputType = inputs?.find((input) => input.name === selectValue)?.type;
-  const inputOptions = inputs?.map((input) => ({ label: input?.name, value: input?.name }));
+  const inputOptions = inputs?.map((input) => ({ label: input?.name || '', value: input?.name || '' }));
 
   return (
     <Dialog open={open} onClose={() => onChange()} fullWidth maxWidth="sm">
-      <EditorWrapper padding={2} spacing={2}>
+      <DialogWrapper padding={2} spacing={2}>
         <Typography variant="h5">Edit argument</Typography>
         <Stack direction="row" spacing={2}>
           <Radio label="Constant" value="constant" checked={isConstant} onChange={() => setIsConstant(true)} />
@@ -71,10 +70,11 @@ export const ArgumentEditor: FC<ArgumentEditorProps> = (props: ArgumentEditorPro
             />
           ) : (
             <Select
+              name="source_input"
               label="Source input"
               value={selectValue}
-              onChange={(event: any) => setSelectValue(event.target.value)}
-              options={inputOptions}
+              onChange={(item) => setSelectValue(item)}
+              options={inputOptions || []}
             />
           )}
         </div>
@@ -98,7 +98,7 @@ export const ArgumentEditor: FC<ArgumentEditorProps> = (props: ArgumentEditorPro
             </Typography>
           </Stack>
         )}
-      </EditorWrapper>
+      </DialogWrapper>
     </Dialog>
   );
 };

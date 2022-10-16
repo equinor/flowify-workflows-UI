@@ -1,9 +1,9 @@
 import React, { FC, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Chip, Icon, Pagination, Typography } from '@equinor/eds-core-react';
+import { Icon, Pagination, Typography } from '@equinor/eds-core-react';
 import { Dialog, Grid } from '@mui/material';
 import moment from 'moment';
-import { Button, Paper, TextField, Stack } from '../../../ui';
+import { Button, Paper, Chip, Stack } from '../../../ui';
 import { DocumentEditorProps } from './types';
 import { StyledTextButton } from './styles';
 import { BaseInput } from '../../../form';
@@ -85,12 +85,10 @@ export const DocumentEditor: FC<DocumentEditorProps> = (props: DocumentEditorPro
             <Paper key={`${version.uid}-${version?.version?.current}`} spacing={1} padding={2} theme="light">
               <Stack direction="row" spacing={2}>
                 <Typography variant="h5">{version.name}</Typography>
-                <Chip style={{ fontSize: '1rem' }}>v{version?.version?.current}</Chip>
-                {version?.version?.tags?.includes('latest') && <Chip style={{ fontSize: '1rem' }}>Latest</Chip>}
+                <Chip>v{version?.version?.current}</Chip>
+                {version?.version?.tags?.includes('latest') && <Chip>Latest</Chip>}
                 {document?.version?.current === version?.version?.current && (
-                  <Chip variant="active" style={{ fontSize: '1rem' }}>
-                    Currently viewing
-                  </Chip>
+                  <Chip theme="success">Currently viewing</Chip>
                 )}
               </Stack>
               <Typography variant="caption">
@@ -175,15 +173,15 @@ export const DocumentEditor: FC<DocumentEditorProps> = (props: DocumentEditorPro
                     {document?.version?.tags?.map((tag) => (
                       <Chip
                         key={tag}
-                        style={{ fontSize: '1rem', marginBottom: '1rem' }}
-                        onDelete={tag === 'latest' ? undefined : () => removeTag(tag)}
+                        style={{ marginBottom: '1rem' }}
+                        onClick={tag === 'latest' ? undefined : () => removeTag(tag)}
                       >
                         {tag}
                       </Chip>
                     ))}
                   </Stack>
-                  <TextField
-                    icon="add"
+                  <BaseInput
+                    startEnhancer={<Icon name="add" />}
                     id="add_tag"
                     name="add_tag"
                     onKeyDown={tagEventHandler}

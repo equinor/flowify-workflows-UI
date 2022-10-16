@@ -1,14 +1,12 @@
-import React, { FC, useState, useRef } from 'react';
-import { Button, Icon, Popover, Typography } from '@equinor/eds-core-react';
+import React, { FC } from 'react';
+import { Icon, Typography } from '@equinor/eds-core-react';
 import { Link } from 'react-router-dom';
-import { FlowifyIcon, IconsWrapper, Stack } from '../../components/ui';
-import { TopBar } from './styles';
+import { FlowifyIcon, Stack } from '../../components/ui';
+import { TopBar, IconsWrapper } from './styles';
 
 interface IHeader {}
 
 const Header: FC<IHeader> = (props: IHeader) => {
-  const [notifsVisible, setNotifsVisible] = useState<boolean>(false);
-  const notifsAnchor = useRef<HTMLButtonElement>(null);
   return (
     <TopBar>
       <Stack direction="row" alignItems="center" spacing={1}>
@@ -20,35 +18,14 @@ const Header: FC<IHeader> = (props: IHeader) => {
         </Typography>
       </Stack>
       <IconsWrapper>
-        <Link to="/components" className="ff-header__link">
-          <Icon name="mall" size={24} color="primary" />
+        <Link title="Marketplace" to="/components" className="ff-header__link">
+          <Icon name="mall" size={24} />
         </Link>
-        <Button
-          variant="ghost_icon"
-          aria-haspopup="true"
-          aria-controls="notifications-popover"
-          ref={notifsAnchor}
-          onClick={() => setNotifsVisible((prev) => !prev)}
-        >
-          <Icon name="notifications" size={24} color="primary" />
-        </Button>
-        <Popover
-          id="notifications-popover"
-          aria-expanded={notifsVisible}
-          anchorEl={notifsAnchor.current}
-          onClose={() => setNotifsVisible(false)}
-          open={notifsVisible}
-        >
-          <Popover.Title>&nbsp;</Popover.Title>
-          <Popover.Content>
-            <Typography variant="body_short">No notifications yet</Typography>
-          </Popover.Content>
-        </Popover>
-        <Link to="/admin" className="ff-header__link">
-          <Icon name="verified_user" size={24} color="primary" />
+        <Link title="Admin page" to="/admin" className="ff-header__link">
+          <Icon name="verified_user" size={24} />
         </Link>
-        <Link to="/user" className="ff-header__link">
-          <Icon name="account_circle" size={24} title="User profile" color="primary" />
+        <Link title="User profile" to="/user" className="ff-header__link">
+          <Icon name="account_circle" size={24} />
         </Link>
       </IconsWrapper>
     </TopBar>

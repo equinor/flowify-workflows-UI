@@ -198,10 +198,12 @@ export const Marketplace: FC<MarketplaceProps> = (props: MarketplaceProps) => {
         </Stack>
         {preview ? (
           <Stack alignItems="flex-end">
-            <Button theme="simple">
-              <Link to="/components">Visit marketplace</Link>
-              <Icon name="chevron_right" size={16} />
-            </Button>
+            <Link to="/components">
+              <Button theme="simple" as="span">
+                Visit marketplace
+                <Icon name="chevron_right" size={16} />
+              </Button>
+            </Link>
           </Stack>
         ) : null}
       </Stack>
