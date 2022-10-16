@@ -39,7 +39,7 @@ export const StyledInputWrapper = styled.div<InputWrapperProps>`
     ${(props) =>
     props.readOnly &&
     css`
-      background: ${({ theme }) => theme?.input?.background?.default};
+      background: ${({ theme }) => theme?.input?.background?.readOnly};
       color: ${({ theme }) => theme?.input?.color?.readOnly};
     `}
 
@@ -61,6 +61,9 @@ export const StyledInputWrapper = styled.div<InputWrapperProps>`
     }
     &:read-only {
       background: none;
+    }
+    ::placeholder {
+      color: ${({ theme }) => theme?.input?.color?.placeholder};
     }
   }
 

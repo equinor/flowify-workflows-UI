@@ -29,7 +29,7 @@ export const darkTheme: DefaultTheme = {
   button: {
     background: {
       simple: 'transparent',
-      create: 'rgba(161, 218, 160, 0.098)',
+      create: 'rgba(161, 218, 160, 0.3)',
       danger: 'rgba(255, 102, 112, 0.3)',
       default: 'rgba(173, 226, 230, 0.1)',
       icon: 'rgba(173, 226, 230, 0.1)',
@@ -46,7 +46,7 @@ export const darkTheme: DefaultTheme = {
     hover: {
       background: {
         simple: 'rgba(161, 218, 160, 0.2)',
-        create: 'rgba(161, 218, 160, 0.25)',
+        create: 'rgba(161, 218, 160, 0.5)',
         danger: 'rgba(255, 102, 112, 0.5)',
         default: 'rgba(173, 226, 230, 0.3)',
         icon: 'rgba(161, 218, 160, 0.2)',
@@ -59,6 +59,25 @@ export const darkTheme: DefaultTheme = {
         default: '#ffffff',
         icon: defaultTextColor,
         link: defaultTextColor,
+      },
+    },
+  },
+  chip: {
+    background: {
+      default: 'rgba(173, 226, 230, 0.3)',
+      success: 'rgba(161, 218, 160, 0.25)',
+      error: 'rgba(255, 102, 112, 0.5)',
+    },
+    border: {
+      default: '1px solid rgba(173, 226, 230, 0.3)',
+      success: '1px solid rgba(161, 218, 160, 0.25)',
+      error: '1px solid rgba(255, 102, 112, 0.5)',
+    },
+    hover: {
+      border: {
+        default: '1px solid rgba(173, 226, 230, 1)',
+        success: '1px solid rgba(161, 218, 160, 1)',
+        error: '1px solid rgba(255, 102, 112, 1)',
       },
     },
   },
@@ -75,7 +94,7 @@ export const darkTheme: DefaultTheme = {
       focused: '#ADE2E619',
       positive: '#e6faec',
       error: '#ff667019',
-      readOnly: '#f7f7f7',
+      readOnly: 'rgba(255, 255, 255, 0.03)',
     },
     border: {
       default: '1px solid #ADE2E619',
@@ -86,8 +105,9 @@ export const darkTheme: DefaultTheme = {
     },
     color: {
       default: defaultTextColor,
-      readOnly: '#ddd',
+      readOnly: '#bbbbbb',
       enhancer: '#007079',
+      placeholder: '#bbbbbb',
     },
     focusedOutline: '1px solid #C3F3D2',
     selectItemHover: 'rgba(161, 218, 160, 0.2)',

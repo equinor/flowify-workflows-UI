@@ -11,6 +11,9 @@ export const SingleSelect: FC<SelectProps> = (props: SelectProps) => {
   const inputRef = useRef(null);
 
   const onSelectedItemChange = (changes: UseSelectStateChange<IOption>) => {
+    if (props.disabled || props.readOnly) {
+      return;
+    }
     const { selectedItem } = changes;
     if (selectedItem && typeof onChange === 'function' && !props.readOnly) {
       onChange(selectedItem?.value);
@@ -43,11 +46,13 @@ export const SingleSelect: FC<SelectProps> = (props: SelectProps) => {
       <SelectButton
         type="button"
         ref={inputRef}
+        readOnly={props?.readOnly || props?.disabled}
         {...getToggleButtonProps({
           'aria-label': props['aria-label'],
           'aria-describedby': props['aria-describedby'],
           'aria-errormessage': props['aria-errormessage'],
           'aria-labelledby': props['aria-labelledby'],
+          disabled: props.disabled || props.readOnly,
         })}
       >
         <Stack direction="row" alignItems="center" spacing={1}>

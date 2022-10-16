@@ -56,6 +56,20 @@ export const lightTheme: DefaultTheme = {
       },
     },
   },
+  chip: {
+    background: {
+      default: 'rgba(173, 226, 230, 0.1)',
+      success: 'rgba(161, 218, 160, 0.098)',
+      error: 'rgba(255, 102, 112, 0.3)',
+    },
+    hover: {
+      background: {
+        default: 'rgba(161, 218, 160, 0.2)',
+        success: 'rgba(161, 218, 160, 0.25)',
+        error: 'rgba(255, 102, 112, 0.5)',
+      },
+    },
+  },
   multiToggle: {
     background: '#deedee',
     button: {
@@ -82,6 +96,7 @@ export const lightTheme: DefaultTheme = {
       default: defaultTextColor,
       readOnly: '#333333',
       enhancer: '#007079',
+      placeholder: '#333333',
     },
     focusedOutline: '1px solid #007079',
     selectItemHover: 'rgba(161, 218, 160, 0.2)',

@@ -35,6 +35,9 @@ export const MultiSelect: FC<MultiSelectProps> = (props: MultiSelectProps) => {
       return changes;
     },
     onStateChange: (stateChange) => {
+      if (props.disabled || props.readOnly) {
+        return;
+      }
       const { type, selectedItem } = stateChange;
       switch (type) {
         case useSelect.stateChangeTypes.MenuKeyDownEnter:
@@ -74,11 +77,12 @@ export const MultiSelect: FC<MultiSelectProps> = (props: MultiSelectProps) => {
   return (
     <SelectWrapper style={props?.style}>
       {label && (
-        <Typography {...getLabelProps({ label: label })} variant="body_short_bold">
+        <Typography style={{ marginBottom: '0.5rem' }} {...getLabelProps({ label: label })} variant="body_short_bold">
           {label}
         </Typography>
       )}
       <SelectButton
+        readOnly={props?.disabled || props?.readOnly}
         {...getToggleButtonProps(
           getDropdownProps({
             preventKeyAction: isOpen,
@@ -87,6 +91,7 @@ export const MultiSelect: FC<MultiSelectProps> = (props: MultiSelectProps) => {
             'aria-errormessage': props['aria-errormessage'],
             'aria-labelledby': props['aria-labelledby'],
             ref: inputRef,
+            disabled: props?.disabled || props?.readOnly,
           }),
         )}
       >

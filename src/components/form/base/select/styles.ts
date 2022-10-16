@@ -1,10 +1,10 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 export const SelectWrapper = styled.div`
   position: relative;
 `;
 
-export const SelectButton = styled.button`
+export const SelectButton = styled.button<{ readOnly?: boolean }>`
   width: 100%;
   -webkit-appearance: none;
   appearance: none;
@@ -21,6 +21,14 @@ export const SelectButton = styled.button`
   column-gap: 1rem;
   cursor: pointer;
   position: relative;
+
+  ${(props) =>
+    props.readOnly &&
+    css`
+      background: ${({ theme }) => theme?.input?.background?.readOnly};
+      color: ${({ theme }) => theme?.input?.color?.readOnly};
+    `}
+
   &:focus {
     outline: ${({ theme }) => theme?.input?.focusedOutline};
   }
