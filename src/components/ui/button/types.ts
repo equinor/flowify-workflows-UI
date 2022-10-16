@@ -13,4 +13,5 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
   leftIcon?: keyof typeof ICONS;
   rightIcon?: keyof typeof ICONS;
   icon?: keyof typeof ICONS;
+  loading?: boolean;
 }

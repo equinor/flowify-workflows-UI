@@ -4,9 +4,10 @@ import { StyledButton } from './styles';
 import { ButtonProps } from './types';
 
 export const Button: FC<ButtonProps> = (props: ButtonProps) => {
-  const { children, theme, as, icon, leftIcon, rightIcon, ...buttonProps } = props;
+  const { children, theme, as, icon, leftIcon, rightIcon, loading, ...buttonProps } = props;
   return (
     <StyledButton as={as || (buttonProps?.href ? 'a' : 'button')} buttonTheme={theme!} type="button" {...buttonProps}>
+      {loading && <Icon name="loop" className="rotate" />}
       {leftIcon && <Icon name={leftIcon} />}
       {icon && <Icon name={icon} />}
       {children && children}
