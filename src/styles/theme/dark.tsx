@@ -26,13 +26,25 @@ export const darkTheme: DefaultTheme = {
       background: 'rgba(161, 218, 160, 0.2)',
     },
   },
+  graph: {
+    background: 'rgba(0, 0, 0, 0.2)',
+    nodes: {
+      background: '#2E3F4D',
+      hover: {
+        background: '#3E4F5C',
+      },
+    },
+    handle: {
+      background: defaultIconColor,
+    },
+  },
   button: {
     background: {
       simple: 'transparent',
       create: 'rgba(161, 218, 160, 0.3)',
       danger: 'rgba(255, 102, 112, 0.3)',
       default: 'rgba(173, 226, 230, 0.1)',
-      icon: 'rgba(173, 226, 230, 0.1)',
+      icon: 'transparent',
       link: 'transparent',
     },
     color: {
@@ -49,7 +61,7 @@ export const darkTheme: DefaultTheme = {
         create: 'rgba(161, 218, 160, 0.5)',
         danger: 'rgba(255, 102, 112, 0.5)',
         default: 'rgba(173, 226, 230, 0.3)',
-        icon: 'rgba(161, 218, 160, 0.2)',
+        icon: 'rgba(173, 226, 230, 0.3)',
         link: 'transparent',
       },
       color: {

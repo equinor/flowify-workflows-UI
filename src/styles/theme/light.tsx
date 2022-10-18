@@ -2,6 +2,7 @@ import { DefaultTheme } from 'styled-components';
 import { defaults } from './theme';
 
 const defaultTextColor = 'rgba(61,61,61,1)';
+const defaultIconColor = '#007079';
 
 export const lightTheme: DefaultTheme = {
   defaults: {
@@ -54,6 +55,18 @@ export const lightTheme: DefaultTheme = {
         danger: defaultTextColor,
         default: '#18252f',
       },
+    },
+  },
+  graph: {
+    background: 'rgba(0, 0, 0, 0.1)',
+    nodes: {
+      background: 'white',
+      hover: {
+        background: '#3E4F5C',
+      },
+    },
+    handle: {
+      background: '#0084c4',
     },
   },
   chip: {

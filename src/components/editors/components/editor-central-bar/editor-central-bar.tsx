@@ -1,12 +1,13 @@
 // @ts-nocheck
 import React, { FC, useState } from 'react';
 import { Stack } from '@mui/material';
-import { Tooltip, Button, Menu, Icon, Typography } from '@equinor/eds-core-react';
+import { Tooltip, Menu, Icon, Typography } from '@equinor/eds-core-react';
 import { EditorSettings, MarketplaceModal, FunctionalComponents } from '..';
 import { Component, Graph } from '../../../../models/v2';
 import { nanoid } from '../../helpers';
 import { services } from '../../../../services';
 import { BUTTON_STATE } from '../../../creators/add-component-to-graph';
+import { Button } from '../../../ui';
 
 interface EditorCentralBarProps {
   setUseManifest?: any;
@@ -80,7 +81,7 @@ export const EditorCentralBar: FC<EditorCentralBarProps> = (props: EditorCentral
             >
               <Button
                 onClick={() => setMenuOpen(true)}
-                variant="ghost_icon"
+                theme="icon"
                 ref={setAnchorEl}
                 aria-haspopup="true"
                 aria-expanded={menuOpen}
@@ -128,12 +129,12 @@ export const EditorCentralBar: FC<EditorCentralBarProps> = (props: EditorCentral
         )}
         <EditorSettings />
         <Tooltip title="Toggle manifest" style={{ fontSize: '1rem' }}>
-          <Button variant="ghost_icon" onClick={() => props.setUseManifest((prev: boolean) => !prev)}>
+          <Button theme="icon" onClick={() => props.setUseManifest((prev: boolean) => !prev)}>
             <Icon name="code" />
           </Button>
         </Tooltip>
       </Stack>
-      <Button variant="ghost_icon">
+      <Button theme="icon">
         <Icon name="first_page" size={24} />
       </Button>
     </Stack>

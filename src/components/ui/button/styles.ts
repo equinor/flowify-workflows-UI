@@ -5,10 +5,10 @@ export const StyledButton = styled.button<{ buttonTheme: ButtonTheme }>`
   appearance: none;
   border: none;
   outline: none;
-  padding: ${(props) => (props.buttonTheme === 'link' ? '0' : '1rem')};
+  padding: ${(props) => (props.buttonTheme === 'link' ? '0' : props.buttonTheme === 'icon' ? '0.5rem' : '1rem')};
   background-color: ${(props) => props?.theme?.button?.background?.[props.buttonTheme]};
   color: ${(props) => props?.theme?.button?.color?.[props.buttonTheme]};
-  border-radius: 1rem;
+  border-radius: ${(props) => (props?.buttonTheme === 'icon' ? '50%' : props?.theme?.defaults?.borderRadius)};
   display: flex;
   align-items: center;
   column-gap: 0.25rem;
