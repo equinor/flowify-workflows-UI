@@ -1,6 +1,14 @@
 import * as React from 'react';
 import { useState } from 'react';
-import ReactFlow, { Connection, Controls, Edge, Node, ReactFlowProvider } from 'react-flow-renderer/nocss';
+import ReactFlow, {
+  Connection,
+  Controls,
+  Edge,
+  Node,
+  ReactFlowProvider,
+  Background,
+  BackgroundVariant,
+} from 'react-flow-renderer/nocss';
 import { StartNode, TaskNode, EndNode, ConditionalNode, MapNode } from '.';
 import { Component } from '../../../../models/v2';
 import { Button, Snackbar } from '@equinor/eds-core-react';
@@ -15,6 +23,7 @@ import {
   updateTaskNodePostion,
   updateParameterPosition,
 } from '../../helpers';
+import { ReactFlowWrapper } from './styles';
 
 interface IGraphEditor {
   component: Component | null;
@@ -124,7 +133,7 @@ export const GraphEditor: React.FC<IGraphEditor> = (props: IGraphEditor) => {
   }
 
   return (
-    <div style={{ height: '100%', width: '100%', display: 'flex' }}>
+    <ReactFlowWrapper>
       <Snackbar placement="top" open={wrongConnectionAlert} onClose={() => setWrongConnectionAlert(false)}>
         Connection refused: Media types do not match.
         <Snackbar.Action>
@@ -149,11 +158,12 @@ export const GraphEditor: React.FC<IGraphEditor> = (props: IGraphEditor) => {
           snapToGrid
           defaultZoom={0.75}
         >
+          <Background color="rgba(255, 255, 255, 0.15)" gap={16} variant={BackgroundVariant.Lines} />
           <Controls style={{ right: 10, left: 'auto' }} fitViewOptions={{ duration: 1000 }}>
             {/*<NodesDebugger />*/}
           </Controls>
         </ReactFlow>
       </ReactFlowProvider>
-    </div>
+    </ReactFlowWrapper>
   );
 };

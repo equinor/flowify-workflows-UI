@@ -1,5 +1,5 @@
 import React, { memo, useState } from 'react';
-import { Button, Chip, Icon, Typography } from '@equinor/eds-core-react';
+import { Icon, Typography } from '@equinor/eds-core-react';
 import { Stack } from '@mui/material';
 import { NodeProps } from 'react-flow-renderer/nocss';
 import { DragIndicator as DragIcon } from '@mui/icons-material';
@@ -8,6 +8,7 @@ import { Handles } from '..';
 import { NodePreview } from '../..';
 import { Map } from '../../../../../models/v2';
 import { isNotEmptyArray } from '../../../../../common';
+import { Button, Chip } from '../../../../ui';
 
 interface IMapNode extends NodeProps<INode> {}
 
@@ -35,10 +36,7 @@ export const MapNode = memo((props: IMapNode) => {
   return (
     <>
       <Handles parameters={data?.component?.inputs} type="Input" />
-      <div>
-        <Button variant="ghost" onClick={() => data.setConfigComponent({ id: props.id, type: 'map' })}>
-          Configure map
-        </Button>
+      <Stack spacing={2}>
         <Stack className="react-flow__node-mapNode--internal" spacing={3}>
           <Stack spacing={2} direction="row" alignItems="center">
             <NodePreview node={props} open={open} onClose={setOpen} />
@@ -54,32 +52,35 @@ export const MapNode = memo((props: IMapNode) => {
                 <Stack direction="row" alignItems="center">
                   <Chip>{data?.component?.implementation?.type}</Chip>
                 </Stack>
+                <Stack direction="row" spacing={2}>
+                  {isNotEmptyArray(secrets) && (
+                    <Button
+                      style={{ padding: '0.5rem' }}
+                      onClick={() => setParameterConfig({ type: 'secret', id, map: false })}
+                      theme={secretsCount < (secrets?.length || 0) ? 'danger' : 'create'}
+                    >
+                      {secretsCount}/{secrets?.length} {secrets!.length > 1 ? 'Secrets' : 'Secret'}
+                    </Button>
+                  )}
+                  {isNotEmptyArray(volumes) && (
+                    <Button
+                      style={{ padding: '0.5rem' }}
+                      onClick={() => setParameterConfig({ type: 'volume', id, map: false })}
+                      theme={volumesCount < (volumes?.length || 0) ? 'danger' : 'create'}
+                    >
+                      {volumesCount}/{volumes?.length} {volumes!.length > 1 ? 'Mounts' : 'Mount'}
+                    </Button>
+                  )}
+                </Stack>
+                <Button leftIcon="settings" onClick={() => data.setConfigComponent({ id: props.id, type: 'map' })}>
+                  Configure map
+                </Button>
               </Stack>
               <DragIcon className="custom-drag-handle" sx={{ color: '#666', fontSize: '2rem' }} />
             </Stack>
           </Stack>
-          <Stack direction="row">
-            {isNotEmptyArray(secrets) && (
-              <Button
-                onClick={() => setParameterConfig({ type: 'secret', id, map: false })}
-                variant="ghost"
-                color={secretsCount < (secrets?.length || 0) ? 'danger' : 'primary'}
-              >
-                {secretsCount}/{secrets?.length} {secrets!.length > 1 ? 'Secrets' : 'Secret'}
-              </Button>
-            )}
-            {isNotEmptyArray(volumes) && (
-              <Button
-                onClick={() => setParameterConfig({ type: 'volume', id, map: false })}
-                variant="ghost"
-                color={volumesCount < (volumes?.length || 0) ? 'danger' : 'primary'}
-              >
-                {volumesCount}/{volumes?.length} {volumes!.length > 1 ? 'Mounts' : 'Mount'}
-              </Button>
-            )}
-          </Stack>
         </Stack>
-      </div>
+      </Stack>
       <Handles parameters={data?.component?.outputs} type="Output" />
     </>
   );

@@ -47,9 +47,11 @@ import {
   launch,
   checkbox,
   checkbox_outline,
+  settings,
 } from '@equinor/eds-icons';
 
 export const ICONS = {
+  settings,
   checkbox,
   checkbox_outline,
   launch,
