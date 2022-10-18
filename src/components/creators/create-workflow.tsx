@@ -6,12 +6,14 @@ import { Workflow } from '../../models/v2/workflow';
 import { services } from '../../services';
 import { useNavigate } from 'react-router';
 import { Button } from '../ui';
+import { uuid } from '../../common';
 
 const makeWorkflow = (workspace: string): Workflow => ({
   type: 'workflow',
   workspace,
   name: 'New workflow',
   component: {
+    uid: uuid(),
     type: 'component',
     implementation: {
       type: 'any',
