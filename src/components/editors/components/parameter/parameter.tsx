@@ -32,9 +32,6 @@ export const Parameter: FC<ParameterProps> = (props: ParameterProps) => {
         ? {
             ...prev,
             [parameterType]: updateParameter(prev[parameterType], index, props.parameter, values),
-            [parameterMappings]: (prev.implementation as Graph)[parameterMappings]?.map((mapping: Edge) =>
-              mapping.source.port !== props.parameter.name ? mapping : { ...mapping, source: { port: values.name } },
-            ),
             implementation: {
               ...prev?.implementation,
               args: updateArgs((prev?.implementation as Brick)?.args, props?.parameter?.name || '', type, values),
@@ -48,10 +45,13 @@ export const Parameter: FC<ParameterProps> = (props: ParameterProps) => {
           }
         : {
             ...prev,
-            [parameterMappings]: (prev?.implementation as Graph)[parameterMappings]?.map((mapping: Edge) =>
-              mapping.source.port !== props.parameter.name ? mapping : { ...mapping, source: { port: values.name } },
-            ),
             [parameterType]: updateParameter(prev?.[parameterType], index, props.parameter, values),
+            implementation: {
+              ...prev?.implementation,
+              [parameterMappings]: (prev?.implementation as Graph)[parameterMappings]?.map((mapping: Edge) =>
+                mapping.source.port !== props.parameter.name ? mapping : { ...mapping, source: { port: values.name } },
+              ),
+            },
           },
     );
     setOpen(false);
