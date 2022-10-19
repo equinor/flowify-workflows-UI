@@ -1,10 +1,11 @@
 import React, { FC, useState, useContext } from 'react';
-import { Button, Icon, Radio, Switch, Tooltip, Typography } from '@equinor/eds-core-react';
+import { Tooltip, Typography } from '@equinor/eds-core-react';
 import { Dialog, Stack } from '@mui/material';
 import {
   SettingsContextStore,
   IEditorSettings as SettingsInterface,
 } from '../../../../common/context/editor-settings-context';
+import { Button, DialogWrapper, MultiToggle, ToggleButton } from '../../../ui';
 
 interface IEditorSettings {}
 
@@ -30,52 +31,46 @@ export const EditorSettings: FC<IEditorSettings> = (props: IEditorSettings) => {
   return (
     <>
       <Tooltip title="Editor preferences" style={{ fontSize: '1rem' }}>
-        <Button onClick={() => setOpen(true)} variant="ghost_icon" style={{ fontSize: '1rem' }}>
-          <Icon name="tune" />
-        </Button>
+        <Button theme="icon" icon="tune" onClick={() => setOpen(true)} />
       </Tooltip>
       <Dialog open={open} onClose={() => setOpen(false)} fullWidth maxWidth="md">
-        <Stack spacing={2} sx={{ padding: '2rem' }}>
-          <div>
-            <Typography variant="h5">Manifest options</Typography>
-            <Stack>
-              <Switch
-                checked={settings?.wordWrap}
-                label="Use word-wrap"
-                onChange={() => updateSettingBoolean('wordWrap')}
-              />
-              <Switch
-                checked={settings?.miniMap}
-                label="Show minimap"
-                onChange={() => updateSettingBoolean('miniMap')}
-              />
-              <Switch
-                checked={settings?.darkTheme}
-                label="Dark theme"
-                onChange={() => updateSettingBoolean('darkTheme')}
-              />
-            </Stack>
-          </div>
-          <div>
-            <Typography variant="h5">Manifest language</Typography>
-            <Stack role="radiogroup" direction="row" spacing={2}>
-              <Radio
-                label="YAML"
-                name="editor_lang_yaml"
-                checked={settings.language === 'yaml'}
-                value="yaml"
-                onChange={() => updateSettingValue('language', 'yaml')}
-              />
-              <Radio
-                label="JSON"
-                name="editor_lang_json"
-                checked={settings.language === 'json'}
-                value="json"
-                onChange={() => updateSettingValue('language', 'json')}
-              />
-            </Stack>
-          </div>
-        </Stack>
+        <DialogWrapper spacing={2} padding={2}>
+          <Typography variant="h5">Manifest options</Typography>
+          <Stack spacing={2}>
+            <MultiToggle label="Wordwrap">
+              <ToggleButton active={settings?.wordWrap} onClick={() => updateSettingBoolean('wordWrap')}>
+                Enable
+              </ToggleButton>
+              <ToggleButton active={!settings?.wordWrap} onClick={() => updateSettingBoolean('wordWrap')}>
+                Disable
+              </ToggleButton>
+            </MultiToggle>
+            <MultiToggle label="Minimap">
+              <ToggleButton active={settings?.miniMap} onClick={() => updateSettingBoolean('miniMap')}>
+                Enable
+              </ToggleButton>
+              <ToggleButton active={!settings?.miniMap} onClick={() => updateSettingBoolean('miniMap')}>
+                Disable
+              </ToggleButton>
+            </MultiToggle>
+            <MultiToggle label="Theme">
+              <ToggleButton active={settings?.darkTheme} onClick={() => updateSettingBoolean('darkTheme')}>
+                Dark
+              </ToggleButton>
+              <ToggleButton active={!settings?.darkTheme} onClick={() => updateSettingBoolean('darkTheme')}>
+                Light
+              </ToggleButton>
+            </MultiToggle>
+          </Stack>
+          <MultiToggle label="Manifest language">
+            <ToggleButton active={settings?.language === 'yaml'} onClick={() => updateSettingValue('language', 'yaml')}>
+              YAML
+            </ToggleButton>
+            <ToggleButton active={settings?.language === 'json'} onClick={() => updateSettingValue('language', 'json')}>
+              JSON
+            </ToggleButton>
+          </MultiToggle>
+        </DialogWrapper>
       </Dialog>
     </>
   );

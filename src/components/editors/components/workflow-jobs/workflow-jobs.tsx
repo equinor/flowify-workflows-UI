@@ -1,18 +1,21 @@
 import React, { FC } from 'react';
 import { Grid, Stack } from '@mui/material';
-import { Button, Icon, Pagination, Typography } from '@equinor/eds-core-react';
+import { Pagination, Typography } from '@equinor/eds-core-react';
 import { IJobsListRequest, Workflow } from '../../../../models/v2';
 import { IPagination } from '../../../../services';
 import { RunWorkflow } from '../../../creators';
 import moment from 'moment';
 //import { Select, TextField } from '../../../ui';
 import { Timestamp } from '../../../timestamp';
+import { Paper, Button } from '../../../ui';
+import { Link } from 'react-router-dom';
 
 interface WorkflowJobsProps {
   workflow: Workflow | undefined;
   secrets: string[];
   jobs: IJobsListRequest | undefined;
   fetchJobs: (pagination: IPagination) => void;
+  workspace: string;
 }
 
 export const WorkflowJobs: FC<WorkflowJobsProps> = (props: WorkflowJobsProps) => {
@@ -37,19 +40,13 @@ export const WorkflowJobs: FC<WorkflowJobsProps> = (props: WorkflowJobsProps) =>
             />
           </Stack> */}
           {jobs?.items?.map((job) => (
-            <Stack
+            <Paper
               key={job?.uid}
               direction="row"
               justifyContent="space-between"
               alignItems="center"
               spacing={1}
-              sx={{
-                padding: '2rem',
-                background: '#ADE2E619',
-                borderRadius: '10px',
-                borderBottom: '1px solid #97CACE',
-                borderRight: '1px solid #97CACE',
-              }}
+              padding={2}
             >
               <Stack spacing={1}>
                 <Typography variant="h5">
@@ -62,12 +59,13 @@ export const WorkflowJobs: FC<WorkflowJobsProps> = (props: WorkflowJobsProps) =>
                 <Typography variant="body_short">{job?.description}</Typography>
               </Stack>
               <Stack direction="row" spacing={2}>
-                <Button variant="ghost">
-                  <Icon name="visibility" />
-                  View job
-                </Button>
+                <Link to={`/workspace/${props.workspace}/job/${job?.uid}`}>
+                  <Button as="span" leftIcon="visibility">
+                    View job
+                  </Button>
+                </Link>
               </Stack>
-            </Stack>
+            </Paper>
           ))}
           <Pagination
             totalItems={jobs?.pageInfo?.totalNumber || 0}

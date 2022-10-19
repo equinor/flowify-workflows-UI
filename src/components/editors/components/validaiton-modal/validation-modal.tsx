@@ -1,8 +1,8 @@
-import { Table, Typography } from '@equinor/eds-core-react';
-import { Dialog } from '@mui/material';
+import { Typography } from '@equinor/eds-core-react';
+import { Dialog, Table, TableHead, TableRow, TableBody, TableCell } from '@mui/material';
 import React, { FC } from 'react';
 import { isNotEmptyArray } from '../../../../common';
-import { Stack } from '../../../ui';
+import { DialogWrapper, Stack } from '../../../ui';
 import { IParameterConfig } from '../../types';
 import { ErrorRow } from './components/error-row';
 import { IValidationError } from './types';
@@ -20,32 +20,32 @@ export const ValidationModal: FC<ValidationModalProps> = (props: ValidationModal
 
   return (
     <Dialog open={open} onClose={onClose} fullWidth maxWidth="lg">
-      <Stack padding={2} spacing={1}>
+      <DialogWrapper padding={2} spacing={1}>
         <Typography variant="h4">Validation</Typography>
         <Stack spacing={0.5}>
           <Table>
-            <Table.Head>
-              <Table.Row>
-                <Table.Cell>Error message</Table.Cell>
-                <Table.Cell>Current value</Table.Cell>
-                <Table.Cell>Manifest path</Table.Cell>
-                <Table.Cell>Quick fix</Table.Cell>
-              </Table.Row>
-            </Table.Head>
-            <Table.Body>
+            <TableHead>
+              <TableRow>
+                <TableCell>Error message</TableCell>
+                <TableCell>Current value</TableCell>
+                <TableCell>Manifest path</TableCell>
+                <TableCell>Quick fix</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
               {isNotEmptyArray(validationErrors) ? (
                 validationErrors?.map((error) => (
                   <ErrorRow error={error} setParameterConfig={props.setParameterConfig} />
                 ))
               ) : (
-                <Table.Row>
-                  <Table.Cell colSpan={4}>No errors found</Table.Cell>
-                </Table.Row>
+                <TableRow>
+                  <TableCell colSpan={4}>No errors found</TableCell>
+                </TableRow>
               )}
-            </Table.Body>
+            </TableBody>
           </Table>
         </Stack>
-      </Stack>
+      </DialogWrapper>
     </Dialog>
   );
 };

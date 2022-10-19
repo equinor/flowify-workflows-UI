@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { Table } from '@equinor/eds-core-react';
+import { TableRow, TableCell } from '@mui/material';
 import { IValidationError } from '../types';
 import { Button } from '../../../../ui';
 import { IParameterConfig } from '../../../types';
@@ -34,23 +34,23 @@ export const ErrorRow: FC<ErrorRowProps> = (props: ErrorRowProps) => {
   }
 
   return (
-    <Table.Row style={{ marginBottom: '0.25rem' }}>
-      <Table.Cell>{error?.message}</Table.Cell>
-      <Table.Cell>
+    <TableRow style={{ marginBottom: '0.25rem' }}>
+      <TableCell>{error?.message}</TableCell>
+      <TableCell>
         {error?.params?.parsedValue
           ? error?.params?.parsedValue
           : typeof error?.value === 'string'
           ? error?.value
           : JSON.stringify(error?.value)}
-      </Table.Cell>
-      <Table.Cell>{error?.path}</Table.Cell>
-      <Table.Cell>
+      </TableCell>
+      <TableCell>{error?.path}</TableCell>
+      <TableCell>
         {quickFixes[error?.type] ? (
           <Button theme="simple" onClick={handleQuickFix}>
             {fixLabels[error?.type] || 'Quick fix'}
           </Button>
         ) : null}
-      </Table.Cell>
-    </Table.Row>
+      </TableCell>
+    </TableRow>
   );
 };
