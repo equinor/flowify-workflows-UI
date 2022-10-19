@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import { Stack, Dialog } from '@mui/material';
 import { Typography } from '@equinor/eds-core-react';
 import { Data, Edge, Graph } from '../../../../models/v2';
-import { DialogWrapper } from '../../../ui';
+import { DialogWrapper, Message } from '../../../ui';
 import { getComponentFromRef } from '../../helpers';
 import { SecretsVolumesConfigProps } from './types';
 import { Select } from '../../../form';
@@ -137,10 +137,12 @@ export const SecretsVolumesConfig: FC<SecretsVolumesConfigProps> = (props: Secre
             {subcomponent?.name} {parameterConfig?.type}s
           </Typography>
           {type === 'component' && (
-            <Typography variant="body_short">
-              When creating components, mounts and secrets need to be defined as inputs before they can be used in
-              sub-components.
-            </Typography>
+            <Message icon="info_circle">
+              <Typography variant="body_short">
+                When creating components, mounts and secrets need to be defined as inputs before they can be used in
+                sub-components.
+              </Typography>
+            </Message>
           )}
         </Stack>
         <Stack spacing={2} style={{ paddingBottom: '11rem' }}>

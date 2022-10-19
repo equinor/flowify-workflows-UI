@@ -149,4 +149,18 @@ export const darkTheme: DefaultTheme = {
       },
     },
   },
+  message: {
+    background: {
+      default: 'rgba(173, 226, 230, 0.1)',
+      warning: 'rgba(255, 198, 122, 0.1)',
+      error: 'rgba(255, 102, 112, 0.1)',
+      success: 'rgba(161, 218, 160, 0.1)',
+    },
+    icon: {
+      default: defaultIconColor,
+      warning: '#FFC67A',
+      error: 'rgb(255, 102, 112)',
+      success: 'rgb(161, 218, 160)',
+    },
+  },
 };

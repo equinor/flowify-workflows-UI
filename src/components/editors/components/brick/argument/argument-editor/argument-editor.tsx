@@ -1,10 +1,10 @@
 import React, { FC, useState } from 'react';
-import { Icon, Radio, Typography } from '@equinor/eds-core-react';
+import { Radio, Typography } from '@equinor/eds-core-react';
 import { Dialog, Stack } from '@mui/material';
 import { ArgumentEditorProps } from './types';
 import { Brick } from '../../../../../../models/v2';
 import { BaseInput, Select } from '../../../../../form';
-import { DialogWrapper } from '../../../../../ui';
+import { DialogWrapper, Message } from '../../../../../ui';
 
 export const ArgumentEditor: FC<ArgumentEditorProps> = (props: ArgumentEditorProps) => {
   const { arg, isConst, index, open, onClose, setComponent, inputs, selectValue, setSelectValue, type } = props;
@@ -87,8 +87,7 @@ export const ArgumentEditor: FC<ArgumentEditorProps> = (props: ArgumentEditorPro
           />
         )}
         {selectedInputType === 'volume' && (
-          <Stack direction="row" alignItems="center" spacing={2} sx={{ background: '#ADE2E619', padding: '1rem' }}>
-            <Icon name="info_circle" color="#007079" />
+          <Message icon="info_circle">
             <Typography variant="body_short">
               <b>Mount path: </b>
               <br />
@@ -96,7 +95,7 @@ export const ArgumentEditor: FC<ArgumentEditorProps> = (props: ArgumentEditorPro
               {selectValue}
               {suffixValue}
             </Typography>
-          </Stack>
+          </Message>
         )}
       </DialogWrapper>
     </Dialog>

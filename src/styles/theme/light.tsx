@@ -139,4 +139,18 @@ export const lightTheme: DefaultTheme = {
       },
     },
   },
+  message: {
+    background: {
+      default: 'rgb(222, 237, 238)',
+      warning: 'rgb(255, 231, 214)',
+      error: 'rgb(255, 193, 193)',
+      success: 'rgb(230, 250, 236)',
+    },
+    icon: {
+      default: defaultIconColor,
+      warning: '#AD6200',
+      error: '#B30D2F',
+      success: '#358132',
+    },
+  },
 };

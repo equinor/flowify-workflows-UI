@@ -7,7 +7,7 @@ import { nanoid } from '../helpers';
 import { EditorHeader } from '../components';
 import { Component, Workflow } from '../../../models/v2';
 import { Parameter } from '.';
-import { MultiToggle, ToggleButton, Button, Chip } from '../../ui';
+import { MultiToggle, ToggleButton, Button, Chip, Message } from '../../ui';
 import { BaseInput } from '../../form';
 
 interface SidebarProps {
@@ -129,12 +129,11 @@ export const Sidebar: FC<SidebarProps> = (props: SidebarProps) => {
           </ToggleButton>
         </MultiToggle>
         {component?.implementation?.type === 'any' && (
-          <Stack direction="row" alignItems="center" spacing={2} sx={{ background: '#FFE7D6', padding: '1rem' }}>
-            <Icon name="warning_outlined" color="#AD6200" size={32} />
+          <Message theme="warning" icon="warning_outlined">
             <Typography variant="body_short">
               Select implementation type "graph" or "brick" to start building your {document?.type}.
             </Typography>
-          </Stack>
+          </Message>
         )}
       </Stack>
       <Stack spacing={1}>
