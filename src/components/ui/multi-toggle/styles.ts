@@ -16,7 +16,10 @@ const StyledToggleButton = styled.button<{ active?: boolean }>`
   outline: none;
   padding: 0.75rem 1rem;
   border-radius: 50px;
-  font-size: 1rem;
+  font-size: inherit;
+  display: flex;
+  align-items: center;
+  column-gap: 0.5rem;
   cursor: pointer;
   &:focus {
     outline: ${({ theme }) => theme?.defaults?.focusOutline};

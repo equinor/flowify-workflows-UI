@@ -13,6 +13,7 @@ export const StyledButton = styled.button<{ buttonTheme: ButtonTheme }>`
   align-items: center;
   column-gap: 0.25rem;
   font-size: 1rem;
+  max-width: max-content;
   font-weight: ${(props) => (props.buttonTheme === 'link' ? 'inherit' : '500')};
   cursor: pointer;
   transition: ease-in-out background-color 0.2s;

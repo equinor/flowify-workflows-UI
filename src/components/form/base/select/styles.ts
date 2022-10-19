@@ -10,7 +10,7 @@ export const SelectButton = styled.button<{ readOnly?: boolean }>`
   appearance: none;
   padding: 0.85rem 0.5rem 0.85rem 1rem;
   border-radius: ${({ theme }) => theme?.defaults?.borderRadius};
-  font-size: 1rem;
+  font-size: inherit;
   font-family: inherit;
   background: ${({ theme }) => theme?.input?.background?.default};
   border: ${({ theme }) => theme?.input?.border?.default};
