@@ -64,14 +64,11 @@ export const Parameter: FC<ParameterProps> = (props: ParameterProps) => {
         ...(prev?.[parameterType]!.slice(0, index) || []),
         ...(prev?.[parameterType]!.slice(index + 1, prev?.[parameterType]!.length) || []),
       ],
-      implementation: {
-        ...prev?.implementation,
-        [parameterMappings]: (prev?.implementation as Graph)?.[parameterMappings]?.filter((mapping: Edge) =>
-          parameterMappings === 'inputMappings'
-            ? mapping?.source?.port !== props.parameter?.name
-            : mapping?.target?.port !== props?.parameter?.name,
-        ),
-      },
+      [parameterMappings]: (prev?.implementation as Graph)?.[parameterMappings]?.filter((mapping: Edge) =>
+        parameterMappings === 'inputMappings'
+          ? mapping?.source?.port !== props.parameter?.name
+          : mapping?.target?.port !== props?.parameter?.name,
+      ),
     }));
     setOpen(false);
   }
