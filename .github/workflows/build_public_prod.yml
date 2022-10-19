@@ -1,4 +1,4 @@
-name: Build docker images to ghcr  
+name: Build docker images to ghcr on release
  
 on: 
   release:
