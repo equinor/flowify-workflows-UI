@@ -9,12 +9,14 @@ import { services } from '../../../services';
 import { Button, DialogWrapper, Stack } from '../../ui';
 import { Submitter } from '../create-component/submitter';
 import { TextInputFormik } from '../../form';
+import { uuid } from '../../../common';
 
 const makeWorkflow = (workspace: string): Workflow => ({
   type: 'workflow',
   workspace,
   name: 'New workflow',
   component: {
+    uid: uuid(),
     type: 'component',
     implementation: {
       type: 'any',
