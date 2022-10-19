@@ -10,7 +10,7 @@
     "@equinor/eds-icons": "0.13.0",
     "@monaco-editor/react": "4.4.5",
     "@mui/icons-material": "5.10.6",
-    "@mui/material": "5.10.6",
+    "@mui/material": "5.10.7",
     "@mui/styles": "5.10.6",
     "dagre": "^0.8.5",
     "formik": "^2.2.9",
