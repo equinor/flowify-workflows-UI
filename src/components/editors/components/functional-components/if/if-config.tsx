@@ -244,6 +244,8 @@ export const IfConfig: FC<IfConfigProps> = (props: IfConfigProps) => {
               open={openMarketplace !== undefined}
               onClose={() => setOpenMarketplace(undefined)}
               onAddComponent={addComponent}
+              component={component}
+              subcomponents={subcomponents}
             />
           </Grid>
         </Grid>

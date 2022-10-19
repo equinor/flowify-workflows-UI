@@ -10,8 +10,8 @@ import ReactFlow, {
   BackgroundVariant,
 } from 'react-flow-renderer/nocss';
 import { StartNode, TaskNode, EndNode, ConditionalNode, MapNode } from '.';
-import { Component } from '../../../../models/v2';
-import { Button, Snackbar } from '@equinor/eds-core-react';
+import { Component, Graph } from '../../../../models/v2';
+import { Button as EDSButton, Snackbar } from '@equinor/eds-core-react';
 import {
   removeConnection,
   ICustomConnection,
@@ -22,25 +22,36 @@ import {
   removeEndNode,
   updateTaskNodePostion,
   updateParameterPosition,
+  nanoid,
 } from '../../helpers';
 import { ReactFlowWrapper } from './styles';
+import { Button } from '../../../ui';
+import { MarketplaceModal } from '../marketplace-modal/marketplace-modal';
+import { services } from '../../../../services';
+import { Feedback } from '../feedbacks/types';
+import { BUTTON_STATE } from '../../../creators/add-component-to-graph';
 
 interface IGraphEditor {
-  component: Component | null;
+  component: Component | undefined;
   onChange: (component: Component) => void;
   elements?: any;
   nodes?: any;
   edges?: any;
   setElements?: any;
   subcomponents?: Component[];
+  setComponent?: React.Dispatch<React.SetStateAction<Component | undefined>>;
+  setSubcomponents?: React.Dispatch<React.SetStateAction<Component[] | undefined>>;
+  setFeedback?: (feedback: Feedback) => void;
   onNodesChange?: any;
   onEdgesChange?: any;
   mapModalOpen?: boolean;
+  type: 'workflow' | 'component' | 'job' | undefined;
 }
 
 export const GraphEditor: React.FC<IGraphEditor> = (props: IGraphEditor) => {
-  const { component, onChange, nodes, edges, mapModalOpen } = props;
+  const { component, onChange, nodes, edges, mapModalOpen, setSubcomponents, setFeedback, setComponent, type } = props;
   const [wrongConnectionAlert, setWrongConnectionAlert] = useState<boolean>(false);
+  const [marketplaceOpen, setMarketplaceOpen] = useState<boolean>(false);
 
   const nodeTypes = React.useMemo(
     () => ({
@@ -132,16 +143,66 @@ export const GraphEditor: React.FC<IGraphEditor> = (props: IGraphEditor) => {
     }
   }
 
+  async function onAddComponent(
+    component: Component,
+    setButtonState: React.Dispatch<React.SetStateAction<BUTTON_STATE>>,
+  ) {
+    const { uid, version } = component;
+    if (uid && setSubcomponents && setFeedback && setComponent) {
+      services.components
+        .get(uid, version?.current)
+        .then((res) => setSubcomponents((prev) => [...(prev || []), res]))
+        .then(() => {
+          setButtonState('success');
+          setFeedback({
+            message: `Component ${component?.name || ''} was successfully added to ${type} graph`,
+            type: 'success',
+          });
+          setTimeout(() => {
+            setButtonState('default');
+          }, 3000);
+        })
+        .then(() => {
+          setComponent((prev) => ({
+            ...prev,
+            implementation: {
+              ...prev?.implementation,
+              nodes: [
+                ...((prev?.implementation as Graph)?.nodes || []),
+                { id: `n${nanoid(8)}`, node: { uid, version: version?.current } },
+              ],
+            },
+          }));
+        })
+        .catch((error) => {
+          console.error(error);
+          setFeedback({ message: `Error: Component could not be added to ${type} graph.`, type: 'error' });
+          setButtonState('error');
+          setTimeout(() => {
+            setButtonState('default');
+          }, 3000);
+        });
+    }
+  }
+
   return (
     <ReactFlowWrapper>
       <Snackbar placement="top" open={wrongConnectionAlert} onClose={() => setWrongConnectionAlert(false)}>
         Connection refused: Media types do not match.
         <Snackbar.Action>
-          <Button onClick={() => setWrongConnectionAlert(false)} variant="ghost">
+          <EDSButton onClick={() => setWrongConnectionAlert(false)} variant="ghost">
             Close
-          </Button>
+          </EDSButton>
         </Snackbar.Action>
       </Snackbar>
+      <MarketplaceModal
+        open={marketplaceOpen}
+        onClose={() => setMarketplaceOpen(false)}
+        onAddComponent={onAddComponent}
+        component={component}
+        setComponent={setComponent}
+        subcomponents={props.subcomponents}
+      />
       <ReactFlowProvider>
         <ReactFlow
           onNodesDelete={(nodes) => onNodesDelete(nodes)}
@@ -162,6 +223,14 @@ export const GraphEditor: React.FC<IGraphEditor> = (props: IGraphEditor) => {
           <Controls style={{ right: 10, left: 'auto' }} fitViewOptions={{ duration: 1000 }}>
             {/*<NodesDebugger />*/}
           </Controls>
+          <Button
+            onClick={() => setMarketplaceOpen(true)}
+            style={{ position: 'absolute', right: 30, top: 30, zIndex: 300 }}
+            theme="create"
+            leftIcon="add"
+          >
+            Add to graph
+          </Button>
         </ReactFlow>
       </ReactFlowProvider>
     </ReactFlowWrapper>

@@ -92,7 +92,7 @@ export const JobViewer: FC<JobViewerProps> = (props: JobViewerProps) => {
               direction="row"
               sx={{ flexGrow: '1', minHeight: '0', flexWrap: 'nowrap', height: '100%', width: '100%' }}
             >
-              <EditorCentralBar setUseManifest={setUseManifest} type="job" />
+              <EditorCentralBar setUseManifest={setUseManifest} />
               {useManifest ? (
                 <ManifestEditor value={jobWatch} lang="yaml" />
               ) : (

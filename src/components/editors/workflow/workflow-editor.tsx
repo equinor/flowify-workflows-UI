@@ -340,7 +340,13 @@ const WorkflowEditor: FC<IWorkflowEditor> = (props: IWorkflowEditor) => {
           errorsLength={validationErrors?.length || 0}
         />
         {activePage === 'runs' && (
-          <WorkflowJobs workflow={workflow} secrets={workspaceSecrets} jobs={jobs} fetchJobs={fetchJobs} />
+          <WorkflowJobs
+            workspace={workspace}
+            workflow={workflow}
+            secrets={workspaceSecrets}
+            jobs={jobs}
+            fetchJobs={fetchJobs}
+          />
         )}
         {activePage === 'document' && (
           <DocumentEditor
