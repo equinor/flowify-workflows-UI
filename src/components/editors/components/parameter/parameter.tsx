@@ -32,9 +32,6 @@ export const Parameter: FC<ParameterProps> = (props: ParameterProps) => {
         ? {
             ...prev,
             [parameterType]: updateParameter(prev[parameterType], index, props.parameter, values),
-            [parameterMappings]: (prev.implementation as Graph)[parameterMappings]?.map((mapping: Edge) =>
-              mapping.source.port !== props.parameter.name ? mapping : { ...mapping, source: { port: values.name } },
-            ),
             implementation: {
               ...prev?.implementation,
               args: updateArgs((prev?.implementation as Brick)?.args, props?.parameter?.name || '', type, values),
@@ -48,10 +45,13 @@ export const Parameter: FC<ParameterProps> = (props: ParameterProps) => {
           }
         : {
             ...prev,
-            [parameterMappings]: (prev?.implementation as Graph)[parameterMappings]?.map((mapping: Edge) =>
-              mapping.source.port !== props.parameter.name ? mapping : { ...mapping, source: { port: values.name } },
-            ),
             [parameterType]: updateParameter(prev?.[parameterType], index, props.parameter, values),
+            implementation: {
+              ...prev?.implementation,
+              [parameterMappings]: (prev?.implementation as Graph)[parameterMappings]?.map((mapping: Edge) =>
+                mapping.source.port !== props.parameter.name ? mapping : { ...mapping, source: { port: values.name } },
+              ),
+            },
           },
     );
     setOpen(false);
@@ -64,11 +64,14 @@ export const Parameter: FC<ParameterProps> = (props: ParameterProps) => {
         ...(prev?.[parameterType]!.slice(0, index) || []),
         ...(prev?.[parameterType]!.slice(index + 1, prev?.[parameterType]!.length) || []),
       ],
-      [parameterMappings]: (prev?.implementation as Graph)?.[parameterMappings]?.filter((mapping: Edge) =>
-        parameterMappings === 'inputMappings'
-          ? mapping?.source?.port !== props.parameter?.name
-          : mapping?.target?.port !== props?.parameter?.name,
-      ),
+      implementation: {
+        ...prev?.implementation,
+        [parameterMappings]: (prev?.implementation as Graph)?.[parameterMappings]?.filter((mapping: Edge) =>
+          parameterMappings === 'inputMappings'
+            ? mapping?.source?.port !== props.parameter?.name
+            : mapping?.target?.port !== props?.parameter?.name,
+        ),
+      },
     }));
     setOpen(false);
   }
