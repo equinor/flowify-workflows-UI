@@ -3,7 +3,9 @@ name: Build dev docker images to ghcr
 on: 
   push:
     branches: [ main ]
-
+    paths-ignore:
+      - '.github/**'
+      
 permissions:
       id-token: write
       contents: read
