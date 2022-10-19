@@ -1,0 +1,24 @@
+name: Delete old container images
+
+on:
+  schedule:
+    # once a week
+    - cron: "0 0 * * 0" 
+    
+
+jobs:
+  clean-ghcr:
+    name: Delete old unused container images
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Delete 'dev' containers older than a week. Keep at least 5
+        uses: snok/container-retention-policy@v1
+        with:
+          image-names: flowify-workflows-ui, flowify-workflows-server
+          cut-off: 1 week ago UTC
+          account-type: org
+          org-name: equinor
+          keep-at-least: 5
+          filter-tags: sha-*
+          token: ${{ secrets.PAT }}
+
