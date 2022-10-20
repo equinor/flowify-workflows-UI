@@ -114,15 +114,14 @@ const WorkflowsListing: FC<IWorkflowsListing> = (props: IWorkflowsListing) => {
       </Stack>
       <Stack sx={{ padding: '1rem' }} spacing={1} alignItems="flex-start">
         <Typography variant="h5">Docs</Typography>
-        <a
+        <Button
           href="https://equinor.github.io/flowify-documentation/docs/workflow/"
+          theme="link"
           target="_blank"
           rel="noopener noreferrer"
         >
-          <Button theme="simple">
-            <span>Creating a workflow</span> <Icon name="chevron_right" size={16} color="#004f55" />
-          </Button>
-        </a>
+          <span>Creating a workflow</span> <Icon name="chevron_right" size={16} color="#004f55" />
+        </Button>
       </Stack>
       <Stack direction="row" spacing={2} justifyContent="stretch">
         <Stack direction="row" sx={{ flexGrow: '2' }} spacing={1}>

@@ -26,7 +26,7 @@ export const StyledMenuButton = styled.button<{ buttonTheme: ButtonTheme }>`
     cursor: not-allowed;
   }
   &:focus {
-    outline: 3px dotted #007079;
+    outline: ${({ theme }) => theme?.defaults?.focusOutline};
   }
 `;
 

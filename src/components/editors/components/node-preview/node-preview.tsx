@@ -1,12 +1,13 @@
 import React, { FC } from 'react';
 import { Drawer, Stack } from '@mui/material';
 import { NodeProps } from 'react-flow-renderer/nocss';
-import { Button, Icon, Typography } from '@equinor/eds-core-react';
+import { Typography } from '@equinor/eds-core-react';
 import moment from 'moment';
 import { Link } from 'react-router-dom';
 import ReactJson from 'react-json-view';
 import { INode } from '../../helpers/helpers';
 import { Brick, Graph } from '../../../../models/v2';
+import { DialogWrapper, Button } from '../../../ui';
 
 interface NodePreviewProps {
   open: boolean;
@@ -21,7 +22,7 @@ export const NodePreview: FC<NodePreviewProps> = (props: NodePreviewProps) => {
   const outputParams = data?.component?.outputs || [];
   return (
     <Drawer open={props.open} onClose={() => onClose(false)} anchor="right" sx={{ width: '400px' }}>
-      <Stack spacing={2} sx={{ padding: '2rem', width: '440px' }}>
+      <DialogWrapper padding={2} spacing={2} style={{ width: '440px', height: '100%' }}>
         <Typography variant="h4">
           <b>{data?.label}</b>
         </Typography>
@@ -113,13 +114,13 @@ export const NodePreview: FC<NodePreviewProps> = (props: NodePreviewProps) => {
         <Stack alignItems="flex-end" sx={{ paddingTop: '2rem' }}>
           {!node.data?.isInlineComponent && (
             <Link to={`/component/${data?.component?.uid}`} target="_blank">
-              <Button as="span" color="secondary">
-                <Icon name="code" /> View component source
+              <Button as="span" leftIcon="code">
+                View component source
               </Button>
             </Link>
           )}
         </Stack>
-      </Stack>
+      </DialogWrapper>
     </Drawer>
   );
 };

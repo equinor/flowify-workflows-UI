@@ -10,6 +10,7 @@ export const StyledDialogWrapper = styled(Stack)`
   span,
   td,
   th,
+  code,
   p {
     color: ${({ theme }) => theme?.defaults?.color};
   }
