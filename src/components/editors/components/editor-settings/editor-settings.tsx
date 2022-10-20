@@ -1,32 +1,14 @@
 import React, { FC, useState, useContext } from 'react';
 import { Tooltip, Typography } from '@equinor/eds-core-react';
 import { Dialog, Stack } from '@mui/material';
-import {
-  SettingsContextStore,
-  IEditorSettings as SettingsInterface,
-} from '../../../../common/context/editor-settings-context';
+import { SettingsContextStore } from '../../../../common/context/editor-settings-context';
 import { Button, DialogWrapper, MultiToggle, ToggleButton } from '../../../ui';
 
 interface IEditorSettings {}
 
 export const EditorSettings: FC<IEditorSettings> = (props: IEditorSettings) => {
   const [open, setOpen] = useState<boolean>(false);
-  const { settings, setSettings } = useContext(SettingsContextStore);
-
-  function updateSettingBoolean(name: string) {
-    setSettings((prev: SettingsInterface) => ({
-      ...prev,
-      //@ts-expect-error
-      [name]: !prev[name],
-    }));
-  }
-
-  function updateSettingValue(name: string, value: string) {
-    setSettings((prev: SettingsInterface) => ({
-      ...prev,
-      [name]: value,
-    }));
-  }
+  const { settings, updateSetting } = useContext(SettingsContextStore);
 
   return (
     <>
@@ -38,35 +20,35 @@ export const EditorSettings: FC<IEditorSettings> = (props: IEditorSettings) => {
           <Typography variant="h5">Manifest options</Typography>
           <Stack spacing={2}>
             <MultiToggle label="Wordwrap">
-              <ToggleButton active={settings?.wordWrap} onClick={() => updateSettingBoolean('wordWrap')}>
+              <ToggleButton active={settings?.wordWrap} onClick={() => updateSetting('wordWrap', true)}>
                 Enable
               </ToggleButton>
-              <ToggleButton active={!settings?.wordWrap} onClick={() => updateSettingBoolean('wordWrap')}>
+              <ToggleButton active={!settings?.wordWrap} onClick={() => updateSetting('wordWrap', false)}>
                 Disable
               </ToggleButton>
             </MultiToggle>
             <MultiToggle label="Minimap">
-              <ToggleButton active={settings?.miniMap} onClick={() => updateSettingBoolean('miniMap')}>
+              <ToggleButton active={settings?.miniMap} onClick={() => updateSetting('miniMap', true)}>
                 Enable
               </ToggleButton>
-              <ToggleButton active={!settings?.miniMap} onClick={() => updateSettingBoolean('miniMap')}>
+              <ToggleButton active={!settings?.miniMap} onClick={() => updateSetting('miniMap', false)}>
                 Disable
               </ToggleButton>
             </MultiToggle>
             <MultiToggle label="Theme">
-              <ToggleButton active={settings?.darkTheme} onClick={() => updateSettingBoolean('darkTheme')}>
+              <ToggleButton active={settings?.darkTheme} onClick={() => updateSetting('darkTheme', true)}>
                 Dark
               </ToggleButton>
-              <ToggleButton active={!settings?.darkTheme} onClick={() => updateSettingBoolean('darkTheme')}>
+              <ToggleButton active={!settings?.darkTheme} onClick={() => updateSetting('darkTheme', false)}>
                 Light
               </ToggleButton>
             </MultiToggle>
           </Stack>
           <MultiToggle label="Manifest language">
-            <ToggleButton active={settings?.language === 'yaml'} onClick={() => updateSettingValue('language', 'yaml')}>
+            <ToggleButton active={settings?.language === 'yaml'} onClick={() => updateSetting('language', 'yaml')}>
               YAML
             </ToggleButton>
-            <ToggleButton active={settings?.language === 'json'} onClick={() => updateSettingValue('language', 'json')}>
+            <ToggleButton active={settings?.language === 'json'} onClick={() => updateSetting('language', 'json')}>
               JSON
             </ToggleButton>
           </MultiToggle>

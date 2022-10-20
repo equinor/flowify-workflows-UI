@@ -1,7 +1,6 @@
 import React from 'react';
 import { SnackbarProvider } from 'notistack';
 import { HelmetProvider } from 'react-helmet-async';
-import { ThemeProvider } from 'styled-components';
 import './common/icons';
 import './styles/scss/index.scss';
 import './common/validation/yup-config';
@@ -9,7 +8,7 @@ import Pages from './routes';
 import { CurrentUserProvider } from './common/context/user-context-store';
 import { EditorSettingsProvider } from './common/context/editor-settings-context';
 import { AuthProvider } from './auth';
-import { lightTheme, darkTheme } from './styles/theme';
+import { ThemeSelector } from './styles/theme/theme-selector';
 
 function App() {
   return (
@@ -18,9 +17,9 @@ function App() {
         <HelmetProvider>
           <EditorSettingsProvider>
             <SnackbarProvider maxSnack={3}>
-              <ThemeProvider theme={darkTheme}>
+              <ThemeSelector>
                 <Pages />
-              </ThemeProvider>
+              </ThemeSelector>
             </SnackbarProvider>
           </EditorSettingsProvider>
         </HelmetProvider>

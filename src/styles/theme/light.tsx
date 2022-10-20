@@ -28,7 +28,7 @@ export const lightTheme: DefaultTheme = {
   button: {
     background: {
       simple: 'transparent',
-      create: '#E6FAEC',
+      create: '#C3F3D2',
       danger: '#FFC1C1',
       default: '#DEEDEE',
       icon: 'transparent',
@@ -44,7 +44,7 @@ export const lightTheme: DefaultTheme = {
       background: {
         simple: '#C9E0E2',
         icon: '#C9E0E2',
-        create: '#C3F3D2',
+        create: '#C1E7C1',
         danger: '#FF6670',
         default: '#C9E0E2',
       },
@@ -58,7 +58,7 @@ export const lightTheme: DefaultTheme = {
     },
   },
   graph: {
-    background: 'rgba(0, 0, 0, 0.1)',
+    background: 'rgba(0, 0, 0, 0.05)',
     nodes: {
       background: 'white',
       hover: {
