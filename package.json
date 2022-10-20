@@ -14,7 +14,7 @@
     "@mui/styles": "5.10.6",
     "dagre": "^0.8.5",
     "downshift": "^6.1.12",
-    "event-source-polyfill": "^1.0.26",
+    "event-source-polyfill": "^1.0.25",
     "formik": "^2.2.9",
     "js-yaml": "^4.1.0",
     "moment": "^2.29.3",
