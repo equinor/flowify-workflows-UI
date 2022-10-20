@@ -1,13 +1,14 @@
 import React, { FC, useState } from 'react';
-import { Button, Chip, Icon, Typography } from '@equinor/eds-core-react';
-import { Stack, TextField } from '@mui/material';
+import { Icon, Typography } from '@equinor/eds-core-react';
+import { Stack } from '@mui/material';
 import styled from 'styled-components';
 import { isNotEmptyArray } from '../../../common';
 import { nanoid } from '../helpers';
 import { EditorHeader } from '../components';
 import { Component, Workflow } from '../../../models/v2';
 import { Parameter } from '.';
-import { MultiToggle, ToggleButton } from '../../ui';
+import { MultiToggle, ToggleButton, Button, Chip, Message } from '../../ui';
+import { BaseInput } from '../../form';
 
 interface SidebarProps {
   component: Component | null | undefined;
@@ -92,13 +93,20 @@ export const Sidebar: FC<SidebarProps> = (props: SidebarProps) => {
       ></EditorHeader>
       <Stack spacing={1}>
         {editName ? (
-          <TextField autoFocus defaultValue={document?.name} onBlur={(event) => updateName(event)} />
+          <BaseInput
+            name="document_name"
+            autoFocus
+            defaultValue={document?.name}
+            onBlur={(event) => updateName(event)}
+          />
         ) : (
           <StyledTextButton onClick={() => setEditName(true)}>
             <Typography variant="h3">{document?.name}</Typography>
           </StyledTextButton>
         )}
-        <Chip style={{ fontSize: '1rem' }}>v{document?.version?.current || ''}</Chip>
+        <div>
+          <Chip>v{document?.version?.current || ''}</Chip>
+        </div>
       </Stack>
       <Stack spacing={1}>
         <MultiToggle label="Implementation type" labelVariant="h5">
@@ -121,12 +129,11 @@ export const Sidebar: FC<SidebarProps> = (props: SidebarProps) => {
           </ToggleButton>
         </MultiToggle>
         {component?.implementation?.type === 'any' && (
-          <Stack direction="row" alignItems="center" spacing={2} sx={{ background: '#FFE7D6', padding: '1rem' }}>
-            <Icon name="warning_outlined" color="#AD6200" size={32} />
+          <Message theme="warning" icon="warning_outlined">
             <Typography variant="body_short">
               Select implementation type "graph" or "brick" to start building your {document?.type}.
             </Typography>
-          </Stack>
+          </Message>
         )}
       </Stack>
       <Stack spacing={1}>
@@ -147,7 +154,7 @@ export const Sidebar: FC<SidebarProps> = (props: SidebarProps) => {
         ) : (
           <Typography variant="body_short">No inputs exists for this {document?.type}</Typography>
         )}
-        <Button onClick={() => addParameter('inputs', 'parameter')} variant="ghost" style={{ alignSelf: 'flex-end' }}>
+        <Button onClick={() => addParameter('inputs', 'parameter')} theme="simple" style={{ alignSelf: 'flex-end' }}>
           <Icon name="add" /> Add input
         </Button>
       </Stack>
@@ -174,7 +181,7 @@ export const Sidebar: FC<SidebarProps> = (props: SidebarProps) => {
             )}
             <Button
               onClick={() => addParameter('inputs', 'env_secret')}
-              variant="ghost"
+              theme="simple"
               style={{ alignSelf: 'flex-end' }}
             >
               <Icon name="add" /> Add secret
@@ -200,7 +207,7 @@ export const Sidebar: FC<SidebarProps> = (props: SidebarProps) => {
             ) : (
               <Typography variant="body_short">No volumes exists for this {document?.type}</Typography>
             )}
-            <Button onClick={() => addParameter('inputs', 'volume')} variant="ghost" style={{ alignSelf: 'flex-end' }}>
+            <Button onClick={() => addParameter('inputs', 'volume')} theme="simple" style={{ alignSelf: 'flex-end' }}>
               <Icon name="add" /> Add volume
             </Button>
           </Stack>
@@ -223,7 +230,7 @@ export const Sidebar: FC<SidebarProps> = (props: SidebarProps) => {
         ) : (
           <Typography variant="body_short">No outputs exists for this {document?.type}</Typography>
         )}
-        <Button onClick={() => addParameter('outputs', 'parameter')} variant="ghost" style={{ alignSelf: 'flex-end' }}>
+        <Button onClick={() => addParameter('outputs', 'parameter')} theme="simple" style={{ alignSelf: 'flex-end' }}>
           <Icon name="add" /> Add output
         </Button>
       </Stack>

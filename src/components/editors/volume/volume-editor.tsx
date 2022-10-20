@@ -1,10 +1,11 @@
 import React, { FC, useState } from 'react';
-import { Button, Typography } from '@equinor/eds-core-react';
-import { Dialog, Stack } from '@mui/material';
+import { Typography } from '@equinor/eds-core-react';
+import { Dialog } from '@mui/material';
 import { IUserVolume, IVolume } from '../../../models/v2';
-import { MultiToggle, TextField, ToggleButton } from '../../ui';
+import { MultiToggle, ToggleButton, Button, Stack, DialogWrapper } from '../../ui';
 import Editor from '@monaco-editor/react';
 import { services } from '../../../services';
+import { BaseInput } from '../../form';
 
 interface VolumeEditorProps {
   open: boolean;
@@ -61,7 +62,7 @@ export const VolumeEditor: FC<VolumeEditorProps> = (props: VolumeEditorProps) =>
 
   return (
     <Dialog open={open} onClose={saveVolume} maxWidth="md" fullWidth>
-      <Stack padding="2rem" height="80vh" justifyContent="space-between">
+      <DialogWrapper padding={2} style={{ height: '80vh' }} justifyContent="space-between">
         <Stack spacing={2} style={{ flexGrow: '2' }}>
           <Typography variant="h4">{mode === 'edit' ? 'Edit' : 'Create new'} volume</Typography>
           <MultiToggle>
@@ -91,8 +92,8 @@ export const VolumeEditor: FC<VolumeEditorProps> = (props: VolumeEditorProps) =>
             <>
               {editorStyle === 'expanded' && (
                 <>
-                  <TextField
-                    id="volume_name"
+                  <BaseInput
+                    name="volume_name"
                     label="Volume name"
                     defaultValue={volume?.volume?.name}
                     onBlur={(event: any) =>
@@ -105,8 +106,8 @@ export const VolumeEditor: FC<VolumeEditorProps> = (props: VolumeEditorProps) =>
                       }))
                     }
                   />
-                  <TextField
-                    id="volume_name"
+                  <BaseInput
+                    name="volume_name"
                     label="Driver"
                     defaultValue={volume?.volume?.csi?.driver}
                     onBlur={(event: any) =>
@@ -124,8 +125,8 @@ export const VolumeEditor: FC<VolumeEditorProps> = (props: VolumeEditorProps) =>
                   />
                 </>
               )}
-              <TextField
-                id="volume_name"
+              <BaseInput
+                name="volume_name"
                 label="Container name"
                 defaultValue={volume?.volume?.csi?.volumeAttributes?.containerName}
                 onBlur={(event: any) =>
@@ -146,8 +147,8 @@ export const VolumeEditor: FC<VolumeEditorProps> = (props: VolumeEditorProps) =>
               />
               {editorStyle === 'expanded' && (
                 <>
-                  <TextField
-                    id="volume_name"
+                  <BaseInput
+                    name="volume_name"
                     label="Mount options"
                     defaultValue={volume?.volume?.csi?.volumeAttributes?.mountOptions}
                     onBlur={(event: any) =>
@@ -166,8 +167,8 @@ export const VolumeEditor: FC<VolumeEditorProps> = (props: VolumeEditorProps) =>
                       }))
                     }
                   />
-                  <TextField
-                    id="volume_name"
+                  <BaseInput
+                    name="volume_name"
                     label="Secret name"
                     defaultValue={volume?.volume?.csi?.volumeAttributes?.secretName}
                     onBlur={(event: any) =>
@@ -192,9 +193,11 @@ export const VolumeEditor: FC<VolumeEditorProps> = (props: VolumeEditorProps) =>
           )}
         </Stack>
         <Stack alignItems="flex-end">
-          <Button onClick={saveVolume}>Save volume</Button>
+          <Button theme="create" onClick={saveVolume}>
+            Save volume
+          </Button>
         </Stack>
-      </Stack>
+      </DialogWrapper>
     </Dialog>
   );
 };

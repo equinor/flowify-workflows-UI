@@ -15,7 +15,7 @@ export const MultiToggle: FC<MultiToggleProps> = (props: MultiToggleProps) => {
   const id = props.id || nanoid(6);
 
   return (
-    <Stack id={id} spacing={1}>
+    <Stack id={id} spacing={1} style={props.style}>
       {label && (
         <Typography id={`${id}--label`} variant={labelVariant}>
           {label}

@@ -8,7 +8,8 @@ interface PaperProps extends StackProps {
 }
 
 export const Paper: FC<PaperProps> = (props: PaperProps) => {
-  return <StyledPaper {...props} />;
+  const { theme, ...restProps } = props;
+  return <StyledPaper {...restProps} paperTheme={theme} />;
 };
 
 Paper.defaultProps = {

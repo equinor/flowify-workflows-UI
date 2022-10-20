@@ -8,6 +8,7 @@ import Pages from './routes';
 import { CurrentUserProvider } from './common/context/user-context-store';
 import { EditorSettingsProvider } from './common/context/editor-settings-context';
 import { AuthProvider } from './auth';
+import { ThemeSelector } from './styles/theme/theme-selector';
 
 function App() {
   return (
@@ -16,7 +17,9 @@ function App() {
         <HelmetProvider>
           <EditorSettingsProvider>
             <SnackbarProvider maxSnack={3}>
-              <Pages />
+              <ThemeSelector>
+                <Pages />
+              </ThemeSelector>
             </SnackbarProvider>
           </EditorSettingsProvider>
         </HelmetProvider>

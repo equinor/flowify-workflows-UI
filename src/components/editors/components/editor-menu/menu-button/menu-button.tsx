@@ -11,10 +11,11 @@ interface MenuButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> 
 }
 
 export const MenuButton: FC<MenuButtonProps> = (props: MenuButtonProps) => {
-  const { label, icon, active, ...buttonProps } = props;
+  const { label, icon, active, create, danger, ...buttonProps } = props;
+  const buttonTheme = active ? 'active' : create ? 'create' : danger ? 'danger' : 'default';
   return (
-    <StyledMenuButton active={active || false} {...buttonProps}>
-      <Icon name={icon} color={props.create ? '#00977B' : props.danger ? '#B30D2F' : '#007079'} />
+    <StyledMenuButton buttonTheme={buttonTheme} {...buttonProps}>
+      <Icon name={icon} />
       <Typography variant="caption" style={{ fontWeight: 'bold' }}>
         {label}
       </Typography>

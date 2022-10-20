@@ -1,10 +1,9 @@
 import React, { FC } from 'react';
-import { Chip } from '@equinor/eds-core-react';
 import { Stack, TableRow as TableRowUI, TableCell } from '@mui/material';
 import { Workflow } from '../../../models/v2/workflow';
 import { Timestamp } from '../../timestamp';
 import { RunWorkflow } from '../../creators';
-import { Button } from '../../ui';
+import { Button, Chip } from '../../ui';
 
 interface ITableRow {
   row: Workflow;
@@ -18,7 +17,7 @@ const TableRow: FC<ITableRow> = (props: ITableRow) => {
       <TableCell>{row?.name}</TableCell>
       <TableCell>{row?.description}</TableCell>
       <TableCell>
-        <Chip style={{ fontSize: '1rem' }}>v{row?.version?.current}</Chip>
+        <Chip>v{row?.version?.current}</Chip>
       </TableCell>
       <TableCell>{row?.modifiedBy?.email}</TableCell>
       <TableCell>

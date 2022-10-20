@@ -1,11 +1,12 @@
 import React, { FC, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Chip, Icon, Pagination, Typography } from '@equinor/eds-core-react';
-import { Dialog, Grid, TextField as MUITextField } from '@mui/material';
+import { Icon, Pagination, Typography } from '@equinor/eds-core-react';
+import { Dialog, Grid } from '@mui/material';
 import moment from 'moment';
-import { Button, Paper, TextField, Stack } from '../../../ui';
+import { Button, Paper, Chip, Stack, DialogWrapper } from '../../../ui';
 import { DocumentEditorProps } from './types';
 import { StyledTextButton } from './styles';
+import { BaseInput } from '../../../form';
 
 export const DocumentEditor: FC<DocumentEditorProps> = (props: DocumentEditorProps) => {
   const { document, setInstance, versionsResponse, fetchVersions } = props;
@@ -84,12 +85,10 @@ export const DocumentEditor: FC<DocumentEditorProps> = (props: DocumentEditorPro
             <Paper key={`${version.uid}-${version?.version?.current}`} spacing={1} padding={2} theme="light">
               <Stack direction="row" spacing={2}>
                 <Typography variant="h5">{version.name}</Typography>
-                <Chip style={{ fontSize: '1rem' }}>v{version?.version?.current}</Chip>
-                {version?.version?.tags?.includes('latest') && <Chip style={{ fontSize: '1rem' }}>Latest</Chip>}
+                <Chip>v{version?.version?.current}</Chip>
+                {version?.version?.tags?.includes('latest') && <Chip>Latest</Chip>}
                 {document?.version?.current === version?.version?.current && (
-                  <Chip variant="active" style={{ fontSize: '1rem' }}>
-                    Currently viewing
-                  </Chip>
+                  <Chip theme="success">Currently viewing</Chip>
                 )}
               </Stack>
               <Typography variant="caption">
@@ -128,7 +127,8 @@ export const DocumentEditor: FC<DocumentEditorProps> = (props: DocumentEditorPro
           <Stack direction="row" alignItems="flex-start" justifyContent="space-between" spacing={2}>
             <Stack spacing={1} grow={1}>
               {editName || !document?.name ? (
-                <MUITextField
+                <BaseInput
+                  name="document_name"
                   autoFocus
                   defaultValue={document?.name}
                   onBlur={(event: any) => updateName(event)}
@@ -140,7 +140,8 @@ export const DocumentEditor: FC<DocumentEditorProps> = (props: DocumentEditorPro
                 </StyledTextButton>
               )}
               {editDescription ? (
-                <MUITextField
+                <BaseInput
+                  name="document_desc"
                   autoFocus
                   multiline
                   rows={3}
@@ -172,15 +173,15 @@ export const DocumentEditor: FC<DocumentEditorProps> = (props: DocumentEditorPro
                     {document?.version?.tags?.map((tag) => (
                       <Chip
                         key={tag}
-                        style={{ fontSize: '1rem', marginBottom: '1rem' }}
-                        onDelete={tag === 'latest' ? undefined : () => removeTag(tag)}
+                        style={{ marginBottom: '1rem' }}
+                        onClick={tag === 'latest' ? undefined : () => removeTag(tag)}
                       >
                         {tag}
                       </Chip>
                     ))}
                   </Stack>
-                  <TextField
-                    icon="add"
+                  <BaseInput
+                    startEnhancer={<Icon name="add" />}
                     id="add_tag"
                     name="add_tag"
                     onKeyDown={tagEventHandler}
@@ -198,7 +199,7 @@ export const DocumentEditor: FC<DocumentEditorProps> = (props: DocumentEditorPro
               Delete {document?.type}
             </Button>
             <Dialog open={deleteModalOpen} onClose={() => setDeleteModalOpen(false)}>
-              <Stack padding={2} spacing={3}>
+              <DialogWrapper padding={2} spacing={3}>
                 <Typography variant="body_long">
                   Are you sure you want to delete {document?.type} "{document?.name}"?
                 </Typography>
@@ -210,7 +211,7 @@ export const DocumentEditor: FC<DocumentEditorProps> = (props: DocumentEditorPro
                     Delete {document?.type}
                   </Button>
                 </Stack>
-              </Stack>
+              </DialogWrapper>
             </Dialog>
           </Stack>
         </Stack>

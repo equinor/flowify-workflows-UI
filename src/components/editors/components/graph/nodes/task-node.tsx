@@ -1,5 +1,5 @@
 import React, { memo, useState } from 'react';
-import { Button, Chip, Icon, Tooltip, Typography } from '@equinor/eds-core-react';
+import { Icon, Tooltip, Typography } from '@equinor/eds-core-react';
 import { Stack } from '@mui/material';
 import { NodeProps } from 'react-flow-renderer/nocss';
 import { DragIndicator as DragIcon } from '@mui/icons-material';
@@ -8,6 +8,7 @@ import { INode } from '../../../helpers/helpers';
 import { Handles } from '..';
 import { NodePreview } from '../..';
 import { isNotEmptyArray } from '../../../../../common';
+import { Button, Chip } from '../../../../ui';
 
 interface ITaskNode extends NodeProps<INode> {}
 
@@ -30,7 +31,7 @@ export const TaskNode = memo((props: ITaskNode) => {
     )?.length || 0;
 
   return (
-    <Stack>
+    <Stack spacing={1}>
       <Stack spacing={2} direction="row" alignItems="center">
         <NodePreview node={props} open={open} onClose={setOpen} />
         <Handles parameters={data?.component?.inputs} type="Input" />
@@ -46,11 +47,11 @@ export const TaskNode = memo((props: ITaskNode) => {
                 {data?.component?.description}
               </Typography>
             </div>
-            <Stack direction="row" alignItems="center">
+            <Stack direction="row" alignItems="center" spacing={2}>
               <Chip>{data.component?.implementation?.type}</Chip>
               {data?.isInlineComponent && <Chip>local</Chip>}
               <Tooltip title="View component information" style={{ fontSize: '1rem' }}>
-                <Button variant="ghost_icon" color="secondary" onClick={() => setOpen(true)}>
+                <Button theme="icon" onClick={() => setOpen(true)}>
                   <Icon name="visibility" />
                 </Button>
               </Tooltip>
@@ -61,37 +62,37 @@ export const TaskNode = memo((props: ITaskNode) => {
                     target="_blank"
                     title="Open component in the editor (opens new tab)"
                   >
-                    <Button variant="ghost_icon" color="secondary" as="span">
+                    <Button theme="icon" color="secondary" as="span">
                       <Icon name="code" />
                     </Button>
                   </Link>
                 </Tooltip>
               )}
             </Stack>
+            <Stack direction="row" spacing={1}>
+              {isNotEmptyArray(secrets) && (
+                <Button
+                  onClick={() => setParameterConfig({ type: 'secret', id })}
+                  theme={secretsCount < (secrets?.length || 0) ? 'danger' : 'create'}
+                  style={{ padding: '0.5rem' }}
+                >
+                  {secretsCount}/{secrets?.length} {secrets!.length > 1 ? 'Secrets' : 'Secret'}
+                </Button>
+              )}
+              {isNotEmptyArray(volumes) && (
+                <Button
+                  onClick={() => setParameterConfig({ type: 'volume', id })}
+                  theme={volumesCount < (volumes?.length || 0) ? 'danger' : 'create'}
+                  style={{ padding: '0.5rem' }}
+                >
+                  {volumesCount}/{volumes?.length} {volumes!.length > 1 ? 'Mounts' : 'Mount'}
+                </Button>
+              )}
+            </Stack>
           </Stack>
           <DragIcon className="custom-drag-handle" sx={{ color: '#666', fontSize: '2rem' }} />
         </Stack>
         <Handles parameters={data?.component?.outputs} type="Output" />
-      </Stack>
-      <Stack direction="row">
-        {isNotEmptyArray(secrets) && (
-          <Button
-            onClick={() => setParameterConfig({ type: 'secret', id })}
-            variant="ghost"
-            color={secretsCount < (secrets?.length || 0) ? 'danger' : 'primary'}
-          >
-            {secretsCount}/{secrets?.length} {secrets!.length > 1 ? 'Secrets' : 'Secret'}
-          </Button>
-        )}
-        {isNotEmptyArray(volumes) && (
-          <Button
-            onClick={() => setParameterConfig({ type: 'volume', id })}
-            variant="ghost"
-            color={volumesCount < (volumes?.length || 0) ? 'danger' : 'primary'}
-          >
-            {volumesCount}/{volumes?.length} {volumes!.length > 1 ? 'Mounts' : 'Mount'}
-          </Button>
-        )}
       </Stack>
     </Stack>
   );

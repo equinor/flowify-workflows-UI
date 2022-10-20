@@ -1,22 +1,36 @@
 import styled from 'styled-components';
+import { Stack } from '../../../ui';
+import { ButtonTheme } from './types';
 
-export const StyledMenuButton = styled.button<{ active: boolean; create?: boolean; danger?: boolean }>`
+export const StyledMenuButton = styled.button<{ buttonTheme: ButtonTheme }>`
   border: none;
   padding: 0.75rem;
-  background: ${(props) => (props.active ? 'rgb(222, 237, 238)' : props.danger ? '#FF667019' : 'none')};
+  background: ${(props) => props.theme?.editorMenu?.button?.background?.[props.buttonTheme]};
   border-radius: 10px;
   display: flex;
   flex-direction: column;
   align-items: center;
   cursor: pointer;
+  svg {
+    fill: ${(props) => props.theme?.editorMenu?.button?.icon?.[props.buttonTheme]};
+  }
+  p {
+    color: ${({ theme }) => theme?.defaults?.color} !important;
+  }
+
   &:hover {
-    background: ${(props) => (props.create ? '#E6FAEC' : props.danger ? '#FFC1C1' : 'rgb(222, 237, 238)')};
+    background: ${(props) => props.theme?.editorMenu?.button?.hover?.background?.[props.buttonTheme]};
   }
   &:disabled {
     opacity: 0.65;
     cursor: not-allowed;
   }
   &:focus {
-    outline: 3px dotted #007079;
+    outline: ${({ theme }) => theme?.defaults?.focusOutline};
   }
+`;
+
+export const StyledEditorMenu = styled(Stack)`
+  background-color: ${({ theme }) => theme?.editorMenu?.background};
+  padding: 0.25rem;
 `;

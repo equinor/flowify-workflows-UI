@@ -7,9 +7,10 @@ import { services, IFilter } from '../../services';
 import { isNotEmptyArray } from '../../common/general-helpers';
 import { ComponentCard } from './components/component-card';
 import { AddComponentToGraph, CreateComponent } from '../creators';
-import { Select, TextField, Button } from '../ui';
+import { Button } from '../ui';
 import { UserContextStore } from '../../common/context/user-context-store';
 import { Link } from 'react-router-dom';
+import { Select, BaseInput } from '../form';
 
 interface MarketplaceProps {
   onAddComponent?: any;
@@ -106,45 +107,46 @@ export const Marketplace: FC<MarketplaceProps> = (props: MarketplaceProps) => {
         <Stack rowGap={3}>
           {!preview && (
             <Stack justifyContent="stretch" direction="row" spacing={2}>
-              <Stack direction="row" sx={{ flexGrow: '2' }}>
+              <Stack direction="row" sx={{ flexGrow: '2' }} spacing={1}>
                 <Select
-                  id="marketplace_searchbar--searchobject"
+                  name="searchparam"
                   label="Search"
                   value={searchParam}
-                  wrapperStyles={{ width: '200px' }}
+                  onChange={(item) => setSearchParam(item as string)}
                   options={[
                     { label: 'Name', value: 'name' },
                     { label: 'Description', value: 'description' },
                   ]}
-                  onChange={(event: any) => setSearchParam(event.target.value)}
+                  style={{ width: '170px' }}
                 />
-                <TextField
+                <BaseInput
+                  name="marketplace_searchbar"
                   id="marketplace_searchbar"
                   label="&nbsp;"
-                  wrapperStyles={{ flexGrow: '2' }}
+                  style={{ flexGrow: '2' }}
                   placeholder={`Search component ${searchParam}`}
                   value={search}
                   onChange={(event: any) => setSearch(event.target.value)}
                 />
               </Stack>
               <Select
-                id="marketplace_created_by"
+                name="marketplace_created_by"
                 value={values.createdBy}
                 label="Created by"
                 icon="account_circle"
-                onChange={(event: any) => setValues((prev) => ({ ...prev, createdBy: event.target.value }))}
+                onChange={(item: any) => setValues((prev) => ({ ...prev, createdBy: item }))}
                 options={[
                   { label: 'All users', value: 'default' },
                   { label: 'Me', value: 'me' },
                 ]}
-                sx={{ width: '145px' }}
+                style={{ width: '185px' }}
               />
               <Select
-                id="marketplace_date"
+                name="marketplace_date"
                 icon="time"
                 value={values.date}
                 label="Last modified"
-                onChange={(event: any) => setValues((prev) => ({ ...prev, date: event.target.value }))}
+                onChange={(item: any) => setValues((prev) => ({ ...prev, date: item }))}
                 options={[
                   { label: 'Anytime', value: 'default' },
                   { label: 'Last day', value: '1_days' },
@@ -154,20 +156,20 @@ export const Marketplace: FC<MarketplaceProps> = (props: MarketplaceProps) => {
                   { label: 'Last six months', value: '6_months' },
                   { label: 'Last year', value: '1_year' },
                 ]}
-                sx={{ width: '220px' }}
+                style={{ width: '270px' }}
               />
               <Select
-                id="marketplace_type"
+                name="marketplace_type"
                 value={values.type}
                 label="Type"
-                onChange={(event: any) => setValues((prev) => ({ ...prev, type: event.target.value }))}
+                onChange={(item: any) => setValues((prev) => ({ ...prev, type: item }))}
                 options={[
                   { label: 'All types', value: 'default' },
                   { label: 'Any', value: 'any' },
                   { label: 'Brick', value: 'brick' },
                   { label: 'Graph', value: 'graph' },
                 ]}
-                sx={{ width: '110px' }}
+                style={{ width: '150px' }}
               />
             </Stack>
           )}
@@ -196,10 +198,12 @@ export const Marketplace: FC<MarketplaceProps> = (props: MarketplaceProps) => {
         </Stack>
         {preview ? (
           <Stack alignItems="flex-end">
-            <Button theme="simple">
-              <Link to="/components">Visit marketplace</Link>
-              <Icon name="chevron_right" size={16} />
-            </Button>
+            <Link to="/components">
+              <Button theme="simple" as="span">
+                Visit marketplace
+                <Icon name="chevron_right" size={16} />
+              </Button>
+            </Link>
           </Stack>
         ) : null}
       </Stack>

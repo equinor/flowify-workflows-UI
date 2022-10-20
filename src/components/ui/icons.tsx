@@ -3,9 +3,6 @@ import { IconProps } from '@equinor/eds-core-react';
 import { addTheme } from '.';
 import * as S from '../../styles/components';
 
-export const IconsWrapper = (props: { children: React.ReactNode }) =>
-  addTheme(<S.IconsWrapper>{props.children}</S.IconsWrapper>);
-
 export const FlowifyIcon = (props: IconProps) => addTheme(<S.FlowifyIcon name={props.name} size={props.size} />);
 
 export const ComponentIcon = (props: { size?: 16 | 24 | 32 | 40 }) => (

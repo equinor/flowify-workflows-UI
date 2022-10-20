@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import { SelectChangeEvent, Stack, Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
+import { Stack, Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
 import { Icon, Typography } from '@equinor/eds-core-react';
 import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
 import { services } from '../../services';
 import { Container, Layout } from '../../layout';
 import { ISecret, ISecretsList, IUserVolume, IVolume, Workspace, WorkspaceList } from '../../models/v2';
-import { Breadcrumbs, Select, Button } from '../../components/ui';
+import { Breadcrumbs, Button } from '../../components/ui';
 import { VolumeEditor } from '../../components/editors/volume/volume-editor';
 import { Feedback, Feedbacks } from '../../components/editors/components';
 import { SecretEditor } from '../../components/editors/secret-editor/secret-editor';
+import { Select } from '../../components/form';
 
 function CREATE_VOLUME_TEMPLATE(workspace: string) {
   return {
@@ -101,11 +102,6 @@ export const AdminPage: React.FC = (): React.ReactElement => {
     }
   }
 
-  function onWorkspaceChange(e: SelectChangeEvent) {
-    const { value } = e.target as HTMLInputElement;
-    setSelectedWorkspace(value);
-  }
-
   const workspaceOptions =
     workspaces
       ?.filter((workspace) => workspace.hasAccess)
@@ -127,9 +123,9 @@ export const AdminPage: React.FC = (): React.ReactElement => {
           </Breadcrumbs>
           <Select
             label="Select workspace to admin"
-            id="workspace_selector"
+            name="workspace_selector"
             options={workspaceOptions}
-            onChange={onWorkspaceChange}
+            onChange={(value) => setSelectedWorkspace(value)}
             value={selectedWorkspace}
             placeholder="Select from workspaces you have admin access to"
           />

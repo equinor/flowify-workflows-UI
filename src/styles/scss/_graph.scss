@@ -1,9 +1,5 @@
 @import 'react-flow-renderer/dist/theme-default.css';
 
-.react-flow {
-  background: rgba(220, 220, 220, 0.7);
-}
-
 @mixin generalNodeStyles() {
   padding: 1rem;
   border-radius: 0.5rem;
@@ -48,83 +44,6 @@
     border-radius: 0.5rem;
     &:hover {
       background: rgb(230, 250, 236);
-    }
-  }
-}
-
-.react-flow__node-taskNode,
-.react-flow__node-subNode {
-  @include generalNodeStyles();
-  padding: 0.75rem 0.75rem 0.5rem;
-  display: flex;
-  align-items: center;
-
-  .react-flow__handle {
-    width: 0.675rem;
-    height: 0.675rem;
-    background-color: #0084c4;
-    border: none;
-  }
-
-  & .handle--secret {
-    background-color: #ff9200;
-  }
-
-  .react-flow__handle-left {
-    left: -3px;
-    transform: none;
-    top: 0;
-  }
-  .react-flow__handle-right {
-    right: -3px;
-    transform: none;
-    top: 0;
-  }
-
-  &.selectable {
-    &:hover {
-      box-shadow: 2px 2px 4px 1px rgba(0, 0, 0, 0.2);
-    }
-  }
-}
-
-.react-flow__node-mapNode,
-.react-flow__node-conditionalNode {
-  border-radius: 0.5rem;
-  font-size: 1rem;
-  text-align: center;
-  padding: 2rem;
-  display: flex;
-  align-items: center;
-  border: 2px dashed #0084c4;
-  background: rgba(255, 255, 255, 0.3);
-  &--internal {
-    background: white;
-    padding: 0.75rem 0.75rem 0.5rem;
-    border-radius: 0.5rem;
-  }
-
-  .react-flow__handle {
-    width: 0.675rem;
-    height: 0.675rem;
-    background-color: #0084c4;
-    border: none;
-  }
-
-  .react-flow__handle-left {
-    left: -1.4rem;
-    transform: none;
-    top: 0;
-  }
-  .react-flow__handle-right {
-    right: -1.4rem;
-    transform: none;
-    top: 0;
-  }
-
-  &.selectable {
-    &:hover {
-      box-shadow: 2px 2px 4px 1px rgba(0, 0, 0, 0.2);
     }
   }
 }

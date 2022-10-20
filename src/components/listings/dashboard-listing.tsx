@@ -46,13 +46,7 @@ export const DashboardListing: FC<DashboardListingProps> = (props: DashboardList
               <Stack direction="row" columnGap={3} rowGap={1} flexWrap="wrap" sx={{ maxWidth: '970px' }}>
                 {section.linklist?.map((item) =>
                   item.external ? (
-                    <Button
-                      key={item.url}
-                      href={item.url}
-                      target={item.target}
-                      rel="noopener noreferrer"
-                      theme="simple"
-                    >
+                    <Button key={item.url} href={item.url} target={item.target} rel="noopener noreferrer" theme="link">
                       {item.icon && <Icon name={item.icon} size={16} color="#004f55" />}
                       <span>{item.title}</span> <Icon name="chevron_right" size={16} color="#004f55" />
                     </Button>

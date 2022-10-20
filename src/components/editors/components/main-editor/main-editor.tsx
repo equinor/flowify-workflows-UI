@@ -38,29 +38,24 @@ export const MainEditor: FC<MainEditorProps> = (props: MainEditorProps) => {
           direction="row"
           sx={{ flexGrow: '1', minHeight: '0', flexWrap: 'nowrap', height: '100%', width: '100%' }}
         >
-          <EditorCentralBar
-            component={component}
-            setComponent={setComponent}
-            setFeedback={props.setFeedback}
-            setSubcomponents={setSubcomponents}
-            setUseManifest={setUseManifest}
-            subComponents={subcomponents}
-            type={document?.type}
-            implementationType={component?.implementation?.type}
-          />
+          <EditorCentralBar setUseManifest={setUseManifest} />
           <Stack sx={{ flexGrow: '1', minHeight: '0', flexWrap: 'nowrap', height: '100%', width: '100%' }}>
             {useManifest ? (
               <ManifestEditor onChange={(doc: Workflow | Component) => onManifestChange(doc)} value={document} />
             ) : component?.implementation?.type === 'graph' ? (
               <GraphEditor
-                component={component || null}
+                component={component}
                 edges={props.edges}
                 mapModalOpen={props.configComponent !== undefined}
                 nodes={props.nodes}
                 onChange={setComponent}
+                setComponent={setComponent}
                 onEdgesChange={props.onEdgesChange}
                 onNodesChange={props.onNodesChange}
                 subcomponents={subcomponents}
+                setSubcomponents={setSubcomponents}
+                setFeedback={props.setFeedback}
+                type={document?.type}
               />
             ) : (
               <Brick component={component} setComponent={setComponent} />
