@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { Icon, Pagination, Typography } from '@equinor/eds-core-react';
 import { Dialog, Grid } from '@mui/material';
 import moment from 'moment';
-import { Button, Paper, Chip, Stack } from '../../../ui';
+import { Button, Paper, Chip, Stack, DialogWrapper } from '../../../ui';
 import { DocumentEditorProps } from './types';
 import { StyledTextButton } from './styles';
 import { BaseInput } from '../../../form';
@@ -199,7 +199,7 @@ export const DocumentEditor: FC<DocumentEditorProps> = (props: DocumentEditorPro
               Delete {document?.type}
             </Button>
             <Dialog open={deleteModalOpen} onClose={() => setDeleteModalOpen(false)}>
-              <Stack padding={2} spacing={3}>
+              <DialogWrapper padding={2} spacing={3}>
                 <Typography variant="body_long">
                   Are you sure you want to delete {document?.type} "{document?.name}"?
                 </Typography>
@@ -211,7 +211,7 @@ export const DocumentEditor: FC<DocumentEditorProps> = (props: DocumentEditorPro
                     Delete {document?.type}
                   </Button>
                 </Stack>
-              </Stack>
+              </DialogWrapper>
             </Dialog>
           </Stack>
         </Stack>

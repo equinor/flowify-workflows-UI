@@ -217,7 +217,7 @@ const Editor: React.FC<IEditor> = (props: IEditor) => {
       services.components
         .delete(uid, component?.version?.current)
         .then(() => {
-          navigate(`/marketplace`);
+          navigate(`/components`);
         })
         .catch((error) => {
           console.error(error);
