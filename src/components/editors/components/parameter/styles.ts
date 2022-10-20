@@ -14,9 +14,11 @@ export const ParameterWrapper = styled.button`
   h5,
   p {
     color: ${({ theme }) => theme.defaults.color};
+    word-break: break-word;
   }
   svg {
     fill: ${({ theme }) => theme.defaults.iconColor};
+    flex-shrink: 0;
   }
   &:hover {
     cursor: pointer;
