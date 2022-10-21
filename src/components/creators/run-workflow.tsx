@@ -1,12 +1,13 @@
 import React, { FC, useEffect, useState } from 'react';
-import { Dialog, Stack, TextField } from '@mui/material';
+import { Dialog } from '@mui/material';
 import { Icon, Typography } from '@equinor/eds-core-react';
 import { Component, IVolume, Job, JobSubmit, Workflow } from '../../models/v2';
 import { Parameter } from '../editors/components';
 import { services } from '../../services';
 import { useParams, useNavigate } from 'react-router-dom';
 import { isNotEmptyArray } from '../../common';
-import { Button } from '../ui';
+import { Button, DialogWrapper, Stack } from '../ui';
+import { BaseInput } from '../form';
 
 interface RunWorkflowProps {
   // Pass the entire workflow object or a string (uid)
@@ -115,39 +116,41 @@ export const RunWorkflow: FC<RunWorkflowProps> = (props: RunWorkflowProps) => {
         <Icon name="launch" style={{ marginRight: '0.75rem' }} /> Run workflow
       </Button>
       <Dialog open={modalOpen} onClose={() => setModalOpen(false)} fullWidth maxWidth="md">
-        <Stack sx={{ padding: '2rem' }} spacing={2}>
-          <Typography variant="h5">Input values</Typography>
-          <Stack spacing={1}>
-            {workflow?.component?.inputs?.map((input, index) => (
-              <Parameter
-                key={input.name}
-                parameter={input}
-                index={index}
-                type="input"
-                setComponent={setComponent}
-                onlyEditableValue
-                editableValue
-                secrets={secrets}
-              />
-            ))}
-          </Stack>
-          <Stack spacing={1}>
-            <Typography variant="h6">Job description</Typography>
-            <TextField
-              id="workflow_description"
-              fullWidth
+        <DialogWrapper padding={2}>
+          <Stack spacing={4}>
+            <Stack spacing={1}>
+              <Typography variant="h5">Input values</Typography>
+              {workflow?.component?.inputs?.map((input, index) => (
+                <Parameter
+                  key={input.name}
+                  parameter={input}
+                  index={index}
+                  type="input"
+                  setComponent={setComponent}
+                  onlyEditableValue
+                  editableValue
+                  secrets={secrets}
+                  volume={input?.type === 'volume'}
+                  secret={input?.type === 'env_secret'}
+                />
+              ))}
+            </Stack>
+            <BaseInput
+              label="Job description"
+              name="workflow_description"
               value={description}
-              onChange={(event) => setDescription(event.target.value)}
+              onChange={(event: any) => setDescription(event.target.value)}
               multiline
               placeholder="Please provide a short description why the job was run"
               rows={3}
             />
+
+            <Button theme="create" disabled={!workflow} style={{ alignSelf: 'flex-end' }} onClick={onRun}>
+              <Icon name="launch" style={{ marginRight: '0.75rem' }} />
+              Run workflow
+            </Button>
           </Stack>
-          <Button theme="create" disabled={!workflow} style={{ alignSelf: 'flex-end' }} onClick={onRun}>
-            <Icon name="launch" style={{ marginRight: '0.75rem' }} />
-            Run workflow
-          </Button>
-        </Stack>
+        </DialogWrapper>
       </Dialog>
     </>
   );

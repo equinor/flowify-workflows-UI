@@ -6,11 +6,25 @@ export const ParameterWrapper = styled.button`
   align-items: flex-start;
   column-gap: 1rem;
   padding: 0.75rem;
-  background-color: #ade2e619;
+  background-color: ${({ theme }) => theme.box.background};
   border: none;
-  border-radius: 1rem;
+  border-bottom: ${({ theme }) => theme.box.border};
+  border-right: ${({ theme }) => theme.box.border};
+  border-radius: ${({ theme }) => theme.defaults.borderRadius};
+  h5,
+  p {
+    color: ${({ theme }) => theme.defaults.color};
+    word-break: break-word;
+  }
+  svg {
+    fill: ${({ theme }) => theme.defaults.iconColor};
+    flex-shrink: 0;
+  }
   &:hover {
     cursor: pointer;
-    background-color: rgba(0, 112, 121, 0.2);
+    background-color: ${({ theme }) => theme.box.hover.background};
+  }
+  &:focus {
+    outline: ${({ theme }) => theme.defaults.focusOutline};
   }
 `;

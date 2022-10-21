@@ -1,12 +1,13 @@
 import React, { FC } from 'react';
-import { Chip, Icon, Typography } from '@equinor/eds-core-react';
+import { Icon, Typography } from '@equinor/eds-core-react';
 import { Grid, Stack } from '@mui/material';
 import { Workflow } from '../../../../models';
 import { Timestamp } from '../../../timestamp';
 import { DurationPanel } from '../../../duration-panel';
 import { Job } from '../../../../models/v2';
-import { Button, Paper } from '../../../ui';
+import { Button, Paper, Chip } from '../../../ui';
 import { Link } from 'react-router-dom';
+import { ChipTheme } from '../../../ui/chip/types';
 
 interface IJobSidebar {
   jobWatch: Workflow | undefined;
@@ -19,12 +20,10 @@ interface IJobSidebar {
 const JobSidebar: FC<IJobSidebar> = (props: IJobSidebar) => {
   const { jobWatch, inputs, job, onTerminate, onDelete } = props;
 
-  type PhaseTheme = 'active' | 'error' | undefined;
-
-  const phaseTheme: { [name: string]: PhaseTheme } = {
-    Pending: undefined,
-    Running: undefined,
-    Succeeded: 'active',
+  const phaseTheme: { [name: string]: ChipTheme } = {
+    Pending: 'default',
+    Running: 'default',
+    Succeeded: 'success',
     Failed: 'error',
     Error: 'error',
   };
@@ -47,9 +46,7 @@ const JobSidebar: FC<IJobSidebar> = (props: IJobSidebar) => {
           Status
         </Grid>
         <Grid item xs={4}>
-          <Chip variant={phaseTheme[jobWatch?.status?.phase as keyof typeof phaseTheme]}>
-            {jobWatch?.status?.phase}
-          </Chip>
+          <Chip theme={phaseTheme[jobWatch?.status?.phase as keyof typeof phaseTheme]}>{jobWatch?.status?.phase}</Chip>
         </Grid>
         <Grid item xs={8}>
           Run

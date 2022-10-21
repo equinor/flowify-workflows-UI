@@ -1,11 +1,12 @@
 import React, { FC, useEffect, useState } from 'react';
 import { Stack, Dialog, Grid } from '@mui/material';
-import { Button, Icon, Typography } from '@equinor/eds-core-react';
+import { Typography } from '@equinor/eds-core-react';
 import { getComponentFromRef, nanoid } from '../../../../helpers';
 import { Parameter } from '../../..';
 import { Component, Edge, Graph, Node } from '../../../../../../models/v2';
 import { MapGraph } from './map-graph';
 import { isNotEmptyArray } from '../../../../../../common';
+import { DialogWrapper, Button } from '../../../../../ui';
 
 interface MapConfigProps {
   open: boolean;
@@ -93,52 +94,55 @@ export const MapConfig: FC<MapConfigProps> = (props: MapConfigProps) => {
 
   return (
     <Dialog open={open} onClose={onClose} fullWidth maxWidth="lg">
-      <Grid container sx={{ height: '90vh' }}>
-        <Grid item xs={3}>
-          <Stack padding="2rem" spacing={4}>
-            <Stack sx={{ flexGrow: '1' }} spacing={2}>
-              <Typography variant="h5">Inputs</Typography>
-              {mapComponent?.inputs?.map((input, index) => (
-                <Parameter
-                  key={input?.name}
-                  parameter={input}
-                  type="input"
-                  index={index}
-                  setComponent={setMapComponent}
-                />
-              ))}
-              <Button variant="ghost" onClick={() => addParameter('inputs')} autoFocus>
-                <Icon name="add" />
-                Add input
-              </Button>
+      <DialogWrapper>
+        <Grid
+          container
+          sx={{ flexGrow: '1', minHeight: '0', flexWrap: 'nowrap', height: '100%', width: '100%', maxHeight: '90vh' }}
+        >
+          <Grid item xs={3} sx={{ flexGrow: '1', overflowY: 'auto', minHeight: '0' }}>
+            <Stack padding={2} spacing={4}>
+              <Stack sx={{ flexGrow: '1' }} spacing={2}>
+                <Typography variant="h5">Inputs</Typography>
+                {mapComponent?.inputs?.map((input, index) => (
+                  <Parameter
+                    key={input?.name}
+                    parameter={input}
+                    type="input"
+                    index={index}
+                    setComponent={setMapComponent}
+                  />
+                ))}
+                <Button theme="simple" leftIcon="add" onClick={() => addParameter('inputs')} autoFocus>
+                  Add input
+                </Button>
+              </Stack>
+              <Stack sx={{ flexGrow: '1' }} spacing={2}>
+                <Typography variant="h5">Outputs</Typography>
+                {mapComponent?.outputs?.map((output, index) => (
+                  <Parameter
+                    key={output?.name}
+                    parameter={output}
+                    type="output"
+                    index={index}
+                    setComponent={setMapComponent}
+                  />
+                ))}
+                <Button theme="simple" leftIcon="add" onClick={() => addParameter('outputs')}>
+                  Add output
+                </Button>
+              </Stack>
             </Stack>
-            <Stack sx={{ flexGrow: '1' }} spacing={2}>
-              <Typography variant="h5">Outputs</Typography>
-              {mapComponent?.outputs?.map((output, index) => (
-                <Parameter
-                  key={output?.name}
-                  parameter={output}
-                  type="output"
-                  index={index}
-                  setComponent={setMapComponent}
-                />
-              ))}
-              <Button variant="ghost" onClick={() => addParameter('outputs')}>
-                <Icon name="add" />
-                Add output
-              </Button>
-            </Stack>
-          </Stack>
+          </Grid>
+          <Grid item xs={9}>
+            <MapGraph
+              component={mapComponent}
+              subcomponents={subcomponents}
+              setComponent={setMapComponent}
+              id={mapConfigComponent!}
+            />
+          </Grid>
         </Grid>
-        <Grid item xs={9}>
-          <MapGraph
-            component={mapComponent}
-            subcomponents={subcomponents}
-            setComponent={setMapComponent}
-            id={mapConfigComponent!}
-          />
-        </Grid>
-      </Grid>
+      </DialogWrapper>
     </Dialog>
   );
 };

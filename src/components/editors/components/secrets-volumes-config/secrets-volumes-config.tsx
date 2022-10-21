@@ -1,21 +1,11 @@
 import React, { FC } from 'react';
 import { Stack, Dialog } from '@mui/material';
 import { Typography } from '@equinor/eds-core-react';
-import { Component, Data, Edge, Graph, IVolume } from '../../../../models/v2';
-import { Select } from '../../../ui';
+import { Data, Edge, Graph } from '../../../../models/v2';
+import { DialogWrapper, Message } from '../../../ui';
 import { getComponentFromRef } from '../../helpers';
-
-interface SecretsVolumesConfigProps {
-  parameterConfig: { type: 'secret' | 'volume'; id: string } | undefined;
-  setParameterConfig: any;
-  component: Component | undefined;
-  setComponent: React.Dispatch<React.SetStateAction<Component | undefined>>;
-  subcomponents: Component[] | undefined;
-  type: 'workflow' | 'component';
-  workspace?: string;
-  workspaceSecrets?: string[];
-  workspaceVolumes?: IVolume[];
-}
+import { SecretsVolumesConfigProps } from './types';
+import { Select } from '../../../form';
 
 export const SecretsVolumesConfig: FC<SecretsVolumesConfigProps> = (props: SecretsVolumesConfigProps) => {
   const {
@@ -43,20 +33,20 @@ export const SecretsVolumesConfig: FC<SecretsVolumesConfigProps> = (props: Secre
 
   const secretOptions =
     type === 'workflow'
-      ? workspaceSecrets?.map((secret) => ({ value: secret, label: secret }))
+      ? workspaceSecrets?.map((secret) => ({ value: secret || '', label: secret || '' }))
       : component?.inputs
           ?.filter((input) => input.type === 'env_secret')
-          .map((input) => ({ value: input.name, label: input.name }));
+          .map((input) => ({ value: input.name || '', label: input.name || '' }));
 
   const mountOptions =
     type === 'workflow'
       ? workspaceVolumes?.map((volume) => ({
-          value: volume?.uid,
+          value: volume?.uid || '',
           label: `${volume?.volume?.name} (${volume?.volume?.csi?.volumeAttributes?.containerName})`,
         }))
       : component?.inputs
           ?.filter((input) => input.type === 'volume')
-          .map((input) => ({ value: input.name, label: input.name }));
+          .map((input) => ({ value: input.name || '', label: input.name || '' }));
 
   const { inputMappings } = component?.implementation as Graph;
 
@@ -93,13 +83,12 @@ export const SecretsVolumesConfig: FC<SecretsVolumesConfigProps> = (props: Secre
     return mappings;
   }
 
-  function onSelectChange(event: any, name: string) {
-    const { value } = event.target;
+  function onSelectChange(value: any, name: string) {
     const existingMapping = inputMappings?.findIndex(
       (mapping) => mapping?.target?.node === id && mapping?.target?.port === name,
     );
     if (type === 'workflow') {
-      const inputId = `${id}@${name}`;
+      const inputId = `${id}-${name}`;
       const existingInputIndex = component?.inputs?.findIndex((input) => input.name === inputId);
       setComponent((prev) => ({
         ...prev,
@@ -130,39 +119,41 @@ export const SecretsVolumesConfig: FC<SecretsVolumesConfigProps> = (props: Secre
     }));
   }
 
-  function findSelectValue(name: string) {
+  function findSelectValue(name: string): string {
     const inputName = inputMappings?.find((mapping) => mapping?.target?.node === id && mapping?.target?.port === name)
       ?.source?.port;
     if (type === 'component') {
       return inputName || '';
     }
     const input = component?.inputs?.find((input) => input.name === inputName);
-    return input?.userdata?.value || '';
+    return (input?.userdata?.value as string) || '';
   }
 
   return (
     <Dialog open={parameterConfig !== undefined} onClose={() => setParameterConfig()} fullWidth maxWidth="md">
-      <Stack padding="2rem" spacing={3}>
+      <DialogWrapper padding={2} spacing={3}>
         <Stack spacing={1}>
           <Typography variant="h5">
             {subcomponent?.name} {parameterConfig?.type}s
           </Typography>
           {type === 'component' && (
-            <Typography variant="body_short">
-              When creating components, mounts and secrets need to be defined as inputs before they can be used in
-              sub-components.
-            </Typography>
+            <Message icon="info_circle">
+              <Typography variant="body_short">
+                When creating components, mounts and secrets need to be defined as inputs before they can be used in
+                sub-components.
+              </Typography>
+            </Message>
           )}
         </Stack>
-        <Stack spacing={2}>
+        <Stack spacing={2} style={{ paddingBottom: '11rem' }}>
           {parameterConfig.type === 'secret' &&
             secrets?.map((secret: Data) => (
               <Select
                 key={secret.name}
-                id={secret.name || ''}
+                name={secret.name || ''}
                 label={secret.name}
-                options={secretOptions}
-                onChange={(event: any) => onSelectChange(event, secret.name || '')}
+                options={secretOptions || []}
+                onChange={(item: any) => onSelectChange(item, secret.name || '')}
                 placeholder={
                   type === 'workflow' ? 'Select from workspace configured secrets' : 'Select from component inputs'
                 }
@@ -173,10 +164,10 @@ export const SecretsVolumesConfig: FC<SecretsVolumesConfigProps> = (props: Secre
             mounts?.map((volume: Data) => (
               <Select
                 key={volume.name}
-                id={volume.name || ''}
+                name={volume.name || ''}
                 label={volume.name}
-                options={mountOptions}
-                onChange={(event: any) => onSelectChange(event, volume.name || '')}
+                options={mountOptions || []}
+                onChange={(item: any) => onSelectChange(item, volume.name || '')}
                 placeholder={
                   type === 'workflow' ? 'Select from workspace configured volumes' : 'Select from component inputs'
                 }
@@ -184,7 +175,7 @@ export const SecretsVolumesConfig: FC<SecretsVolumesConfigProps> = (props: Secre
               />
             ))}
         </Stack>
-      </Stack>
+      </DialogWrapper>
     </Dialog>
   );
 };

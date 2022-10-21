@@ -1,9 +1,10 @@
 import React, { FC, useState } from 'react';
 import { Stack } from '@mui/material';
-import { Button, Checkbox, Icon, Radio, Typography } from '@equinor/eds-core-react';
+import { Checkbox, Icon, Radio, Typography } from '@equinor/eds-core-react';
 import { Component, Graph } from '../../../../../../models/v2';
 import { generateMap } from './helpers';
 import { getComponentFromRef } from '../../../../helpers';
+import { Button } from '../../../../../ui';
 
 interface MapCreatorProps {
   component?: Component;
@@ -37,7 +38,7 @@ export const MapCreator: FC<MapCreatorProps> = (props: MapCreatorProps) => {
   }
 
   return (
-    <Stack sx={{ padding: '2rem' }} spacing={3}>
+    <Stack spacing={3}>
       <Stack spacing={0.5}>
         <Typography variant="h6">Select component to wrap in a map</Typography>
         <Stack direction="row" spacing={2}>
@@ -61,8 +62,8 @@ export const MapCreator: FC<MapCreatorProps> = (props: MapCreatorProps) => {
           <Checkbox label="Connections" value="connections" checked={options?.connections} onChange={onOptionsChange} />
         </Stack>
       </Stack>
-      <Stack alignItems="flex-end">
-        <Button disabled={!selectedComponent} onClick={onCreate}>
+      <Stack>
+        <Button theme="create" disabled={!selectedComponent} onClick={onCreate}>
           <Icon name="add" />
           Create map component
         </Button>

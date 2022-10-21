@@ -1,0 +1,56 @@
+import React, { FC } from 'react';
+import { TableRow, TableCell } from '@mui/material';
+import { IValidationError } from '../types';
+import { Button } from '../../../../ui';
+import { IParameterConfig } from '../../../types';
+
+interface ErrorRowProps {
+  error: IValidationError;
+  setParameterConfig: (config: IParameterConfig) => void;
+}
+
+export const ErrorRow: FC<ErrorRowProps> = (props: ErrorRowProps) => {
+  const { error, setParameterConfig } = props;
+
+  const quickFixes: { [propname: string]: boolean } = {
+    validSecret: true,
+    validVolume: true,
+  };
+
+  const fixLabels: { [propname: string]: string } = {
+    validSecret: 'Update secret',
+    validVolume: 'Update volume',
+  };
+
+  function handleQuickFix() {
+    if (error?.type === 'validSecret' || error?.type === 'validVolume') {
+      if (typeof setParameterConfig === 'function') {
+        const { nodeid } = error?.params;
+        if (nodeid) {
+          setParameterConfig({ type: error?.type === 'validSecret' ? 'secret' : 'volume', id: nodeid });
+        }
+      }
+    }
+  }
+
+  return (
+    <TableRow style={{ marginBottom: '0.25rem' }}>
+      <TableCell>{error?.message}</TableCell>
+      <TableCell>
+        {error?.params?.parsedValue
+          ? error?.params?.parsedValue
+          : typeof error?.value === 'string'
+          ? error?.value
+          : JSON.stringify(error?.value)}
+      </TableCell>
+      <TableCell>{error?.path}</TableCell>
+      <TableCell>
+        {quickFixes[error?.type] ? (
+          <Button theme="simple" onClick={handleQuickFix}>
+            {fixLabels[error?.type] || 'Quick fix'}
+          </Button>
+        ) : null}
+      </TableCell>
+    </TableRow>
+  );
+};

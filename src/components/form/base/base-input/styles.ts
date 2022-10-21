@@ -11,43 +11,36 @@ export const StyledInputWrapper = styled.div<InputWrapperProps>`
   position: relative;
   display: flex;
   justify-content: space-between;
-  border: 1px solid #9ca6ac;
-  border-radius: 0.5rem;
+  border: ${({ theme }) => theme?.input?.border?.default};
+  border-radius: ${({ theme }) => theme?.defaults?.borderRadius};
   padding: 0.5rem;
+  background: ${({ theme }) => theme?.input?.background?.default};
+  color: ${({ theme }) => theme?.input?.color?.default};
   ${(props) =>
     props.focused &&
     css`
-      outline: 1px solid #007079;
-      outline-offset: 0px;
+      outline: ${props?.error ? '1px solid #eb0000' : props?.theme?.input?.focusedOutline};
     `}
 
   ${(props) =>
     props.positive &&
     css`
-      border: 1px solid #4bb748;
-      background: #e6faec;
+      border: ${({ theme }) => theme?.input?.border?.positive};
+      background: #${({ theme }) => theme?.input?.background?.positive};
     `}
 
     ${(props) =>
     props.error &&
     css`
-      border: 1px solid #eb0000;
-      background: #ff667019;
+      border: ${({ theme }) => theme?.input?.border?.error};
+      background: ${({ theme }) => theme?.input?.background?.error};
     `}
 
     ${(props) =>
     props.readOnly &&
     css`
-      background: #f7f7f7;
-      color: #333333;
-    `}
-
-    ${(props) =>
-    props.error &&
-    props.focused &&
-    css`
-      outline: 1px solid #b30d2f;
-      outline-offset: 0px;
+      background: ${({ theme }) => theme?.input?.background?.readOnly};
+      color: ${({ theme }) => theme?.input?.color?.readOnly};
     `}
 
     input, textarea, select {
@@ -62,11 +55,15 @@ export const StyledInputWrapper = styled.div<InputWrapperProps>`
     position: relative;
     z-index: 2;
     border: none;
+    color: inherit;
     &:focus {
       outline: none;
     }
     &:read-only {
       background: none;
+    }
+    ::placeholder {
+      color: ${({ theme }) => theme?.input?.color?.placeholder};
     }
   }
 
@@ -89,7 +86,7 @@ export const EnhancerWrapper = styled.div<{ type: 'start' | 'end' }>`
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #007079;
+  color: ${({ theme }) => theme?.input?.color?.readOnly};
   padding: ${(props) => (props.type === 'start' ? '0 0 0 1rem' : '0 1rem 0 0.5rem')};
 `;
 

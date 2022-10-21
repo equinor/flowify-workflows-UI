@@ -6,6 +6,8 @@ declare module 'yup' {
     startsWithLetter(message?: string): yup.StringSchema;
     noWhitespace(message?: string): yup.StringSchema;
     validSecret(type: 'workflow' | 'component', secrets: string[], message?: string): yup.StringSchema;
+    validVolume(type: 'workflow' | 'component', volumes: string[], message?: string): yup.StringSchema;
+    noDuplicateValues(list: string[], oldValue: string | undefined, message?: string): yup.StringSchema;
   }
   interface ArraySchema<T> {
     unique(mapper: (a: T) => T, message?: any): ArraySchema<T>;
@@ -25,12 +27,6 @@ yup.addMethod(yup.string, 'startsWithLetter', function (message) {
 
 yup.addMethod(yup.string, 'noWhitespace', function (message) {
   return this.test('noWhitespace', message || 'Whitespace is not allowed', noWhitespace);
-});
-
-yup.addMethod(yup.array, 'unique', function (mapper = (a: any) => a, message: string) {
-  return this.test('unique', message, (list) => {
-    return list?.length === new Set(list?.map(mapper)).size;
-  });
 });
 
 yup.addMethod(yup.object, 'uniqueProperty', function (propertyName, message) {
@@ -65,10 +61,56 @@ yup.addMethod(yup.string, 'validSecret', function (type, secrets, message) {
     if (secrets.includes(value)) {
       return true;
     }
-    const [nodeid, inputName] = from[1]?.value?.name?.split('@');
+    const [nodeid, ...rest] = from[1]?.value?.name?.split('-');
     throw this.createError({
-      path: `${this.path}`,
-      message: `Secret chosen for node with id «${nodeid}»: input «${inputName}» references a workspace secret that does not exist. The secret may have been deleted. Please re-select a valid secret.`,
+      path: this.path,
+      message: `Secret chosen for node with id «${nodeid}»: input «${rest.join(
+        '-',
+      )}» references a workspace secret that does not exist. The secret may have been deleted. Please re-select a valid secret.`,
+      params: {
+        nodeid,
+      },
     });
+  });
+});
+
+yup.addMethod(yup.string, 'validVolume', function (type, volumes, message) {
+  return this.test('validVolume', message, function (value) {
+    // @ts-expect-error
+    const { from } = this;
+    if (type === 'component') {
+      return true;
+    }
+    if (!(from[1]?.value?.type === 'volume')) {
+      return true;
+    }
+    if (volumes.includes(value)) {
+      return true;
+    }
+    const [nodeid, ...rest] = from[1]?.value?.name?.split('-');
+    throw this.createError({
+      path: this.path,
+      message: `Volume chosen for node with id «${nodeid}»: input «${rest?.join(
+        '-',
+      )}» references a workspace volume that does not exist. The volume may have been deleted. Please re-select a valid volume.`,
+      params: {
+        nodeid,
+      },
+    });
+  });
+});
+
+yup.addMethod(yup.string, 'noDuplicateValues', function (list: string[], oldValue: string, message) {
+  return this.test('noDuplicateValues', message || 'Value already exists', function (value) {
+    if (!value) {
+      return true;
+    }
+    if (value === oldValue) {
+      return true;
+    }
+    if (list?.includes(value)) {
+      return false;
+    }
+    return true;
   });
 });

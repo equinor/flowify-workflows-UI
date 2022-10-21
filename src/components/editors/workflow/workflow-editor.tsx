@@ -22,6 +22,7 @@ import { IFilter, IPagination, services } from '../../../services';
 import { IfConfig } from '../components/functional-components/if/if-config';
 import { isNotEmptyArray } from '../../../common';
 import { checkWorkflowValidation } from '../../../common/validation/workflow-validation';
+import { IFunctionalCompConfig, IParameterConfig } from '../types';
 
 interface IWorkflowEditor {
   uid: string | null;
@@ -54,8 +55,8 @@ const WorkflowEditor: FC<IWorkflowEditor> = (props: IWorkflowEditor) => {
   const [nodes, setNodes, onNodesChange] = useNodesState<INode>([]);
 
   // Configs
-  const [configComponent, setConfigComponent] = useState<{ id: string; type: 'map' | 'if' }>();
-  const [parameterConfig, setParameterConfig] = useState<{ type: 'secret' | 'volume'; id: string }>();
+  const [configComponent, setConfigComponent] = useState<IFunctionalCompConfig>();
+  const [parameterConfig, setParameterConfig] = useState<IParameterConfig>();
 
   // Validation
   const [feedback, setFeedback] = useState<Feedback>();
@@ -98,7 +99,8 @@ const WorkflowEditor: FC<IWorkflowEditor> = (props: IWorkflowEditor) => {
    * @returns Promise<boolean>
    */
   async function onValidate() {
-    const validationErrors = await checkWorkflowValidation(workflow, initialWorkflow, workspaceSecrets);
+    const volumes: string[] = workspaceVolumes?.map((volume) => volume.uid);
+    const validationErrors = await checkWorkflowValidation(workflow, initialWorkflow, workspaceSecrets, volumes);
     setValidationErrors(validationErrors);
     if (isNotEmptyArray(validationErrors)) {
       return true;
@@ -185,13 +187,14 @@ const WorkflowEditor: FC<IWorkflowEditor> = (props: IWorkflowEditor) => {
    * To be able to reuse React components for both workflow and component editor, this is a workaround that allows us to pass only component and setComponent to those React components. When component updates in those editor components, we use this hook and update workflow by updating the entire component within the workflow object with the changes.
    */
   useEffect(() => {
-    if (component) {
+    if (component && mounted) {
       console.log('component updates workflow');
       setWorkflow((prev) => ({
         ...prev,
         component: component,
       }));
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [component]);
 
   /**
@@ -210,7 +213,11 @@ const WorkflowEditor: FC<IWorkflowEditor> = (props: IWorkflowEditor) => {
       services.workflows
         .update(workflow, workflow.uid!)
         .then((res) => {
-          console.log(res);
+          setWorkflow(res);
+          setComponent(res?.component);
+          setInitialWorkflow(res);
+          setDirty(false);
+          setMounted(false);
           setFeedback({ message: 'Workflow was successfully updated', type: 'success' });
           setLoading(false);
           setDirty(false);
@@ -297,6 +304,7 @@ const WorkflowEditor: FC<IWorkflowEditor> = (props: IWorkflowEditor) => {
         onClose={() => setValidationModal(false)}
         validationErrors={validationErrors}
         onValidate={onValidate}
+        setParameterConfig={setParameterConfig}
       />
       <MapConfig
         component={component}
@@ -336,7 +344,13 @@ const WorkflowEditor: FC<IWorkflowEditor> = (props: IWorkflowEditor) => {
           errorsLength={validationErrors?.length || 0}
         />
         {activePage === 'runs' && (
-          <WorkflowJobs workflow={workflow} secrets={workspaceSecrets} jobs={jobs} fetchJobs={fetchJobs} />
+          <WorkflowJobs
+            workspace={workspace}
+            workflow={workflow}
+            secrets={workspaceSecrets}
+            jobs={jobs}
+            fetchJobs={fetchJobs}
+          />
         )}
         {activePage === 'document' && (
           <DocumentEditor

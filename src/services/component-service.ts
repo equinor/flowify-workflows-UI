@@ -24,16 +24,14 @@ export class ComponentService {
     return requests
       .put(`api/v1/components/${id}`)
       .send({ component })
-      .then((res) => res.body as Component)
-      .catch((error) => error);
+      .then((res) => res.body as Component);
   }
 
   public update(component: Component, id: string) {
     return requests
       .patch(`api/v1/components/${id}`)
       .send({ component })
-      .then((res) => res.body as Component)
-      .catch((error) => error);
+      .then((res) => res.body as Component);
   }
 
   public delete(id: string, version: string | number) {

@@ -8,30 +8,32 @@ import { Brick, Data, Edge, Graph } from '../../../../models/v2';
 import { ParameterWrapper } from './styles';
 import { ParameterProps, TYPE_ICONS } from './types';
 import { updateArgs, updateParameter, updateResults } from './helpers';
-import { ParameterEditor } from './components/parameter-editor/parameter-editor';
+import { ParameterEditor } from './parameter-editor/parameter-editor';
 
 export const Parameter: FC<ParameterProps> = (props: ParameterProps) => {
-  const { index, setComponent, type, onlyEditableValue, editableValue, parameter } = props;
+  const { index, setComponent, type, onlyEditableValue, editableValue, parameter, names } = props;
   const [open, setOpen] = useState<boolean>(false);
 
   const validationSchema = yup.object({
-    name: yup.string().required('Parameter name is required').startsWithLetter().noWhitespace(),
+    name: yup
+      .string()
+      .required('Parameter name is required')
+      .startsWithLetter('Parameter name nees to start with alpabetical letters [a…z]')
+      .noWhitespace('Whitespace is not allowed in parameter names')
+      .noDuplicateValues(names || [], props.parameter?.name, `An ${type} parameter with this name already exists.`),
   });
 
   const parameterType = type === 'input' ? 'inputs' : 'outputs';
   const parameterMappings = type === 'input' ? 'inputMappings' : 'outputMappings';
 
-  async function onClose(values: Data) {
+  async function onParameterUpdate(values: Data) {
     setComponent((prev) =>
       prev?.implementation?.type === 'brick'
         ? {
             ...prev,
+            [parameterType]: updateParameter(prev[parameterType], index, props.parameter, values),
             implementation: {
               ...prev?.implementation,
-              [parameterMappings]: (prev.implementation as Graph)[parameterMappings]?.map((mapping: Edge) =>
-                mapping.source.port !== props.parameter.name ? mapping : { ...mapping, source: { port: values.name } },
-              ),
-              [parameterType]: updateParameter(prev[parameterType], index, props.parameter, values),
               args: updateArgs((prev?.implementation as Brick)?.args, props?.parameter?.name || '', type, values),
               results: updateResults(
                 (prev?.implementation as Brick)?.results,
@@ -43,13 +45,13 @@ export const Parameter: FC<ParameterProps> = (props: ParameterProps) => {
           }
         : {
             ...prev,
+            [parameterType]: updateParameter(prev?.[parameterType], index, props.parameter, values),
             implementation: {
               ...prev?.implementation,
               [parameterMappings]: (prev?.implementation as Graph)[parameterMappings]?.map((mapping: Edge) =>
                 mapping.source.port !== props.parameter.name ? mapping : { ...mapping, source: { port: values.name } },
               ),
             },
-            [parameterType]: updateParameter(prev?.[parameterType], index, props.parameter, values),
           },
     );
     setOpen(false);
@@ -87,7 +89,7 @@ export const Parameter: FC<ParameterProps> = (props: ParameterProps) => {
             <div style={{ flexGrow: '2' }}>
               <Typography variant="h5">{parameter.name}</Typography>
               <Typography variant="body_short">{parameter.userdata?.description}</Typography>
-              {editableValue && (
+              {editableValue && type === 'input' && (
                 <Stack
                   direction="row"
                   alignItems="center"
@@ -110,7 +112,7 @@ export const Parameter: FC<ParameterProps> = (props: ParameterProps) => {
               value: props?.parameter?.userdata?.value || '',
               description: props?.parameter?.userdata?.description || '',
             }}
-            onSubmit={onClose}
+            onSubmit={onParameterUpdate}
             validationSchema={validationSchema}
             validateOnBlur
           >
@@ -123,6 +125,7 @@ export const Parameter: FC<ParameterProps> = (props: ParameterProps) => {
                 volume={props.volume}
                 onClose={() => setOpen(false)}
                 removeInput={removeInput}
+                type={type}
               />
             </Form>
           </Formik>

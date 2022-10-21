@@ -1,29 +1,21 @@
 import React, { FC } from 'react';
 import { Stack } from '@mui/material';
-import { MenuButton } from './components/menu-button';
-
-type ActiveType = 'editor' | 'document' | 'runs';
-interface EditorMenuProps {
-  active: ActiveType;
-  setActive: (type: ActiveType) => void;
-  isWorkflow?: boolean;
-  onSave: () => void;
-  dirty: boolean;
-  openValidation?: () => void;
-  errorsLength?: number;
-}
+import { MenuButton } from './menu-button/menu-button';
+import { EditorMenuProps } from './types';
+import { StyledEditorMenu } from './styles';
 
 export const EditorMenu: FC<EditorMenuProps> = (props: EditorMenuProps) => {
   const { active, setActive, isWorkflow } = props;
   return (
-    <Stack
-      alignItems="stretch"
-      justifyContent="space-between"
-      spacing={1}
-      sx={{ backgroundColor: '#ADE2E619', padding: '0.25rem' }}
-    >
+    <StyledEditorMenu alignItems="stretch" justifyContent="space-between" spacing={1}>
       <Stack spacing={0.5}>
-        <MenuButton disabled={!props.dirty} create onClick={props.onSave} icon="save" label="Save" />
+        <MenuButton
+          disabled={!props.dirty || !(props.errorsLength === 0)}
+          create
+          onClick={props.onSave}
+          icon="save"
+          label="Save"
+        />
         <MenuButton
           onClick={props.openValidation}
           label={`${props.errorsLength} Errors`}
@@ -49,7 +41,7 @@ export const EditorMenu: FC<EditorMenuProps> = (props: EditorMenuProps) => {
         )}
       </Stack>
       <div />
-    </Stack>
+    </StyledEditorMenu>
   );
 };
 

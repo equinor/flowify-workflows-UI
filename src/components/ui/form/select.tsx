@@ -13,12 +13,6 @@ export interface SelectProps {
   placeholder?: string;
   [propname: string]: any;
 }
-
-export function createOptionsFromSingleValue(list: string[]) {
-  const options = list?.map((item) => ({ label: item, value: item }));
-  return options || [];
-}
-
 export const Select: FC<SelectProps> = (props: SelectProps) => {
   const {
     id,

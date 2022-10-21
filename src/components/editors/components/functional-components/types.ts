@@ -2,8 +2,7 @@ import React from 'react';
 import { Component } from '../../../../models/v2';
 
 export interface FunctionalComponentsProps {
-  open: boolean;
-  setOpen: any;
+  onClose: any;
   component?: Component;
   subComponents?: Component[];
   setComponent: React.Dispatch<React.SetStateAction<Component | undefined>>;
@@ -26,12 +25,12 @@ export const FUNCTIONAL_COMPONENTS: IFunctionalComponent[] = [
     description: 'Wrap component in a map and use parameter arrays to run it multiple times when running jobs.',
     onAdd: 'onAddMap',
   },
-  {
+  /*   {
     id: 'if',
     name: 'If component',
     type: 'conditional',
     description:
       'Select component to run if condition is true, additionally select component to run if condition is false',
     onAdd: 'onAddIf',
-  },
+  }, */
 ];

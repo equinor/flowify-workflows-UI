@@ -19,7 +19,8 @@ export function removeConnection(removedObject: ICustomConnection, component: Co
     if (inputMappings) {
       const edgeIndex = inputMappings?.findIndex(
         (input) =>
-          input.source.port === removedObject.source && input.target.port === removedObject.targetHandle.slice(2),
+          input.source.port === removedObject.source?.slice(2) &&
+          input.target.port === removedObject.targetHandle.slice(2),
       );
       if (edgeIndex === -1) {
         throw new Error('Could not find deleted connection in component object');
@@ -33,7 +34,8 @@ export function removeConnection(removedObject: ICustomConnection, component: Co
     if (outputMappings) {
       const edgeIndex = outputMappings?.findIndex(
         (output) =>
-          output.target.port === removedObject.target && output.source.port === removedObject.sourceHandle.slice(2),
+          output.target.port === removedObject.target?.slice(2) &&
+          output.source.port === removedObject.sourceHandle.slice(2),
       );
       if (edgeIndex === -1) {
         throw new Error('Could not find deleted connection in component object');
@@ -92,7 +94,7 @@ export function removeStartNode(removedElement: Node, component: Component): Com
   const { inputs } = component;
   const { inputMappings } = component.implementation as Graph;
   if (inputs) {
-    const nodeIndex = inputs.findIndex((input) => input.name === removedElement.id);
+    const nodeIndex = inputs.findIndex((input) => input.name === removedElement.id?.slice(2));
     if (nodeIndex === -1) {
       throw new Error('Could not find deleted node in component object');
     }
@@ -100,7 +102,7 @@ export function removeStartNode(removedElement: Node, component: Component): Com
     // Remove all connections that belongs to the start/input node
     if (Array.isArray(inputMappings) && inputMappings.length > 0) {
       (component.implementation as Graph).inputMappings = inputMappings.filter(
-        (inputMapping) => inputMapping.source.port !== removedElement.id,
+        (inputMapping) => inputMapping.source.port !== removedElement.id?.slice(2),
       );
     }
     return component;
@@ -112,14 +114,14 @@ export function removeEndNode(removedElement: Node, component: Component): Compo
   const { outputs } = component;
   const { outputMappings } = component.implementation as Graph;
   if (outputs) {
-    const nodeIndex = outputs.findIndex((output) => output.name === removedElement.id);
+    const nodeIndex = outputs.findIndex((output) => output.name === removedElement.id?.slice(2));
     if (nodeIndex === -1) {
       throw new Error('Could not find deleted node in component object');
     }
     outputs.splice(nodeIndex, 1);
     if (Array.isArray(outputMappings) && outputMappings.length > 0) {
       (component.implementation as Graph).outputMappings = outputMappings.filter(
-        (outputMapping) => outputMapping.target.port !== removedElement.id,
+        (outputMapping) => outputMapping.target.port !== removedElement.id?.slice(2),
       );
     }
     return component;
@@ -140,7 +142,7 @@ export function addConnection(
     }
     const { inputMappings } = component.implementation as Graph;
     inputMappings?.push({
-      source: { port: params.source },
+      source: { port: params.source.slice(2) },
       target: { node: params.target, port: params.targetHandle.slice(2) },
     });
     return component;
@@ -152,7 +154,7 @@ export function addConnection(
     const { outputMappings } = component.implementation as Graph;
     outputMappings?.push({
       source: { node: params.source, port: params.sourceHandle.slice(2) },
-      target: { port: params.target },
+      target: { port: params.target.slice(2) },
     });
     return component;
   }
@@ -169,22 +171,25 @@ export function addConnection(
 }
 
 export function updateTaskNodePostion(component: Component, node: Node) {
-  const nodePlacement = (component?.implementation as Graph)?.nodes?.findIndex((comp) => comp.id === node.id) || -1;
-  if ((component?.implementation as Graph)?.nodes?.[nodePlacement]) {
-    if (!(component.implementation as Graph).nodes?.[nodePlacement].userdata) {
-      (component.implementation as Graph).nodes![nodePlacement].userdata = {};
+  const nodePlacement = (component?.implementation as Graph).nodes?.findIndex((comp) => comp.id === node.id);
+  if (nodePlacement !== -1 && nodePlacement !== undefined) {
+    if ((component?.implementation as Graph)?.nodes?.[nodePlacement]) {
+      console.log('is ndoe');
+      if (!(component.implementation as Graph).nodes?.[nodePlacement].userdata) {
+        (component.implementation as Graph).nodes![nodePlacement].userdata = {};
+      }
+      (component.implementation as Graph).nodes![nodePlacement].userdata!.graphPosition = {
+        x: node.position.x,
+        y: node.position.y,
+      };
+      return component;
     }
-    (component.implementation as Graph).nodes![nodePlacement].userdata!.graphPosition = {
-      x: node.position.x,
-      y: node.position.y,
-    };
-    return component;
   }
   return component;
 }
 
 export function updateParameterPosition(component: Component, node: Node, type: 'inputs' | 'outputs'): Component {
-  const placement = component?.[type]?.findIndex((param) => param.name === node.id);
+  const placement = component?.[type]?.findIndex((param) => param.name === node.id?.slice(2));
   if (placement !== -1 && placement !== undefined) {
     if (!component[type]?.[placement].userdata) {
       component[type]![placement].userdata = {};

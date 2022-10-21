@@ -1,7 +1,6 @@
 import React, { FC } from 'react';
 import { useFormikContext } from 'formik';
 import { Button, Stack } from '../../../ui';
-import { Progress } from '@equinor/eds-core-react';
 
 interface SubmitterProps {
   mode?: 'edit' | 'create';
@@ -30,16 +29,14 @@ export const Submitter: FC<SubmitterProps> = (props: SubmitterProps) => {
       <Button theme="simple" onClick={onClose}>
         Close
       </Button>
-      <Button theme="create" onClick={trySubmit}>
-        {submitting ? (
-          <>
-            <Progress.Circular size={16} color="neutral" /> {mode === 'create' ? 'Adding secret…' : 'Updating secret…'}
-          </>
-        ) : mode === 'create' ? (
-          'Add secret'
-        ) : (
-          'Update secret'
-        )}
+      <Button theme="create" onClick={trySubmit} loading={submitting}>
+        {submitting
+          ? mode === 'create'
+            ? 'Adding secret…'
+            : 'Updating secret…'
+          : mode === 'create'
+          ? 'Add secret'
+          : 'Update secret'}
       </Button>
     </Stack>
   );

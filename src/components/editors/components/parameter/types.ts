@@ -10,6 +10,7 @@ export interface ParameterProps {
   onlyEditableValue?: boolean;
   secret?: boolean;
   volume?: boolean;
+  names?: string[] | undefined;
 }
 
 const TYPE_ICONS = {

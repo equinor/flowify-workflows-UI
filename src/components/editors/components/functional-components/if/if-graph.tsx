@@ -3,7 +3,7 @@ import ReactFlow, { Edge, ReactFlowProvider, useNodesState, useEdgesState, Node 
 import { Component, Conditional, Map } from '../../../../../models/v2';
 import { getComponentFromRef, INode, nanoid } from '../../../helpers';
 import { AddNode, EndNode, StartNode, TaskNode } from '../../graph';
-import { SubNode } from '../../graph/sub-node';
+import { SubNode } from '../../graph';
 
 interface IfGraphProps {
   component: Component | undefined;

@@ -38,7 +38,7 @@ export async function checkValidation(
   if (isBaseOutput) {
     const baseOutput = outputs?.find((output) => output.name === target);
     const sourceNode = nodes.find((node: INode) => node.id === source);
-    const sourceInput = await getSourceParam(sourceNode?.node!, sourceHandle!, subcomponents!);
+    const sourceInput = await getSourceParam(sourceNode?.node!, sourceHandle?.slice(2) || '', subcomponents!);
     console.log(sourceInput);
     const sourceType = sourceInput?.type;
     const targetType = baseOutput?.type;
@@ -54,7 +54,7 @@ export async function checkValidation(
    * If component input, locate the input in the component inputs list
    */
   if (isBaseInput && targetInput) {
-    const baseInput = inputs?.find((input) => input.name === source);
+    const baseInput = inputs?.find((input) => input.name === source?.slice(2));
     const targetType = targetInput.type;
     const sourceType = baseInput!.type;
     const mapCheck = targetType === 'parameter_array' || sourceType === 'parameter_array';

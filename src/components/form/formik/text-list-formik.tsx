@@ -5,10 +5,12 @@ import { TextInputFormik } from './text-input-formik';
 
 interface TextListFormikProps {
   name: string;
+  label: string;
+  addButtonLabel?: string;
 }
 
 export const TextListFormik: FC<TextListFormikProps> = (props: TextListFormikProps) => {
-  const { name } = props;
+  const { name, label } = props;
   const { values } = useFormikContext();
 
   return (
@@ -16,9 +18,9 @@ export const TextListFormik: FC<TextListFormikProps> = (props: TextListFormikPro
       name={name}
       render={(arrayHelpers) => (
         <DraggableList
-          label="Value"
-          type="value"
-          name={name}
+          label={label}
+          id={name}
+          addButtonLabel={props.addButtonLabel}
           onChange={() => null}
           customDragEnd={(indexA, indexB) => arrayHelpers.swap(indexA, indexB)}
           customRemove={(index) => arrayHelpers.remove(index)}

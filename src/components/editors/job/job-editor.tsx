@@ -10,6 +10,7 @@ import { Helmet } from 'react-helmet-async';
 import { Job } from '../../../models/v2';
 import { services } from '../../../services';
 import { useNavigate } from 'react-router';
+import { LoadingEventsTypes } from '../../../pages/job/job-page';
 
 interface JobViewerProps {
   job: Job | undefined;
@@ -17,6 +18,7 @@ interface JobViewerProps {
   workspace: string;
   loading: boolean;
   uid: string | undefined;
+  loadingEvents: LoadingEventsTypes;
 }
 
 export const JobViewer: FC<JobViewerProps> = (props: JobViewerProps) => {
@@ -92,7 +94,7 @@ export const JobViewer: FC<JobViewerProps> = (props: JobViewerProps) => {
               direction="row"
               sx={{ flexGrow: '1', minHeight: '0', flexWrap: 'nowrap', height: '100%', width: '100%' }}
             >
-              <EditorCentralBar setUseManifest={setUseManifest} type="job" />
+              <EditorCentralBar setUseManifest={setUseManifest} />
               {useManifest ? (
                 <ManifestEditor value={jobWatch} lang="yaml" />
               ) : (
@@ -103,6 +105,7 @@ export const JobViewer: FC<JobViewerProps> = (props: JobViewerProps) => {
                     setSelectedNodeId(nodeId);
                   }}
                   setSelectedNodeId={setSelectedNodeId}
+                  loadingEvents={props.loadingEvents}
                 />
               )}
             </Stack>

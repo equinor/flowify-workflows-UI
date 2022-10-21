@@ -5,12 +5,15 @@ import ReactFlow, {
   ReactFlowProvider,
   useNodesState,
   useEdgesState,
+  Background,
+  BackgroundVariant,
 } from 'react-flow-renderer/nocss';
 import { INode, getComponentFromRef } from '../../../../helpers/helpers';
 import { Component, Map, Edge as IEdge } from '../../../../../../models/v2';
 import { StartNode, EndNode, ConditionalNode, SubNode } from '../../../graph';
 import { addConnection, checkValidation, createEdges, createNodes } from './helpers';
 import { ConnectionData } from '../types';
+import { ReactFlowWrapper } from '../../../graph/styles';
 
 interface MapGraphProps {
   component: Component | undefined;
@@ -83,16 +86,20 @@ export const MapGraph: FC<MapGraphProps> = (props: MapGraphProps) => {
 
   return (
     <ReactFlowProvider>
-      <ReactFlow
-        onConnect={onConnect}
-        edges={edges}
-        onEdgesChange={onEdgesChange}
-        onEdgesDelete={(edges) => deleteEdge(edges)}
-        nodeTypes={nodeTypes}
-        nodes={nodes}
-        onNodesChange={onNodesChange}
-        defaultZoom={0.75}
-      ></ReactFlow>
+      <ReactFlowWrapper>
+        <ReactFlow
+          onConnect={onConnect}
+          edges={edges}
+          onEdgesChange={onEdgesChange}
+          onEdgesDelete={(edges) => deleteEdge(edges)}
+          nodeTypes={nodeTypes}
+          nodes={nodes}
+          onNodesChange={onNodesChange}
+          defaultZoom={0.75}
+        >
+          <Background variant={BackgroundVariant.Lines} color="rgba(255, 255, 255, 0.15" gap={24} />
+        </ReactFlow>
+      </ReactFlowWrapper>
     </ReactFlowProvider>
   );
 };
