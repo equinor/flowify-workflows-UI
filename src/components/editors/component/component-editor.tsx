@@ -127,8 +127,8 @@ const Editor: React.FC<IEditor> = (props: IEditor) => {
    * Calls yup validation on manifest, sets errors to validationErrors state and returns boolean
    * @returns Promise<boolean>
    */
-  async function onValidate(): Promise<boolean> {
-    const validationErrors = await checkComponentValidtion(component, initialComponent);
+  async function onValidate(passedComponent?: Component): Promise<boolean> {
+    const validationErrors = await checkComponentValidtion(passedComponent || component, initialComponent);
     setValidationErrors(validationErrors);
     if (isNotEmptyArray(validationErrors)) {
       return true;
@@ -153,13 +153,15 @@ const Editor: React.FC<IEditor> = (props: IEditor) => {
       services.components
         .update(component, component.uid!)
         .then((res) => {
-          console.log(res);
+          setComponent(res);
+          setInitialComponent(res);
+          setDirty(false);
+          setMounted(false);
           setLoading(false);
           setFeedback({ message: 'Component was successfully updated.', type: 'success' });
         })
         .catch((error) => {
           console.error(error);
-          console.log(error?.code);
           // HACK UNTIL WE FIX COSMOSDB ISSUES
           if (error?.code === 500) {
             setFeedback({ message: 'Component was successfully updated.', type: 'success' });

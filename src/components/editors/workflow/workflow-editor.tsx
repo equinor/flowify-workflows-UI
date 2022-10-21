@@ -213,7 +213,11 @@ const WorkflowEditor: FC<IWorkflowEditor> = (props: IWorkflowEditor) => {
       services.workflows
         .update(workflow, workflow.uid!)
         .then((res) => {
-          console.log(res);
+          setWorkflow(res);
+          setComponent(res?.component);
+          setInitialWorkflow(res);
+          setDirty(false);
+          setMounted(false);
           setFeedback({ message: 'Workflow was successfully updated', type: 'success' });
           setLoading(false);
           setDirty(false);

@@ -10,6 +10,7 @@ export const ReactFlowWrapper = styled.div`
 
   svg {
     fill: ${({ theme }) => theme?.defaults?.iconColor};
+    flex-shrink: 0;
   }
 
   .react-flow {
@@ -72,6 +73,8 @@ export const ReactFlowWrapper = styled.div`
         display: flex;
         align-items: center;
         column-gap: 1rem;
+        max-width: 240px;
+        word-break: break-word;
       }
       p,
       .react-flow__handle {

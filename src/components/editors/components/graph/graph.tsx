@@ -133,12 +133,12 @@ export const GraphEditor: React.FC<IGraphEditor> = (props: IGraphEditor) => {
     const { type } = node;
     if (type === 'taskNode' || type === 'mapNode' || type === 'conditionalNode') {
       const moved = updateTaskNodePostion(component!, node);
-      onChange(moved);
+      onChange({ ...moved });
       return;
     }
     if (type === 'startNode' || type === 'endNode') {
       const moved = updateParameterPosition(component!, node, type === 'startNode' ? 'inputs' : 'outputs');
-      onChange(moved);
+      onChange({ ...moved });
       return;
     }
   }

@@ -14,11 +14,13 @@ export const StyledButton = styled.button<{ buttonTheme: ButtonTheme }>`
   column-gap: 0.25rem;
   font-size: 1rem;
   max-width: max-content;
+  min-width: min-content;
   font-weight: ${(props) => (props.buttonTheme === 'link' ? 'inherit' : '500')};
   cursor: pointer;
   transition: ease-in-out background-color 0.2s;
   svg {
     fill: ${(props) => props?.theme?.button?.color?.[props.buttonTheme]};
+    flex-shrink: 0;
   }
 
   &:hover {
