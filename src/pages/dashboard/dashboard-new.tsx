@@ -47,19 +47,19 @@ const DashboardPage: FC<IDashboardPage> = (props: IDashboardPage) => {
                 linklist: [
                   {
                     title: 'Creating a component',
-                    url: 'https://equinor.github.io/flowify-documentation/docs/component/',
+                    url: 'https://equinor.github.io/flowify-documentation/components/',
                     target: '_blank',
                     external: true,
                   },
                   {
                     title: 'Building a brick component',
-                    url: 'https://equinor.github.io/flowify-documentation/docs/component/build/brick/',
+                    url: 'https://equinor.github.io/flowify-documentation/bricks/',
                     target: '_blank',
                     external: true,
                   },
                   {
                     title: 'Building a graph component',
-                    url: 'https://equinor.github.io/flowify-documentation/docs/component/build/graph/',
+                    url: 'https://equinor.github.io/flowify-documentation/graphs/',
                     target: '_blank',
                     external: true,
                   },

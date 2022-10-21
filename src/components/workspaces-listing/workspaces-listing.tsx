@@ -47,13 +47,13 @@ const WorkspacesListing: FC<IWorkspacesListing> = (props: IWorkspacesListing) =>
               linklist: [
                 {
                   title: 'Creating a workspace',
-                  url: 'https://equinor.github.io/flowify-documentation/docs/workspace/',
+                  url: 'https://equinor.github.io/flowify-documentation/workspaces/',
                   target: '_blank',
                   external: true,
                 },
                 {
                   title: 'Configure workspace secrets',
-                  url: 'https://equinor.github.io/flowify-documentation/docs/secret/',
+                  url: 'https://equinor.github.io/flowify-documentation/secrets/',
                   target: '_blank',
                   external: true,
                 },
