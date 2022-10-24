@@ -1,7 +1,6 @@
 import React, { FC, useState } from 'react';
 import { Icon, Typography } from '@equinor/eds-core-react';
 import { Stack } from '@mui/material';
-import styled from 'styled-components';
 import { isNotEmptyArray } from '../../../common';
 import { nanoid } from '../helpers';
 import { EditorHeader } from '../components';
@@ -9,6 +8,7 @@ import { Component, Workflow } from '../../../models/v2';
 import { Parameter } from '.';
 import { MultiToggle, ToggleButton, Button, Chip, Message } from '../../ui';
 import { BaseInput } from '../../form';
+import { StyledTextButton } from './document-editor/styles';
 
 interface SidebarProps {
   component: Component | null | undefined;
@@ -19,13 +19,6 @@ interface SidebarProps {
   secrets?: string[];
   isLatest?: boolean;
 }
-
-const StyledTextButton = styled.button`
-  background: none;
-  border: none;
-  cursor: text;
-  padding: 0;
-`;
 
 export const Sidebar: FC<SidebarProps> = (props: SidebarProps) => {
   const { component, setComponent, workspace, setDocument, document, secrets } = props;

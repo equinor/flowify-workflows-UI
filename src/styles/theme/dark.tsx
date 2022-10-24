@@ -18,6 +18,9 @@ export const darkTheme: DefaultTheme = {
     background: '#2E3F4D',
     boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.14), 0px 3px 4px rgba(0, 0, 0, 0.12)',
     borderColor: 'transparent',
+    hover: {
+      background: 'rgba(173, 226, 230, 0.1)',
+    },
   },
   box: {
     background: 'rgba(173, 226, 230, 0.1)',

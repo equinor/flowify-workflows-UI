@@ -9,14 +9,15 @@ export const lightTheme: DefaultTheme = {
     ...defaults,
     focusOutline: '3px dotted #007079',
     color: defaultTextColor,
+    iconColor: '#007079',
   },
   layout: {
-    background: 'white',
+    background: '#ffffff',
   },
   paper: {
-    background: '#FFFFFF',
-    boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.14), 0px 3px 4px rgba(0, 0, 0, 0.12)',
-    borderColor: 'rgb(247, 247, 247)',
+    background: '#ade2e624',
+    boxShadow: 'none',
+    borderColor: 'transparent',
   },
   box: {
     background: '#ADE2E619',

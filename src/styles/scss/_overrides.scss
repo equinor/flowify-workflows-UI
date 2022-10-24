@@ -16,11 +16,3 @@ code {
     background-color: #deedee !important;
   }
 }
-
-a {
-  border-radius: 10px;
-  &:focus {
-    outline: 3px dotted #007079;
-    outline-offset: 3px;
-  }
-}

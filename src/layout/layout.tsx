@@ -30,6 +30,13 @@ const StyledPageWrapper = styled.div<ILayout>`
   p {
     color: ${({ theme }) => theme.defaults.color};
   }
+  a {
+    border-radius: ${({ theme }) => theme.defaults.borderRadius};
+    &:focus {
+      outline: ${({ theme }) => theme.defaults.focusOutline};
+      outline-offset: 3px;
+    }
+  }
 `;
 
 const StyledMain = styled.main<ILayout>`

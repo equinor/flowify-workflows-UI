@@ -26,6 +26,7 @@ export type JustifyContentTypes =
   | 'flex-end'
   | 'space-between'
   | 'space-around'
+  | 'stretch'
   | 'initial'
   | 'inherit';
 

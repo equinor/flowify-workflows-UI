@@ -8,11 +8,13 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { isNotEmptyArray } from '../../common';
 import { Button, DialogWrapper, Stack } from '../ui';
 import { BaseInput } from '../form';
+import { ButtonProps } from '../ui/button/types';
 
 interface RunWorkflowProps {
   // Pass the entire workflow object or a string (uid)
   workflow: Workflow | string;
   secrets?: string[];
+  buttonProps?: ButtonProps;
 }
 
 export const RunWorkflow: FC<RunWorkflowProps> = (props: RunWorkflowProps) => {
@@ -110,11 +112,15 @@ export const RunWorkflow: FC<RunWorkflowProps> = (props: RunWorkflowProps) => {
       .catch((error) => console.error(error));
   }
 
+  const buttonProps = props.buttonProps || {
+    theme: 'create',
+    leftIcon: 'launch',
+    children: 'Run workflow',
+  };
+
   return (
     <>
-      <Button onClick={() => setModalOpen(true)} theme="create">
-        <Icon name="launch" style={{ marginRight: '0.75rem' }} /> Run workflow
-      </Button>
+      <Button {...buttonProps} onClick={() => setModalOpen(true)} />
       <Dialog open={modalOpen} onClose={() => setModalOpen(false)} fullWidth maxWidth="md">
         <DialogWrapper padding={2}>
           <Stack spacing={4}>
