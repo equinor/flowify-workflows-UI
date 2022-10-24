@@ -3,7 +3,7 @@ import { Icon, Typography } from '@equinor/eds-core-react';
 import { Stack } from '@mui/material';
 import { Storage } from '@mui/icons-material';
 import { TYPE_ICONS, ArgumentProps } from './types';
-import { ArgumentButton, ArgumentWrapper } from './styles';
+import { ArgumentButton } from './styles';
 import { Port } from '../../../../../models/v2';
 import { ArgumentEditor } from './argument-editor/argument-editor';
 
@@ -20,19 +20,21 @@ export const Argument: FC<ArgumentProps> = (props: ArgumentProps) => {
   }, [selectValue, inputs]);
 
   return (
-    <ArgumentWrapper>
-      <ArgumentEditor
-        arg={arg}
-        index={props.index}
-        inputs={inputs || []}
-        isConst={isConst}
-        onClose={() => setOpen(false)}
-        open={open}
-        setComponent={props.setComponent!}
-        selectValue={selectValue}
-        setSelectValue={setSelectValue}
-        type={type}
-      />
+    <>
+      {open && (
+        <ArgumentEditor
+          arg={arg}
+          index={props.index}
+          inputs={inputs || []}
+          isConst={isConst}
+          onClose={() => setOpen(false)}
+          open={open}
+          setComponent={props.setComponent!}
+          selectValue={selectValue}
+          setSelectValue={setSelectValue}
+          type={type}
+        />
+      )}
       <ArgumentButton onClick={() => setOpen(true)}>
         {isConst ? (
           <Icon name="text_field" />
@@ -53,6 +55,6 @@ export const Argument: FC<ArgumentProps> = (props: ArgumentProps) => {
           </Typography>
         </Stack>
       </ArgumentButton>
-    </ArgumentWrapper>
+    </>
   );
 };

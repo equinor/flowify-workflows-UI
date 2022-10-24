@@ -6,6 +6,7 @@ import { removeItem, reorder } from './helpers';
 import { Button } from '../../../ui';
 import { getItemStyle, getListStyle } from './styles';
 import { DraggableListProps } from './types';
+import { nanoid } from '../../helpers';
 
 /**
  * DraggableList. Takes a list of items (object or string) and maps the item to draggable items. Inside the draggable the function you passed to the child prop will be called with the item from the map and the index as parameters. It will then print whatever you return in this function as a child of the draggable.
@@ -45,7 +46,7 @@ export const DraggableList: FC<DraggableListProps> = (props: DraggableListProps)
             <div {...provided.droppableProps} ref={provided.innerRef} style={getListStyle(snapshot.isDraggingOver)}>
               {list?.map((item, index) => (
                 <Draggable
-                  key={`draggable_item_${id}_${index}`}
+                  key={`draggable_item_${id}_${nanoid(4)}`}
                   draggableId={`draggable_item_${id}_${index}`}
                   index={index}
                 >
@@ -56,7 +57,7 @@ export const DraggableList: FC<DraggableListProps> = (props: DraggableListProps)
                       {...prov.dragHandleProps}
                       style={getItemStyle(snapshot.isDragging, prov.draggableProps.style)}
                     >
-                      <Icon name="drag_handle" />
+                      <Icon name="drag_handle" style={{ flexShrink: 0 }} />
                       {typeof child === 'function' ? child(item, index) : null}
                       <Button theme="simple" onClick={() => onRemove(index)}>
                         <Icon name="clear" />
