@@ -78,7 +78,7 @@ export const RunWorkflow: FC<RunWorkflowProps> = (props: RunWorkflowProps) => {
       if (input.type === 'volume') {
         const volume = volumes.find((volume) => volume.uid === input?.userdata?.value);
         return {
-          value: volume?.volume,
+          value: JSON.stringify(volume?.volume),
           target: input.name,
         };
       }
