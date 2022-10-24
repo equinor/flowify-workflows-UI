@@ -1,26 +1,39 @@
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 import { useParams } from 'react-router';
 import { Helmet } from 'react-helmet-async';
-import { Stack } from '@mui/material';
 import { Container, Layout } from '../../layout';
 import { WorkflowsListing, JobsListing } from '../../components';
-import { WorkspaceHeader } from '../../components/ui';
+import { WorkspaceHeader, Stack, MultiToggle, ToggleButton } from '../../components/ui';
+import { CreateWorkflow } from '../../components/creators';
 
 interface IWorkspace {}
 
 const Workspace: FC<IWorkspace> = (props: IWorkspace) => {
   const { workspace } = useParams();
+  const [type, setType] = useState<'workflows' | 'jobs'>('workflows');
 
   return (
     <Layout>
       <Helmet>
         <title>{workspace} - Flowify</title>
       </Helmet>
-      <Container withMargins>
-        <Stack spacing={6}>
+      <Container>
+        <Stack style={{ padding: '1rem 3rem 1rem 3rem' }} spacing={2}>
           <WorkspaceHeader workspace={workspace!} />
-          <WorkflowsListing workspace={workspace!} />
-          <JobsListing workspace={workspace!} />
+          <Stack direction="row" alignItems="center" justifyContent="space-between">
+            <MultiToggle style={{ fontSize: '1.5rem' }}>
+              <ToggleButton active={type === 'workflows'} onClick={() => setType('workflows')}>
+                Workflows
+              </ToggleButton>
+              <ToggleButton active={type === 'jobs'} onClick={() => setType('jobs')}>
+                Jobs
+              </ToggleButton>
+            </MultiToggle>
+            <CreateWorkflow workspace={workspace!} />
+          </Stack>
+        </Stack>
+        <Stack direction="row" style={{ flexGrow: '1', minHeight: '0', flexWrap: 'nowrap', padding: '1rem 3rem' }}>
+          {type === 'workflows' ? <WorkflowsListing workspace={workspace!} /> : <JobsListing workspace={workspace!} />}
         </Stack>
       </Container>
     </Layout>
