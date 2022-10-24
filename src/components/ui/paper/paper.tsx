@@ -5,6 +5,7 @@ import { PaperTheme, StyledPaper } from './styles';
 interface PaperProps extends StackProps {
   theme?: PaperTheme;
   children?: React.ReactNode;
+  hoverable?: boolean;
 }
 
 export const Paper: FC<PaperProps> = (props: PaperProps) => {
@@ -14,4 +15,5 @@ export const Paper: FC<PaperProps> = (props: PaperProps) => {
 
 Paper.defaultProps = {
   theme: 'paper',
+  hoverable: false,
 };

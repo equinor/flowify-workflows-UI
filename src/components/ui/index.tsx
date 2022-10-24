@@ -9,3 +9,4 @@ export * from './stack/stack';
 export { Chip } from './chip/chip';
 export { DialogWrapper } from './dialog-wrapper/dialog-wrapper';
 export { Message } from './message/message';
+export { Pagination } from './pagination/pagination';

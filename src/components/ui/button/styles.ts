@@ -33,4 +33,8 @@ export const StyledButton = styled.button<{ buttonTheme: ButtonTheme }>`
     outline: ${(props) => props?.theme?.defaults?.focusOutline};
     outline-offset: 2px;
   }
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
 `;

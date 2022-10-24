@@ -1,33 +1,17 @@
 import React, { FC, useContext, useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import styled from 'styled-components';
-import {
-  Stack,
-  Table,
-  TableHead,
-  TableBody,
-  TableCell,
-  TableRow,
-  TablePagination,
-  TableSortLabel,
-} from '@mui/material';
-import { Icon, Typography } from '@equinor/eds-core-react';
-import JobTableRow from './table-row/table-row';
+import { Typography } from '@equinor/eds-core-react';
 import { services } from '../../services';
 import { Job, IPageInfo } from '../../models/v2';
 import { IFilter } from '../../services/filters';
-import { Paper } from '../ui';
+import { Pagination, Stack } from '../ui';
 import { UserContextStore } from '../../common/context/user-context-store';
 import { BaseInput, Select } from '../form';
+import { JobCard } from './job-card/job-card';
 
 interface IJobsListing {
   workspace: string;
   showTitle?: boolean;
 }
-
-const StyledTable = styled(Table)`
-  width: 100%;
-`;
 
 const JobsListing: FC<IJobsListing> = (props: IJobsListing) => {
   const { workspace } = props;
@@ -35,7 +19,7 @@ const JobsListing: FC<IJobsListing> = (props: IJobsListing) => {
   const [requestData, setRequestData] = useState<IPageInfo>();
   const [order, setOrder] = useState<'asc' | 'desc'>('asc');
   const [orderBy, setOrderBy] = useState<string>('timestamp');
-  const [page, setPage] = useState<number>(0);
+  const [page, setPage] = useState<number>(1);
   const [search, setSearch] = useState<string>('');
   const [searchParam, setSearchParam] = useState<string>('uid');
   const [values, setValues] = useState({ createdBy: 'default' });
@@ -50,7 +34,8 @@ const JobsListing: FC<IJobsListing> = (props: IJobsListing) => {
     if (values.createdBy !== 'default') {
       jobsFilters.push({ name: 'modifiedBy.email', type: 'EQUALTO', value: user.userInfo.email });
     }
-    const pagination = { limit: 10, offset: page * 10 };
+    const itemsPerPage = 10;
+    const pagination = { limit: itemsPerPage, offset: page === 1 ? 0 : (page - 1) * itemsPerPage };
     const sorting =
       orderBy === 'timestamp'
         ? `sort=${order === 'asc' ? '-' : `${encodeURIComponent('+')}`}${orderBy}`
@@ -66,48 +51,21 @@ const JobsListing: FC<IJobsListing> = (props: IJobsListing) => {
       .catch((error) => console.error(error));
   }, [workspace, page, order, orderBy, search, searchParam, user, values]);
 
-  const headers = [
-    { label: 'Job ID', id: 'uid', sortable: true },
-    { label: 'Submitted by', id: 'modifiedBy.email', sortable: true },
-    { label: 'Submitted', id: 'timestamp', sortable: true },
-    { label: 'Name', id: 'name', sortable: true },
-    { label: 'Description', id: 'description', sortable: false },
+  const headerSortOptions = [
+    { label: 'Submitted', value: 'timestamp' },
+    { label: 'Name', value: 'name' },
+    { label: 'Submitted by', value: 'modifiedBy.email' },
   ];
 
-  function onSort(header: string) {
-    if (header === orderBy) {
-      setOrder((prev) => (prev === 'asc' ? 'desc' : 'asc'));
-      return;
-    }
-    setOrderBy(header);
-    setOrder('asc');
-  }
-
   return (
-    <Paper spacing={2} padding={2}>
-      <Stack direction="row" spacing={5} alignContent="center">
-        <Stack
-          direction="row"
-          spacing={2}
-          sx={{ flexGrow: '1', height: '100%' }}
-          alignItems="center"
-          justifyContent="flex-start"
-        >
-          <Stack sx={{ padding: '1rem' }}>
-            <Icon size={24} name="play_circle" color="#709DA0" />
-          </Stack>
-          <Link to={`/workspace/${workspace}/jobs`}>
-            <Typography variant="h3">Jobs</Typography>
-          </Link>
-        </Stack>
-      </Stack>
-      <Stack direction="row" spacing={2} justifyContent="stretch">
-        <Stack direction="row" sx={{ flexGrow: '2' }} spacing={1}>
+    <Stack spacing={1} style={{ width: '100%' }}>
+      <Stack direction="row" spacing={1} justifyContent="stretch">
+        <Stack direction="row" style={{ flexGrow: '2' }} spacing={0.5}>
           <Select
             name="jobs_searchbar--searchobject"
             label="Search"
             value={searchParam}
-            style={{ width: '200px' }}
+            style={{ width: '130px' }}
             options={[
               { label: 'Job ID', value: 'uid' },
               { label: 'Description', value: 'description' },
@@ -135,52 +93,43 @@ const JobsListing: FC<IJobsListing> = (props: IJobsListing) => {
           ]}
           style={{ width: '195px' }}
         />
-      </Stack>
-      <>
-        <StyledTable size="small">
-          <TableHead>
-            <TableRow>
-              <TableCell width={80}>&nbsp;</TableCell>
-              <TableCell width={80}>&nbsp;</TableCell>
-              {headers.map((header) => (
-                <TableCell key={header.id} sortDirection={order}>
-                  {header.sortable ? (
-                    <TableSortLabel active={header.id === orderBy} direction={order} onClick={() => onSort(header.id)}>
-                      {header.label}
-                    </TableSortLabel>
-                  ) : (
-                    header.label
-                  )}
-                </TableCell>
-              ))}
-              <TableCell>&nbsp;</TableCell>
-            </TableRow>
-          </TableHead>
-          {!loadingJobs && requestData?.totalNumber && requestData?.totalNumber > 0 ? (
-            <TableBody>
-              {Array.isArray(jobs) && jobs.map((job) => <JobTableRow key={job?.uid} workspace={workspace} row={job} />)}
-            </TableBody>
-          ) : (
-            <TableBody sx={{ padding: '1rem' }}>
-              <TableRow>
-                <TableCell>No jobs available.</TableCell>
-              </TableRow>
-            </TableBody>
-          )}
-        </StyledTable>
-        {requestData && (
-          <TablePagination
-            sx={{ width: '100%' }}
-            component="div"
-            count={requestData.totalNumber}
-            page={page}
-            rowsPerPage={10}
-            onPageChange={(event, page) => setPage(page)}
-            rowsPerPageOptions={[10]}
+        <Stack direction="row" spacing={0.5}>
+          <Select
+            name="jobs_sort"
+            value={orderBy}
+            options={headerSortOptions}
+            onChange={(item) => setOrderBy(item)}
+            label="Order by"
+            style={{ width: '185px' }}
           />
+          <Select
+            name="jobs_sortorder"
+            value={order}
+            options={[
+              { label: 'Asc', value: 'asc' },
+              { label: 'Desc', value: 'desc' },
+            ]}
+            onChange={(item: any) => setOrder(item)}
+            label="&nbsp;"
+            icon="swap_vertical"
+            style={{ width: '145px' }}
+          />
+        </Stack>
+      </Stack>
+      <Stack spacing={0.75}>
+        {loadingJobs ? null : requestData?.totalNumber && requestData.totalNumber > 0 ? (
+          Array.isArray(jobs) && jobs.map((job) => <JobCard key={job?.uid} job={job} workspace={workspace} />)
+        ) : (
+          <Typography variant="body_short">No workflows available</Typography>
         )}
-      </>
-    </Paper>
+        <Pagination
+          total={requestData?.totalNumber || 0}
+          page={page}
+          onPageChange={setPage}
+          itemsPerPage={requestData?.limit}
+        />
+      </Stack>
+    </Stack>
   );
 };
 

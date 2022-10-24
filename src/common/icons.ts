@@ -48,9 +48,13 @@ import {
   checkbox,
   checkbox_outline,
   settings,
+  swap_vertical,
+  chevron_left,
 } from '@equinor/eds-icons';
 
 export const ICONS = {
+  chevron_left,
+  swap_vertical,
   settings,
   checkbox,
   checkbox_outline,

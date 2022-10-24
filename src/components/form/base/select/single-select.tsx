@@ -7,8 +7,12 @@ import { Icon, Typography } from '@equinor/eds-core-react';
 import { Stack } from '../../../ui';
 
 export const SingleSelect: FC<SelectProps> = (props: SelectProps) => {
-  const { placeholder, options, onChange, value, label, icon } = props;
+  const { placeholder, options, onChange, label, icon, value } = props;
   const inputRef = useRef(null);
+
+  function getItemFromValue(value: string | undefined) {
+    return options.find((option: any) => option?.value === value);
+  }
 
   const onSelectedItemChange = (changes: UseSelectStateChange<IOption>) => {
     if (props.disabled || props.readOnly) {
@@ -20,13 +24,16 @@ export const SingleSelect: FC<SelectProps> = (props: SelectProps) => {
     }
   };
 
-  const initialSelectedItem = options.find((option: any) => option?.value === value);
+  function itemToString(selectedItem: IOption | null) {
+    return selectedItem?.label || '';
+  }
 
-  const { isOpen, selectedItem, getToggleButtonProps, getLabelProps, getMenuProps, highlightedIndex, getItemProps } =
+  const { isOpen, getToggleButtonProps, getLabelProps, getMenuProps, highlightedIndex, getItemProps, selectedItem } =
     useSelect({
       items: options,
+      selectedItem: getItemFromValue(value),
       onSelectedItemChange,
-      initialSelectedItem,
+      itemToString,
     });
 
   /*   const clearValue = () => {
@@ -45,19 +52,20 @@ export const SingleSelect: FC<SelectProps> = (props: SelectProps) => {
       )}
       <SelectButton
         type="button"
-        ref={inputRef}
-        readOnly={props?.readOnly || props?.disabled}
         {...getToggleButtonProps({
+          name: props.name,
+          id: props.name,
           'aria-label': props['aria-label'],
           'aria-describedby': props['aria-describedby'],
           'aria-errormessage': props['aria-errormessage'],
           'aria-labelledby': props['aria-labelledby'],
           disabled: props.disabled || props.readOnly,
+          ref: inputRef,
         })}
       >
         <Stack direction="row" alignItems="center" spacing={1}>
           {icon && <Icon name={icon} />}
-          <span>{(selectedItem && selectedItem?.label) || placeholder}</span>
+          <span>{itemToString(selectedItem) || placeholder}</span>
         </Stack>
         <Icon name="chevron_down" />
         {/* {props.clearable && isNotEmptyArray(value) && (
