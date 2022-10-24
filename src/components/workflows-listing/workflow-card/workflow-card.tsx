@@ -42,7 +42,7 @@ export const WorkflowCard: FC<WorkflowCardProps> = (props: WorkflowCardProps) =>
           </div>
         </Paper>
       </Link>
-      <Paper justifyContent="center" theme="light">
+      <Paper justifyContent="center" theme="light" style={{ display: 'inline-grid' }}>
         <RunWorkflow
           workflow={workflow?.uid!}
           buttonProps={{ theme: 'simple', leftIcon: 'launch', children: 'Run', style: { height: '100%' } }}

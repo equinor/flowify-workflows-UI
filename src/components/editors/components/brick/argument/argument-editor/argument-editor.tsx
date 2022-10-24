@@ -91,8 +91,7 @@ export const ArgumentEditor: FC<ArgumentEditorProps> = (props: ArgumentEditorPro
             <Typography variant="body_short">
               <b>Mount path: </b>
               <br />
-              {prefixValue}
-              {selectValue}
+              {prefixValue}[input:{selectValue} value]
               {suffixValue}
             </Typography>
           </Message>

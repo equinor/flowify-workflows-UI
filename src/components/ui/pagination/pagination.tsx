@@ -36,7 +36,7 @@ export const Pagination: FC<PaginationProps> = (props: PaginationProps) => {
         options={pagesOptions}
         onChange={(item: string) => onPageChange(parseInt(item, 10))}
       />
-      <span>of {pages}</span>
+      <span>of {typeof pages === 'number' ? pages : 0}</span>
       <Button disabled={page === pages} icon="chevron_right" onClick={() => onPageChange((prev) => prev + 1)} />
     </Stack>
   );
