@@ -16,7 +16,7 @@ export function checkValidation(params: Edge<any> | Connection, component: Compo
 
   if (isBaseOutput) {
     const baseOutput = outputs?.find((output) => output.name === target);
-    const sourceInput = childComponent?.outputs?.find((output) => `p-${output.name}` === sourceHandle);
+    const sourceInput = childComponent?.outputs?.find((output) => `p-${output.name}` === sourceHandle?.slice(2));
     const sourceType = sourceInput?.type;
     const targetType = baseOutput?.type;
     const mapCheck = targetType === 'parameter_array' || sourceType === 'parameter_array';
@@ -26,7 +26,7 @@ export function checkValidation(params: Edge<any> | Connection, component: Compo
   const targetInput = childComponent?.inputs?.find((input) => `p-${input.name}` === targetHandle);
 
   if (isBaseInput && targetInput) {
-    const baseInput = inputs?.find((input) => input.name === source);
+    const baseInput = inputs?.find((input) => input.name === source?.slice(2));
     const targetType = targetInput.type;
     const sourceType = baseInput!.type;
     const mapCheck = targetType === 'parameter_array' || sourceType === 'parameter_array';
@@ -42,7 +42,7 @@ export function addConnection(params: any, isParentInput: boolean, isParentOutpu
     }
     const { inputMappings } = component.implementation as Map;
     inputMappings.push({
-      source: { port: params.source },
+      source: { port: params.source.slice(2) },
       target: { node: params.target, port: params.targetHandle.slice(2) },
     });
     return component;
@@ -54,7 +54,7 @@ export function addConnection(params: any, isParentInput: boolean, isParentOutpu
     const { outputMappings } = component.implementation as Map;
     outputMappings.push({
       source: { node: params.source, port: params.sourceHandle.slice(2) },
-      target: { port: params.target },
+      target: { port: params.target.slice(2) },
     });
     return component;
   }
@@ -82,7 +82,7 @@ export function createNodes(childNode: Component, id: string, component: Compone
   // Add Input nodes
   component?.inputs?.forEach((input, index) => {
     nodes.push({
-      id: input.name || nanoid(6),
+      id: `i-${input.name}` || nanoid(6),
       type: 'mapInput',
       selectable: false,
       data: {
@@ -99,7 +99,7 @@ export function createNodes(childNode: Component, id: string, component: Compone
   // Add output nodes
   component?.outputs?.forEach((output, index) => {
     nodes.push({
-      id: output.name || nanoid(6),
+      id: `o-${output.name}` || nanoid(6),
       type: 'mapOutput',
       selectable: false,
       data: {
@@ -121,8 +121,8 @@ export function createEdges(component: Component, id: string) {
   (component?.implementation as Map)?.inputMappings?.forEach((edge, index) => {
     if (edge.source?.port && edge.target?.port) {
       edges.push({
-        id: `map-${edge.source.port}-${edge.target.port}_${index}`,
-        source: edge.source.port,
+        id: `map-input-${edge.source.port}-${edge.target.port}_${index}`,
+        source: `i-${edge.source.port}`,
         sourceHandle: `i-${edge.source.port}`,
         targetHandle: `p-${edge.target.port}`,
         target: id,
@@ -138,10 +138,10 @@ export function createEdges(component: Component, id: string) {
   (component?.implementation as Map)?.outputMappings?.forEach((edge, index) => {
     if (edge.source?.port && edge.target?.port) {
       edges.push({
-        id: `map-${edge.source.port}-${edge.target.port}_${index}`,
+        id: `map-output-${edge.source.port}-${edge.target.port}_${index}`,
         source: id,
         sourceHandle: `p-${edge.source.port}`,
-        target: edge.target.port,
+        target: `o-${edge.target.port}`,
         targetHandle: `o-${edge.target.port}`,
         data: {
           connectionType: 'output',
