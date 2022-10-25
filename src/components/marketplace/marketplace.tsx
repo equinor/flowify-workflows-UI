@@ -199,7 +199,7 @@ export const Marketplace: FC<MarketplaceProps> = (props: MarketplaceProps) => {
         {preview ? (
           <Stack alignItems="flex-end">
             <Link to="/components">
-              <Button theme="simple" as="span">
+              <Button theme="link" as="span">
                 Visit marketplace
                 <Icon name="chevron_right" size={16} />
               </Button>

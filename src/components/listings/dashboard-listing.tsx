@@ -57,7 +57,7 @@ export const DashboardListing: FC<DashboardListingProps> = (props: DashboardList
                       <Icon name="chevron_right" size={16} color="#004f55" style={{ marginRight: '0.5rem' }} />
                     </Button>
                   ) : (
-                    <Link key={item.url} to={item.url!} target={item.target}>
+                    <Link key={item.url} to={item.url!} target={item.target} style={{ display: 'contents' }}>
                       <Button as="span">
                         {item.icon && (
                           <Icon name={item.icon} size={16} color="#004f55" style={{ marginRight: '0.5rem' }} />

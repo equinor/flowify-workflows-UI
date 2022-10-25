@@ -65,7 +65,7 @@ function newEndNodes(outputs: Data[]): Node<INode>[] {
     },
     position: {
       x: output?.userdata?.graphPosition?.x || 700,
-      y: output?.userdata?.graphPosition?.y || 100 + 100 * index,
+      y: output?.userdata?.graphPosition?.y || 100 + 50 * index,
     },
   }));
   return nodes;
