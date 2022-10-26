@@ -1036,7 +1036,7 @@
     core-js-pure "^3.20.2"
     regenerator-runtime "^0.13.4"
 
-"@babel/runtime@^7.10.2", "@babel/runtime@^7.11.2", "@babel/runtime@^7.12.5", "@babel/runtime@^7.14.8", "@babel/runtime@^7.15.4", "@babel/runtime@^7.16.3", "@babel/runtime@^7.17.9", "@babel/runtime@^7.18.3", "@babel/runtime@^7.18.9", "@babel/runtime@^7.19.0", "@babel/runtime@^7.3.1", "@babel/runtime@^7.5.5", "@babel/runtime@^7.8.3", "@babel/runtime@^7.8.4", "@babel/runtime@^7.8.7", "@babel/runtime@^7.9.2":
+"@babel/runtime@^7.10.2", "@babel/runtime@^7.11.2", "@babel/runtime@^7.12.5", "@babel/runtime@^7.14.8", "@babel/runtime@^7.15.4", "@babel/runtime@^7.16.3", "@babel/runtime@^7.18.3", "@babel/runtime@^7.18.9", "@babel/runtime@^7.19.0", "@babel/runtime@^7.3.1", "@babel/runtime@^7.5.5", "@babel/runtime@^7.8.3", "@babel/runtime@^7.8.4", "@babel/runtime@^7.8.7", "@babel/runtime@^7.9.2":
   version "7.19.0"
   resolved "https://registry.npmjs.org/@babel/runtime/-/runtime-7.19.0.tgz"
   integrity sha512-eR8Lo9hnDS7tqkO7NsV+mKvCmv5boaXFSZ70DnfhcgiEne8hv9oCEd36Klw74EtizEqLsy4YnW8UWwpBVolHZA==
@@ -1311,42 +1311,41 @@
   resolved "https://registry.npmjs.org/@emotion/weak-memoize/-/weak-memoize-0.3.0.tgz"
   integrity sha512-AHPmaAx+RYfZz0eYu6Gviiagpmiyw98ySSlQvCUhVGDRtDFe4DBS0x1bSjdF3gqUDYOczB+yYvBTtEylYSdRhg==
 
-"@equinor/eds-core-react@0.21.0":
-  version "0.21.0"
-  resolved "https://registry.npmjs.org/@equinor/eds-core-react/-/eds-core-react-0.21.0.tgz"
-  integrity sha512-icgWxoXWQoQe/6gHDH2L9zaNYdrj3oBqew2ERealnucKHaP0NUoacTYDRQNgL/e7o1ACrXVSznEmryYwvmmkDA==
+"@equinor/eds-core-react@0.23.0":
+  version "0.23.0"
+  resolved "https://registry.yarnpkg.com/@equinor/eds-core-react/-/eds-core-react-0.23.0.tgz#6f99c666c187e685de0f52399bc64c4f5b8bd9fe"
+  integrity sha512-yabhrSEmrvt6FE8fAaEzlY2q5S3hbF9ict4GdQEefwC3aDKVuXf/7vx40ukH+iswlVvIVsB63b6Zny0yPCLpBQ==
   dependencies:
-    "@babel/runtime" "^7.17.9"
-    "@equinor/eds-icons" "0.12.0"
+    "@babel/runtime" "^7.19.0"
+    "@equinor/eds-icons" "0.14.0"
     "@equinor/eds-tokens" "0.7.1"
-    "@equinor/eds-utils" "0.3.0"
+    "@equinor/eds-utils" "0.4.0"
     "@floating-ui/react-dom-interactions" "^0.6.6"
-    downshift "^6.1.7"
-    react-fast-compare "3.2.0"
-
-"@equinor/eds-icons@0.12.0":
-  version "0.12.0"
-  resolved "https://registry.npmjs.org/@equinor/eds-icons/-/eds-icons-0.12.0.tgz"
-  integrity sha512-82jmcWWzySvl/yhQ+VXT7a8lJnV7N/HrB72VQh1LrL/KojDY7MorOITthyLcSHdaMZ/UQx9z/JjCOmpZZjTIpA==
+    downshift "^6.1.12"
 
 "@equinor/eds-icons@0.13.0":
   version "0.13.0"
   resolved "https://registry.npmjs.org/@equinor/eds-icons/-/eds-icons-0.13.0.tgz"
   integrity sha512-0EsUVTUXvhGjI0+ef4g4s+5iX929AKQ0UhjCFZ1yI0rnl0mTPz4eLz7L5fEcvnIoPtRucm+kPcwY/VgyYq7AOw==
 
+"@equinor/eds-icons@0.14.0":
+  version "0.14.0"
+  resolved "https://registry.yarnpkg.com/@equinor/eds-icons/-/eds-icons-0.14.0.tgz#881f4c1351725f1bff63a975c21b803dd4f09c09"
+  integrity sha512-a0IzvOX3sYOhwso33gcv7EtS/pv/2EEVfPmA01yCD+QTU4kyS0/B0OUg3otQnGeLL4rk0z3YNCTHYe4d0BP7sQ==
+
 "@equinor/eds-tokens@0.7.1":
   version "0.7.1"
   resolved "https://registry.npmjs.org/@equinor/eds-tokens/-/eds-tokens-0.7.1.tgz"
   integrity sha512-1IRJzf0Vf9t7MeG/NI9AmSi9YddyQc8ev5fax5IYSNLggE88X8EuYej52BMpJ6IJc7oEVvCQPC7JYD2XeyYJ1Q==
 
-"@equinor/eds-utils@0.3.0":
-  version "0.3.0"
-  resolved "https://registry.npmjs.org/@equinor/eds-utils/-/eds-utils-0.3.0.tgz"
-  integrity sha512-4azh6MO0S8Mgrzn8lF9bfZuedlApgmO319ZwlpTDG+JvE6UEf+mmHcKgfcFxe+bSvcfrX7NgmnVNG8HlfzbTtw==
+"@equinor/eds-utils@0.4.0":
+  version "0.4.0"
+  resolved "https://registry.yarnpkg.com/@equinor/eds-utils/-/eds-utils-0.4.0.tgz#5fc96e4741347a883c1cdf46bda73374f9d3326b"
+  integrity sha512-MtOhczl/DeyrUocnIEDwsCxIn6jhj/EdmJocvk4ygcRhCDkqP7ipWboBX4AEicbjcZWfGwOS76WlpB0xqY2YNA==
   dependencies:
-    "@babel/runtime" "^7.17.9"
+    "@babel/runtime" "^7.19.0"
     "@equinor/eds-tokens" "0.7.1"
-    "@popperjs/core" "2.11.5"
+    "@popperjs/core" "2.11.6"
     react-popper "2.3.0"
 
 "@eslint/eslintrc@^1.3.2":
@@ -1911,12 +1910,7 @@
     schema-utils "^3.0.0"
     source-map "^0.7.3"
 
-"@popperjs/core@2.11.5":
-  version "2.11.5"
-  resolved "https://registry.npmjs.org/@popperjs/core/-/core-2.11.5.tgz"
-  integrity sha512-9X2obfABZuDVLCgPK9aX0a/x4jaOEweTTWE2+9sr0Qqqevj2Uv5XorvusThmc9XGYpS9yI+fhh8RTafBtGposw==
-
-"@popperjs/core@^2.11.6":
+"@popperjs/core@2.11.6", "@popperjs/core@^2.11.6":
   version "2.11.6"
   resolved "https://registry.npmjs.org/@popperjs/core/-/core-2.11.6.tgz"
   integrity sha512-50/17A98tWUfQ176raKiOGXuYpLyyVMkxxG6oylzL3BPOlA6ADGdK7EYunSa4I064xerltq9TGXs8HmOk5E+vw==
@@ -4605,17 +4599,6 @@ downshift@^6.1.12:
   version "6.1.12"
   resolved "https://registry.npmjs.org/downshift/-/downshift-6.1.12.tgz"
   integrity sha512-7XB/iaSJVS4T8wGFT3WRXmSF1UlBHAA40DshZtkrIscIN+VC+Lh363skLxFTvJwtNgHxAMDGEHT4xsyQFWL+UA==
-  dependencies:
-    "@babel/runtime" "^7.14.8"
-    compute-scroll-into-view "^1.0.17"
-    prop-types "^15.7.2"
-    react-is "^17.0.2"
-    tslib "^2.3.0"
-
-downshift@^6.1.7:
-  version "6.1.9"
-  resolved "https://registry.npmjs.org/downshift/-/downshift-6.1.9.tgz"
-  integrity sha512-mzvk61WOX4MEsYHMKCXEVwuz/zM84x/WrCbaCQw71hyNN0fmWXvV673uOQy2idgIA+yqDsjtkV5KPfAFWuQylg==
   dependencies:
     "@babel/runtime" "^7.14.8"
     compute-scroll-into-view "^1.0.17"
@@ -8533,15 +8516,15 @@ react-error-overlay@^6.0.11:
   resolved "https://registry.npmjs.org/react-error-overlay/-/react-error-overlay-6.0.11.tgz"
   integrity sha512-/6UZ2qgEyH2aqzYZgQPxEnz33NJ2gNsnHA2o5+o4wW9bLM/JYQitNP9xPhsXwC08hMMovfGe/8retsdDsczPRg==
 
-react-fast-compare@3.2.0, react-fast-compare@^3.0.1, react-fast-compare@^3.2.0:
-  version "3.2.0"
-  resolved "https://registry.npmjs.org/react-fast-compare/-/react-fast-compare-3.2.0.tgz"
-  integrity sha512-rtGImPZ0YyLrscKI9xTpV8psd6I8VAtjKCzQDlzyDvqJA8XOW78TXYQwNRNd8g8JZnDu8q9Fu/1v4HPAVwVdHA==
-
 react-fast-compare@^2.0.1:
   version "2.0.4"
   resolved "https://registry.npmjs.org/react-fast-compare/-/react-fast-compare-2.0.4.tgz"
   integrity sha512-suNP+J1VU1MWFKcyt7RtjiSWUjvidmQSlqu+eHslq+342xCbGTYmC0mEhPCOHxlW0CywylOC1u2DFAT+bv4dBw==
+
+react-fast-compare@^3.0.1, react-fast-compare@^3.2.0:
+  version "3.2.0"
+  resolved "https://registry.npmjs.org/react-fast-compare/-/react-fast-compare-3.2.0.tgz"
+  integrity sha512-rtGImPZ0YyLrscKI9xTpV8psd6I8VAtjKCzQDlzyDvqJA8XOW78TXYQwNRNd8g8JZnDu8q9Fu/1v4HPAVwVdHA==
 
 react-flow-renderer@10.3.17:
   version "10.3.17"
