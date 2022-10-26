@@ -23,7 +23,7 @@ export const Handles: FC<IHandles> = (props: IHandles) => {
             .filter((param) => (filterParameters ? param.type !== 'env_secret' && param.type !== 'volume' : true))
             .map((parameter) => (
               <Tooltip
-                key={`p-${parameter.name}`}
+                key={`p-${type}-${parameter.name}`}
                 title={`${type}: ${parameter.name} | type: ${parameter.type}`}
                 style={{ fontSize: '1rem' }}
               >

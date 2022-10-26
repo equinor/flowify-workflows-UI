@@ -7,4 +7,7 @@ export const StyledParameterWrapper = styled(Stack)`
   p {
     color: ${({ theme }) => theme?.defaults?.color};
   }
+  svg {
+    fill: ${({ theme }) => theme?.defaults?.iconColor};
+  }
 `;

@@ -46,7 +46,7 @@ export const DraggableList: FC<DraggableListProps> = (props: DraggableListProps)
             <div {...provided.droppableProps} ref={provided.innerRef} style={getListStyle(snapshot.isDraggingOver)}>
               {list?.map((item, index) => (
                 <Draggable
-                  key={`draggable_item_${id}_${nanoid(4)}`}
+                  key={`draggable_item_${id}_${props.useIndex ? index : nanoid(4)}`}
                   draggableId={`draggable_item_${id}_${index}`}
                   index={index}
                 >
@@ -82,4 +82,5 @@ export const DraggableList: FC<DraggableListProps> = (props: DraggableListProps)
 
 DraggableList.defaultProps = {
   addButtonLabel: 'Add item',
+  useIndex: false,
 };

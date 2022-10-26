@@ -1,4 +1,5 @@
 import { Node } from 'react-flow-renderer/nocss';
+import { isNotEmptyArray } from '../../../common';
 import { Component, Graph } from '../../../models/v2';
 
 export interface ICustomConnection {
@@ -64,6 +65,7 @@ export function removeConnection(removedObject: ICustomConnection, component: Co
 
 export function removeTaskNode(removedElement: Node, component: Component): Component {
   const { nodes, edges, inputMappings, outputMappings } = component.implementation as Graph;
+  const { inputs } = component;
   if (!nodes) {
     return component;
   }
@@ -72,20 +74,27 @@ export function removeTaskNode(removedElement: Node, component: Component): Comp
     throw new Error('Could not find deleted node in component object');
   }
   nodes.splice(nodeIndex, 1);
+  // Remove inputMappings that point to node
   if (Array.isArray(inputMappings) && inputMappings.length > 0) {
     (component.implementation as Graph).inputMappings = inputMappings.filter(
       (inputMapping) => inputMapping.target.node !== removedElement.id,
     );
   }
+  // Remove outputMappings that point to node
   if (Array.isArray(outputMappings) && outputMappings.length > 0) {
     (component.implementation as Graph).outputMappings = outputMappings.filter(
       (outputMapping) => outputMapping.source.node !== removedElement.id,
     );
   }
+  // Remove edges that point to node
   if (Array.isArray(edges) && edges.length > 0) {
     (component.implementation as Graph).edges = edges.filter(
       (edge) => edge.source.node !== removedElement.id && edge.target.node !== removedElement.id,
     );
+  }
+  // Remove automatically created secret and volume inputs that belong to node
+  if (isNotEmptyArray(inputs)) {
+    component.inputs = inputs?.filter((input) => !input?.name?.includes(removedElement.id));
   }
   return component;
 }

@@ -14,4 +14,8 @@ export interface DraggableListProps {
   customDragEnd?: (indexA: number, indexB: number) => void;
   // Pass customRemove function to handle drag end functionality instead of component calling onChange props with updated list.
   customRemove?: (index: number) => void;
+  /**
+   * Certian use-cases the cacheing and rendering that react and react-dnd is doing is actively working against us because we rerender the UI when the workflow or component object changes to maintain consistency. Using a nanoid in the key forces it to rerender properly with updated context, but for use-cases like formik, this won't work. So we give options to either use the index (formik) or nanoid (args, results, commands)
+   */
+  useIndex?: boolean;
 }

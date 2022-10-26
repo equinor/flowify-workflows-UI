@@ -1,12 +1,12 @@
 import React, { FC, useState } from 'react';
 import { Icon, Typography } from '@equinor/eds-core-react';
-import { Stack } from '@mui/material';
+import { Dialog, Stack } from '@mui/material';
 import { isNotEmptyArray } from '../../../common';
 import { nanoid } from '../helpers';
 import { EditorHeader } from '../components';
 import { Component, Workflow } from '../../../models/v2';
 import { Parameter } from '.';
-import { MultiToggle, ToggleButton, Button, Chip, Message } from '../../ui';
+import { MultiToggle, ToggleButton, Button, Chip, Message, DialogWrapper } from '../../ui';
 import { BaseInput } from '../../form';
 import { StyledTextButton } from './document-editor/styles';
 
@@ -20,9 +20,12 @@ interface SidebarProps {
   isLatest?: boolean;
 }
 
+type ImplementationTypes = 'any' | 'brick' | 'graph';
+
 export const Sidebar: FC<SidebarProps> = (props: SidebarProps) => {
   const { component, setComponent, workspace, setDocument, document, secrets } = props;
   const [editName, setEditName] = useState<boolean>(false);
+  const [confirmTypeChange, setConfirmTypeChange] = useState<ImplementationTypes | undefined>(undefined);
 
   console.log('sidebar render');
 
@@ -48,25 +51,21 @@ export const Sidebar: FC<SidebarProps> = (props: SidebarProps) => {
     }));
   }
 
-  function setImplementationType(type: 'any' | 'brick' | 'graph') {
-    if (type === 'brick') {
-      setComponent((prev: Component) => ({
-        ...prev,
-        implementation: {
-          ...prev.implementation,
-          type,
-          container: {},
-        },
-      }));
-      return;
-    }
+  function setImplementationType(type: 'any' | 'brick' | 'graph' | undefined) {
+    const implementation = type === 'brick' ? { type, container: {} } : { type };
+    setConfirmTypeChange(undefined);
     setComponent((prev: Component) => ({
       ...prev,
-      implementation: {
-        ...prev.implementation,
-        type,
-      },
+      implementation,
     }));
+  }
+
+  function onTypeChange(type: 'any' | 'brick' | 'graph') {
+    if (component?.implementation?.type === 'brick' || component?.implementation?.type === 'graph') {
+      setConfirmTypeChange(type);
+      return;
+    }
+    setImplementationType(type);
   }
 
   function updateName(event: any) {
@@ -80,6 +79,22 @@ export const Sidebar: FC<SidebarProps> = (props: SidebarProps) => {
 
   return (
     <Stack spacing={2} sx={{ padding: '1rem', position: 'relative', width: '100%' }}>
+      <Dialog open={confirmTypeChange !== undefined} onClose={() => setConfirmTypeChange(undefined)}>
+        <DialogWrapper padding={2} spacing={2}>
+          <Typography variant="body_short">
+            Are you sure you want to change implementation type?{' '}
+            {component?.implementation?.type === 'brick'
+              ? 'This will delete any values you have entered to the container, commands, args and results.'
+              : 'This will delete any items you have added to your graph and their connections.'}
+          </Typography>
+          <Stack direction="row" spacing={2} justifyContent="flex-end">
+            <Button theme="simple" onClick={() => setConfirmTypeChange(undefined)}>
+              Cancel
+            </Button>
+            <Button onClick={() => setImplementationType(confirmTypeChange)}>Confirm</Button>
+          </Stack>
+        </DialogWrapper>
+      </Dialog>
       <EditorHeader
         type={document?.type === 'component' ? 'Component' : 'Workflow'}
         workspace={workspace}
@@ -103,21 +118,15 @@ export const Sidebar: FC<SidebarProps> = (props: SidebarProps) => {
       </Stack>
       <Stack spacing={1}>
         <MultiToggle label="Implementation type" labelVariant="h5">
-          <ToggleButton active={component?.implementation?.type === 'any'} onClick={() => setImplementationType('any')}>
+          <ToggleButton active={component?.implementation?.type === 'any'} onClick={() => onTypeChange('any')}>
             Any
           </ToggleButton>
           {document?.type === 'component' ? (
-            <ToggleButton
-              active={component?.implementation?.type === 'brick'}
-              onClick={() => setImplementationType('brick')}
-            >
+            <ToggleButton active={component?.implementation?.type === 'brick'} onClick={() => onTypeChange('brick')}>
               Brick
             </ToggleButton>
           ) : null}
-          <ToggleButton
-            active={component?.implementation?.type === 'graph'}
-            onClick={() => setImplementationType('graph')}
-          >
+          <ToggleButton active={component?.implementation?.type === 'graph'} onClick={() => onTypeChange('graph')}>
             Graph
           </ToggleButton>
         </MultiToggle>

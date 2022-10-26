@@ -27,6 +27,7 @@ export const TextListFormik: FC<TextListFormikProps> = (props: TextListFormikPro
           list={Array.isArray((values as any)?.value) ? (values as any)?.value : []}
           addItem={() => arrayHelpers.insert((values as any)?.value?.length, '')}
           child={(item, index) => <TextInputFormik style={{ flexGrow: '1' }} name={`${name}[${index}]`} />}
+          useIndex
         />
       )}
     />
