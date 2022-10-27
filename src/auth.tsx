@@ -49,7 +49,7 @@ export function WorkspaceAuth(props: { children: React.ReactNode }) {
     );
   }
   // Does user have access to workspace
-  if (!workspace.hasAccess) {
+  if (workspace.roles && workspace?.roles?.length === 0) {
     return (
       <Layout>
         <Container withMargins>You do not have access to the {workspaceName} workspace.</Container>

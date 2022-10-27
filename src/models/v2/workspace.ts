@@ -11,8 +11,8 @@ export interface Role {
  */
 export interface Workspace {
   name: string;
-  hasAccess: boolean;
-  missingRoles: Role[][];
+  roles: string[];
+  description?: string;
 }
 
 /**

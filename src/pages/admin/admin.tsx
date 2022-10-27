@@ -11,6 +11,7 @@ import { VolumeEditor } from '../../components/editors/volume/volume-editor';
 import { Feedback, Feedbacks } from '../../components/editors/components';
 import { SecretEditor } from '../../components/editors/secret-editor/secret-editor';
 import { Select } from '../../components/form';
+import { isNotEmptyArray } from '../../common';
 
 function CREATE_VOLUME_TEMPLATE(workspace: string) {
   return {
@@ -104,7 +105,7 @@ export const AdminPage: React.FC = (): React.ReactElement => {
 
   const workspaceOptions =
     workspaces
-      ?.filter((workspace) => workspace.hasAccess)
+      ?.filter((workspace) => isNotEmptyArray(workspace.roles) && workspace?.roles?.includes('admin'))
       .map((workspace) => ({ label: workspace.name, value: workspace.name })) || [];
 
   return (
