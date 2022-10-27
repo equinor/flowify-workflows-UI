@@ -3,6 +3,7 @@ import { Icon, Progress } from '@equinor/eds-core-react';
 import { services } from '../../services';
 import { Workspace } from '../../models/v2';
 import { DashboardListing } from '../listings/dashboard-listing';
+import { isNotEmptyArray } from '../../common';
 
 interface IWorkspacesListing {}
 
@@ -13,7 +14,7 @@ const WorkspacesListing: FC<IWorkspacesListing> = (props: IWorkspacesListing) =>
   useEffect(() => {
     function createWorkspacesLinkList(items: Workspace[]) {
       const list = items
-        .filter((item) => item.hasAccess)
+        .filter((item) => isNotEmptyArray(item?.roles))
         .map((item) => ({ title: item.name, url: `/workspace/${item.name}` }));
       return list;
     }
