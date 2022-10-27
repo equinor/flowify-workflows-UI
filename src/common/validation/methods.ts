@@ -13,12 +13,16 @@ export function noWhitespace(value: string | undefined) {
   return value ? !value.includes(' ') : true;
 }
 
-export function checkConnections(component: Component | undefined, subcomponents: Component[]) {
+export async function checkConnections(
+  component: Component | undefined,
+  subcomponents: Component[],
+): Promise<string[]> {
   const { implementation } = component || {};
   if (implementation?.type !== 'graph') {
-    return true;
+    return [];
   }
   const { inputMappings, edges, nodes } = implementation as Graph;
+  const warnings: string[] = [];
   nodes?.forEach((node) => {
     const subcomponent = getComponentFromRef(node?.node, subcomponents);
     subcomponent?.inputs?.forEach((input) => {
@@ -29,7 +33,9 @@ export function checkConnections(component: Component | undefined, subcomponents
       const hasEdge = edges?.some((edge) => edge?.target?.node === node?.id && edge?.target?.port === name);
       if (!hasMapping && !hasEdge) {
         console.log(`Input parameter for ${subcomponent?.name} with name ${name} does not have a valid connection`);
+        warnings.push(`Graph component with name ${subcomponent?.name} is missing a valid connection to port ${name}`);
       }
     });
   });
+  return warnings;
 }

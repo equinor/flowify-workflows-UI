@@ -23,7 +23,6 @@ import { IfConfig } from '../components/functional-components/if/if-config';
 import { isNotEmptyArray } from '../../../common';
 import { checkWorkflowValidation } from '../../../common/validation/workflow-validation';
 import { IFunctionalCompConfig, IParameterConfig } from '../types';
-import { checkConnections } from '../../../common/validation/methods';
 
 interface IWorkflowEditor {
   uid: string | null;
@@ -288,10 +287,6 @@ const WorkflowEditor: FC<IWorkflowEditor> = (props: IWorkflowEditor) => {
 
   if (!workflow) {
     return null;
-  }
-
-  function checkJobRunValidation() {
-    checkConnections(component, subcomponents || []);
   }
 
   return (

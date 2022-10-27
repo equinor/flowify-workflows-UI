@@ -6,9 +6,11 @@ import { Parameter } from '../editors/components';
 import { services } from '../../services';
 import { useParams, useNavigate } from 'react-router-dom';
 import { isNotEmptyArray } from '../../common';
-import { Button, DialogWrapper, Stack } from '../ui';
+import { Button, DialogWrapper, Message, Stack } from '../ui';
 import { BaseInput } from '../form';
 import { ButtonProps } from '../ui/button/types';
+import { fetchInitialSubComponents } from '../editors/helpers';
+import { checkConnections } from '../../common/validation/methods';
 
 interface RunWorkflowProps {
   // Pass the entire workflow object or a string (uid)
@@ -24,6 +26,7 @@ export const RunWorkflow: FC<RunWorkflowProps> = (props: RunWorkflowProps) => {
   const [component, setComponent] = useState<Component>();
   const [description, setDescription] = useState<string>('');
   const [volumes, setVolumes] = useState<IVolume[]>([]);
+  const [workflowWarning, setWorkflowWarnings] = useState<string[]>();
 
   const { workspace } = useParams();
   const navigate = useNavigate();
@@ -48,6 +51,7 @@ export const RunWorkflow: FC<RunWorkflowProps> = (props: RunWorkflowProps) => {
       }
       setVolumes(usedVolumes);
     }
+
     /**
      * If the workflow is only passed as a string (uid) we need to fetch it first to get the entire workflow object. (used in listings where you only have the workflow metadata and not the whole workflow object)
      */
@@ -56,12 +60,20 @@ export const RunWorkflow: FC<RunWorkflowProps> = (props: RunWorkflowProps) => {
         getVolumes(res);
         setWorkflow(res);
         setComponent(res.component);
+        fetchInitialSubComponents(res.component).then((components) => {
+          checkConnections(res.component, components || []).then((warnings) => setWorkflowWarnings(warnings));
+        });
       });
       return;
     }
     getVolumes(props.workflow);
     setWorkflow(props.workflow as Workflow);
     setComponent(props.workflow?.component);
+    fetchInitialSubComponents(props?.workflow?.component).then((components) => {
+      checkConnections((props?.workflow as Workflow)?.component, components || []).then((warnings) =>
+        setWorkflowWarnings(warnings),
+      );
+    });
   }, [props.workflow, workspace, modalOpen]);
 
   useEffect(() => {
@@ -123,7 +135,7 @@ export const RunWorkflow: FC<RunWorkflowProps> = (props: RunWorkflowProps) => {
       <Button {...buttonProps} onClick={() => setModalOpen(true)} />
       <Dialog open={modalOpen} onClose={() => setModalOpen(false)} fullWidth maxWidth="md">
         <DialogWrapper padding={2}>
-          <Stack spacing={4}>
+          <Stack spacing={2}>
             <Stack spacing={1}>
               <Typography variant="h5">Input values</Typography>
               {workflow?.component?.inputs?.map((input, index) => (
@@ -151,10 +163,23 @@ export const RunWorkflow: FC<RunWorkflowProps> = (props: RunWorkflowProps) => {
               rows={3}
             />
 
-            <Button theme="create" disabled={!workflow} style={{ alignSelf: 'flex-end' }} onClick={onRun}>
-              <Icon name="launch" style={{ marginRight: '0.75rem' }} />
-              Run workflow
-            </Button>
+            {isNotEmptyArray(workflowWarning) && (
+              <Message theme="warning" icon="warning_outlined">
+                <div>
+                  <Typography variant="h5">Workflow warnings</Typography>
+                  {workflowWarning?.map((warning) => (
+                    <span>- {warning}</span>
+                  ))}
+                </div>
+              </Message>
+            )}
+            <Stack direction="row" spacing={2} justifyContent="flex-end">
+              <Button onClick={() => setModalOpen(false)}>Cancel</Button>
+              <Button theme="create" disabled={!workflow} onClick={onRun}>
+                <Icon name="launch" style={{ marginRight: '0.75rem' }} />
+                Run workflow
+              </Button>
+            </Stack>
           </Stack>
         </DialogWrapper>
       </Dialog>

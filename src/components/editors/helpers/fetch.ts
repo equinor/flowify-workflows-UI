@@ -19,7 +19,7 @@ async function referenceHandler(node: Component | CRef | string) {
  * @param component Component model
  * @returns Promise<Component[]>
  */
-export async function fetchInitialSubComponents(component: Component): Promise<Component[]> {
+export async function fetchInitialSubComponents(component: Component | undefined): Promise<Component[]> {
   if (component) {
     const subs: Component[] = [];
     const { nodes } = component.implementation as Graph;
