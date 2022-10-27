@@ -91,7 +91,7 @@ export const GraphSchema = Yup.object({
   edges: EdgeSchema,
   nodes: Yup.array().of(
     Yup.object({
-      id: Yup.string().required().startsWithLetter(),
+      id: Yup.string().required(),
     }),
   ),
 });
