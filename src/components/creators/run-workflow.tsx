@@ -168,7 +168,9 @@ export const RunWorkflow: FC<RunWorkflowProps> = (props: RunWorkflowProps) => {
                 <div>
                   <Typography variant="h5">Workflow warnings</Typography>
                   {workflowWarning?.map((warning) => (
-                    <span>- {warning}</span>
+                    <Typography key={warning} variant="body_short">
+                      - {warning}
+                    </Typography>
                   ))}
                 </div>
               </Message>
