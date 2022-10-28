@@ -48,7 +48,6 @@ export const Marketplace: FC<MarketplaceProps> = (props: MarketplaceProps) => {
         const dateObjects = values.date.split('_');
         // @ts-expect-error
         const date = moment().subtract(dateObjects[0]!, dateObjects[1]!).utc().format();
-        console.log(date);
         filters.push({ name: 'timestamp', type: 'MORETHAN', value: date });
       }
       if (search !== '') {

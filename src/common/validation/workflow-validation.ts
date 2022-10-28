@@ -39,6 +39,5 @@ export async function checkWorkflowValidation(
       return { path: error.path, message: error.message, value: error.value, type: error.type, params: error.params };
     }, {});
   });
-  console.log(errors);
   return errors;
 }

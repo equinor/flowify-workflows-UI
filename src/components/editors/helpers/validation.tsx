@@ -21,7 +21,6 @@ export async function checkValidation(
   component: Component,
   subcomponents?: Component[],
 ): Promise<boolean[]> {
-  console.log(params);
   const { source, sourceHandle, target, targetHandle } = params;
   const { inputs, outputs } = component!;
   const isBaseInput = sourceHandle?.slice(0, 1) === 'i';

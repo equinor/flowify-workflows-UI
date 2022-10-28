@@ -183,7 +183,6 @@ export function updateTaskNodePostion(component: Component, node: Node) {
   const nodePlacement = (component?.implementation as Graph).nodes?.findIndex((comp) => comp.id === node.id);
   if (nodePlacement !== -1 && nodePlacement !== undefined) {
     if ((component?.implementation as Graph)?.nodes?.[nodePlacement]) {
-      console.log('is ndoe');
       if (!(component.implementation as Graph).nodes?.[nodePlacement].userdata) {
         (component.implementation as Graph).nodes![nodePlacement].userdata = {};
       }

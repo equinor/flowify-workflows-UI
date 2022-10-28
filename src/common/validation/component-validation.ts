@@ -27,7 +27,6 @@ export async function checkComponentValidation(component: Component | undefined,
   });
 
   const errors = await ComponentValidationSchema.validate(component, { abortEarly: false }).catch((error) => {
-    console.log(error.inner);
     return error.inner.map((error: any) => {
       return { path: error.path, message: error.message, value: error.value, type: error.type, params: error.params };
     }, {});

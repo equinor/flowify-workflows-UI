@@ -112,7 +112,6 @@ export const GraphEditor: React.FC<IGraphEditor> = (props: IGraphEditor) => {
   };
 
   async function onConnect(params: Edge<any> | Connection) {
-    console.log('onConnect called');
     const [isValidConnection, isBaseInput, isBaseOutput] = await checkValidation(
       params,
       component!,

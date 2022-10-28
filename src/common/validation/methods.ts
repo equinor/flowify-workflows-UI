@@ -32,7 +32,6 @@ export async function checkConnections(
       );
       const hasEdge = edges?.some((edge) => edge?.target?.node === node?.id && edge?.target?.port === name);
       if (!hasMapping && !hasEdge) {
-        console.log(`Input parameter for ${subcomponent?.name} with name ${name} does not have a valid connection`);
         warnings.push(`Graph component with name ${subcomponent?.name} is missing a valid connection to port ${name}`);
       }
     });

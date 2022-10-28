@@ -190,7 +190,6 @@ const Editor: React.FC<IEditor> = (props: IEditor) => {
       services.components
         .publish(component, component.uid!)
         .then((res) => {
-          console.log(res);
           setLoading(false);
           // TODO: Reroute to new component
         })
