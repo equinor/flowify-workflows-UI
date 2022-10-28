@@ -86,9 +86,9 @@ const WorkflowEditor: FC<IWorkflowEditor> = (props: IWorkflowEditor) => {
    * @updates jobs state
    */
   const fetchJobs = useCallback(
-    (pagination: IPagination | undefined) => {
+    (pagination: IPagination | undefined, filters: IFilter[] | undefined) => {
       const jobsFilter: IFilter[] = [{ name: 'workflow.uid', value: uid || '', type: 'EQUALTO' }];
-      services.jobs.list(jobsFilter, pagination, 'sort=-timestamp').then((res) => setJobs(res));
+      services.jobs.list(filters || jobsFilter, pagination, 'sort=-timestamp').then((res) => setJobs(res));
     },
     [uid],
   );
@@ -154,7 +154,7 @@ const WorkflowEditor: FC<IWorkflowEditor> = (props: IWorkflowEditor) => {
     // Fetch latest versions of workflow
     fetchWorkflowVersions(undefined, undefined, undefined);
     // Fetch jobs
-    fetchJobs(undefined);
+    fetchJobs(undefined, undefined);
   }, [workspace, uid, version, fetchWorkflowVersions, fetchJobs]);
 
   /**
