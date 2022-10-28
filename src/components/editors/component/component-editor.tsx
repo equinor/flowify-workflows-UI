@@ -17,7 +17,7 @@ import {
   IValidationError,
 } from '../components';
 import { createGraphElements, fetchInitialSubComponents, INode } from '../helpers';
-import { checkComponentValidtion, isNotEmptyArray } from '../../../common';
+import { checkComponentValidation, isNotEmptyArray } from '../../../common';
 
 interface IEditor {
   uid: string | null;
@@ -128,7 +128,7 @@ const Editor: React.FC<IEditor> = (props: IEditor) => {
    * @returns Promise<boolean>
    */
   async function onValidate(passedComponent?: Component): Promise<boolean> {
-    const validationErrors = await checkComponentValidtion(passedComponent || component, initialComponent);
+    const validationErrors = await checkComponentValidation(passedComponent || component, initialComponent);
     setValidationErrors(validationErrors);
     if (isNotEmptyArray(validationErrors)) {
       return true;
@@ -190,7 +190,6 @@ const Editor: React.FC<IEditor> = (props: IEditor) => {
       services.components
         .publish(component, component.uid!)
         .then((res) => {
-          console.log(res);
           setLoading(false);
           // TODO: Reroute to new component
         })

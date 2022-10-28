@@ -4,6 +4,7 @@ import { MessageTheme } from './types';
 
 export const StyledMessage = styled(Stack)<{ messageTheme: MessageTheme }>`
   background-color: ${(props) => props?.theme?.message?.background?.[props.messageTheme]};
+  color: ${({ theme }) => theme?.defaults?.color};
   svg {
     fill: ${(props) => props?.theme?.message?.icon?.[props.messageTheme]}!important;
   }

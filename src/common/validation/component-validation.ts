@@ -2,8 +2,8 @@ import * as Yup from 'yup';
 import { Component } from '../../models/v2';
 import { AnySchema, BrickSchema, DataSchema, GraphSchema } from './schemas';
 
-export async function checkComponentValidtion(component: Component | undefined, previous: Component | undefined) {
-  const ComponentValidtionSchema = Yup.object({
+export async function checkComponentValidation(component: Component | undefined, previous: Component | undefined) {
+  const ComponentValidationSchema = Yup.object({
     name: Yup.string().required('Component name is required'),
     uid: Yup.string().required().oneOf([previous?.uid]),
     timestamp: Yup.string().required().oneOf([previous?.timestamp]),
@@ -26,8 +26,7 @@ export async function checkComponentValidtion(component: Component | undefined, 
     outputs: DataSchema('component'),
   });
 
-  const errors = await ComponentValidtionSchema.validate(component, { abortEarly: false }).catch((error) => {
-    console.log(error.inner);
+  const errors = await ComponentValidationSchema.validate(component, { abortEarly: false }).catch((error) => {
     return error.inner.map((error: any) => {
       return { path: error.path, message: error.message, value: error.value, type: error.type, params: error.params };
     }, {});

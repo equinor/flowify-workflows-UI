@@ -26,7 +26,6 @@ export const JobViewer: FC<JobViewerProps> = (props: JobViewerProps) => {
   const [useManifest, setUseManifest] = useState<boolean>(false);
   const [selectedNodeId, setSelectedNodeId] = useState<string | undefined>(undefined);
   const navigate = useNavigate();
-  console.log(jobWatch);
 
   function onTerminate() {
     services.jobs

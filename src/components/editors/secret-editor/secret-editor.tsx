@@ -27,7 +27,6 @@ export const SecretEditor: FC<SecretEditorProps> = (props: SecretEditorProps) =>
     if (secret && !submitting) {
       // Check if no change has happened to the secret
       if (props.secret === secret || !secret.key || !secret.value) {
-        console.log('no change');
         onClose();
         return;
       }

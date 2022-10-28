@@ -220,7 +220,6 @@ const WorkflowEditor: FC<IWorkflowEditor> = (props: IWorkflowEditor) => {
           setMounted(false);
           setFeedback({ message: 'Workflow was successfully updated', type: 'success' });
           setLoading(false);
-          setDirty(false);
         })
         .catch((error) => {
           console.error(error);

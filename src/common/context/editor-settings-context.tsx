@@ -26,7 +26,6 @@ export const EditorSettingsProvider = (props: { children: React.ReactNode }) => 
 
   function updateSettings(settings: IEditorSettings) {
     setSettings(settings);
-    console.log(settings);
     localStorage?.setItem('flowify-usersettings', JSON.stringify(settings));
   }
 

@@ -35,11 +35,9 @@ export async function checkWorkflowValidation(
   });
 
   const errors = await WorkflowValidationSchema.validate(workflow, { abortEarly: false }).catch((error) => {
-    console.log(error.inner);
     return error.inner.map((error: any) => {
       return { path: error.path, message: error.message, value: error.value, type: error.type, params: error.params };
     }, {});
   });
-  console.log(errors);
   return errors;
 }
