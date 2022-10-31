@@ -1,6 +1,6 @@
 import React, { FC, useEffect, useState } from 'react';
 import { Button, Icon, Typography } from '@equinor/eds-core-react';
-import { Dialog, Grid, Stack } from '@mui/material';
+import { Dialog, Grid } from '@mui/material';
 import { Component, Edge, Graph, Node } from '../../../../../models/v2';
 import { Parameter } from '../../parameter/parameter';
 import { IfGraph } from './if-graph';
@@ -8,7 +8,7 @@ import { nanoid } from '../../../helpers';
 import { isNotEmptyArray } from '../../../../../common';
 import { Expression } from './expression';
 import { ComponentsHandler } from './components-handler';
-import { DialogWrapper } from '../../../../ui';
+import { DialogWrapper, Stack } from '../../../../ui';
 
 interface IfConfigProps {
   open: boolean;
@@ -109,7 +109,7 @@ export const IfConfig: FC<IfConfigProps> = (props: IfConfigProps) => {
         <Expression ifComponent={ifComponent} setIfComponent={setIfComponent} />
         <Grid container style={{ height: '100%' }}>
           <Grid item xs={3}>
-            <Stack padding="2rem" spacing={4}>
+            <Stack padding={2} spacing={2}>
               <ComponentsHandler
                 ifComponent={ifComponent}
                 setIfComponent={setIfComponent}
@@ -117,7 +117,7 @@ export const IfConfig: FC<IfConfigProps> = (props: IfConfigProps) => {
                 setSubcomponents={props.setSubcomponents}
                 subcomponents={subcomponents}
               />
-              <Stack sx={{ flexGrow: '1' }} spacing={2}>
+              <Stack style={{ flexGrow: '1' }} spacing={1}>
                 <Typography variant="h5">Inputs</Typography>
                 {ifComponent?.inputs?.map((input, index) => (
                   <Parameter

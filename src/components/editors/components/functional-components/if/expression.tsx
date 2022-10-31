@@ -1,8 +1,7 @@
 import React, { FC, useState } from 'react';
-import { Stack } from '@mui/material';
 import { Typography } from '@equinor/eds-core-react';
 import { Component, Conditional } from '../../../../../models/v2';
-import { MultiToggle, ToggleButton } from '../../../../ui';
+import { MultiToggle, ToggleButton, Stack } from '../../../../ui';
 import { BaseInput, Select } from '../../../../form';
 
 interface ExpressionProps {
@@ -77,10 +76,10 @@ export const Expression: FC<ExpressionProps> = (props: ExpressionProps) => {
   }
 
   return (
-    <Stack padding="2rem" spacing={1}>
+    <Stack padding={1} spacing={0.5}>
       <Typography variant="h5">Expression</Typography>
-      <Stack direction="row" spacing={6}>
-        <Stack direction="row" spacing={2}>
+      <Stack direction="row" spacing={3}>
+        <Stack direction="row" spacing={1.5}>
           <MultiToggle label="Left expression">
             <ToggleButton onClick={() => changeType('left', 'input')} active={leftType === 'input'}>
               Select input
@@ -116,7 +115,7 @@ export const Expression: FC<ExpressionProps> = (props: ExpressionProps) => {
           value={operator || ''}
           onChange={(item) => onValueChange(item, 'operator')}
         />
-        <Stack direction="row" spacing={2}>
+        <Stack direction="row" spacing={1}>
           <MultiToggle label="Right expression">
             <ToggleButton onClick={() => changeType('right', 'input')} active={rightType === 'input'}>
               Select input

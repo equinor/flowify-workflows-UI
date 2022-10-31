@@ -1,10 +1,10 @@
 import React, { FC, useState } from 'react';
 import { Typography } from '@equinor/eds-core-react';
-import { Dialog, Stack } from '@mui/material';
+import { Dialog } from '@mui/material';
 import { services } from '../../../../../services';
 import { Component, Conditional } from '../../../../../models/v2';
 import { MarketplaceModal } from '../..';
-import { Button } from '../../../../ui';
+import { Button, Stack } from '../../../../ui';
 
 interface ComponentsHandlerProps {
   ifComponent: Component | undefined;
@@ -75,7 +75,7 @@ export const ComponentsHandler: FC<ComponentsHandlerProps> = (props: ComponentsH
   return (
     <>
       <Dialog open={selectComponent !== undefined}></Dialog>
-      <Stack sx={{ flexGrow: '1' }} spacing={2}>
+      <Stack style={{ flexGrow: '1' }} spacing={1}>
         <Typography variant="h5">True component</Typography>
         {nodeTrue ? (
           <Stack spacing={2}>
@@ -88,7 +88,7 @@ export const ComponentsHandler: FC<ComponentsHandlerProps> = (props: ComponentsH
           <Button onClick={() => setOpenMarketplace('trueNode')}>Add true component</Button>
         )}
       </Stack>
-      <Stack sx={{ flexGrow: '1' }} spacing={2}>
+      <Stack style={{ flexGrow: '1' }} spacing={1}>
         <Typography variant="h5">False component</Typography>
         {nodeFalse ? (
           <Stack spacing={2}>
