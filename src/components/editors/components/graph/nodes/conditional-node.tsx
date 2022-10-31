@@ -1,12 +1,12 @@
 import React, { memo, useState } from 'react';
 import { Button, Chip, Icon, Typography } from '@equinor/eds-core-react';
-import { Stack } from '@mui/material';
 import { NodeProps } from 'react-flow-renderer/nocss';
 import { DragIndicator as DragIcon } from '@mui/icons-material';
 import { INode } from '../../../helpers/helpers';
 import { Handles } from '..';
 import { NodePreview } from '../..';
 import { Conditional } from '../../../../../models/v2';
+import { Stack } from '../../../../ui';
 
 interface IConditionalNode extends NodeProps<INode> {}
 

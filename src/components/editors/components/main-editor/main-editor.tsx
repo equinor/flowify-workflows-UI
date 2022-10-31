@@ -1,9 +1,10 @@
 import React, { FC, useState } from 'react';
-import { Grid, Stack } from '@mui/material';
+import { Grid } from '@mui/material';
 import { Component, Workflow } from '../../../../models/v2';
 import { EditorCentralBar, Sidebar, Brick, GraphEditor } from '..';
 import { ManifestEditor } from '../../manifest-editor/manifest-editor';
 import { MainEditorProps } from './types';
+import { Stack } from '../../../ui';
 
 export const MainEditor: FC<MainEditorProps> = (props: MainEditorProps) => {
   const { component, document, setComponent, setDocument, secrets, subcomponents, setSubcomponents, setDirty } = props;
@@ -22,7 +23,7 @@ export const MainEditor: FC<MainEditorProps> = (props: MainEditorProps) => {
   return (
     <Grid container sx={{ flexGrow: '1', minHeight: '0', flexWrap: 'nowrap' }}>
       <Grid item xs={3} sx={{ flexGrow: '1', overflowY: 'auto', minHeight: '0' }}>
-        <Stack direction="row" sx={{ height: '100%' }}>
+        <Stack direction="row" style={{ height: '100%' }}>
           <Sidebar
             component={component}
             secrets={secrets}
@@ -36,10 +37,10 @@ export const MainEditor: FC<MainEditorProps> = (props: MainEditorProps) => {
       <Grid item xs={9} sx={{ flexGrow: '1', minHeight: '0', flexWrap: 'nowrap' }}>
         <Stack
           direction="row"
-          sx={{ flexGrow: '1', minHeight: '0', flexWrap: 'nowrap', height: '100%', width: '100%' }}
+          style={{ flexGrow: '1', minHeight: '0', flexWrap: 'nowrap', height: '100%', width: '100%' }}
         >
           <EditorCentralBar setUseManifest={setUseManifest} />
-          <Stack sx={{ flexGrow: '1', minHeight: '0', flexWrap: 'nowrap', height: '100%', width: '100%' }}>
+          <Stack style={{ flexGrow: '1', minHeight: '0', flexWrap: 'nowrap', height: '100%', width: '100%' }}>
             {useManifest ? (
               <ManifestEditor onChange={(doc: Workflow | Component) => onManifestChange(doc)} value={document} />
             ) : component?.implementation?.type === 'graph' ? (

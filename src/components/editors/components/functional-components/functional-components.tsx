@@ -1,7 +1,7 @@
 import React, { FC, useState } from 'react';
-import { Grid, Stack } from '@mui/material';
-import { Button, Icon, Typography } from '@equinor/eds-core-react';
-import { Paper } from '../../../ui';
+import { Grid } from '@mui/material';
+import { Icon, Typography } from '@equinor/eds-core-react';
+import { Paper, Stack, Button } from '../../../ui';
 import { isNotEmptyArray } from '../../../../common';
 import { Graph } from '../../../../models/v2';
 import { generateIf } from './helpers';
@@ -50,18 +50,18 @@ export const FunctionalComponents: FC<FunctionalComponentsProps> = (props: Funct
                   padding={1.5}
                   style={{ height: '100%' }}
                 >
-                  <Stack spacing={2}>
+                  <Stack spacing={1}>
                     <Icon name="formula" size={16} color="#004f55" />
                     <Typography variant="body_short_bold">{component.name}</Typography>
                     <Typography variant="body_short">{component.description}</Typography>
                   </Stack>
                   <Button
                     style={{ flexShrink: '0' }}
-                    variant="ghost_icon"
+                    theme="icon"
                     onClick={() => addFunctions[component.onAdd]()}
-                  >
-                    <Icon name="add" />
-                  </Button>
+                    icon="add"
+                    aria-label={`Add ${component?.name} to graph`}
+                  />
                 </Paper>
               </Grid>
             ))}

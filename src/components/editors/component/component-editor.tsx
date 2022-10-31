@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
-import { Stack } from '@mui/material';
 import { useEdgesState, useNodesState } from 'react-flow-renderer';
 import { Helmet } from 'react-helmet-async';
 import { Component, ComponentListRequest } from '../../../models/v2';
@@ -18,6 +17,7 @@ import {
 } from '../components';
 import { createGraphElements, fetchInitialSubComponents, INode } from '../helpers';
 import { checkComponentValidation, isNotEmptyArray } from '../../../common';
+import { Stack } from '../../ui';
 
 interface IEditor {
   uid: string | null;
@@ -260,7 +260,7 @@ const Editor: React.FC<IEditor> = (props: IEditor) => {
         subcomponents={subcomponents}
         type="component"
       />
-      <Stack direction="row" justifyContent="stretch" sx={{ flexGrow: '1', minHeight: '0', flexWrap: 'nowrap' }}>
+      <Stack direction="row" justifyContent="stretch" style={{ flexGrow: '1', minHeight: '0', flexWrap: 'nowrap' }}>
         <EditorMenu
           active={activePage}
           setActive={setActivePage}

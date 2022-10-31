@@ -1,8 +1,8 @@
 import React, { FC, useEffect, useState } from 'react';
 import { Button, Icon, Typography } from '@equinor/eds-core-react';
-import { Dialog, Grid, Stack } from '@mui/material';
+import { Dialog, Grid } from '@mui/material';
 import { Component, Conditional, Graph } from '../../../../../models/v2';
-import { MultiToggle, Select, TextField, ToggleButton } from '../../../../ui';
+import { MultiToggle, Select, TextField, ToggleButton, Stack } from '../../../../ui';
 import { IfGraph } from './if-graph';
 import { MarketplaceModal, Parameter } from '../..';
 
@@ -124,8 +124,8 @@ export const IfConfig: FC<IfConfigProps> = (props: IfConfigProps) => {
 
   return (
     <Dialog open={open} onClose={onClose} fullWidth maxWidth="lg">
-      <Stack sx={{ height: '90vh' }}>
-        <Stack padding="2rem" spacing={1}>
+      <Stack style={{ height: '90vh' }}>
+        <Stack padding={2} spacing={1}>
           <Typography variant="h5">Expression</Typography>
           <Stack direction="row" spacing={6}>
             <Stack direction="row" spacing={2}>
@@ -164,7 +164,7 @@ export const IfConfig: FC<IfConfigProps> = (props: IfConfigProps) => {
               value={operator || ''}
               onChange={(event: any) => onValueChange(event.target.value, 'operator')}
             />
-            <Stack direction="row" spacing={2}>
+            <Stack direction="row" spacing={1}>
               <MultiToggle label="Right expression">
                 <ToggleButton onClick={() => changeType('right', 'input')} active={rightType === 'input'}>
                   Select input
@@ -197,8 +197,8 @@ export const IfConfig: FC<IfConfigProps> = (props: IfConfigProps) => {
         </Stack>
         <Grid container style={{ height: '100%' }}>
           <Grid item xs={3}>
-            <Stack padding="2rem" spacing={4}>
-              <Stack sx={{ flexGrow: '1' }} spacing={2}>
+            <Stack padding={2} spacing={3}>
+              <Stack style={{ flexGrow: '1' }} spacing={1}>
                 <Typography variant="h5">Inputs</Typography>
                 {ifComponent?.inputs?.map((input, index) => (
                   <Parameter
@@ -214,7 +214,7 @@ export const IfConfig: FC<IfConfigProps> = (props: IfConfigProps) => {
                   Add input
                 </Button>
               </Stack>
-              <Stack sx={{ flexGrow: '1' }} spacing={2}>
+              <Stack style={{ flexGrow: '1' }} spacing={1}>
                 <Typography variant="h5">Outputs</Typography>
                 {ifComponent?.outputs?.map((output, index) => (
                   <Parameter

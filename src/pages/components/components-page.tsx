@@ -1,11 +1,10 @@
 import React from 'react';
 import { useParams } from 'react-router';
 import { Link } from 'react-router-dom';
-import { Stack } from '@mui/material';
-import { Container, Layout } from '../../layout';
-import { Breadcrumbs } from '../../components/ui';
-import { Marketplace } from '../../components';
 import { Helmet } from 'react-helmet-async';
+import { Container, Layout } from '../../layout';
+import { Breadcrumbs, Stack } from '../../components/ui';
+import { Marketplace } from '../../components';
 
 export const ComponentsPage: React.FC = () => {
   const { workspace } = useParams();
@@ -16,7 +15,7 @@ export const ComponentsPage: React.FC = () => {
         <title>Marketplace - Flowify</title>
       </Helmet>
       <Container withMargins>
-        <Stack spacing={4}>
+        <Stack spacing={2}>
           <Breadcrumbs>
             <Link to="/dashboard">Dashboard</Link>
             {workspace && <Link to={`/workspace/${workspace}`}>{workspace}</Link>}

@@ -1,6 +1,5 @@
 import React, { FC, useState } from 'react';
 import { Icon, Typography } from '@equinor/eds-core-react';
-import { Stack } from '@mui/material';
 import { Storage } from '@mui/icons-material';
 import * as yup from 'yup';
 import { Formik, Form } from 'formik';
@@ -9,6 +8,7 @@ import { ParameterWrapper } from './styles';
 import { ParameterProps, TYPE_ICONS } from './types';
 import { updateArgs, updateParameter, updateResults } from './helpers';
 import { ParameterEditor } from './parameter-editor/parameter-editor';
+import { Stack } from '../../../ui';
 
 export const Parameter: FC<ParameterProps> = (props: ParameterProps) => {
   const { index, setComponent, type, onlyEditableValue, editableValue, parameter, names } = props;
@@ -80,7 +80,7 @@ export const Parameter: FC<ParameterProps> = (props: ParameterProps) => {
     <>
       <Stack spacing={0.5}>
         <ParameterWrapper onClick={() => setOpen(true)}>
-          <Stack direction="row" alignItems="center" spacing={2}>
+          <Stack direction="row" alignItems="center" spacing={1}>
             {parameter?.type === 'volume' ? (
               <Storage sx={{ color: '#007079' }} />
             ) : (
@@ -94,7 +94,7 @@ export const Parameter: FC<ParameterProps> = (props: ParameterProps) => {
                   direction="row"
                   alignItems="center"
                   spacing={1}
-                  sx={{ paddingLeft: '0.25rem', paddingTop: '0.25rem' }}
+                  style={{ paddingLeft: '0.25rem', paddingTop: '0.25rem' }}
                 >
                   <Icon name="subdirectory_arrow_right" color="#007079" size={16} />
                   <Typography variant="caption">

@@ -1,6 +1,5 @@
 import React, { FC, useEffect, useState } from 'react';
 import { Icon, Typography } from '@equinor/eds-core-react';
-import { Stack } from '@mui/material';
 import { Storage } from '@mui/icons-material';
 import { TYPE_ICONS, ArgumentProps } from './types';
 import { ArgumentButton } from './styles';
@@ -43,17 +42,15 @@ export const Argument: FC<ArgumentProps> = (props: ArgumentProps) => {
         ) : (
           <Icon name={TYPE_ICONS[type as keyof typeof TYPE_ICONS] || 'swap_horizontal'} />
         )}
-        <Stack direction="column" justifyContent="space-between">
-          <Typography variant="h6">
-            {isConst
-              ? arg.source
-                ? (arg.source as string)
-                : 'undefined'
-              : (arg.source as Port)?.port
-              ? (arg.source as Port)?.port
-              : 'undefined'}
-          </Typography>
-        </Stack>
+        <Typography variant="h6">
+          {isConst
+            ? arg.source
+              ? (arg.source as string)
+              : 'undefined'
+            : (arg.source as Port)?.port
+            ? (arg.source as Port)?.port
+            : 'undefined'}
+        </Typography>
       </ArgumentButton>
     </>
   );

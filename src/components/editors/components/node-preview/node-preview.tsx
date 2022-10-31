@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { Drawer, Stack } from '@mui/material';
+import { Drawer } from '@mui/material';
 import { NodeProps } from 'react-flow-renderer/nocss';
 import { Typography } from '@equinor/eds-core-react';
 import moment from 'moment';
@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom';
 import ReactJson from 'react-json-view';
 import { INode } from '../../helpers/helpers';
 import { Brick, Graph } from '../../../../models/v2';
-import { DialogWrapper, Button } from '../../../ui';
+import { DialogWrapper, Button, Stack } from '../../../ui';
 
 interface NodePreviewProps {
   open: boolean;
@@ -28,24 +28,24 @@ export const NodePreview: FC<NodePreviewProps> = (props: NodePreviewProps) => {
         </Typography>
         <Typography variant="body_short">{data?.component?.description}</Typography>
         {data?.component?.modifiedBy && (
-          <Stack spacing={1}>
+          <Stack spacing={0.5}>
             <Typography variant="body_short_bold">Author</Typography>
             <Typography variant="body_short_link">
               <a href={`mailto: ${data?.component?.modifiedBy?.email}`}>{data?.component?.modifiedBy?.email}</a>
             </Typography>
           </Stack>
         )}
-        <Stack spacing={1}>
+        <Stack spacing={0.5}>
           <Typography variant="body_short_bold">Node Id</Typography>
           <code>{node?.id}</code>
         </Stack>
-        <Stack spacing={1}>
+        <Stack spacing={0.5}>
           <Typography variant="body_short_bold">Published</Typography>
           <code>{moment(data?.component?.timestamp).format('MMMM Do YYYY, H:mm:ss')}</code>
         </Stack>
         {type === 'taskNode' && (
-          <Stack spacing={2}>
-            <Stack spacing={1}>
+          <Stack spacing={1}>
+            <Stack spacing={0.5}>
               <Typography variant="body_short_bold">Inputs</Typography>
               {Array.isArray(inputParams) && inputParams.length > 0 ? (
                 <ReactJson src={inputParams} name="inputs" collapsed displayDataTypes={false} />
@@ -53,7 +53,7 @@ export const NodePreview: FC<NodePreviewProps> = (props: NodePreviewProps) => {
                 <Typography variant="body_short">No input parameters</Typography>
               )}
             </Stack>
-            <Stack spacing={1}>
+            <Stack spacing={0.5}>
               <Typography variant="body_short_bold">Outputs</Typography>
               {Array.isArray(outputParams) && outputParams.length > 0 ? (
                 <ReactJson src={outputParams} name="outputs" collapsed displayDataTypes={false} />
@@ -61,13 +61,13 @@ export const NodePreview: FC<NodePreviewProps> = (props: NodePreviewProps) => {
                 <Typography variant="body_short">No output parameters</Typography>
               )}
             </Stack>
-            <Stack spacing={1}>
+            <Stack spacing={0.5}>
               <Typography variant="body_short_bold">Implementation type</Typography>
               <code>{data?.implementation?.type}</code>
             </Stack>
             {data?.implementation?.type === 'brick' && (
               <>
-                <Stack spacing={1}>
+                <Stack spacing={0.5}>
                   <Typography variant="body_short_bold">Container</Typography>
                   <ReactJson
                     src={(data?.implementation as Brick)?.container || {}}
@@ -76,7 +76,7 @@ export const NodePreview: FC<NodePreviewProps> = (props: NodePreviewProps) => {
                     displayDataTypes={false}
                   />
                 </Stack>
-                <Stack spacing={1}>
+                <Stack spacing={0.5}>
                   <Typography variant="body_short_bold">Arguments</Typography>
                   <ReactJson
                     src={(data?.implementation as Brick)?.args || {}}
@@ -85,7 +85,7 @@ export const NodePreview: FC<NodePreviewProps> = (props: NodePreviewProps) => {
                     displayDataTypes={false}
                   />
                 </Stack>
-                <Stack spacing={1}>
+                <Stack spacing={0.5}>
                   <Typography variant="body_short_bold">Results</Typography>
                   <ReactJson
                     src={(data?.implementation as Brick)?.results || {}}
@@ -98,7 +98,7 @@ export const NodePreview: FC<NodePreviewProps> = (props: NodePreviewProps) => {
             )}
             {data?.implementation?.type === 'graph' && (
               <>
-                <Stack spacing={1}>
+                <Stack spacing={0.5}>
                   <Typography variant="body_short_bold">Nodes</Typography>
                   <ReactJson
                     src={(data?.implementation as Graph)?.nodes || {}}
@@ -111,7 +111,7 @@ export const NodePreview: FC<NodePreviewProps> = (props: NodePreviewProps) => {
             )}
           </Stack>
         )}
-        <Stack alignItems="flex-end" sx={{ paddingTop: '2rem' }}>
+        <Stack alignItems="flex-end" style={{ paddingTop: '2rem' }}>
           {!node.data?.isInlineComponent && (
             <Link to={`/component/${data?.component?.uid}`} target="_blank">
               <Button as="span" leftIcon="code">

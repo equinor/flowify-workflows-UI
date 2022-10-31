@@ -1,5 +1,5 @@
 import React, { FC, useState, useEffect, useContext } from 'react';
-import { Grid, Stack } from '@mui/material';
+import { Grid } from '@mui/material';
 import { Button as EDSButton, Icon, Progress, Snackbar, Typography, Pagination } from '@equinor/eds-core-react';
 import moment from 'moment';
 import { Component, IPageInfo } from '../../models/v2';
@@ -7,7 +7,7 @@ import { services, IFilter } from '../../services';
 import { isNotEmptyArray } from '../../common/general-helpers';
 import { ComponentCard } from './components/component-card';
 import { AddComponentToGraph, CreateComponent } from '../creators';
-import { Button } from '../ui';
+import { Button, Stack } from '../ui';
 import { UserContextStore } from '../../common/context/user-context-store';
 import { Link } from 'react-router-dom';
 import { Select, BaseInput } from '../form';
@@ -103,10 +103,10 @@ export const Marketplace: FC<MarketplaceProps> = (props: MarketplaceProps) => {
             <CreateComponent open={createModalOpen} setOpen={setCreateModalOpen} />
           </Stack>
         )}
-        <Stack rowGap={3}>
+        <Stack style={{ rowGap: '1.5rem' }}>
           {!preview && (
             <Stack justifyContent="stretch" direction="row" spacing={2}>
-              <Stack direction="row" sx={{ flexGrow: '2' }} spacing={1}>
+              <Stack direction="row" style={{ flexGrow: '2' }} spacing={1}>
                 <Select
                   name="searchparam"
                   label="Search"

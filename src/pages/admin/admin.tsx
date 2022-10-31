@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { Stack, Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
+import { Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
 import { Icon, Typography } from '@equinor/eds-core-react';
 import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
 import { services } from '../../services';
 import { Container, Layout } from '../../layout';
 import { ISecret, ISecretsList, IUserVolume, IVolume, Workspace, WorkspaceList } from '../../models/v2';
-import { Breadcrumbs, Button } from '../../components/ui';
+import { Breadcrumbs, Button, Stack } from '../../components/ui';
 import { VolumeEditor } from '../../components/editors/volume/volume-editor';
 import { Feedback, Feedbacks } from '../../components/editors/components';
 import { SecretEditor } from '../../components/editors/secret-editor/secret-editor';

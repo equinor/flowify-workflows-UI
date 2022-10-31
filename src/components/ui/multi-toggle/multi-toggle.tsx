@@ -1,9 +1,9 @@
 import React, { FC } from 'react';
 import { Typography } from '@equinor/eds-core-react';
-import { Stack } from '@mui/material';
 import { nanoid } from '../../editors/helpers';
 import { MultiToggleProps, ToggleButtonProps } from './types';
 import { StyledMultiToggle, StyledToggleButton } from './styles';
+import { Stack } from '../stack/stack';
 
 export const ToggleButton: FC<ToggleButtonProps> = (props: ToggleButtonProps) => {
   return <button {...props} />;
@@ -15,7 +15,7 @@ export const MultiToggle: FC<MultiToggleProps> = (props: MultiToggleProps) => {
   const id = props.id || nanoid(6);
 
   return (
-    <Stack id={id} spacing={1} style={props.style}>
+    <Stack id={id} spacing={0.5} style={props.style}>
       {label && (
         <Typography id={`${id}--label`} variant={labelVariant}>
           {label}

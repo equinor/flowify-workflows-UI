@@ -1,9 +1,10 @@
 import React, { FC } from 'react';
-import { Grid, Stack } from '@mui/material';
+import { Grid } from '@mui/material';
 import { Typography } from '@equinor/eds-core-react';
 import { Component, Brick as IBrick } from '../../../../models/v2';
 import { Argument, DraggableList, Result } from '../../components';
 import { BaseInput } from '../../../form';
+import { Stack } from '../../../ui';
 
 interface BrickProps {
   component: Component | null | undefined;
@@ -130,7 +131,7 @@ export const Brick: FC<BrickProps> = (props: BrickProps) => {
       {type === 'brick' && (
         <>
           <Grid item xs={6} sx={{ flexGrow: '1', overflowY: 'auto', minHeight: '0' }}>
-            <Stack spacing={2} sx={{ padding: '2rem' }}>
+            <Stack spacing={1} padding={2}>
               <Typography variant="h4">Container</Typography>
               <BaseInput
                 label="Name"

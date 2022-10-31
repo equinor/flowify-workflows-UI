@@ -1,12 +1,12 @@
 import React, { memo, useState } from 'react';
-import { Button, Chip, Icon, Tooltip, Typography } from '@equinor/eds-core-react';
-import { Stack } from '@mui/material';
-import { NodeProps } from 'react-flow-renderer/nocss';
-import { DragIndicator as DragIcon } from '@mui/icons-material';
 import { Link } from 'react-router-dom';
+import { NodeProps } from 'react-flow-renderer/nocss';
+import { Button, Chip, Icon, Tooltip, Typography } from '@equinor/eds-core-react';
+import { DragIndicator as DragIcon } from '@mui/icons-material';
 import { INode } from '../../../helpers/helpers';
 import { Handles } from '..';
 import { NodePreview } from '../..';
+import { Stack } from '../../../../ui';
 
 interface ISubNode extends NodeProps<INode> {}
 
@@ -15,11 +15,11 @@ export const SubNode = memo((props: ISubNode) => {
   const [open, setOpen] = useState<boolean>(false);
 
   return (
-    <Stack spacing={2} direction="row" alignItems="center">
+    <Stack spacing={1} direction="row" alignItems="center">
       <NodePreview node={props} open={open} onClose={setOpen} />
       <Handles parameters={data?.component?.inputs} type="Input" filterParameters={false} />
-      <Stack alignItems="center" spacing={3} direction="row">
-        <Stack spacing={1} alignItems="space-between">
+      <Stack alignItems="center" spacing={1.5} direction="row">
+        <Stack spacing={0.5} alignItems="space-between">
           <Icon name="mall" size={16} color="#999" />
           <div>
             <Typography variant="body_short_bold">{data.label}</Typography>

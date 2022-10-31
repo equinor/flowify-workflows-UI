@@ -1,6 +1,5 @@
 import React, { memo, useState } from 'react';
 import { Icon, Tooltip, Typography } from '@equinor/eds-core-react';
-import { Stack } from '@mui/material';
 import { NodeProps } from 'react-flow-renderer/nocss';
 import { DragIndicator as DragIcon } from '@mui/icons-material';
 import { Link } from 'react-router-dom';
@@ -8,7 +7,7 @@ import { INode } from '../../../helpers/helpers';
 import { Handles } from '..';
 import { NodePreview } from '../..';
 import { isNotEmptyArray } from '../../../../../common';
-import { Button, Chip } from '../../../../ui';
+import { Button, Chip, Stack } from '../../../../ui';
 
 interface ITaskNode extends NodeProps<INode> {}
 
@@ -31,12 +30,12 @@ export const TaskNode = memo((props: ITaskNode) => {
     )?.length || 0;
 
   return (
-    <Stack spacing={1}>
-      <Stack spacing={2} direction="row" alignItems="center">
+    <Stack spacing={0.5}>
+      <Stack spacing={1} direction="row" alignItems="center">
         <NodePreview node={props} open={open} onClose={setOpen} />
         <Handles parameters={data?.component?.inputs} type="Input" />
         <Stack alignItems="center" spacing={3} direction="row">
-          <Stack spacing={1} alignItems="space-between">
+          <Stack spacing={0.5} alignItems="space-between">
             <Icon name="mall" size={16} color="#999" />
             <div>
               <Typography variant="body_short_bold">
@@ -47,7 +46,7 @@ export const TaskNode = memo((props: ITaskNode) => {
                 {data?.component?.description}
               </Typography>
             </div>
-            <Stack direction="row" alignItems="center" spacing={2}>
+            <Stack direction="row" alignItems="center" spacing={1}>
               <Chip>{data.component?.implementation?.type}</Chip>
               {data?.isInlineComponent && <Chip>local</Chip>}
               <Tooltip title="View component information" style={{ fontSize: '1rem' }}>
@@ -69,7 +68,7 @@ export const TaskNode = memo((props: ITaskNode) => {
                 </Tooltip>
               )}
             </Stack>
-            <Stack direction="row" spacing={1}>
+            <Stack direction="row" spacing={0.5}>
               {isNotEmptyArray(secrets) && (
                 <Button
                   onClick={() => setParameterConfig({ type: 'secret', id })}

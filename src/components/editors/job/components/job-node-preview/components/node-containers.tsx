@@ -1,8 +1,8 @@
 import React from 'react';
 import { Typography } from '@equinor/eds-core-react';
-import { Stack } from '@mui/material';
 import { NodeStatus } from '../../../../../../models';
 import { Container } from '../../../../../../models/kubernetes';
+import { Stack } from '../../../../../ui';
 
 interface NodeContainersProps {
   nodeStatus: NodeStatus;
@@ -12,7 +12,7 @@ export const NodeContainers: React.FC<NodeContainersProps> = (props: NodeContain
   const { container } = props;
 
   return (
-    <Stack spacing={2}>
+    <Stack spacing={1}>
       <Typography variant="h3">Containers</Typography>
       {container ? (
         <>

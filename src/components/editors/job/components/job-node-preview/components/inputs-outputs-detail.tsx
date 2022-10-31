@@ -1,8 +1,8 @@
 import React, { FC } from 'react';
 import { Typography } from '@equinor/eds-core-react';
-import { Stack } from '@mui/material';
 import { ArtifactsDetail, ParametersDetail } from '.';
 import { Outputs, NodeStatus, Workflow, Inputs } from '../../../../../../models';
+import { Stack } from '../../../../../ui';
 
 interface IInputsOutputsDetail {
   workflow: Workflow;
@@ -13,7 +13,7 @@ interface IInputsOutputsDetail {
 export const InputsOutputsDetail: FC<IInputsOutputsDetail> = (props: IInputsOutputsDetail) => {
   const { inputs, workflow, node, outputs } = props;
   return (
-    <Stack spacing={2}>
+    <Stack spacing={1}>
       <Typography variant="h4">Inputs</Typography>
       <ParametersDetail parameters={inputs?.parameters} />
       <ArtifactsDetail workflow={workflow} node={node} isInput artifacts={inputs?.artifacts} />

@@ -1,10 +1,10 @@
 import React, { FC, useState } from 'react';
-import { Dialog, DialogContent, Stack } from '@mui/material';
+import { Dialog, DialogContent } from '@mui/material';
 import { Icon } from '@equinor/eds-core-react';
 import { Marketplace } from '../../../marketplace/marketplace';
 import { Component } from '../../../../models/v2';
 import { BUTTON_STATE } from '../../../creators/add-component-to-graph';
-import { DialogWrapper, Button, MultiToggle, ToggleButton } from '../../../ui';
+import { DialogWrapper, Button, MultiToggle, ToggleButton, Stack } from '../../../ui';
 import { FunctionalComponents } from '../functional-components/functional-components';
 
 interface MarketplaceModalProps {
@@ -24,7 +24,7 @@ export const MarketplaceModal: FC<MarketplaceModalProps> = (props: MarketplaceMo
     <Dialog open={open} onClose={onClose} fullWidth maxWidth="xl">
       <DialogWrapper>
         <DialogContent sx={{ height: '90vh' }}>
-          <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ padding: '1rem' }}>
+          <Stack direction="row" justifyContent="space-between" alignItems="center" padding={1}>
             <MultiToggle style={{ fontSize: '1.25rem' }}>
               <ToggleButton active={type === 'marketplace'} onClick={() => setType('marketplace')}>
                 <Icon name="mall" /> Marketplace components
@@ -37,7 +37,7 @@ export const MarketplaceModal: FC<MarketplaceModalProps> = (props: MarketplaceMo
               <Icon name="close" />
             </Button>
           </Stack>
-          <Stack sx={{ padding: '2rem 2rem 2rem' }}>
+          <Stack style={{ padding: '2rem 2rem 2rem' }}>
             {type === 'marketplace' ? (
               <Marketplace onAddComponent={onAddComponent} showTitle={false} />
             ) : (

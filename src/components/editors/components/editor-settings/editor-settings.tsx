@@ -1,8 +1,8 @@
 import React, { FC, useState, useContext } from 'react';
 import { Tooltip, Typography } from '@equinor/eds-core-react';
-import { Dialog, Stack } from '@mui/material';
+import { Dialog } from '@mui/material';
 import { SettingsContextStore } from '../../../../common/context/editor-settings-context';
-import { Button, DialogWrapper, MultiToggle, ToggleButton } from '../../../ui';
+import { Button, DialogWrapper, MultiToggle, ToggleButton, Stack } from '../../../ui';
 
 interface IEditorSettings {}
 
@@ -18,7 +18,7 @@ export const EditorSettings: FC<IEditorSettings> = (props: IEditorSettings) => {
       <Dialog open={open} onClose={() => setOpen(false)} fullWidth maxWidth="md">
         <DialogWrapper spacing={2} padding={2}>
           <Typography variant="h5">Manifest options</Typography>
-          <Stack spacing={2}>
+          <Stack spacing={1}>
             <MultiToggle label="Wordwrap">
               <ToggleButton active={settings?.wordWrap} onClick={() => updateSetting('wordWrap', true)}>
                 Enable

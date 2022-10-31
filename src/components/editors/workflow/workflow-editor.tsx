@@ -1,5 +1,4 @@
 import React, { useEffect, useState, FC, useCallback } from 'react';
-import { Stack } from '@mui/material';
 import { Helmet } from 'react-helmet-async';
 import { useNavigate, useParams } from 'react-router';
 import { useEdgesState, useNodesState } from 'react-flow-renderer';
@@ -23,6 +22,7 @@ import { IfConfig } from '../components/functional-components/if/if-config';
 import { isNotEmptyArray } from '../../../common';
 import { checkWorkflowValidation } from '../../../common/validation/workflow-validation';
 import { IFunctionalCompConfig, IParameterConfig } from '../types';
+import { Stack } from '../../ui';
 
 interface IWorkflowEditor {
   uid: string | null;
@@ -332,7 +332,7 @@ const WorkflowEditor: FC<IWorkflowEditor> = (props: IWorkflowEditor) => {
         workspaceSecrets={workspaceSecrets}
         workspaceVolumes={workspaceVolumes}
       />
-      <Stack direction="row" justifyContent="stretch" sx={{ flexGrow: '1', minHeight: '0', flexWrap: 'nowrap' }}>
+      <Stack direction="row" justifyContent="stretch" style={{ flexGrow: '1', minHeight: '0', flexWrap: 'nowrap' }}>
         <EditorMenu
           active={activePage}
           setActive={setActivePage}
