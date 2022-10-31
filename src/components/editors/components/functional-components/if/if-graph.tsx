@@ -1,9 +1,18 @@
 import React, { FC, useEffect, useMemo } from 'react';
-import ReactFlow, { Edge, ReactFlowProvider, useNodesState, useEdgesState, Node } from 'react-flow-renderer/nocss';
+import ReactFlow, {
+  Edge,
+  ReactFlowProvider,
+  useNodesState,
+  useEdgesState,
+  Node,
+  Background,
+  BackgroundVariant,
+} from 'react-flow-renderer/nocss';
 import { Component, Conditional, Map } from '../../../../../models/v2';
 import { getComponentFromRef, INode, nanoid } from '../../../helpers';
 import { EndNode, StartNode, TaskNode } from '../../graph';
 import { SubNode } from '../../graph/nodes/sub-node';
+import { ReactFlowWrapper } from '../../graph/styles';
 
 interface IfGraphProps {
   component: Component | undefined;
@@ -150,17 +159,21 @@ export const IfGraph: FC<IfGraphProps> = (props: IfGraphProps) => {
   function deleteEdge(edges: Edge<ConnectionData>[]) {}
 
   return (
-    <ReactFlowProvider>
-      <ReactFlow
-        onConnect={onConnect}
-        edges={edges}
-        onEdgesChange={onEdgesChange}
-        onEdgesDelete={(edges) => deleteEdge(edges)}
-        nodeTypes={nodeTypes}
-        nodes={nodes}
-        onNodesChange={onNodesChange}
-        defaultZoom={0.75}
-      ></ReactFlow>
-    </ReactFlowProvider>
+    <ReactFlowWrapper>
+      <ReactFlowProvider>
+        <ReactFlow
+          onConnect={onConnect}
+          edges={edges}
+          onEdgesChange={onEdgesChange}
+          onEdgesDelete={(edges) => deleteEdge(edges)}
+          nodeTypes={nodeTypes}
+          nodes={nodes}
+          onNodesChange={onNodesChange}
+          defaultZoom={0.75}
+        >
+          <Background color="rgba(255, 255, 255, 0.15)" gap={16} variant={BackgroundVariant.Lines} />
+        </ReactFlow>
+      </ReactFlowProvider>
+    </ReactFlowWrapper>
   );
 };

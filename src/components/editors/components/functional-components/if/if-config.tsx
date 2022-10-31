@@ -8,6 +8,7 @@ import { nanoid } from '../../../helpers';
 import { isNotEmptyArray } from '../../../../../common';
 import { Expression } from './expression';
 import { ComponentsHandler } from './components-handler';
+import { DialogWrapper } from '../../../../ui';
 
 interface IfConfigProps {
   open: boolean;
@@ -36,7 +37,8 @@ export const IfConfig: FC<IfConfigProps> = (props: IfConfigProps) => {
         setIfComponent(node?.node as Component);
       }
     }
-  }, [ifConfigComponent, component, subcomponents]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [ifConfigComponent, component]);
 
   function onClose() {
     function updateIfComponent(nodes: Node[]) {
@@ -103,7 +105,7 @@ export const IfConfig: FC<IfConfigProps> = (props: IfConfigProps) => {
 
   return (
     <Dialog open={open} onClose={onClose} fullWidth maxWidth="lg">
-      <Stack sx={{ height: '90vh' }}>
+      <DialogWrapper style={{ height: '90vh' }}>
         <Expression ifComponent={ifComponent} setIfComponent={setIfComponent} />
         <Grid container style={{ height: '100%' }}>
           <Grid item xs={3}>
@@ -149,7 +151,7 @@ export const IfConfig: FC<IfConfigProps> = (props: IfConfigProps) => {
               </Stack>
             </Stack>
           </Grid>
-          <Grid item xs={9} style={{ height: '100%', width: '100%', backgroundColor: '#eee' }}>
+          <Grid item xs={9} style={{ height: '100%', width: '100%' }}>
             <IfGraph
               component={ifComponent}
               subcomponents={subcomponents}
@@ -158,7 +160,7 @@ export const IfConfig: FC<IfConfigProps> = (props: IfConfigProps) => {
             />
           </Grid>
         </Grid>
-      </Stack>
+      </DialogWrapper>
     </Dialog>
   );
 };

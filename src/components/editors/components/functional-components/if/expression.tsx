@@ -2,7 +2,8 @@ import React, { FC, useState } from 'react';
 import { Stack } from '@mui/material';
 import { Typography } from '@equinor/eds-core-react';
 import { Component, Conditional } from '../../../../../models/v2';
-import { MultiToggle, Select, TextField, ToggleButton } from '../../../../ui';
+import { MultiToggle, ToggleButton } from '../../../../ui';
+import { BaseInput, Select } from '../../../../form';
 
 interface ExpressionProps {
   ifComponent: Component | undefined;
@@ -90,18 +91,18 @@ export const Expression: FC<ExpressionProps> = (props: ExpressionProps) => {
           </MultiToggle>
           {leftType === 'input' ? (
             <Select
-              id="left_selection"
+              name="left_selection"
               aria-label="Left expression"
-              options={ifComponent?.inputs?.map((input) => ({ label: input.name, value: input.name })) || []}
+              options={ifComponent?.inputs?.map((input) => ({ label: input.name!, value: input.name! })) || []}
               value={leftExpressionValue || ''}
-              onChange={(event: any) => onValueChange(event.target.value, 'left')}
+              onChange={(item) => onValueChange(item, 'left')}
               placeholder="Select from inputs"
               label="&nbsp;"
             />
           ) : (
-            <TextField
+            <BaseInput
               label="&nbsp;"
-              id="left_value"
+              name="left_value"
               aria-label="Left expression custom value"
               defaultValue={leftExpressionValue}
               onBlur={(event: any) => onValueChange(event.target.value, 'left')}
@@ -109,11 +110,11 @@ export const Expression: FC<ExpressionProps> = (props: ExpressionProps) => {
           )}
         </Stack>
         <Select
-          id="operator_selection"
+          name="operator_selection"
           label="Operator"
           options={OPERATORS}
           value={operator || ''}
-          onChange={(event: any) => onValueChange(event.target.value, 'operator')}
+          onChange={(item) => onValueChange(item, 'operator')}
         />
         <Stack direction="row" spacing={2}>
           <MultiToggle label="Right expression">
@@ -126,18 +127,18 @@ export const Expression: FC<ExpressionProps> = (props: ExpressionProps) => {
           </MultiToggle>
           {rightType === 'input' ? (
             <Select
-              id="right_selection"
+              name="right_selection"
               aria-label="Right"
-              options={ifComponent?.inputs?.map((input) => ({ label: input.name, value: input.name })) || []}
+              options={ifComponent?.inputs?.map((input) => ({ label: input.name!, value: input.name! })) || []}
               value={rightExpressionValue || ''}
-              onChange={(event: any) => onValueChange(event.target.value, 'right')}
+              onChange={(item) => onValueChange(item, 'right')}
               placeholder="Select from inputs"
               label="&nbsp;"
             />
           ) : (
-            <TextField
+            <BaseInput
               label="&nbsp;"
-              id="right_value"
+              name="right_value"
               aria-label="Right expression custom value"
               defaultValue={rightExpressionValue}
               onBlur={(event: any) => onValueChange(event.target.value, 'right')}

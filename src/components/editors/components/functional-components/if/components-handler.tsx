@@ -1,20 +1,21 @@
 import React, { FC, useState } from 'react';
-import { Button, Typography } from '@equinor/eds-core-react';
+import { Typography } from '@equinor/eds-core-react';
 import { Dialog, Stack } from '@mui/material';
 import { services } from '../../../../../services';
 import { Component, Conditional } from '../../../../../models/v2';
 import { MarketplaceModal } from '../..';
+import { Button } from '../../../../ui';
 
 interface ComponentsHandlerProps {
   ifComponent: Component | undefined;
   setIfComponent: any;
   subcomponents: Component[] | undefined;
   setSubcomponents: any;
-  setMarketplaceSnackbar: any;
+  setMarketplaceSnackbar?: any;
 }
 
 export const ComponentsHandler: FC<ComponentsHandlerProps> = (props: ComponentsHandlerProps) => {
-  const { ifComponent, subcomponents, setSubcomponents, setMarketplaceSnackbar, setIfComponent } = props;
+  const { ifComponent, subcomponents, setSubcomponents, setIfComponent } = props;
   const [openMarketplace, setOpenMarketplace] = useState<'trueNode' | 'falseNode'>();
   const [selectComponent] = useState<'trueNode' | 'falseNode'>();
   const { nodeTrue, nodeFalse } = (ifComponent?.implementation as Conditional) || {};
@@ -29,13 +30,15 @@ export const ComponentsHandler: FC<ComponentsHandlerProps> = (props: ComponentsH
         .then((res) => setSubcomponents((prev: Component[]) => [...(prev || []), res]))
         .then(() => {
           setButtonState('success');
-          setMarketplaceSnackbar(true);
+          //setMarketplaceSnackbar(true);
           setTimeout(() => {
             setButtonState('default');
           }, 3000);
         })
         .then(() => {
           if (openMarketplace === 'trueNode') {
+            console.log('trueNode');
+            console.log(uid);
             setIfComponent((prev: Component) => ({
               ...prev,
               implementation: {
@@ -77,7 +80,7 @@ export const ComponentsHandler: FC<ComponentsHandlerProps> = (props: ComponentsH
         {nodeTrue ? (
           <Stack spacing={2}>
             <Typography variant="body_short">{(trueNode as Component)?.name || 'Unnamed component'}</Typography>
-            <Button variant="ghost" onClick={() => removeNode('trueNode')}>
+            <Button theme="danger" onClick={() => removeNode('trueNode')}>
               Remove component
             </Button>
           </Stack>
@@ -90,7 +93,7 @@ export const ComponentsHandler: FC<ComponentsHandlerProps> = (props: ComponentsH
         {nodeFalse ? (
           <Stack spacing={2}>
             <Typography variant="body_short">{(falseNode as Component)?.name || 'Unnamed component'}</Typography>
-            <Button variant="ghost" onClick={() => removeNode('falseNode')}>
+            <Button theme="danger" onClick={() => removeNode('falseNode')}>
               Remove component
             </Button>
           </Stack>

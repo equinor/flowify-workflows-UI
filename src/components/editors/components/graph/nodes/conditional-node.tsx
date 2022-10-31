@@ -1,12 +1,12 @@
 import React, { memo, useState } from 'react';
-import { Button, Chip, Icon, Typography } from '@equinor/eds-core-react';
+import { Icon, Typography } from '@equinor/eds-core-react';
 import { NodeProps } from 'react-flow-renderer/nocss';
 import { DragIndicator as DragIcon } from '@mui/icons-material';
 import { INode } from '../../../helpers/helpers';
 import { Handles } from '..';
 import { NodePreview } from '../..';
 import { Conditional } from '../../../../../models/v2';
-import { Stack } from '../../../../ui';
+import { Stack, Button, Chip } from '../../../../ui';
 
 interface IConditionalNode extends NodeProps<INode> {}
 
@@ -34,7 +34,7 @@ export const ConditionalNode = memo((props: IConditionalNode) => {
               <Stack direction="row" alignItems="center">
                 <Chip>{data?.component?.implementation?.type}</Chip>
               </Stack>
-              <Button variant="ghost" onClick={() => data.setConfigComponent({ id: props.id, type: 'if' })}>
+              <Button theme="simple" onClick={() => data.setConfigComponent({ id: props.id, type: 'if' })}>
                 <Icon name="tune" />
                 Configure conditional
               </Button>
