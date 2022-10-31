@@ -320,6 +320,7 @@ const WorkflowEditor: FC<IWorkflowEditor> = (props: IWorkflowEditor) => {
         setComponent={setComponent}
         setOpen={() => setConfigComponent(undefined)}
         subcomponents={subcomponents}
+        setSubcomponents={setSubcomponents}
       />
       <SecretsVolumesConfig
         component={component}

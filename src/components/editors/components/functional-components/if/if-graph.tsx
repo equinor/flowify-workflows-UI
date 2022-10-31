@@ -2,19 +2,19 @@ import React, { FC, useEffect, useMemo } from 'react';
 import ReactFlow, { Edge, ReactFlowProvider, useNodesState, useEdgesState, Node } from 'react-flow-renderer/nocss';
 import { Component, Conditional, Map } from '../../../../../models/v2';
 import { getComponentFromRef, INode, nanoid } from '../../../helpers';
-import { AddNode, EndNode, StartNode, TaskNode } from '../../graph';
-import { SubNode } from '../../graph';
+import { EndNode, StartNode, TaskNode } from '../../graph';
+import { SubNode } from '../../graph/nodes/sub-node';
 
 interface IfGraphProps {
   component: Component | undefined;
   id: string;
   subcomponents: Component[] | undefined;
   setComponent: React.Dispatch<React.SetStateAction<Component | undefined>>;
-  setOpenMarketplace: any;
+  setOpenMarketplace?: any;
 }
 
 export const IfGraph: FC<IfGraphProps> = (props: IfGraphProps) => {
-  const { component, subcomponents, id, setOpenMarketplace } = props;
+  const { component, subcomponents, id } = props;
   const [nodes, setNodes, onNodesChange] = useNodesState<INode>([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState<any>([]);
   const { nodeTrue, nodeFalse } = component?.implementation as Conditional;
@@ -33,7 +33,6 @@ export const IfGraph: FC<IfGraphProps> = (props: IfGraphProps) => {
       subNode: SubNode,
       ifInput: StartNode,
       ifOutput: EndNode,
-      addNode: AddNode,
     }),
     [],
   );
@@ -66,21 +65,6 @@ export const IfGraph: FC<IfGraphProps> = (props: IfGraphProps) => {
             label: `False: ${falseNode?.name || ''}`,
             component: falseNode,
             implementation: falseNode?.implementation,
-          },
-          position: {
-            x: 450,
-            y: 460,
-          },
-        });
-      }
-      if (!falseNode) {
-        nodes.push({
-          id: 'falseNode',
-          type: 'addNode',
-          selectable: false,
-          data: {
-            label: 'Add false node',
-            setConfigComponent: setOpenMarketplace,
           },
           position: {
             x: 450,
@@ -160,7 +144,7 @@ export const IfGraph: FC<IfGraphProps> = (props: IfGraphProps) => {
       setEdges(createEdges());
       setNodes(nodes);
     }
-  }, [component, trueNode, falseNode, id, setEdges, setNodes, setOpenMarketplace]);
+  }, [component, trueNode, falseNode, id, setEdges, setNodes]);
 
   function onConnect() {}
   function deleteEdge(edges: Edge<ConnectionData>[]) {}
