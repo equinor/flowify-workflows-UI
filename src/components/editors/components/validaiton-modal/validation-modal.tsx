@@ -1,8 +1,7 @@
-import { Typography } from '@equinor/eds-core-react';
-import { Table, TableHead, TableRow, TableBody, TableCell } from '@mui/material';
 import React, { FC } from 'react';
+import { Typography } from '@equinor/eds-core-react';
 import { isNotEmptyArray } from '../../../../common';
-import { DialogWrapper, Stack, Modal } from '../../../ui';
+import { DialogWrapper, Stack, Modal, Table } from '../../../ui';
 import { IParameterConfig } from '../../types';
 import { ErrorRow } from './components/error-row';
 import { IValidationError } from './types';
@@ -24,25 +23,25 @@ export const ValidationModal: FC<ValidationModalProps> = (props: ValidationModal
         <Typography variant="h4">Validation</Typography>
         <Stack spacing={0.5}>
           <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell>Error message</TableCell>
-                <TableCell>Current value</TableCell>
-                <TableCell>Manifest path</TableCell>
-                <TableCell>Quick fix</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
+            <thead>
+              <tr>
+                <th>Error message</th>
+                <th>Current value</th>
+                <th>Manifest path</th>
+                <th>Quick fix</th>
+              </tr>
+            </thead>
+            <tbody>
               {isNotEmptyArray(validationErrors) ? (
                 validationErrors?.map((error) => (
-                  <ErrorRow error={error} setParameterConfig={props.setParameterConfig} />
+                  <ErrorRow key={error?.path} error={error} setParameterConfig={props.setParameterConfig} />
                 ))
               ) : (
-                <TableRow>
-                  <TableCell colSpan={4}>No errors found</TableCell>
-                </TableRow>
+                <tr>
+                  <td colSpan={4}>No errors found</td>
+                </tr>
               )}
-            </TableBody>
+            </tbody>
           </Table>
         </Stack>
       </DialogWrapper>

@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
 import { Icon, Typography } from '@equinor/eds-core-react';
 import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
 import { services } from '../../services';
 import { Container, Layout } from '../../layout';
 import { ISecret, ISecretsList, IUserVolume, IVolume, Workspace, WorkspaceList } from '../../models/v2';
-import { Breadcrumbs, Button, Stack } from '../../components/ui';
+import { Breadcrumbs, Button, Stack, Table } from '../../components/ui';
 import { VolumeEditor } from '../../components/editors/volume/volume-editor';
 import { Feedback, Feedbacks } from '../../components/editors/components';
 import { SecretEditor } from '../../components/editors/secret-editor/secret-editor';
@@ -47,7 +46,7 @@ export const AdminPage: React.FC = (): React.ReactElement => {
   function fetchSecrets(workspace: string) {
     services.secrets
       .list(workspace)
-      .then((x) => setSecrets(x))
+      .then((x) => setSecrets({ items: ['TEST123', 'ACCESS_TOKEN'] }))
       .catch((e) => {
         console.log('call to fetch Secrets failed reason: ' + e);
       });
@@ -134,32 +133,32 @@ export const AdminPage: React.FC = (): React.ReactElement => {
             <>
               <Typography variant="h4">Secrets</Typography>
               <Table>
-                <TableHead>
-                  <TableRow>
-                    <TableCell>Secret name</TableCell>
-                    <TableCell>Description</TableCell>
-                    <TableCell>Edit</TableCell>
-                    <TableCell>Delete</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
+                <thead>
+                  <tr>
+                    <th>Secret name</th>
+                    <th>Description</th>
+                    <th>Edit</th>
+                    <th>Delete</th>
+                  </tr>
+                </thead>
+                <tbody>
                   {secrets?.items?.map((key) => (
-                    <TableRow key={key}>
-                      <TableCell>{key}</TableCell>
-                      <TableCell></TableCell>
-                      <TableCell>
+                    <tr key={key}>
+                      <td>{key}</td>
+                      <td></td>
+                      <td>
                         <Button onClick={() => setEditableSecret({ secret: { key: key, value: '' }, mode: 'edit' })}>
                           Edit
                         </Button>
-                      </TableCell>
-                      <TableCell>
+                      </td>
+                      <td>
                         <Button theme="danger" onClick={() => onSecretDelete(key)}>
                           Delete
                         </Button>
-                      </TableCell>
-                    </TableRow>
+                      </td>
+                    </tr>
                   ))}
-                </TableBody>
+                </tbody>
               </Table>
               <div>
                 <Button theme="create" onClick={() => setEditableSecret({ secret: SECRET_TEMPLATE, mode: 'create' })}>
@@ -180,34 +179,34 @@ export const AdminPage: React.FC = (): React.ReactElement => {
               )}
               <Typography variant="h4">Volumes</Typography>
               <Table>
-                <TableHead>
-                  <TableRow>
-                    <TableCell>Container name</TableCell>
-                    <TableCell>Volume Name</TableCell>
-                    <TableCell>Description</TableCell>
-                    <TableCell>Edit</TableCell>
-                    <TableCell>Delete</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
+                <thead>
+                  <tr>
+                    <th>Container name</th>
+                    <th>Volume Name</th>
+                    <th>Description</th>
+                    <th>Edit</th>
+                    <th>Delete</th>
+                  </tr>
+                </thead>
+                <tbody>
                   {volumes?.map((volume) => (
-                    <TableRow key={volume?.uid}>
-                      <TableCell>{volume?.volume?.csi?.volumeAttributes?.containerName}</TableCell>
-                      <TableCell>{volume?.volume?.name}</TableCell>
-                      <TableCell></TableCell>
-                      <TableCell>
+                    <tr key={volume?.uid}>
+                      <td>{volume?.volume?.csi?.volumeAttributes?.containerName}</td>
+                      <td>{volume?.volume?.name}</td>
+                      <td></td>
+                      <td>
                         <Button theme="simple" onClick={() => setEditableVolume({ volume: volume, mode: 'edit' })}>
                           Edit
                         </Button>
-                      </TableCell>
-                      <TableCell>
+                      </td>
+                      <td>
                         <Button theme="danger" onClick={() => onVolumeDelete(volume.uid)}>
                           Delete
                         </Button>
-                      </TableCell>
-                    </TableRow>
+                      </td>
+                    </tr>
                   ))}
-                </TableBody>
+                </tbody>
               </Table>
               <div>
                 <Button

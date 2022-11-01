@@ -11,3 +11,4 @@ export { Message } from './message/message';
 export { Pagination } from './pagination/pagination';
 export { Grid } from './grid/grid';
 export { Modal } from './modal/modal';
+export { Table } from './table/table';
