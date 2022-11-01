@@ -1,6 +1,5 @@
 import React, { FC, useState } from 'react';
 import { Typography } from '@equinor/eds-core-react';
-import { Dialog } from '@mui/material';
 import { services } from '../../../../../services';
 import { Component, Conditional } from '../../../../../models/v2';
 import { MarketplaceModal } from '../..';
@@ -17,7 +16,6 @@ interface ComponentsHandlerProps {
 export const ComponentsHandler: FC<ComponentsHandlerProps> = (props: ComponentsHandlerProps) => {
   const { ifComponent, subcomponents, setSubcomponents, setIfComponent } = props;
   const [openMarketplace, setOpenMarketplace] = useState<'trueNode' | 'falseNode'>();
-  const [selectComponent] = useState<'trueNode' | 'falseNode'>();
   const { nodeTrue, nodeFalse } = (ifComponent?.implementation as Conditional) || {};
   const trueNode = typeof nodeTrue === 'string' ? subcomponents?.find((comp) => comp.uid === nodeTrue) : nodeTrue;
   const falseNode = typeof nodeFalse === 'string' ? subcomponents?.find((comp) => comp.uid === nodeFalse) : nodeFalse;
@@ -74,7 +72,6 @@ export const ComponentsHandler: FC<ComponentsHandlerProps> = (props: ComponentsH
 
   return (
     <>
-      <Dialog open={selectComponent !== undefined}></Dialog>
       <Stack style={{ flexGrow: '1' }} spacing={1}>
         <Typography variant="h5">True component</Typography>
         {nodeTrue ? (

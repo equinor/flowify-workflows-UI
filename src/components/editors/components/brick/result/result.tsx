@@ -1,11 +1,10 @@
 import React, { FC, useState } from 'react';
 import { Icon, Radio, Typography } from '@equinor/eds-core-react';
-import { Dialog } from '@mui/material';
 import { ResultProps } from './types';
 import { ResultButton, ResultWrapper } from './styles';
 import { Brick, FilePath, Result as IResult } from '../../../../../models/v2';
 import { BaseInput, Select, createOptionsFromObjectValue } from '../../../../form';
-import { DialogWrapper, Stack } from '../../../../ui';
+import { DialogWrapper, Stack, Modal } from '../../../../ui';
 
 export const Result: FC<ResultProps> = (props: ResultProps) => {
   const { outputs, result, setComponent, index, setWorkflow } = props;
@@ -54,7 +53,7 @@ export const Result: FC<ResultProps> = (props: ResultProps) => {
 
   return (
     <ResultWrapper>
-      <Dialog open={open} onClose={() => onChange()} fullWidth maxWidth="sm">
+      <Modal open={open} onClose={() => onChange()} fullWidth maxWidth="sm">
         <DialogWrapper padding={2} spacing={2}>
           <Typography variant="h5">Edit result</Typography>
           <Stack>
@@ -79,7 +78,7 @@ export const Result: FC<ResultProps> = (props: ResultProps) => {
             options={createOptionsFromObjectValue(outputs, 'name')}
           />
         </DialogWrapper>
-      </Dialog>
+      </Modal>
       <ResultButton onClick={() => setOpen(true)}>
         <Stack direction="row" justifyContent="center" spacing={0.5}>
           <Typography variant="h6">

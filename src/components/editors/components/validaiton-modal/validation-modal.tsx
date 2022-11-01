@@ -1,8 +1,8 @@
 import { Typography } from '@equinor/eds-core-react';
-import { Dialog, Table, TableHead, TableRow, TableBody, TableCell } from '@mui/material';
+import { Table, TableHead, TableRow, TableBody, TableCell } from '@mui/material';
 import React, { FC } from 'react';
 import { isNotEmptyArray } from '../../../../common';
-import { DialogWrapper, Stack } from '../../../ui';
+import { DialogWrapper, Stack, Modal } from '../../../ui';
 import { IParameterConfig } from '../../types';
 import { ErrorRow } from './components/error-row';
 import { IValidationError } from './types';
@@ -19,7 +19,7 @@ export const ValidationModal: FC<ValidationModalProps> = (props: ValidationModal
   const { open, onClose, validationErrors } = props;
 
   return (
-    <Dialog open={open} onClose={onClose} fullWidth maxWidth="lg">
+    <Modal open={open} onClose={onClose} fullWidth maxWidth="lg">
       <DialogWrapper padding={2} spacing={1}>
         <Typography variant="h4">Validation</Typography>
         <Stack spacing={0.5}>
@@ -46,7 +46,7 @@ export const ValidationModal: FC<ValidationModalProps> = (props: ValidationModal
           </Table>
         </Stack>
       </DialogWrapper>
-    </Dialog>
+    </Modal>
   );
 };
 

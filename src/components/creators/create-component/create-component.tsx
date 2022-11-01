@@ -1,12 +1,11 @@
 import React, { FC, useState } from 'react';
-import { Dialog } from '@mui/material';
 import { Button as EDSButton, Snackbar } from '@equinor/eds-core-react';
 import { useNavigate } from 'react-router-dom';
 import { Form, Formik } from 'formik';
 import * as yup from 'yup';
 import { Component } from '../../../models/v2';
 import { services } from '../../../services';
-import { DialogWrapper } from '../../ui';
+import { DialogWrapper, Modal } from '../../ui';
 import { BaseInputFormik } from '../../form';
 import { Submitter } from './submitter';
 
@@ -64,7 +63,7 @@ const CreateComponent: FC<ICreateComponent> = (props: ICreateComponent) => {
           </Snackbar.Action>
         </Snackbar>
       )}
-      <Dialog fullWidth open={open} onClose={() => setOpen(false)}>
+      <Modal maxWidth="sm" fullWidth open={open} onClose={() => setOpen(false)}>
         <DialogWrapper padding={2}>
           <Formik initialValues={{ ...makeComponent() }} onSubmit={onSubmit} validationSchema={validationSchema}>
             <Form>
@@ -73,7 +72,7 @@ const CreateComponent: FC<ICreateComponent> = (props: ICreateComponent) => {
             </Form>
           </Formik>
         </DialogWrapper>
-      </Dialog>
+      </Modal>
     </>
   );
 };

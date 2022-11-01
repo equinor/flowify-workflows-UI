@@ -1,12 +1,11 @@
 import React, { FC, useEffect, useState } from 'react';
-import { Dialog } from '@mui/material';
 import { Typography } from '@equinor/eds-core-react';
 import { getComponentFromRef, nanoid } from '../../../../helpers';
 import { Parameter } from '../../..';
 import { Component, Edge, Graph, Node } from '../../../../../../models/v2';
 import { MapGraph } from './map-graph';
 import { isNotEmptyArray } from '../../../../../../common';
-import { DialogWrapper, Button, Stack, Grid } from '../../../../../ui';
+import { DialogWrapper, Button, Stack, Grid, Modal } from '../../../../../ui';
 
 interface MapConfigProps {
   open: boolean;
@@ -93,7 +92,7 @@ export const MapConfig: FC<MapConfigProps> = (props: MapConfigProps) => {
   }
 
   return (
-    <Dialog open={open} onClose={onClose} fullWidth maxWidth="lg">
+    <Modal open={open} onClose={onClose} fullWidth maxWidth="lg">
       <DialogWrapper>
         <Grid
           container
@@ -150,6 +149,6 @@ export const MapConfig: FC<MapConfigProps> = (props: MapConfigProps) => {
           </Grid>
         </Grid>
       </DialogWrapper>
-    </Dialog>
+    </Modal>
   );
 };

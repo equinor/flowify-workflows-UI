@@ -1,8 +1,7 @@
 import React, { FC } from 'react';
-import { Dialog } from '@mui/material';
 import { Typography } from '@equinor/eds-core-react';
 import { Data, Edge, Graph } from '../../../../models/v2';
-import { DialogWrapper, Message, Stack } from '../../../ui';
+import { DialogWrapper, Message, Stack, Modal } from '../../../ui';
 import { getComponentFromRef } from '../../helpers';
 import { SecretsVolumesConfigProps } from './types';
 import { Select } from '../../../form';
@@ -130,7 +129,7 @@ export const SecretsVolumesConfig: FC<SecretsVolumesConfigProps> = (props: Secre
   }
 
   return (
-    <Dialog open={parameterConfig !== undefined} onClose={() => setParameterConfig()} fullWidth maxWidth="md">
+    <Modal open={parameterConfig !== undefined} onClose={() => setParameterConfig()} fullWidth maxWidth="md">
       <DialogWrapper padding={2} spacing={3}>
         <Stack spacing={0.5}>
           <Typography variant="h5">
@@ -176,6 +175,6 @@ export const SecretsVolumesConfig: FC<SecretsVolumesConfigProps> = (props: Secre
             ))}
         </Stack>
       </DialogWrapper>
-    </Dialog>
+    </Modal>
   );
 };

@@ -1,9 +1,8 @@
 import React, { FC, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Icon, Pagination, Typography } from '@equinor/eds-core-react';
-import { Dialog } from '@mui/material';
 import moment from 'moment';
-import { Button, Paper, Chip, Stack, DialogWrapper, Grid } from '../../../ui';
+import { Button, Paper, Chip, Stack, DialogWrapper, Grid, Modal } from '../../../ui';
 import { DocumentEditorProps } from './types';
 import { StyledTextButton } from './styles';
 import { BaseInput } from '../../../form';
@@ -194,8 +193,8 @@ export const DocumentEditor: FC<DocumentEditorProps> = (props: DocumentEditorPro
               <Icon name="delete_to_trash" />
               Delete {document?.type}
             </Button>
-            <Dialog open={deleteModalOpen} onClose={() => setDeleteModalOpen(false)}>
-              <DialogWrapper padding={2} spacing={3}>
+            <Modal open={deleteModalOpen} onClose={() => setDeleteModalOpen(false)} maxWidth="sm">
+              <DialogWrapper padding={2} spacing={1.5}>
                 <Typography variant="body_long">
                   Are you sure you want to delete {document?.type} "{document?.name}"?
                 </Typography>
@@ -208,7 +207,7 @@ export const DocumentEditor: FC<DocumentEditorProps> = (props: DocumentEditorPro
                   </Button>
                 </Stack>
               </DialogWrapper>
-            </Dialog>
+            </Modal>
           </Stack>
         </Stack>
       </Grid>

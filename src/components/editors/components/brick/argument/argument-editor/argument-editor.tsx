@@ -1,10 +1,9 @@
 import React, { FC, useState } from 'react';
 import { Radio, Typography } from '@equinor/eds-core-react';
-import { Dialog } from '@mui/material';
 import { ArgumentEditorProps } from './types';
 import { Brick } from '../../../../../../models/v2';
 import { BaseInput, Select } from '../../../../../form';
-import { DialogWrapper, Message, Stack } from '../../../../../ui';
+import { DialogWrapper, Message, Stack, Modal } from '../../../../../ui';
 
 export const ArgumentEditor: FC<ArgumentEditorProps> = (props: ArgumentEditorProps) => {
   const { arg, isConst, index, open, onClose, setComponent, inputs, selectValue, setSelectValue, type } = props;
@@ -40,7 +39,7 @@ export const ArgumentEditor: FC<ArgumentEditorProps> = (props: ArgumentEditorPro
   const inputOptions = inputs?.map((input) => ({ label: input?.name || '', value: input?.name || '' }));
 
   return (
-    <Dialog open={open} onClose={() => onChange()} fullWidth maxWidth="sm">
+    <Modal open={open} onClose={() => onChange()} fullWidth maxWidth="sm">
       <DialogWrapper padding={2} spacing={2}>
         <Typography variant="h5">Edit argument</Typography>
         <Stack direction="row" spacing={1.5}>
@@ -97,6 +96,6 @@ export const ArgumentEditor: FC<ArgumentEditorProps> = (props: ArgumentEditorPro
           </Message>
         )}
       </DialogWrapper>
-    </Dialog>
+    </Modal>
   );
 };

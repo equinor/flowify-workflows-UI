@@ -1,12 +1,11 @@
 import React, { FC, useState } from 'react';
 import { Icon, Typography } from '@equinor/eds-core-react';
-import { Dialog } from '@mui/material';
 import { isNotEmptyArray } from '../../../common';
 import { nanoid } from '../helpers';
 import { EditorHeader } from '../components';
 import { Component, Workflow } from '../../../models/v2';
 import { Parameter } from '.';
-import { MultiToggle, ToggleButton, Button, Chip, Message, DialogWrapper, Stack } from '../../ui';
+import { MultiToggle, ToggleButton, Button, Chip, Message, DialogWrapper, Stack, Modal } from '../../ui';
 import { BaseInput } from '../../form';
 import { StyledTextButton } from './document-editor/styles';
 
@@ -79,7 +78,7 @@ export const Sidebar: FC<SidebarProps> = (props: SidebarProps) => {
 
   return (
     <Stack spacing={2} padding={1} style={{ position: 'relative', width: '100%' }}>
-      <Dialog open={confirmTypeChange !== undefined} onClose={() => setConfirmTypeChange(undefined)}>
+      <Modal maxWidth="sm" open={confirmTypeChange !== undefined} onClose={() => setConfirmTypeChange(undefined)}>
         <DialogWrapper padding={2} spacing={2}>
           <Typography variant="body_short">
             Are you sure you want to change implementation type?{' '}
@@ -94,7 +93,7 @@ export const Sidebar: FC<SidebarProps> = (props: SidebarProps) => {
             <Button onClick={() => setImplementationType(confirmTypeChange)}>Confirm</Button>
           </Stack>
         </DialogWrapper>
-      </Dialog>
+      </Modal>
       <EditorHeader
         type={document?.type === 'component' ? 'Component' : 'Workflow'}
         workspace={workspace}
