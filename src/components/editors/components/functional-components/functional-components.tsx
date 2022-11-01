@@ -1,7 +1,6 @@
 import React, { FC, useState } from 'react';
-import { Grid } from '@mui/material';
 import { Icon, Typography } from '@equinor/eds-core-react';
-import { Paper, Stack, Button } from '../../../ui';
+import { Paper, Stack, Button, Grid } from '../../../ui';
 import { isNotEmptyArray } from '../../../../common';
 import { Graph } from '../../../../models/v2';
 import { generateIf } from './helpers';
@@ -37,7 +36,7 @@ export const FunctionalComponents: FC<FunctionalComponentsProps> = (props: Funct
   return (
     <>
       {!activeComponent && (
-        <Grid container justifyContent="flex-start" spacing={2}>
+        <Grid container justifyContent="flex-start" spacing={1}>
           {isNotEmptyArray(FUNCTIONAL_COMPONENTS) &&
             FUNCTIONAL_COMPONENTS.map((component) => (
               <Grid key={component.name} item xs={4}>

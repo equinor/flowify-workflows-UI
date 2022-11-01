@@ -1,12 +1,11 @@
 import React, { FC } from 'react';
 import { Link } from 'react-router-dom';
 import { Icon, Typography } from '@equinor/eds-core-react';
-import { Grid } from '@mui/material';
 import { Workflow } from '../../../../models';
 import { Timestamp } from '../../../timestamp';
 import { DurationPanel } from '../../../duration-panel';
 import { Job } from '../../../../models/v2';
-import { Button, Paper, Chip, Stack } from '../../../ui';
+import { Button, Paper, Chip, Stack, Grid } from '../../../ui';
 import { ChipTheme } from '../../../ui/chip/types';
 
 interface IJobSidebar {
@@ -32,7 +31,7 @@ const JobSidebar: FC<IJobSidebar> = (props: IJobSidebar) => {
     <Stack spacing={1.5}>
       <Typography variant="h3">{job?.uid}</Typography>
       <Typography variant="body_short">{job?.description}</Typography>
-      <Grid container spacing={1}>
+      <Grid container spacing={0.5}>
         <Grid item xs={8}>
           Workflow
         </Grid>

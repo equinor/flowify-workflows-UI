@@ -1,10 +1,9 @@
 import React, { FC } from 'react';
-import { Grid } from '@mui/material';
 import { Typography } from '@equinor/eds-core-react';
 import { Component, Brick as IBrick } from '../../../../models/v2';
 import { Argument, DraggableList, Result } from '../../components';
 import { BaseInput } from '../../../form';
-import { Stack } from '../../../ui';
+import { Stack, Grid } from '../../../ui';
 
 interface BrickProps {
   component: Component | null | undefined;
@@ -127,10 +126,10 @@ export const Brick: FC<BrickProps> = (props: BrickProps) => {
   }
 
   return (
-    <Grid container sx={{ flexGrow: '1', minHeight: '0', flexWrap: 'nowrap' }}>
+    <Grid container style={{ flexGrow: '1', minHeight: '0', flexWrap: 'nowrap' }}>
       {type === 'brick' && (
         <>
-          <Grid item xs={6} sx={{ flexGrow: '1', overflowY: 'auto', minHeight: '0' }}>
+          <Grid item xs={12} l={7} style={{ flexGrow: '1', overflowY: 'auto', minHeight: '0' }}>
             <Stack spacing={1} padding={2}>
               <Typography variant="h4">Container</Typography>
               <BaseInput
@@ -187,7 +186,7 @@ export const Brick: FC<BrickProps> = (props: BrickProps) => {
               />
             </Stack>
           </Grid>
-          <Grid item xs={6} sx={{ flexGrow: '1', overflowY: 'auto', minHeight: '0' }}></Grid>
+          <Grid xs={0} l={5} style={{ flexGrow: '1', overflowY: 'auto', minHeight: '0' }}></Grid>
         </>
       )}
     </Grid>

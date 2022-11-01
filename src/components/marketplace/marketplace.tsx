@@ -1,5 +1,4 @@
 import React, { FC, useState, useEffect, useContext } from 'react';
-import { Grid } from '@mui/material';
 import { Button as EDSButton, Icon, Progress, Snackbar, Typography, Pagination } from '@equinor/eds-core-react';
 import moment from 'moment';
 import { Component, IPageInfo } from '../../models/v2';
@@ -7,7 +6,7 @@ import { services, IFilter } from '../../services';
 import { isNotEmptyArray } from '../../common/general-helpers';
 import { ComponentCard } from './components/component-card';
 import { AddComponentToGraph, CreateComponent } from '../creators';
-import { Button, Stack } from '../ui';
+import { Button, Stack, Grid } from '../ui';
 import { UserContextStore } from '../../common/context/user-context-store';
 import { Link } from 'react-router-dom';
 import { Select, BaseInput } from '../form';
@@ -172,7 +171,7 @@ export const Marketplace: FC<MarketplaceProps> = (props: MarketplaceProps) => {
               />
             </Stack>
           )}
-          <Grid container justifyContent="flex-start" spacing={2}>
+          <Grid container justifyContent="flex-start" spacing={1}>
             {loading && <Progress.Dots />}
             {isNotEmptyArray(components) &&
               !loading &&

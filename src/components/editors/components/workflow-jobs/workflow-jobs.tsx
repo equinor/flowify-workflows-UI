@@ -1,13 +1,12 @@
 import React, { FC, useContext, useEffect, useState } from 'react';
-import { Grid } from '@mui/material';
 import moment from 'moment';
 import { Icon, Typography } from '@equinor/eds-core-react';
+import { Link } from 'react-router-dom';
 import { IJobsListRequest, Workflow } from '../../../../models/v2';
 import { IFilter, IPagination } from '../../../../services';
 import { RunWorkflow } from '../../../creators';
 import { Timestamp } from '../../../timestamp';
-import { Paper, Button, Pagination, Stack } from '../../../ui';
-import { Link } from 'react-router-dom';
+import { Paper, Button, Pagination, Stack, Grid } from '../../../ui';
 import { BaseInput, Select } from '../../../form';
 import { UserContextStore } from '../../../../common/context/user-context-store';
 
@@ -46,8 +45,8 @@ export const WorkflowJobs: FC<WorkflowJobsProps> = (props: WorkflowJobsProps) =>
   }, [fetchJobs, page, search, searchParam, values, user, workflow?.uid]);
 
   return (
-    <Grid container sx={{ flexGrow: '1', minHeight: '0', flexWrap: 'nowrap' }}>
-      <Grid item xs={8} sx={{ flexGrow: '1', overflowY: 'auto', minHeight: '0', borderLeft: '1px solid #f7f7f7' }}>
+    <Grid container style={{ flexGrow: '1', minHeight: '0', flexWrap: 'nowrap' }}>
+      <Grid item xs={8} style={{ flexGrow: '1', overflowY: 'auto', minHeight: '0', borderLeft: '1px solid #f7f7f7' }}>
         <Stack spacing={1} padding={2}>
           <Stack direction="row" justifyContent="stretch" spacing={1}>
             <Select
@@ -115,7 +114,7 @@ export const WorkflowJobs: FC<WorkflowJobsProps> = (props: WorkflowJobsProps) =>
           />
         </Stack>
       </Grid>
-      <Grid item xs={4} sx={{ flexGrow: '1', minHeight: '0', flexWrap: 'nowrap' }}>
+      <Grid item xs={4} style={{ flexGrow: '1', minHeight: '0', flexWrap: 'nowrap' }}>
         <Stack padding={2}>
           <Stack direction="row" alignItems="flex-end" justifyContent="space-between" spacing={6}>
             <Typography variant="h4"></Typography>

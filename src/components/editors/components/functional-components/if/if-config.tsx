@@ -1,6 +1,6 @@
 import React, { FC, useEffect, useState } from 'react';
 import { Button, Icon, Typography } from '@equinor/eds-core-react';
-import { Dialog, Grid } from '@mui/material';
+import { Dialog } from '@mui/material';
 import { Component, Edge, Graph, Node } from '../../../../../models/v2';
 import { Parameter } from '../../parameter/parameter';
 import { IfGraph } from './if-graph';
@@ -8,7 +8,7 @@ import { nanoid } from '../../../helpers';
 import { isNotEmptyArray } from '../../../../../common';
 import { Expression } from './expression';
 import { ComponentsHandler } from './components-handler';
-import { DialogWrapper, Stack } from '../../../../ui';
+import { DialogWrapper, Stack, Grid } from '../../../../ui';
 
 interface IfConfigProps {
   open: boolean;
