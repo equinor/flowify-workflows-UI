@@ -2,7 +2,6 @@ import React, { memo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { NodeProps } from 'react-flow-renderer/nocss';
 import { Button, Chip, Icon, Tooltip, Typography } from '@equinor/eds-core-react';
-import { DragIndicator as DragIcon } from '@mui/icons-material';
 import { INode } from '../../../helpers/helpers';
 import { Handles } from '..';
 import { NodePreview } from '../..';
@@ -47,7 +46,7 @@ export const SubNode = memo((props: ISubNode) => {
             </Tooltip>
           </Stack>
         </Stack>
-        <DragIcon className="custom-drag-handle" sx={{ color: '#666', fontSize: '2rem' }} />
+        <Icon name="drag_indicator" className="custom-drag-handle" size={32} />
       </Stack>
       <Handles parameters={data?.component?.outputs} type="Output" filterParameters={false} />
     </Stack>

@@ -1,6 +1,5 @@
 import React, { FC, useState } from 'react';
 import { Icon, Typography } from '@equinor/eds-core-react';
-import { Storage } from '@mui/icons-material';
 import * as yup from 'yup';
 import { Formik, Form } from 'formik';
 import { Brick, Data, Edge, Graph } from '../../../../models/v2';
@@ -81,11 +80,7 @@ export const Parameter: FC<ParameterProps> = (props: ParameterProps) => {
       <Stack spacing={0.5}>
         <ParameterWrapper onClick={() => setOpen(true)}>
           <Stack direction="row" alignItems="center" spacing={1}>
-            {parameter?.type === 'volume' ? (
-              <Storage sx={{ color: '#007079' }} />
-            ) : (
-              <Icon color="#007079" name={TYPE_ICONS[parameter.type as keyof typeof TYPE_ICONS]} />
-            )}
+            <Icon color="#007079" name={TYPE_ICONS[parameter.type as keyof typeof TYPE_ICONS]} />
             <div style={{ flexGrow: '2' }}>
               <Typography variant="h5">{parameter.name}</Typography>
               <Typography variant="body_short">{parameter.userdata?.description}</Typography>
