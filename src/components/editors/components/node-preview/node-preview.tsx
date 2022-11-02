@@ -1,5 +1,4 @@
 import React, { FC } from 'react';
-import { Drawer } from '@mui/material';
 import { NodeProps } from 'react-flow-renderer/nocss';
 import { Typography } from '@equinor/eds-core-react';
 import moment from 'moment';
@@ -7,7 +6,7 @@ import { Link } from 'react-router-dom';
 import ReactJson from 'react-json-view';
 import { INode } from '../../helpers/helpers';
 import { Brick, Graph } from '../../../../models/v2';
-import { DialogWrapper, Button, Stack } from '../../../ui';
+import { DialogWrapper, Button, Stack, Drawer } from '../../../ui';
 
 interface NodePreviewProps {
   open: boolean;
@@ -21,7 +20,7 @@ export const NodePreview: FC<NodePreviewProps> = (props: NodePreviewProps) => {
   const inputParams = data?.component?.inputs || [];
   const outputParams = data?.component?.outputs || [];
   return (
-    <Drawer open={props.open} onClose={() => onClose(false)} anchor="right" sx={{ width: '400px' }}>
+    <Drawer open={props.open} onClose={() => onClose(false)} maxWidth="sm">
       <DialogWrapper padding={2} spacing={2} style={{ width: '440px', height: '100%' }}>
         <Typography variant="h4">
           <b>{data?.label}</b>

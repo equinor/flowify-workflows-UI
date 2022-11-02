@@ -3,6 +3,8 @@ import { Stack } from '..';
 
 export const StyledDialogWrapper = styled(Stack)`
   background-color: ${({ theme }) => theme?.layout?.background};
+  height: 100%;
+  color: ${({ theme }) => theme?.defaults?.color};
   h4,
   h5,
   h6,

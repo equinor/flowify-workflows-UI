@@ -87,7 +87,9 @@ const JobSidebar: FC<IJobSidebar> = (props: IJobSidebar) => {
         ))}
       </Stack>
       <Stack direction="row" spacing={2}>
-        {jobWatch?.status?.phase === 'Running' && <Button onClick={onTerminate}>Terminate job</Button>}
+        {jobWatch?.status?.phase === 'Running' || jobWatch === undefined ? (
+          <Button onClick={onTerminate}>Terminate job</Button>
+        ) : null}
         <Button theme="danger" onClick={onDelete}>
           Delete job
         </Button>

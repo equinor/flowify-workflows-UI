@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Typography } from '@equinor/eds-core-react';
-import { Drawer } from '@mui/material';
 import ReactJson from 'react-json-view';
 import { getResolvedTemplates } from '../../../../../common';
 import { NodeStatus, Workflow } from '../../../../../models';
@@ -9,7 +8,7 @@ import { NodeSummary } from './components';
 import { InputsOutputsDetail } from './components/inputs-outputs-detail';
 import { LogViewer } from '../log-viewer';
 import { ensurePodName } from './helpers/node-helpers';
-import { Stack } from '../../../../ui';
+import { Stack, Drawer } from '../../../../ui';
 
 interface NodeDetailsProps {
   workflowName?: string;
@@ -65,7 +64,7 @@ export const NodeDetails: React.FC<NodeDetailsProps> = (props: NodeDetailsProps)
   };
 
   return (
-    <Drawer open={props.open} onClose={() => props.onClose(false)} anchor="right" sx={{ minWidth: '650px' }}>
+    <Drawer open={props.open} onClose={() => props.onClose(false)} maxWidth="sm">
       <Stack spacing={1} padding={2} style={{ maxWidth: '650px', flexWrap: 'wrap', position: 'relative' }}>
         <NodeSummary nodeStatus={nodeStatus} />
         <Typography variant="h4">Containers</Typography>

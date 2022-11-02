@@ -40,5 +40,5 @@ export const Modal: FC<ModalProps> = (props: ModalProps) => {
     },
   };
 
-  return <ReactModal isOpen={open} onRequestClose={onClose} style={customStyles} {...restProps} />;
+  return <ReactModal isOpen={open} onRequestClose={onClose} style={customStyles} {...restProps} closeTimeoutMS={500} />;
 };
