@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import { Icon, Typography } from '@equinor/eds-core-react';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
-import { ComponentIcon, Button, Paper, Chip, Stack } from '../../ui';
+import { Button, Paper, Chip, Stack } from '../../ui';
 import { Component } from '../../../models/v2';
 import { Timestamp } from '../../timestamp';
 
@@ -22,7 +22,7 @@ export const ComponentCard: FC<IComponentCard> = (props: IComponentCard) => {
         <div>
           <Stack spacing={1}>
             <Stack direction="row" alignItems="center" spacing={1}>
-              <ComponentIcon />
+              <Icon name="component" size={16} />
               {today.diff(component.timestamp, 'days') < 3 ? <Icon name="new_label" size={32} color="#004f55" /> : null}
             </Stack>
             <Stack spacing={0.5}>

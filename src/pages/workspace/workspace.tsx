@@ -5,6 +5,7 @@ import { Container, Layout } from '../../layout';
 import { WorkflowsListing, JobsListing } from '../../components';
 import { WorkspaceHeader, Stack, MultiToggle, ToggleButton } from '../../components/ui';
 import { CreateWorkflow } from '../../components/creators';
+import { Icon } from '@equinor/eds-core-react';
 
 interface IWorkspace {}
 
@@ -23,9 +24,11 @@ const Workspace: FC<IWorkspace> = (props: IWorkspace) => {
           <Stack direction="row" alignItems="center" justifyContent="space-between">
             <MultiToggle style={{ fontSize: '1.5rem' }}>
               <ToggleButton active={type === 'workflows'} onClick={() => setType('workflows')}>
+                <Icon name="workflow" />
                 Workflows
               </ToggleButton>
               <ToggleButton active={type === 'jobs'} onClick={() => setType('jobs')}>
+                <Icon name="launch" />
                 Jobs
               </ToggleButton>
             </MultiToggle>

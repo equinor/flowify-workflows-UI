@@ -1,7 +1,7 @@
 import React, { FC, useContext } from 'react';
 import { Icon, Typography } from '@equinor/eds-core-react';
 import { Link } from 'react-router-dom';
-import { FlowifyIcon, Stack } from '../../components/ui';
+import { Stack } from '../../components/ui';
 import { TopBar, IconsWrapper } from './styles';
 import { UserContextStore } from '../../common/context/user-context-store';
 
@@ -13,7 +13,7 @@ const Header: FC<IHeader> = (props: IHeader) => {
     <TopBar>
       <Stack direction="row" alignItems="center" spacing={1}>
         <Link to="/dashboard">
-          <FlowifyIcon name="waves" size={32} />
+          <Icon name="waves" size={32} />
         </Link>
         <Typography variant="h3" as="span">
           Flowify

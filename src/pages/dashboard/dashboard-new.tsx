@@ -1,7 +1,7 @@
 import React, { FC, useState } from 'react';
-import { Typography } from '@equinor/eds-core-react';
+import { Icon, Typography } from '@equinor/eds-core-react';
 import { Helmet } from 'react-helmet-async';
-import { Breadcrumbs, ComponentIcon, Stack } from '../../components/ui';
+import { Breadcrumbs, Stack } from '../../components/ui';
 import { Layout, Container } from '../../layout';
 import { Marketplace, WorkspacesListing } from '../../components';
 import { DashboardListing } from '../../components/listings/dashboard-listing';
@@ -28,7 +28,7 @@ const DashboardPage: FC<IDashboardPage> = (props: IDashboardPage) => {
           <CreateComponent open={newComponentOpen} setOpen={setNewComponentOpen} />
           <DashboardListing
             title="Components"
-            icon={<ComponentIcon size={24} />}
+            icon={<Icon name="component" />}
             sections={[
               {
                 linklist: [
