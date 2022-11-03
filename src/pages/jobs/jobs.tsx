@@ -1,6 +1,5 @@
 import React from 'react';
 import { useParams } from 'react-router';
-import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { Breadcrumbs, Stack } from '../../components/ui';
 import { JobsListing } from '../../components';
@@ -18,13 +17,13 @@ export const JobsPage: React.FC<JobsPageProps> = (props: JobsPageProps) => {
       </Helmet>
       <Container withMargins>
         <Stack spacing={4}>
-          <Breadcrumbs>
-            <Link to="/dashboard">Dashboard</Link>
-            <Link to={`/workspace/${workspace}`}>{workspace}</Link>
-            <span>
-              <b>Jobs</b>
-            </span>
-          </Breadcrumbs>
+          <Breadcrumbs
+            links={[
+              { title: 'Dashboard', href: '/dashboard' },
+              { title: workspace || '', href: `/workspace/${workspace}` },
+              { title: 'Jobs' },
+            ]}
+          />
           <JobsListing workspace={workspace!} />
         </Stack>
       </Container>

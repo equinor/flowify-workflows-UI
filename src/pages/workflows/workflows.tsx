@@ -1,6 +1,5 @@
 import React, { FC } from 'react';
 import { useParams } from 'react-router';
-import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { Breadcrumbs, Stack } from '../../components/ui';
 import WorkflowsListing from '../../components/workflows-listing/workflows-listing';
@@ -16,13 +15,13 @@ export const WorkflowsPage: FC = () => {
       </Helmet>
       <Container withMargins>
         <Stack spacing={4}>
-          <Breadcrumbs>
-            <Link to="/dashboard">Dashboard</Link>
-            <Link to={`/workspace/${workspace}`}>{workspace}</Link>
-            <span>
-              <b>Workflows</b>
-            </span>
-          </Breadcrumbs>
+          <Breadcrumbs
+            links={[
+              { title: 'Dashboard', href: '/dashboard' },
+              { title: workspace || '', href: `/workspace/${workspace}` },
+              { title: 'Workflows' },
+            ]}
+          />
           <WorkflowsListing workspace={workspace!} showTitle={false} />
         </Stack>
       </Container>

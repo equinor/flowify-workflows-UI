@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Icon, Typography } from '@equinor/eds-core-react';
 import { Helmet } from 'react-helmet-async';
-import { Link } from 'react-router-dom';
 import { services } from '../../services';
 import { Container, Layout } from '../../layout';
 import { ISecret, ISecretsList, IUserVolume, IVolume, Workspace, WorkspaceList } from '../../models/v2';
@@ -115,12 +114,7 @@ export const AdminPage: React.FC = (): React.ReactElement => {
       <Feedbacks feedback={feedback} setFeedback={setFeedback} />
       <Container withMargins>
         <Stack spacing={4}>
-          <Breadcrumbs>
-            <Link to="/dashboard">Dashboard</Link>
-            <span>
-              <b>Admin page</b>
-            </span>
-          </Breadcrumbs>
+          <Breadcrumbs links={[{ title: 'Dashboard', href: '/dashboard' }, { title: 'Admin page' }]} />
           <Select
             label="Select workspace to admin"
             name="workspace_selector"

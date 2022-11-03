@@ -19,11 +19,7 @@ const DashboardPage: FC<IDashboardPage> = (props: IDashboardPage) => {
       </Helmet>
       <Container withMargins>
         <Stack spacing={4}>
-          <Breadcrumbs>
-            <span>
-              <b>Dashboard</b>
-            </span>
-          </Breadcrumbs>
+          <Breadcrumbs links={[{ title: 'Dashboard' }]} />
           <WorkspacesListing />
           <CreateComponent open={newComponentOpen} setOpen={setNewComponentOpen} />
           <DashboardListing

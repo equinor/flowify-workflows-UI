@@ -1,5 +1,3 @@
-export { theme, addTheme } from '../../styles/theme/index';
-export * from './navigation';
 export * from './multi-toggle/multi-toggle';
 export * from './button/button';
 export * from './paper/paper';
@@ -12,3 +10,4 @@ export { Grid } from './grid/grid';
 export { Modal } from './modal/modal';
 export { Table } from './table/table';
 export { Drawer } from './drawer/drawer';
+export { Breadcrumbs } from './breadcrumbs/breadcrumbs';
