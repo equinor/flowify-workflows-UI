@@ -17,12 +17,12 @@ export const Breadcrumbs: FC<BreadcrumbsProps> = (props: BreadcrumbsProps) => {
         <ol>
           {links?.map((link) =>
             link?.href ? (
-              <li>
+              <li key={link?.href}>
                 <Link to={link?.href}>{link?.title}</Link>
                 <Icon name="chevron_right" size={16} />
               </li>
             ) : (
-              <li>
+              <li key={link?.title}>
                 <span>{link?.title}</span>
               </li>
             ),

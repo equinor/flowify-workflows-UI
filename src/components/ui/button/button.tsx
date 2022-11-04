@@ -27,3 +27,5 @@ export const Button: FC<ButtonProps> = React.forwardRef((props: ButtonProps, ref
 Button.defaultProps = {
   theme: 'default',
 };
+
+export type { ButtonProps };
