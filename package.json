@@ -4,6 +4,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@craco/craco": "^6.4.5",
     "@equinor/eds-core-react": "0.21.0",
     "@equinor/eds-icons": "0.13.0",
     "@monaco-editor/react": "4.4.5",
@@ -33,13 +34,10 @@
     "yup": "^0.32.11"
   },
   "scripts": {
-    "api": "node mock-server/server.js",
-    "start": "react-scripts start",
-    "start:dev": "yarn start:browser && yarn start",
-    "start:browser": "open -n -a /Applications/Google\\ Chrome.app/Contents/MacOS/Google\\ Chrome --args --user-data-dir='/tmp/chrome_dev_test' --disable-web-security",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
+    "start": "craco start",
+    "build": "craco build",
+    "test": "craco test",
+    "eject": "craco eject",
     "analyze": "source-map-explorer 'build/static/js/*.js' --gzip"
   },
   "eslintConfig": {
