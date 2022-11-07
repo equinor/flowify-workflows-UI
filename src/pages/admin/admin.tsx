@@ -7,9 +7,7 @@ import { Breadcrumbs, Button, Stack, Table } from '@ui';
 import { Select } from '@form';
 import { isNotEmptyArray } from '@common';
 import { Container, Layout } from '../../layout';
-import { VolumeEditor } from '../../components/editors/volume/volume-editor';
-import { Feedback, Feedbacks } from '../../components/editors/components';
-import { SecretEditor } from '../../components/editors/secret-editor/secret-editor';
+import { VolumeEditor, Feedback, Feedbacks, SecretEditor } from '../../components';
 
 function CREATE_VOLUME_TEMPLATE(workspace: string) {
   return {

@@ -1,4 +1,4 @@
-import { NodePhase } from './../../../../models/workflows';
+import { NodePhase } from '../../../../models/workflows';
 
 export type Node = string;
 type NodeGroup = string;
