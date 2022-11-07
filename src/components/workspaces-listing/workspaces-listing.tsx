@@ -3,7 +3,7 @@ import { Icon, Progress } from '@equinor/eds-core-react';
 import { services } from '@services';
 import { Workspace } from '@models/v2';
 import { isNotEmptyArray } from '@common';
-import { DashboardListing } from '../listings/dashboard-listing';
+import { DashboardListing } from '../dashboard-listing/dashboard-listing';
 
 interface IWorkspacesListing {}
 

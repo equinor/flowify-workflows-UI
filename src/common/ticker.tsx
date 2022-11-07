@@ -5,16 +5,6 @@ export interface TickerProps {
   children: any;
 }
 
-export const Ticker: React.FC<TickerProps> = ({ interval, children }: TickerProps): React.ReactElement => {
-  const [res, setResult] = useState(children());
-
-  useInterval(() => {
-    setResult(children());
-  }, interval);
-
-  return <>{res}</>;
-};
-
 function useInterval(callback: () => void, delay: number) {
   const savedCallback = useRef(callback);
 
@@ -31,3 +21,13 @@ function useInterval(callback: () => void, delay: number) {
     return () => clearInterval(id);
   }, [delay]);
 }
+
+export const Ticker: React.FC<TickerProps> = ({ interval, children }: TickerProps): React.ReactElement => {
+  const [res, setResult] = useState(children());
+
+  useInterval(() => {
+    setResult(children());
+  }, interval);
+
+  return <>{res}</>;
+};

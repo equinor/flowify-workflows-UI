@@ -7,8 +7,9 @@ import { Button, Stack, Grid } from '@ui';
 import { Select, BaseInput } from '@form';
 import { Component, IPageInfo } from '@models/v2';
 import { isNotEmptyArray, UserContextStore } from '@common';
-import { ComponentCard } from './components/component-card';
-import { AddComponentToGraph, CreateComponent } from '../creators';
+import { ComponentCard } from './component-card/component-card';
+import { AddButton } from './add-button/add-button';
+import { CreateComponent } from '../creators';
 
 interface MarketplaceProps {
   onAddComponent?: any;
@@ -178,7 +179,7 @@ export const Marketplace: FC<MarketplaceProps> = (props: MarketplaceProps) => {
                 <Grid key={`${component.uid}_${component?.version?.current}`} item xs={4}>
                   <ComponentCard component={component}>
                     {typeof onAddComponent === 'function' && (
-                      <AddComponentToGraph component={component} onAddComponent={onAddComponent} />
+                      <AddButton component={component} onAddComponent={onAddComponent} />
                     )}
                   </ComponentCard>
                 </Grid>

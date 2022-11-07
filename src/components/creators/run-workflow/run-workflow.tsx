@@ -7,8 +7,8 @@ import { isNotEmptyArray } from '@common';
 import { Button, DialogWrapper, Message, Stack, Modal, ButtonProps } from '@ui';
 import { BaseInput } from '@form';
 import { checkConnections } from '@common';
-import { fetchInitialSubComponents } from '../editors/helpers';
-import { Parameter } from '../editors/components';
+import { fetchInitialSubComponents } from '../../editors/helpers';
+import { Parameter } from '../../editors/components';
 
 interface RunWorkflowProps {
   // Pass the entire workflow object or a string (uid)

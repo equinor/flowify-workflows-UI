@@ -2,9 +2,8 @@ import React, { FC } from 'react';
 import { Link } from 'react-router-dom';
 import { Typography } from '@equinor/eds-core-react';
 import { Workflow } from '@models/v2';
-import { Chip, Paper, Stack } from '@ui';
+import { Chip, Paper, Stack, Timestamp } from '@ui';
 import { RunWorkflow } from '../../creators';
-import { Timestamp } from '../../timestamp';
 
 interface WorkflowCardProps {
   workflow: Workflow;

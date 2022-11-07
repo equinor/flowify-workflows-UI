@@ -29,7 +29,7 @@ import {
 import { ReactFlowWrapper } from './styles';
 import { MarketplaceModal } from '../marketplace-modal/marketplace-modal';
 import { Feedback } from '../feedbacks/types';
-import { BUTTON_STATE } from '../../../creators/add-component-to-graph';
+import { BUTTON_STATE } from '../../../marketplace/add-button/add-button';
 
 interface IGraphEditor {
   component: Component | undefined;

@@ -3,7 +3,7 @@ import { Icon } from '@equinor/eds-core-react';
 import { Component } from '@models/v2';
 import { DialogWrapper, Button, MultiToggle, ToggleButton, Stack, Modal } from '@ui';
 import { Marketplace } from '../../../marketplace/marketplace';
-import { BUTTON_STATE } from '../../../creators/add-component-to-graph';
+import { BUTTON_STATE } from '../../../marketplace/add-button/add-button';
 import { FunctionalComponents } from '../functional-components/functional-components';
 
 interface MarketplaceModalProps {

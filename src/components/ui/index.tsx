@@ -11,3 +11,4 @@ export { Modal } from './modal/modal';
 export { Table } from './table/table';
 export { Drawer } from './drawer/drawer';
 export { Breadcrumbs } from './breadcrumbs/breadcrumbs';
+export { Timestamp } from './timestamp/timestamp';

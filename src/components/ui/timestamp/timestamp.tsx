@@ -1,6 +1,5 @@
 import React from 'react';
-import { ago } from '../common';
-import { Ticker } from './ticker';
+import { ago, Ticker } from '@common';
 
 export interface TimestampProps {
   date: Date | string | number | undefined;

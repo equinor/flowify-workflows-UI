@@ -1,7 +1,7 @@
 import React from 'react';
-import { WorkflowStatus } from '../models';
-import { formatDuration, wfDuration } from '../common';
-import { Ticker } from './ticker';
+import { WorkflowStatus } from '../../../../../models';
+import { formatDuration, wfDuration } from '../../../../../common';
+import { Ticker } from '../../../../../common/ticker';
 
 export interface DurationPanelProps {
   status: WorkflowStatus;

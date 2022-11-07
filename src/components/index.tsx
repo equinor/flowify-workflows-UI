@@ -6,7 +6,7 @@ export { default as ComponentEditor } from './editors/component-editor/component
 export { default as WorkflowEditor } from './editors/workflow-editor/workflow-editor';
 export { default as CreateComponent } from './creators/create-component/create-component';
 export { Marketplace } from './marketplace/marketplace';
-export { DashboardListing } from './listings/dashboard-listing';
+export { DashboardListing } from './dashboard-listing/dashboard-listing';
 export { SecretEditor } from './editors/secret-editor/secret-editor';
 export { VolumeEditor } from './editors/volume-editor/volume-editor';
 export * from './editors/components/feedbacks/feedbacks';
