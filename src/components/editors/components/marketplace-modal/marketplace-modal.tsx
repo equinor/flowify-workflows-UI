@@ -1,10 +1,9 @@
 import React, { FC, useState } from 'react';
-import { Dialog, DialogContent, Stack } from '@mui/material';
 import { Icon } from '@equinor/eds-core-react';
+import { Component } from '@models/v2';
+import { DialogWrapper, Button, MultiToggle, ToggleButton, Stack, Modal } from '@ui';
 import { Marketplace } from '../../../marketplace/marketplace';
-import { Component } from '../../../../models/v2';
 import { BUTTON_STATE } from '../../../creators/add-component-to-graph';
-import { DialogWrapper, Button, MultiToggle, ToggleButton } from '../../../ui';
 import { FunctionalComponents } from '../functional-components/functional-components';
 
 interface MarketplaceModalProps {
@@ -21,36 +20,34 @@ export const MarketplaceModal: FC<MarketplaceModalProps> = (props: MarketplaceMo
   const [type, setType] = useState<'marketplace' | 'functional'>('marketplace');
 
   return (
-    <Dialog open={open} onClose={onClose} fullWidth maxWidth="xl">
-      <DialogWrapper>
-        <DialogContent sx={{ height: '90vh' }}>
-          <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ padding: '1rem' }}>
-            <MultiToggle style={{ fontSize: '1.25rem' }}>
-              <ToggleButton active={type === 'marketplace'} onClick={() => setType('marketplace')}>
-                <Icon name="mall" /> Marketplace components
-              </ToggleButton>
-              <ToggleButton active={type === 'functional'} onClick={() => setType('functional')}>
-                <Icon name="formula" /> Functional components
-              </ToggleButton>
-            </MultiToggle>
-            <Button theme="icon" onClick={() => onClose(false)}>
-              <Icon name="close" />
-            </Button>
-          </Stack>
-          <Stack sx={{ padding: '2rem 2rem 2rem' }}>
-            {type === 'marketplace' ? (
-              <Marketplace onAddComponent={onAddComponent} showTitle={false} />
-            ) : (
-              <FunctionalComponents
-                onClose={onClose}
-                component={props.component}
-                subComponents={props.subcomponents}
-                setComponent={props.setComponent || (() => null)}
-              />
-            )}
-          </Stack>
-        </DialogContent>
+    <Modal open={open} onClose={() => onClose(false)} fullWidth maxWidth="xl">
+      <DialogWrapper padding={1} style={{ height: '90vh' }}>
+        <Stack direction="row" justifyContent="space-between" alignItems="center" padding={1}>
+          <MultiToggle style={{ fontSize: '1.25rem' }}>
+            <ToggleButton active={type === 'marketplace'} onClick={() => setType('marketplace')}>
+              <Icon name="mall" /> Marketplace components
+            </ToggleButton>
+            <ToggleButton active={type === 'functional'} onClick={() => setType('functional')}>
+              <Icon name="formula" /> Functional components
+            </ToggleButton>
+          </MultiToggle>
+          <Button theme="icon" onClick={() => onClose(false)}>
+            <Icon name="close" />
+          </Button>
+        </Stack>
+        <Stack style={{ padding: '2rem 2rem 2rem' }}>
+          {type === 'marketplace' ? (
+            <Marketplace onAddComponent={onAddComponent} showTitle={false} />
+          ) : (
+            <FunctionalComponents
+              onClose={onClose}
+              component={props.component}
+              subComponents={props.subcomponents}
+              setComponent={props.setComponent || (() => null)}
+            />
+          )}
+        </Stack>
       </DialogWrapper>
-    </Dialog>
+    </Modal>
   );
 };

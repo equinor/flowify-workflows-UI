@@ -1,6 +1,5 @@
 import React, { FC } from 'react';
-import { Link } from 'react-router-dom';
-import { Breadcrumbs } from '../../../ui';
+import { Breadcrumbs } from '@ui';
 
 interface IEditorHeader {
   name?: string | null;
@@ -14,13 +13,13 @@ interface IEditorHeader {
 const EditorHeader: FC<IEditorHeader> = (props: IEditorHeader) => {
   const { workspace } = props;
   return (
-    <Breadcrumbs>
-      <Link to="/dashboard">Dashboard</Link>
-      {workspace && <Link to={`/workspace/${workspace}`}>{workspace}</Link>}
-      <span>
-        <b>{props.type} editor</b>
-      </span>
-    </Breadcrumbs>
+    <Breadcrumbs
+      links={[
+        { title: 'Dashboard', href: '/dashboard' },
+        { title: workspace, href: `/workspace/${workspace}` },
+        { title: `${props.type} editor` },
+      ]}
+    />
   );
 };
 

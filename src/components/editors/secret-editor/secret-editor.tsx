@@ -1,12 +1,11 @@
 import React, { FC, useState } from 'react';
-import { Dialog } from '@mui/material';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
-import { ISecret } from '../../../models/v2';
-import { Stack, DialogWrapper } from '../../ui';
-import { services } from '../../../services';
+import { ISecret } from '@models/v2';
+import { Stack, DialogWrapper, Modal } from '@ui';
+import { services } from '@services';
+import { TextInputFormik } from '@form';
 import { Feedback } from '../components';
-import { TextInputFormik } from '../../form/formik/text-input-formik';
 import { Submitter } from './components/submitter';
 
 interface SecretEditorProps {
@@ -65,7 +64,7 @@ export const SecretEditor: FC<SecretEditorProps> = (props: SecretEditorProps) =>
   });
 
   return (
-    <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth>
+    <Modal open={open} onClose={onClose} maxWidth="md" fullWidth>
       <DialogWrapper padding={2}>
         <Stack spacing={2}>
           <Formik initialValues={props.secret} onSubmit={saveSecret} validateOnBlur validationSchema={validationSchema}>
@@ -79,6 +78,6 @@ export const SecretEditor: FC<SecretEditorProps> = (props: SecretEditorProps) =>
           </Formik>
         </Stack>
       </DialogWrapper>
-    </Dialog>
+    </Modal>
   );
 };

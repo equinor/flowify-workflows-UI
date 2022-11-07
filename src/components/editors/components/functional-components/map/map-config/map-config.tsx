@@ -1,12 +1,11 @@
 import React, { FC, useEffect, useState } from 'react';
-import { Stack, Dialog, Grid } from '@mui/material';
 import { Typography } from '@equinor/eds-core-react';
+import { Component, Edge, Graph, Node } from '@models/v2';
+import { isNotEmptyArray } from '@common';
+import { DialogWrapper, Button, Stack, Grid, Modal } from '@ui';
 import { getComponentFromRef, nanoid } from '../../../../helpers';
 import { Parameter } from '../../..';
-import { Component, Edge, Graph, Node } from '../../../../../../models/v2';
 import { MapGraph } from './map-graph';
-import { isNotEmptyArray } from '../../../../../../common';
-import { DialogWrapper, Button } from '../../../../../ui';
 
 interface MapConfigProps {
   open: boolean;
@@ -58,7 +57,7 @@ export const MapConfig: FC<MapConfigProps> = (props: MapConfigProps) => {
         const updated = mappings.filter(
           (edge) =>
             (edge?.source?.node === mapConfigComponent ? outputs?.includes(edge?.source?.port) : true) &&
-            (edge?.target?.node === mapConfigComponent ? inputs?.includes(edge?.source?.port) : true),
+            (edge?.target?.node === mapConfigComponent ? inputs?.includes(edge?.target?.port) : true),
         );
         return updated;
       }
@@ -93,15 +92,22 @@ export const MapConfig: FC<MapConfigProps> = (props: MapConfigProps) => {
   }
 
   return (
-    <Dialog open={open} onClose={onClose} fullWidth maxWidth="lg">
+    <Modal open={open} onClose={onClose} fullWidth maxWidth="lg">
       <DialogWrapper>
         <Grid
           container
-          sx={{ flexGrow: '1', minHeight: '0', flexWrap: 'nowrap', height: '100%', width: '100%', maxHeight: '90vh' }}
+          style={{
+            flexGrow: '1',
+            minHeight: '0',
+            flexWrap: 'nowrap',
+            height: '100%',
+            width: '100%',
+            maxHeight: '90vh',
+          }}
         >
-          <Grid item xs={3} sx={{ flexGrow: '1', overflowY: 'auto', minHeight: '0' }}>
-            <Stack padding={2} spacing={4}>
-              <Stack sx={{ flexGrow: '1' }} spacing={2}>
+          <Grid item xs={3} style={{ flexGrow: '1', overflowY: 'auto', minHeight: '0' }}>
+            <Stack padding={1} spacing={2}>
+              <Stack style={{ flexGrow: '1' }} spacing={1}>
                 <Typography variant="h5">Inputs</Typography>
                 {mapComponent?.inputs?.map((input, index) => (
                   <Parameter
@@ -116,7 +122,7 @@ export const MapConfig: FC<MapConfigProps> = (props: MapConfigProps) => {
                   Add input
                 </Button>
               </Stack>
-              <Stack sx={{ flexGrow: '1' }} spacing={2}>
+              <Stack style={{ flexGrow: '1' }} spacing={1}>
                 <Typography variant="h5">Outputs</Typography>
                 {mapComponent?.outputs?.map((output, index) => (
                   <Parameter
@@ -143,6 +149,6 @@ export const MapConfig: FC<MapConfigProps> = (props: MapConfigProps) => {
           </Grid>
         </Grid>
       </DialogWrapper>
-    </Dialog>
+    </Modal>
   );
 };

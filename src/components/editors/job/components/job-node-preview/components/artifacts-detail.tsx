@@ -1,9 +1,9 @@
 import React from 'react';
 import { Button, Icon, Typography } from '@equinor/eds-core-react';
-import { Stack } from '@mui/material';
+import { services } from '@services';
+import { Stack } from '@ui';
 import { environment } from '../../../../../../environments/environment';
 import { Artifact, NodeStatus, Workflow } from '../../../../../../models';
-import { services } from '../../../../../../services';
 
 interface ArtifactsProps {
   workflow: Workflow;
@@ -39,9 +39,13 @@ export const ArtifactsDetail: React.FC<ArtifactsProps> = ({
       {artifactsDetails === undefined || artifactsDetails?.length === 0 ? (
         <Typography variant="body_short">No artifacts</Typography>
       ) : (
-        <Stack spacing={1} sx={{ marginTop: '0.5rem' }}>
+        <Stack spacing={0.5} style={{ marginTop: '0.5rem' }}>
           {artifactsDetails.map((artifact) => (
-            <Stack alignItems="flex-start" spacing={1} sx={{ borderLeft: '3px solid #007079', padding: '0.5rem 1rem' }}>
+            <Stack
+              alignItems="flex-start"
+              spacing={0.5}
+              style={{ borderLeft: '3px solid #007079', padding: '0.5rem 1rem' }}
+            >
               <Typography variant="body_short">
                 <b>Name: </b>
                 {artifact.name}

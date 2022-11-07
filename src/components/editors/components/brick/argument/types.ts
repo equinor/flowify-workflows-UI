@@ -1,9 +1,10 @@
-import { Arg, Component, Data } from '../../../../../models/v2';
+import { Arg, Component, Data } from '@models/v2';
 
 export const TYPE_ICONS = {
   parameter: 'swap_horizontal',
   artifact: 'file',
   env_secret: 'security',
+  volume: 'storage',
 };
 
 export interface ArgumentProps {

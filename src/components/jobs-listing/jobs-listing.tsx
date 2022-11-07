@@ -1,11 +1,10 @@
 import React, { FC, useContext, useEffect, useState } from 'react';
 import { Typography } from '@equinor/eds-core-react';
-import { services } from '../../services';
-import { Job, IPageInfo } from '../../models/v2';
-import { IFilter } from '../../services/filters';
-import { Pagination, Stack } from '../ui';
-import { UserContextStore } from '../../common/context/user-context-store';
-import { BaseInput, Select } from '../form';
+import { services, IFilter } from '@services';
+import { Job, IPageInfo } from '@models/v2';
+import { Pagination, Stack } from '@ui';
+import { UserContextStore } from '@common';
+import { BaseInput, Select } from '@form';
 import { JobCard } from './job-card/job-card';
 
 interface IJobsListing {

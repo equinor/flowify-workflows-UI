@@ -1,8 +1,7 @@
 import { Connection, Edge, Node } from 'react-flow-renderer';
-import { Component, Map } from '../../../../../../models/v2';
-import { INode, nanoid } from '../../../../helpers';
+import { Component, Map } from '@models/v2';
+import { INode, nanoid, getComponentFromRef } from '../../../../helpers';
 import { ConnectionData } from '../types';
-import { getComponentFromRef } from '../../../../helpers';
 
 export function checkValidation(params: Edge<any> | Connection, component: Component, subcomponents?: Component[]) {
   const { source, sourceHandle, target, targetHandle } = params;

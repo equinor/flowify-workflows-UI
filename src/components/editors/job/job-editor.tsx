@@ -1,15 +1,15 @@
 import React, { FC, useState } from 'react';
+import { useNavigate } from 'react-router';
+import { Helmet } from 'react-helmet-async';
 import { Progress } from '@equinor/eds-core-react';
-import { Grid, Stack } from '@mui/material';
+import { Job } from '@models/v2';
+import { services } from '@services';
+import { Stack, Grid } from '@ui';
+import { NodeDetails } from './components/job-node-preview/job-node-preview';
 import { ManifestEditor } from '../manifest-editor/manifest-editor';
 import { Workflow } from '../../../models';
 import { EditorCentralBar, EditorHeader } from '../components';
 import { JobSidebar, JobGraph } from './components';
-import { NodeDetails } from './components/job-node-preview/job-node-preview';
-import { Helmet } from 'react-helmet-async';
-import { Job } from '../../../models/v2';
-import { services } from '../../../services';
-import { useNavigate } from 'react-router';
 import { LoadingEventsTypes } from '../../../pages/job/job-page';
 
 interface JobViewerProps {
@@ -51,7 +51,7 @@ export const JobViewer: FC<JobViewerProps> = (props: JobViewerProps) => {
       <Helmet>
         <title>{jobWatch?.metadata?.name || ''} - Job viewer - Flowify</title>
       </Helmet>
-      <Grid container sx={{ flexGrow: '1', minHeight: '0', flexWrap: 'nowrap' }}>
+      <Grid container style={{ flexGrow: '1', minHeight: '0', flexWrap: 'nowrap' }}>
         {selectedNodeId && (
           <NodeDetails
             workflowName={jobWatch?.metadata!.name!}
@@ -64,13 +64,13 @@ export const JobViewer: FC<JobViewerProps> = (props: JobViewerProps) => {
         <Grid
           item
           xs={3}
-          sx={{
+          style={{
             minHeight: '0',
             flexGrow: '1',
             overflowY: 'auto',
           }}
         >
-          <Stack spacing={2} padding="1rem">
+          <Stack spacing={2} padding={1}>
             <EditorHeader name={jobWatch?.metadata?.name} type="Job" workspace={props.workspace} loading={loading} />
             {loading && !jobWatch ? (
               <Progress.Dots color="primary" />
@@ -85,13 +85,13 @@ export const JobViewer: FC<JobViewerProps> = (props: JobViewerProps) => {
             )}
           </Stack>
         </Grid>
-        <Grid item xs={9} sx={{ flexGrow: '1', minHeight: '0', flexWrap: 'nowrap' }}>
+        <Grid item xs={9} style={{ flexGrow: '1', minHeight: '0', flexWrap: 'nowrap' }}>
           {loading && !jobWatch ? (
             <Progress.Dots color="primary" />
           ) : (
             <Stack
               direction="row"
-              sx={{ flexGrow: '1', minHeight: '0', flexWrap: 'nowrap', height: '100%', width: '100%' }}
+              style={{ flexGrow: '1', minHeight: '0', flexWrap: 'nowrap', height: '100%', width: '100%' }}
             >
               <EditorCentralBar setUseManifest={setUseManifest} />
               {useManifest ? (

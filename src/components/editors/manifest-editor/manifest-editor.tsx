@@ -1,9 +1,9 @@
 import React, { useState, useContext, FC } from 'react';
-import { Dialog, Stack } from '@mui/material';
 import Editor from '@monaco-editor/react';
-import { Button, Typography } from '@equinor/eds-core-react';
+import { Typography } from '@equinor/eds-core-react';
+import { SettingsContextStore } from '@common';
+import { Button, DialogWrapper, Modal } from '@ui';
 import { StyledManifestWrapper } from './styles';
-import { SettingsContextStore } from '../../../common/context/editor-settings-context';
 import { DEFAULT_LANGUAGE, IError, ManifestEditorProps } from './types';
 import { parse, stringify } from './helpers';
 
@@ -41,19 +41,18 @@ export const ManifestEditor: FC<ManifestEditorProps> = (props: ManifestEditorPro
       {error && (
         <>
           <Button
-            variant="ghost"
+            theme="danger"
             onClick={() => setErrorDialog(true)}
-            style={{ position: 'absolute', bottom: 0, right: 0 }}
-            color="danger"
+            style={{ position: 'absolute', bottom: 10, right: 10 }}
           >
             View Error(s)
           </Button>
-          <Dialog open={errorDialog} onClose={() => setErrorDialog(false)} fullWidth maxWidth="md">
-            <Stack sx={{ padding: '2rem' }}>
+          <Modal open={errorDialog} onClose={() => setErrorDialog(false)} fullWidth maxWidth="md">
+            <DialogWrapper padding={2} spacing={1}>
               <Typography variant="h5">{error.reason}</Typography>
               <Typography variant="body_long">{error.message}</Typography>
-            </Stack>
-          </Dialog>
+            </DialogWrapper>
+          </Modal>
         </>
       )}
     </StyledManifestWrapper>

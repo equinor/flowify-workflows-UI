@@ -1,8 +1,7 @@
 import React, { FC } from 'react';
-import { Icon, Typography } from '@equinor/eds-core-react';
-import { Stack } from '@mui/material';
 import { Link } from 'react-router-dom';
-import { Button, Paper } from '../ui';
+import { Icon, Typography } from '@equinor/eds-core-react';
+import { Button, Paper, Stack } from '@ui';
 
 interface ISection {
   title?: string;
@@ -28,22 +27,22 @@ export const DashboardListing: FC<DashboardListingProps> = (props: DashboardList
   const { sections, title, icon } = props;
   return (
     <Paper padding={2}>
-      <Stack sx={{ justifyContent: 'stretch' }}>
+      <Stack justifyContent="stretch">
         <Stack
           direction="row"
-          spacing={2}
-          sx={{ flexGrow: '1', height: '100%' }}
+          spacing={1}
+          style={{ flexGrow: '1', height: '100%' }}
           alignItems="center"
           justifyContent="flex-start"
         >
-          {icon ? <Stack sx={{ padding: '1rem' }}>{icon}</Stack> : null}
+          {icon ? <Stack padding={1}>{icon}</Stack> : null}
           <Typography variant="h3">{title}</Typography>
         </Stack>
-        <Stack sx={{ flexGrow: '1' }} spacing={4}>
+        <Stack style={{ flexGrow: '1' }} spacing={2}>
           {sections.map((section, index) => (
             <Stack spacing={1} key={`${section.title}_${index}`}>
               <Typography variant="h6">{section.title}</Typography>
-              <Stack direction="row" columnGap={3} rowGap={1} flexWrap="wrap" sx={{ maxWidth: '970px' }}>
+              <Stack direction="row" wrap="wrap" style={{ maxWidth: '970px', columnGap: '1rem' }}>
                 {section.linklist?.map((item) =>
                   item.external ? (
                     <Button key={item.url} href={item.url} target={item.target} rel="noopener noreferrer" theme="link">

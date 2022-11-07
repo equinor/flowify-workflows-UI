@@ -1,14 +1,12 @@
 import React, { memo, useState } from 'react';
 import { Icon, Typography } from '@equinor/eds-core-react';
-import { Stack } from '@mui/material';
 import { NodeProps } from 'react-flow-renderer/nocss';
-import { DragIndicator as DragIcon } from '@mui/icons-material';
+import { Map } from '@models/v2';
+import { isNotEmptyArray } from '@common';
+import { Button, Chip, Stack } from '@ui';
 import { INode, getComponentFromRef } from '../../../helpers/helpers';
 import { Handles } from '..';
 import { NodePreview } from '../..';
-import { Map } from '../../../../../models/v2';
-import { isNotEmptyArray } from '../../../../../common';
-import { Button, Chip } from '../../../../ui';
 
 interface IMapNode extends NodeProps<INode> {}
 
@@ -36,12 +34,12 @@ export const MapNode = memo((props: IMapNode) => {
   return (
     <>
       <Handles parameters={data?.component?.inputs} type="Input" />
-      <Stack spacing={2}>
-        <Stack className="react-flow__node-mapNode--internal" spacing={3}>
-          <Stack spacing={2} direction="row" alignItems="center">
+      <Stack spacing={1}>
+        <Stack className="react-flow__node-mapNode--internal" spacing={1.5}>
+          <Stack spacing={1} direction="row" alignItems="center">
             <NodePreview node={props} open={open} onClose={setOpen} />
-            <Stack alignItems="center" spacing={3} direction="row">
-              <Stack spacing={1} alignItems="space-between">
+            <Stack alignItems="center" spacing={1.5} direction="row">
+              <Stack spacing={0.5} alignItems="space-between">
                 <Icon name="formula" size={16} color="#999" />
                 <div>
                   <Typography variant="body_short_bold">Map({childNode?.name})</Typography>
@@ -52,7 +50,7 @@ export const MapNode = memo((props: IMapNode) => {
                 <Stack direction="row" alignItems="center">
                   <Chip>{data?.component?.implementation?.type}</Chip>
                 </Stack>
-                <Stack direction="row" spacing={2}>
+                <Stack direction="row" spacing={1}>
                   {isNotEmptyArray(secrets) && (
                     <Button
                       style={{ padding: '0.5rem' }}
@@ -76,7 +74,7 @@ export const MapNode = memo((props: IMapNode) => {
                   Configure map
                 </Button>
               </Stack>
-              <DragIcon className="custom-drag-handle" sx={{ color: '#666', fontSize: '2rem' }} />
+              <Icon name="drag_indicator" className="custom-drag-handle" size={32} />
             </Stack>
           </Stack>
         </Stack>

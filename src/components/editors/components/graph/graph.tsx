@@ -9,9 +9,11 @@ import ReactFlow, {
   Background,
   BackgroundVariant,
 } from 'react-flow-renderer/nocss';
-import { StartNode, TaskNode, EndNode, ConditionalNode, MapNode } from '.';
-import { Component, Graph } from '../../../../models/v2';
 import { Button as EDSButton, Snackbar } from '@equinor/eds-core-react';
+import { Component, Graph } from '@models/v2';
+import { Button } from '@ui';
+import { services } from '@services';
+import { StartNode, TaskNode, EndNode, ConditionalNode, MapNode } from '.';
 import {
   removeConnection,
   ICustomConnection,
@@ -25,9 +27,7 @@ import {
   nanoid,
 } from '../../helpers';
 import { ReactFlowWrapper } from './styles';
-import { Button } from '../../../ui';
 import { MarketplaceModal } from '../marketplace-modal/marketplace-modal';
-import { services } from '../../../../services';
 import { Feedback } from '../feedbacks/types';
 import { BUTTON_STATE } from '../../../creators/add-component-to-graph';
 

@@ -1,8 +1,8 @@
 import React, { FC } from 'react';
 import { Handle, Position } from 'react-flow-renderer/nocss';
 import { Tooltip } from '@equinor/eds-core-react';
-import { Stack } from '@mui/material';
-import { Data } from '../../../../models/v2';
+import { Data } from '@models/v2';
+import { Stack } from '@ui';
 
 interface IHandles {
   parameters?: Data[];
@@ -16,7 +16,7 @@ export const Handles: FC<IHandles> = (props: IHandles) => {
   const style = type === 'Input' ? { marginLeft: '-1rem' } : { marginRight: '-1rem' };
 
   return (
-    <Stack spacing={2} style={style}>
+    <Stack spacing={1} style={style}>
       {parameters
         ? parameters
             .filter((param) => param.name)

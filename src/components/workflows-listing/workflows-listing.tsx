@@ -1,13 +1,11 @@
 import React, { FC, useEffect, useState, useContext } from 'react';
 import { Typography } from '@equinor/eds-core-react';
-import { Workflow } from '../../models/v2/workflow';
-import { services } from '../../services';
-import { IFilter } from '../../services/filters';
-import { IPageInfo } from '../../models/v2';
-import { UserContextStore } from '../../common/context/user-context-store';
-import { Select, BaseInput } from '../form';
+import { services, IFilter } from '@services';
+import { IPageInfo, Workflow } from '@models/v2';
+import { UserContextStore } from '@common';
+import { Select, BaseInput } from '@form';
+import { Pagination, Stack } from '@ui';
 import { WorkflowCard } from './workflow-card/workflow-card';
-import { Pagination, Stack } from '../ui';
 
 interface IWorkflowsListing {
   workspace: string;

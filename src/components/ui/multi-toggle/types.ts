@@ -1,5 +1,5 @@
-import { TypographyVariants } from '@equinor/eds-core-react/dist/types/components/Typography/Typography.tokens';
 import React from 'react';
+import { TypographyVariants } from '@equinor/eds-core-react/dist/types/components/Typography/Typography.tokens';
 
 export interface MultiToggleProps {
   children: Array<React.ReactNode>;

@@ -1,12 +1,11 @@
 import React, { FC, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Icon, Pagination, Typography } from '@equinor/eds-core-react';
-import { Dialog, Grid } from '@mui/material';
 import moment from 'moment';
-import { Button, Paper, Chip, Stack, DialogWrapper } from '../../../ui';
+import { BaseInput } from '@form';
+import { Button, Paper, Chip, Stack, DialogWrapper, Grid, Modal } from '@ui';
 import { DocumentEditorProps } from './types';
 import { StyledTextButton } from './styles';
-import { BaseInput } from '../../../form';
 
 export const DocumentEditor: FC<DocumentEditorProps> = (props: DocumentEditorProps) => {
   const { document, setInstance, versionsResponse, fetchVersions } = props;
@@ -70,12 +69,8 @@ export const DocumentEditor: FC<DocumentEditorProps> = (props: DocumentEditorPro
   }
 
   return (
-    <Grid container sx={{ flexGrow: '1', minHeight: '0', flexWrap: 'nowrap' }}>
-      <Grid
-        item
-        xs={8}
-        sx={{ borderLeft: '1px solid #f7f7f7', flexGrow: '1', overflowY: 'auto', minHeight: '0', padding: '2rem' }}
-      >
+    <Grid container style={{ flexGrow: '1', minHeight: '0', flexWrap: 'nowrap' }}>
+      <Grid item xs={8} style={{ flexGrow: '1', overflowY: 'auto', minHeight: '0', padding: '2rem' }}>
         <Stack spacing={1}>
           <Button theme="create">
             <Icon name="add" size={24} color="#709DA0" />
@@ -122,7 +117,7 @@ export const DocumentEditor: FC<DocumentEditorProps> = (props: DocumentEditorPro
           />
         </Stack>
       </Grid>
-      <Grid item xs={4} sx={{ flexGrow: '1', overflowY: 'auto', minHeight: '0' }}>
+      <Grid item xs={4} style={{ flexGrow: '1', overflowY: 'auto', minHeight: '0' }}>
         <Stack padding={2} spacing={2} justifyContent="space-between" style={{ minHeight: '100%' }}>
           <Stack direction="row" alignItems="flex-start" justifyContent="space-between" spacing={2}>
             <Stack spacing={1} grow={1}>
@@ -198,8 +193,8 @@ export const DocumentEditor: FC<DocumentEditorProps> = (props: DocumentEditorPro
               <Icon name="delete_to_trash" />
               Delete {document?.type}
             </Button>
-            <Dialog open={deleteModalOpen} onClose={() => setDeleteModalOpen(false)}>
-              <DialogWrapper padding={2} spacing={3}>
+            <Modal open={deleteModalOpen} onClose={() => setDeleteModalOpen(false)} maxWidth="sm">
+              <DialogWrapper padding={2} spacing={1.5}>
                 <Typography variant="body_long">
                   Are you sure you want to delete {document?.type} "{document?.name}"?
                 </Typography>
@@ -212,7 +207,7 @@ export const DocumentEditor: FC<DocumentEditorProps> = (props: DocumentEditorPro
                   </Button>
                 </Stack>
               </DialogWrapper>
-            </Dialog>
+            </Modal>
           </Stack>
         </Stack>
       </Grid>

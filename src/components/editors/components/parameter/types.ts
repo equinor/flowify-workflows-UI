@@ -1,4 +1,4 @@
-import { Data, Component, DataTypes } from '../../../../models/v2';
+import { Data, Component, DataTypes } from '@models/v2';
 
 export interface ParameterProps {
   parameter: Data;
@@ -18,6 +18,7 @@ const TYPE_ICONS = {
   artifact: 'file',
   env_secret: 'security',
   parameter_array: 'list',
+  volume: 'storage',
 };
 
 const MEDIATYPES = ['string', 'integer', 'env_variable'];

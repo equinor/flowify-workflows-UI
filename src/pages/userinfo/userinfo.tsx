@@ -1,20 +1,9 @@
 import React, { useContext } from 'react';
-import { Avatar, Stack } from '@mui/material';
-import { List, Typography } from '@equinor/eds-core-react';
-import { UserContextStore } from '../../common/context/user-context-store';
-import { Container, Layout } from '../../layout';
 import { Helmet } from 'react-helmet-async';
-import { SettingsContextStore } from '../../common/context/editor-settings-context';
-import { MultiToggle, ToggleButton } from '../../components/ui';
-
-const initials = (name: string): string => {
-  if (!Array.isArray(name)) {
-    return '';
-  }
-  const names = [...name.split(' ')] || [];
-  const is: string = ((names.shift()?.[0] || '') + (names.pop()?.[0] || '')).toUpperCase();
-  return is;
-};
+import { List, Typography } from '@equinor/eds-core-react';
+import { UserContextStore, SettingsContextStore } from '@common';
+import { MultiToggle, ToggleButton, Stack } from '@ui';
+import { Container, Layout } from '../../layout';
 
 interface UserInfoPageProps {}
 
@@ -29,9 +18,8 @@ export const UserInfoPage: React.FC<UserInfoPageProps> = (props: UserInfoPagePro
       </Helmet>
       <Container withMargins>
         {user && (
-          <Stack spacing={4}>
+          <Stack spacing={2}>
             <div style={{ display: 'flex', alignItems: 'center', columnGap: '2rem' }}>
-              <Avatar>{initials(user.name)}</Avatar>
               <Typography variant="h2">{user.name}</Typography>
             </div>
             <div>

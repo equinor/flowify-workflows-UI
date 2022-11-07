@@ -1,11 +1,10 @@
 import React, { FC } from 'react';
-import { Stack, Dialog } from '@mui/material';
 import { Typography } from '@equinor/eds-core-react';
-import { Data, Edge, Graph } from '../../../../models/v2';
-import { DialogWrapper, Message } from '../../../ui';
+import { Data, Edge, Graph } from '@models/v2';
+import { DialogWrapper, Message, Stack, Modal } from '@ui';
+import { Select } from '@form';
 import { getComponentFromRef } from '../../helpers';
 import { SecretsVolumesConfigProps } from './types';
-import { Select } from '../../../form';
 
 export const SecretsVolumesConfig: FC<SecretsVolumesConfigProps> = (props: SecretsVolumesConfigProps) => {
   const {
@@ -130,9 +129,9 @@ export const SecretsVolumesConfig: FC<SecretsVolumesConfigProps> = (props: Secre
   }
 
   return (
-    <Dialog open={parameterConfig !== undefined} onClose={() => setParameterConfig()} fullWidth maxWidth="md">
+    <Modal open={parameterConfig !== undefined} onClose={() => setParameterConfig()} fullWidth maxWidth="md">
       <DialogWrapper padding={2} spacing={3}>
-        <Stack spacing={1}>
+        <Stack spacing={0.5}>
           <Typography variant="h5">
             {subcomponent?.name} {parameterConfig?.type}s
           </Typography>
@@ -145,7 +144,7 @@ export const SecretsVolumesConfig: FC<SecretsVolumesConfigProps> = (props: Secre
             </Message>
           )}
         </Stack>
-        <Stack spacing={2} style={{ paddingBottom: '11rem' }}>
+        <Stack spacing={1} style={{ paddingBottom: '11rem' }}>
           {parameterConfig.type === 'secret' &&
             secrets?.map((secret: Data) => (
               <Select
@@ -176,6 +175,6 @@ export const SecretsVolumesConfig: FC<SecretsVolumesConfigProps> = (props: Secre
             ))}
         </Stack>
       </DialogWrapper>
-    </Dialog>
+    </Modal>
   );
 };

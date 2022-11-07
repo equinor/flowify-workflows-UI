@@ -1,12 +1,9 @@
 import React, { FC, useState } from 'react';
-import { Stack } from '@mui/material';
-import { Breadcrumbs, ComponentIcon } from '../../components/ui';
-import { Layout, Container } from '../../layout';
-import { Marketplace, WorkspacesListing } from '../../components';
-import { DashboardListing } from '../../components/listings/dashboard-listing';
-import { Typography } from '@equinor/eds-core-react';
-import { CreateComponent } from '../../components/creators';
+import { Icon, Typography } from '@equinor/eds-core-react';
 import { Helmet } from 'react-helmet-async';
+import { Breadcrumbs, Stack } from '@ui';
+import { Layout, Container } from '../../layout';
+import { Marketplace, WorkspacesListing, DashboardListing, CreateComponent } from '../../components';
 
 interface IDashboardPage {}
 
@@ -20,16 +17,12 @@ const DashboardPage: FC<IDashboardPage> = (props: IDashboardPage) => {
       </Helmet>
       <Container withMargins>
         <Stack spacing={4}>
-          <Breadcrumbs>
-            <span>
-              <b>Dashboard</b>
-            </span>
-          </Breadcrumbs>
+          <Breadcrumbs links={[{ title: 'Dashboard' }]} />
           <WorkspacesListing />
           <CreateComponent open={newComponentOpen} setOpen={setNewComponentOpen} />
           <DashboardListing
             title="Components"
-            icon={<ComponentIcon size={24} />}
+            icon={<Icon name="component" />}
             sections={[
               {
                 linklist: [
@@ -67,7 +60,7 @@ const DashboardPage: FC<IDashboardPage> = (props: IDashboardPage) => {
               },
             ]}
           >
-            <Stack sx={{ marginTop: '4rem' }} spacing={1}>
+            <Stack style={{ marginTop: '4rem' }} spacing={1}>
               <Typography variant="h4">New marketplace components</Typography>
               <Marketplace preview />
             </Stack>

@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import { useFormikContext } from 'formik';
-import { Button, Stack } from '../../ui';
+import { Button, Stack } from '@ui';
 
 interface SubmitterProps {
   onClose: () => void;

@@ -1,16 +1,14 @@
 import React, { FC, useEffect, useState } from 'react';
-import { Dialog } from '@mui/material';
-import { Icon, Typography } from '@equinor/eds-core-react';
-import { Component, IVolume, Job, JobSubmit, Workflow } from '../../models/v2';
-import { Parameter } from '../editors/components';
-import { services } from '../../services';
 import { useParams, useNavigate } from 'react-router-dom';
-import { isNotEmptyArray } from '../../common';
-import { Button, DialogWrapper, Message, Stack } from '../ui';
-import { BaseInput } from '../form';
-import { ButtonProps } from '../ui/button/types';
+import { Icon, Typography } from '@equinor/eds-core-react';
+import { Component, IVolume, Job, JobSubmit, Workflow } from '@models/v2';
+import { services } from '@services';
+import { isNotEmptyArray } from '@common';
+import { Button, DialogWrapper, Message, Stack, Modal, ButtonProps } from '@ui';
+import { BaseInput } from '@form';
+import { checkConnections } from '@common';
 import { fetchInitialSubComponents } from '../editors/helpers';
-import { checkConnections } from '../../common/validation/methods';
+import { Parameter } from '../editors/components';
 
 interface RunWorkflowProps {
   // Pass the entire workflow object or a string (uid)
@@ -133,7 +131,7 @@ export const RunWorkflow: FC<RunWorkflowProps> = (props: RunWorkflowProps) => {
   return (
     <>
       <Button {...buttonProps} onClick={() => setModalOpen(true)} />
-      <Dialog open={modalOpen} onClose={() => setModalOpen(false)} fullWidth maxWidth="md">
+      <Modal open={modalOpen} onClose={() => setModalOpen(false)} fullWidth maxWidth="md">
         <DialogWrapper padding={2}>
           <Stack spacing={2}>
             <Stack spacing={1}>
@@ -184,7 +182,7 @@ export const RunWorkflow: FC<RunWorkflowProps> = (props: RunWorkflowProps) => {
             </Stack>
           </Stack>
         </DialogWrapper>
-      </Dialog>
+      </Modal>
     </>
   );
 };

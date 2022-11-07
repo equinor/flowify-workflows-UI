@@ -1,6 +1,5 @@
+import { ANNOTATION_KEY_POD_NAME_VERSION, getPodName, getTemplateNameFromNode } from '@common';
 import { NodeStatus, Workflow } from '../../../../../../models';
-import { ANNOTATION_KEY_POD_NAME_VERSION } from '../../../../../../common/annotations';
-import { getPodName, getTemplateNameFromNode } from '../../../../../../common/pod-name';
 
 export const ensurePodName = (workflow: Workflow, node: NodeStatus, nodeID: string): string => {
   if (workflow && node) {

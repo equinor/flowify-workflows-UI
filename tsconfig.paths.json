@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@ui": ["./src/components/ui/index.tsx"],
+      "@services": ["./src/services/index.ts"],
+      "@form": ["./src/components/form/index.ts"],
+      "@models/v2": ["./src/models/v2/index.ts"],
+      "@common": ["./src/common/index.tsx"]
+    }
+  }
+}

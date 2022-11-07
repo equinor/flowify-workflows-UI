@@ -1,6 +1,6 @@
 import { Node } from 'react-flow-renderer';
+import { Component, Workflow } from '@models/v2';
 import { INode } from '../../helpers';
-import { Component, Workflow } from '../../../../models/v2';
 import { Feedback } from '../feedbacks/types';
 
 export interface MainEditorProps {

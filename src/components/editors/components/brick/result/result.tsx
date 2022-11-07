@@ -1,11 +1,10 @@
 import React, { FC, useState } from 'react';
 import { Icon, Radio, Typography } from '@equinor/eds-core-react';
-import { Dialog, Stack } from '@mui/material';
+import { Brick, FilePath, Result as IResult } from '@models/v2';
+import { BaseInput, Select, createOptionsFromObjectValue } from '@form';
+import { DialogWrapper, Stack, Modal } from '@ui';
 import { ResultProps } from './types';
 import { ResultButton, ResultWrapper } from './styles';
-import { Brick, FilePath, Result as IResult } from '../../../../../models/v2';
-import { BaseInput, Select, createOptionsFromObjectValue } from '../../../../form';
-import { DialogWrapper } from '../../../../ui';
 
 export const Result: FC<ResultProps> = (props: ResultProps) => {
   const { outputs, result, setComponent, index, setWorkflow } = props;
@@ -54,12 +53,12 @@ export const Result: FC<ResultProps> = (props: ResultProps) => {
 
   return (
     <ResultWrapper>
-      <Dialog open={open} onClose={() => onChange()} fullWidth maxWidth="sm">
+      <Modal open={open} onClose={() => onChange()} fullWidth maxWidth="sm">
         <DialogWrapper padding={2} spacing={2}>
           <Typography variant="h5">Edit result</Typography>
           <Stack>
             <Typography variant="body_short_bold">Source type</Typography>
-            <Stack direction="row" spacing={2}>
+            <Stack direction="row" spacing={1}>
               <Radio label="Constant" value="constant" checked={!isFilePath} onChange={() => setIsFilePath(false)} />
               <Radio label="File path" value="parameter" checked={isFilePath} onChange={() => setIsFilePath(true)} />
             </Stack>
@@ -79,9 +78,9 @@ export const Result: FC<ResultProps> = (props: ResultProps) => {
             options={createOptionsFromObjectValue(outputs, 'name')}
           />
         </DialogWrapper>
-      </Dialog>
+      </Modal>
       <ResultButton onClick={() => setOpen(true)}>
-        <Stack direction="row" justifyContent="center" spacing={2}>
+        <Stack direction="row" justifyContent="center" spacing={0.5}>
           <Typography variant="h6">
             {isPath ? (result?.source as FilePath)?.file || 'undefined' : (result?.source as string) || 'undefined'}
           </Typography>

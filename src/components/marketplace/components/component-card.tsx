@@ -1,11 +1,10 @@
 import React, { FC } from 'react';
-import { Stack } from '@mui/material';
-import { Icon, Typography } from '@equinor/eds-core-react';
 import { Link } from 'react-router-dom';
-import { ComponentIcon, Button, Paper, Chip } from '../../ui';
-import { Component } from '../../../models/v2';
-import { Timestamp } from '../../timestamp';
+import { Icon, Typography } from '@equinor/eds-core-react';
 import moment from 'moment';
+import { Button, Paper, Chip, Stack } from '@ui';
+import { Component } from '@models/v2';
+import { Timestamp } from '../../timestamp';
 
 interface IComponentCard {
   component: Component;
@@ -19,14 +18,14 @@ export const ComponentCard: FC<IComponentCard> = (props: IComponentCard) => {
 
   return (
     <Paper theme="light" padding={1.5} style={{ height: '100%' }}>
-      <Stack direction="row" alignItems="center" justifyContent="space-between" spacing={1}>
+      <Stack direction="row" alignItems="center" justifyContent="space-between" spacing={0.5}>
         <div>
-          <Stack spacing={2}>
+          <Stack spacing={1}>
             <Stack direction="row" alignItems="center" spacing={1}>
-              <ComponentIcon />
+              <Icon name="component" size={16} />
               {today.diff(component.timestamp, 'days') < 3 ? <Icon name="new_label" size={32} color="#004f55" /> : null}
             </Stack>
-            <Stack spacing={1}>
+            <Stack spacing={0.5}>
               <Stack direction="row" alignItems="center" spacing={1}>
                 <Typography variant="body_short_bold">{component.name}</Typography>
                 <Chip>v{component?.version?.current}</Chip>

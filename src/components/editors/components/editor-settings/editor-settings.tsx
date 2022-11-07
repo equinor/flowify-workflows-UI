@@ -1,8 +1,7 @@
 import React, { FC, useState, useContext } from 'react';
 import { Tooltip, Typography } from '@equinor/eds-core-react';
-import { Dialog, Stack } from '@mui/material';
-import { SettingsContextStore } from '../../../../common/context/editor-settings-context';
-import { Button, DialogWrapper, MultiToggle, ToggleButton } from '../../../ui';
+import { SettingsContextStore } from '@common';
+import { Button, DialogWrapper, MultiToggle, ToggleButton, Stack, Modal } from '@ui';
 
 interface IEditorSettings {}
 
@@ -15,10 +14,10 @@ export const EditorSettings: FC<IEditorSettings> = (props: IEditorSettings) => {
       <Tooltip title="Editor preferences" style={{ fontSize: '1rem' }}>
         <Button theme="icon" icon="tune" onClick={() => setOpen(true)} />
       </Tooltip>
-      <Dialog open={open} onClose={() => setOpen(false)} fullWidth maxWidth="md">
+      <Modal open={open} onClose={() => setOpen(false)} fullWidth maxWidth="md">
         <DialogWrapper spacing={2} padding={2}>
           <Typography variant="h5">Manifest options</Typography>
-          <Stack spacing={2}>
+          <Stack spacing={1}>
             <MultiToggle label="Wordwrap">
               <ToggleButton active={settings?.wordWrap} onClick={() => updateSetting('wordWrap', true)}>
                 Enable
@@ -53,7 +52,7 @@ export const EditorSettings: FC<IEditorSettings> = (props: IEditorSettings) => {
             </ToggleButton>
           </MultiToggle>
         </DialogWrapper>
-      </Dialog>
+      </Modal>
     </>
   );
 };

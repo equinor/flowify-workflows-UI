@@ -1,4 +1,5 @@
 import { Icon } from '@equinor/eds-core-react';
+import { storage, drag_indicator, component, workflow } from '../components/ui/icon/custom-icons';
 import {
   account_circle,
   archive,
@@ -103,6 +104,10 @@ export const ICONS = {
   delete_forever,
   info_circle,
   chevron_right,
+  storage,
+  drag_indicator,
+  component,
+  workflow,
 };
 
-Icon.add(ICONS);
+Icon.add({ ...ICONS });

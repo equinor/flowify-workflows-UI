@@ -1,14 +1,12 @@
 import React, { FC, useState } from 'react';
 import { Icon, Typography } from '@equinor/eds-core-react';
-import { Dialog, Stack } from '@mui/material';
-import { isNotEmptyArray } from '../../../common';
+import { isNotEmptyArray } from '@common';
+import { Component, Workflow } from '@models/v2';
+import { BaseInput } from '@form';
+import { MultiToggle, ToggleButton, Button, Chip, Message, DialogWrapper, Stack, Modal } from '@ui';
 import { nanoid } from '../helpers';
-import { EditorHeader } from '../components';
-import { Component, Workflow } from '../../../models/v2';
-import { Parameter } from '.';
-import { MultiToggle, ToggleButton, Button, Chip, Message, DialogWrapper } from '../../ui';
-import { BaseInput } from '../../form';
 import { StyledTextButton } from './document-editor/styles';
+import { Parameter, EditorHeader } from '.';
 
 interface SidebarProps {
   component: Component | null | undefined;
@@ -78,8 +76,8 @@ export const Sidebar: FC<SidebarProps> = (props: SidebarProps) => {
   }
 
   return (
-    <Stack spacing={2} sx={{ padding: '1rem', position: 'relative', width: '100%' }}>
-      <Dialog open={confirmTypeChange !== undefined} onClose={() => setConfirmTypeChange(undefined)}>
+    <Stack spacing={2} padding={1} style={{ position: 'relative', width: '100%' }}>
+      <Modal maxWidth="sm" open={confirmTypeChange !== undefined} onClose={() => setConfirmTypeChange(undefined)}>
         <DialogWrapper padding={2} spacing={2}>
           <Typography variant="body_short">
             Are you sure you want to change implementation type?{' '}
@@ -94,12 +92,12 @@ export const Sidebar: FC<SidebarProps> = (props: SidebarProps) => {
             <Button onClick={() => setImplementationType(confirmTypeChange)}>Confirm</Button>
           </Stack>
         </DialogWrapper>
-      </Dialog>
+      </Modal>
       <EditorHeader
         type={document?.type === 'component' ? 'Component' : 'Workflow'}
         workspace={workspace}
       ></EditorHeader>
-      <Stack spacing={1}>
+      <Stack spacing={0.5}>
         {editName ? (
           <BaseInput
             name="document_name"
@@ -116,7 +114,7 @@ export const Sidebar: FC<SidebarProps> = (props: SidebarProps) => {
           <Chip>v{document?.version?.current || ''}</Chip>
         </div>
       </Stack>
-      <Stack spacing={1}>
+      <Stack spacing={0.5}>
         <MultiToggle label="Implementation type" labelVariant="h5">
           <ToggleButton active={component?.implementation?.type === 'any'} onClick={() => onTypeChange('any')}>
             Any
@@ -138,7 +136,7 @@ export const Sidebar: FC<SidebarProps> = (props: SidebarProps) => {
           </Message>
         )}
       </Stack>
-      <Stack spacing={1}>
+      <Stack spacing={0.5}>
         <Typography variant="h5">Inputs</Typography>
         {isNotEmptyArray(inputs) ? (
           inputs?.map((input, index) => (
@@ -162,7 +160,7 @@ export const Sidebar: FC<SidebarProps> = (props: SidebarProps) => {
       </Stack>
       {document?.type === 'component' && (
         <>
-          <Stack spacing={1}>
+          <Stack spacing={0.5}>
             <Typography variant="h5">Secrets</Typography>
             {isNotEmptyArray(inputSecrets) ? (
               inputSecrets?.map((input) => (
@@ -190,7 +188,7 @@ export const Sidebar: FC<SidebarProps> = (props: SidebarProps) => {
             </Button>
           </Stack>
 
-          <Stack spacing={1}>
+          <Stack spacing={0.5}>
             <Typography variant="h5">Volumes</Typography>
             {isNotEmptyArray(inputVolumes) ? (
               inputVolumes?.map((input) => (
@@ -215,7 +213,7 @@ export const Sidebar: FC<SidebarProps> = (props: SidebarProps) => {
           </Stack>
         </>
       )}
-      <Stack spacing={1}>
+      <Stack spacing={0.5} style={{ paddingBottom: '2rem' }}>
         <Typography variant="h5">Outputs</Typography>
         {isNotEmptyArray(outputs) ? (
           outputs!.map((output, index) => (

@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Typography } from '@equinor/eds-core-react';
-import { getResolvedTemplates } from '../../../../../common';
+import ReactJson from 'react-json-view';
+import { getResolvedTemplates } from '@common';
+import { Stack, Drawer } from '@ui';
+import { services } from '@services';
 import { NodeStatus, Workflow } from '../../../../../models';
-import { services } from '../../../../../services';
 import { NodeSummary } from './components';
 import { InputsOutputsDetail } from './components/inputs-outputs-detail';
-import { ensurePodName } from './helpers/node-helpers';
 import { LogViewer } from '../log-viewer';
-import { Drawer, Stack } from '@mui/material';
-import ReactJson from 'react-json-view';
+import { ensurePodName } from './helpers/node-helpers';
 
 interface NodeDetailsProps {
   workflowName?: string;
@@ -64,8 +64,8 @@ export const NodeDetails: React.FC<NodeDetailsProps> = (props: NodeDetailsProps)
   };
 
   return (
-    <Drawer open={props.open} onClose={() => props.onClose(false)} anchor="right" sx={{ minWidth: '650px' }}>
-      <Stack spacing={2} sx={{ padding: '2rem', maxWidth: '650px', flexWrap: 'wrap', position: 'relative' }}>
+    <Drawer open={props.open} onClose={() => props.onClose(false)} maxWidth="sm">
+      <Stack spacing={1} padding={2} style={{ maxWidth: '650px', flexWrap: 'wrap', position: 'relative' }}>
         <NodeSummary nodeStatus={nodeStatus} />
         <Typography variant="h4">Containers</Typography>
         <ReactJson src={template?.container || {}} name="container" collapsed displayDataTypes={false} />

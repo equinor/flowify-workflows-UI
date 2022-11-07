@@ -1,9 +1,11 @@
 import React, { useEffect, useState, FC, useCallback } from 'react';
-import { Stack } from '@mui/material';
 import { Helmet } from 'react-helmet-async';
 import { useNavigate, useParams } from 'react-router';
 import { useEdgesState, useNodesState } from 'react-flow-renderer';
-import { Workflow } from '../../../models/v2/workflow';
+import { Workflow, Component, IJobsListRequest, IVolume, WorkflowListRequest } from '@models/v2';
+import { Stack } from '@ui';
+import { isNotEmptyArray, checkWorkflowValidation } from '@common';
+import { IFilter, IPagination, services } from '@services';
 import {
   MapConfig,
   SecretsVolumesConfig,
@@ -17,11 +19,7 @@ import {
   IValidationError,
 } from '../components';
 import { createGraphElements, fetchInitialSubComponents, INode } from '../helpers';
-import { Component, IJobsListRequest, IVolume, WorkflowListRequest } from '../../../models/v2';
-import { IFilter, IPagination, services } from '../../../services';
 import { IfConfig } from '../components/functional-components/if/if-config';
-import { isNotEmptyArray } from '../../../common';
-import { checkWorkflowValidation } from '../../../common/validation/workflow-validation';
 import { IFunctionalCompConfig, IParameterConfig } from '../types';
 
 interface IWorkflowEditor {
@@ -86,9 +84,9 @@ const WorkflowEditor: FC<IWorkflowEditor> = (props: IWorkflowEditor) => {
    * @updates jobs state
    */
   const fetchJobs = useCallback(
-    (pagination: IPagination | undefined) => {
+    (pagination: IPagination | undefined, filters: IFilter[] | undefined) => {
       const jobsFilter: IFilter[] = [{ name: 'workflow.uid', value: uid || '', type: 'EQUALTO' }];
-      services.jobs.list(jobsFilter, pagination, 'sort=-timestamp').then((res) => setJobs(res));
+      services.jobs.list(filters || jobsFilter, pagination, 'sort=-timestamp').then((res) => setJobs(res));
     },
     [uid],
   );
@@ -154,7 +152,7 @@ const WorkflowEditor: FC<IWorkflowEditor> = (props: IWorkflowEditor) => {
     // Fetch latest versions of workflow
     fetchWorkflowVersions(undefined, undefined, undefined);
     // Fetch jobs
-    fetchJobs(undefined);
+    fetchJobs(undefined, undefined);
   }, [workspace, uid, version, fetchWorkflowVersions, fetchJobs]);
 
   /**
@@ -320,6 +318,7 @@ const WorkflowEditor: FC<IWorkflowEditor> = (props: IWorkflowEditor) => {
         setComponent={setComponent}
         setOpen={() => setConfigComponent(undefined)}
         subcomponents={subcomponents}
+        setSubcomponents={setSubcomponents}
       />
       <SecretsVolumesConfig
         component={component}
@@ -332,7 +331,7 @@ const WorkflowEditor: FC<IWorkflowEditor> = (props: IWorkflowEditor) => {
         workspaceSecrets={workspaceSecrets}
         workspaceVolumes={workspaceVolumes}
       />
-      <Stack direction="row" justifyContent="stretch" sx={{ flexGrow: '1', minHeight: '0', flexWrap: 'nowrap' }}>
+      <Stack direction="row" justifyContent="stretch" style={{ flexGrow: '1', minHeight: '0', flexWrap: 'nowrap' }}>
         <EditorMenu
           active={activePage}
           setActive={setActivePage}

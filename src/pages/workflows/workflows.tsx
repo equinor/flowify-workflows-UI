@@ -1,11 +1,9 @@
 import React, { FC } from 'react';
 import { useParams } from 'react-router';
-import { Link } from 'react-router-dom';
-import { Stack } from '@mui/material';
-import { Breadcrumbs } from '../../components/ui';
+import { Helmet } from 'react-helmet-async';
+import { Breadcrumbs, Stack } from '@ui';
 import WorkflowsListing from '../../components/workflows-listing/workflows-listing';
 import { Container, Layout } from '../../layout';
-import { Helmet } from 'react-helmet-async';
 
 export const WorkflowsPage: FC = () => {
   const { workspace } = useParams();
@@ -16,14 +14,14 @@ export const WorkflowsPage: FC = () => {
         <title>Workflows - {workspace} - Flowify</title>
       </Helmet>
       <Container withMargins>
-        <Stack spacing={6}>
-          <Breadcrumbs>
-            <Link to="/dashboard">Dashboard</Link>
-            <Link to={`/workspace/${workspace}`}>{workspace}</Link>
-            <span>
-              <b>Workflows</b>
-            </span>
-          </Breadcrumbs>
+        <Stack spacing={4}>
+          <Breadcrumbs
+            links={[
+              { title: 'Dashboard', href: '/dashboard' },
+              { title: workspace || '', href: `/workspace/${workspace}` },
+              { title: 'Workflows' },
+            ]}
+          />
           <WorkflowsListing workspace={workspace!} showTitle={false} />
         </Stack>
       </Container>

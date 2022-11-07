@@ -1,5 +1,4 @@
 import React from 'react';
-import { SnackbarProvider } from 'notistack';
 import { HelmetProvider } from 'react-helmet-async';
 import './common/icons';
 import './styles/scss/index.scss';
@@ -16,11 +15,9 @@ function App() {
       <AuthProvider>
         <HelmetProvider>
           <EditorSettingsProvider>
-            <SnackbarProvider maxSnack={3}>
-              <ThemeSelector>
-                <Pages />
-              </ThemeSelector>
-            </SnackbarProvider>
+            <ThemeSelector>
+              <Pages />
+            </ThemeSelector>
           </EditorSettingsProvider>
         </HelmetProvider>
       </AuthProvider>

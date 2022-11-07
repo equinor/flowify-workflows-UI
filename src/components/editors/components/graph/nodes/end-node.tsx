@@ -1,7 +1,6 @@
 import React, { FC } from 'react';
 import { Icon, Tooltip, Typography } from '@equinor/eds-core-react';
 import { Handle, NodeProps, Position } from 'react-flow-renderer/nocss';
-import { Storage } from '@mui/icons-material';
 import { INode } from '../../../helpers/helpers';
 
 interface IEndNode extends NodeProps<INode> {}
@@ -14,16 +13,13 @@ export const EndNode: FC<IEndNode> = (props: IEndNode) => {
     artifact: 'file',
     env_secret: 'security',
     parameter_array: 'list',
+    volume: 'storage',
   };
 
   return (
     <div className="react-flow__node-endNode__wrapper">
       <Typography variant="body_short_bold">
-        {data?.type === 'volume' ? (
-          <Storage sx={{ color: '#999' }} />
-        ) : (
-          <Icon name={data?.type ? ICON[data?.type as keyof typeof ICON] : 'swap_horizontal'} color="#999" />
-        )}{' '}
+        <Icon name={data?.type ? ICON[data?.type as keyof typeof ICON] : 'swap_horizontal'} color="#999" />
         <b>{data?.label}</b>
       </Typography>
       <Tooltip title={`Output | Type: ${data?.type}`} style={{ fontSize: '1rem' }}>

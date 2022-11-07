@@ -1,15 +1,14 @@
 import React, { FC, useState } from 'react';
 import { Icon, Snackbar } from '@equinor/eds-core-react';
-import { Dialog } from '@mui/material';
 import { useNavigate } from 'react-router';
 import { Form, Formik } from 'formik';
 import * as yup from 'yup';
-import { Workflow } from '../../../models/v2/workflow';
-import { services } from '../../../services';
-import { Button, DialogWrapper, Stack } from '../../ui';
+import { Workflow } from '@models/v2';
+import { services } from '@services';
+import { Button, DialogWrapper, Stack, Modal } from '@ui';
+import { TextInputFormik } from '@form';
+import { uuid } from '@common';
 import { Submitter } from '../create-component/submitter';
-import { TextInputFormik } from '../../form';
-import { uuid } from '../../../common';
 
 const makeWorkflow = (workspace: string): Workflow => ({
   type: 'workflow',
@@ -76,7 +75,7 @@ const CreateWorkflow: FC<ICreateWorkflow> = (props: ICreateWorkflow) => {
         <Icon name="add" />
         Add new Workflow
       </Button>
-      <Dialog fullWidth open={modalOpen} onClose={() => setModalOpen(false)}>
+      <Modal maxWidth="sm" fullWidth open={modalOpen} onClose={() => setModalOpen(false)}>
         <DialogWrapper padding={2}>
           <Formik
             onSubmit={onSubmit}
@@ -92,7 +91,7 @@ const CreateWorkflow: FC<ICreateWorkflow> = (props: ICreateWorkflow) => {
             </Form>
           </Formik>
         </DialogWrapper>
-      </Dialog>
+      </Modal>
     </div>
   );
 };

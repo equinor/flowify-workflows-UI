@@ -1,7 +1,6 @@
 import React, { FC } from 'react';
-import { TableRow, TableCell } from '@mui/material';
 import { IValidationError } from '../types';
-import { Button } from '../../../../ui';
+import { Button } from '@ui';
 import { IParameterConfig } from '../../../types';
 
 interface ErrorRowProps {
@@ -34,23 +33,23 @@ export const ErrorRow: FC<ErrorRowProps> = (props: ErrorRowProps) => {
   }
 
   return (
-    <TableRow style={{ marginBottom: '0.25rem' }}>
-      <TableCell>{error?.message}</TableCell>
-      <TableCell>
+    <tr style={{ marginBottom: '0.25rem' }}>
+      <td>{error?.message}</td>
+      <td>
         {error?.params?.parsedValue
           ? error?.params?.parsedValue
           : typeof error?.value === 'string'
           ? error?.value
           : JSON.stringify(error?.value)}
-      </TableCell>
-      <TableCell>{error?.path}</TableCell>
-      <TableCell>
+      </td>
+      <td>{error?.path}</td>
+      <td>
         {quickFixes[error?.type] ? (
           <Button theme="simple" onClick={handleQuickFix}>
             {fixLabels[error?.type] || 'Quick fix'}
           </Button>
         ) : null}
-      </TableCell>
-    </TableRow>
+      </td>
+    </tr>
   );
 };

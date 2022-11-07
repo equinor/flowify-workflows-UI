@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { Stack } from '@mui/material';
+import { Stack } from '@ui';
 import { MenuButton } from './menu-button/menu-button';
 import { EditorMenuProps } from './types';
 import { StyledEditorMenu } from './styles';
@@ -8,7 +8,7 @@ export const EditorMenu: FC<EditorMenuProps> = (props: EditorMenuProps) => {
   const { active, setActive, isWorkflow } = props;
   return (
     <StyledEditorMenu alignItems="stretch" justifyContent="space-between" spacing={1}>
-      <Stack spacing={0.5}>
+      <Stack spacing={0.25}>
         <MenuButton
           disabled={!props.dirty || !(props.errorsLength === 0)}
           create
@@ -23,7 +23,7 @@ export const EditorMenu: FC<EditorMenuProps> = (props: EditorMenuProps) => {
           danger={(props.errorsLength || 0) > 0}
         />
       </Stack>
-      <Stack spacing={0.5}>
+      <Stack spacing={0.25}>
         <MenuButton
           active={active === 'editor'}
           onClick={() => setActive('editor')}

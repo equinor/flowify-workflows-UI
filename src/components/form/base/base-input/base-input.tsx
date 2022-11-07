@@ -1,6 +1,6 @@
-import { Typography } from '@equinor/eds-core-react';
 import React, { FC, useEffect, useRef, useState } from 'react';
-import { Stack } from '../../../ui';
+import { Typography } from '@equinor/eds-core-react';
+import { Stack } from '@ui';
 import { ClearIcon } from './components/clear-icon';
 import { MaskToggleButton } from './components/mask-toggle-button';
 import { EnhancerWrapper, StyledInputWrapper } from './styles';

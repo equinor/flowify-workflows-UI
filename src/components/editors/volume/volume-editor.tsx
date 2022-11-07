@@ -1,11 +1,10 @@
 import React, { FC, useState } from 'react';
 import { Typography } from '@equinor/eds-core-react';
-import { Dialog } from '@mui/material';
-import { IUserVolume, IVolume } from '../../../models/v2';
-import { MultiToggle, ToggleButton, Button, Stack, DialogWrapper } from '../../ui';
 import Editor from '@monaco-editor/react';
-import { services } from '../../../services';
-import { BaseInput } from '../../form';
+import { IUserVolume, IVolume } from '@models/v2';
+import { MultiToggle, ToggleButton, Button, Stack, DialogWrapper, Modal } from '@ui';
+import { services } from '@services';
+import { BaseInput } from '@form';
 
 interface VolumeEditorProps {
   open: boolean;
@@ -61,7 +60,7 @@ export const VolumeEditor: FC<VolumeEditorProps> = (props: VolumeEditorProps) =>
   }
 
   return (
-    <Dialog open={open} onClose={saveVolume} maxWidth="md" fullWidth>
+    <Modal open={open} onClose={saveVolume} maxWidth="md" fullWidth>
       <DialogWrapper padding={2} style={{ height: '80vh' }} justifyContent="space-between">
         <Stack spacing={2} style={{ flexGrow: '2' }}>
           <Typography variant="h4">{mode === 'edit' ? 'Edit' : 'Create new'} volume</Typography>
@@ -198,6 +197,6 @@ export const VolumeEditor: FC<VolumeEditorProps> = (props: VolumeEditorProps) =>
           </Button>
         </Stack>
       </DialogWrapper>
-    </Dialog>
+    </Modal>
   );
 };

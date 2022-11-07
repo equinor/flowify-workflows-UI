@@ -9,7 +9,15 @@ export type AlignContentTypes =
   | 'stretch'
   | 'initial'
   | 'inherit';
-export type AlignItemsTypes = 'center' | 'flex-start' | 'flex-end' | 'stretch' | 'baseline' | 'initial' | 'inherit';
+export type AlignItemsTypes =
+  | 'center'
+  | 'flex-start'
+  | 'flex-end'
+  | 'stretch'
+  | 'baseline'
+  | 'space-between'
+  | 'initial'
+  | 'inherit';
 export type AlignSelfTypes =
   | 'center'
   | 'flex-start'

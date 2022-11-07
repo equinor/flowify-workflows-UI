@@ -1,7 +1,8 @@
 import React, { FC } from 'react';
 import { Typography } from '@equinor/eds-core-react';
-import { isNotEmptyArray } from '../../../../common';
-import { Stack, TextField } from '@mui/material';
+import { isNotEmptyArray } from '@common';
+import { Stack } from '@ui';
+import { BaseInput } from '@form';
 
 interface LogViewerProps {
   logs: string[];
@@ -10,9 +11,9 @@ interface LogViewerProps {
 export const LogViewer: FC<LogViewerProps> = (props: LogViewerProps) => {
   const { logs } = props;
   return isNotEmptyArray(logs) ? (
-    <Stack spacing={1}>
+    <Stack spacing={0.5}>
       <Typography variant="h4">Logs</Typography>
-      <TextField size="small" multiline minRows={3} maxRows={8} fullWidth value={logs.join('\n')} spellCheck={false} />
+      <BaseInput name="logs" multiline rows={3} value={logs.join('\n')} spellCheck={false} />
     </Stack>
   ) : null;
 };

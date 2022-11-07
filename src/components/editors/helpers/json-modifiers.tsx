@@ -1,6 +1,6 @@
 import { Node } from 'react-flow-renderer/nocss';
-import { isNotEmptyArray } from '../../../common';
-import { Component, Graph } from '../../../models/v2';
+import { isNotEmptyArray } from '@common';
+import { Component, Graph } from '@models/v2';
 
 export interface ICustomConnection {
   type: string;

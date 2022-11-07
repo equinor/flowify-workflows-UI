@@ -1,5 +1,5 @@
-import { Icon } from '@equinor/eds-core-react';
 import React, { FC } from 'react';
+import { Icon } from '@equinor/eds-core-react';
 import { StyledButton } from './styles';
 import { ButtonProps } from './types';
 
@@ -27,3 +27,5 @@ export const Button: FC<ButtonProps> = React.forwardRef((props: ButtonProps, ref
 Button.defaultProps = {
   theme: 'default',
 };
+
+export type { ButtonProps };

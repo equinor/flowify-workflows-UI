@@ -1,14 +1,14 @@
 import React, { useEffect } from 'react';
 import ReactFlow, { ReactFlowProvider } from 'react-flow-renderer/nocss';
+import { useEdgesState, useNodesState } from 'react-flow-renderer';
+import { Icon } from '@equinor/eds-core-react';
+import { Message } from '@ui';
 import { NodeStatus } from '../../../../models';
 import { layout } from '../helpers/layout';
 import { ExecNode, HiddenNode } from './node-types';
 import { visible, graphToReactflow, prepareGraph } from './helpers/graph-helpers';
-import { useEdgesState, useNodesState } from 'react-flow-renderer';
 import { ReactFlowWrapper } from '../../components/graph/styles';
 import { LoadingEventsTypes } from '../../../../pages/job/job-page';
-import { Icon } from '@equinor/eds-core-react';
-import { Message } from '../../../ui';
 
 interface JobGraphProps {
   workflowName: string;

@@ -1,5 +1,5 @@
-import { Icon } from '@equinor/eds-core-react';
 import React, { FC } from 'react';
+import { Icon } from '@equinor/eds-core-react';
 import { ClearIconWrapper } from '../styles';
 
 interface ClearIconProps {

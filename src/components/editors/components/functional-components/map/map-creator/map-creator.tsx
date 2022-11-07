@@ -1,10 +1,9 @@
 import React, { FC, useState } from 'react';
-import { Stack } from '@mui/material';
 import { Checkbox, Icon, Radio, Typography } from '@equinor/eds-core-react';
-import { Component, Graph } from '../../../../../../models/v2';
+import { Component, Graph } from '@models/v2';
+import { Button, Stack } from '@ui';
 import { generateMap } from './helpers';
 import { getComponentFromRef } from '../../../../helpers';
-import { Button } from '../../../../../ui';
 
 interface MapCreatorProps {
   component?: Component;
@@ -41,7 +40,7 @@ export const MapCreator: FC<MapCreatorProps> = (props: MapCreatorProps) => {
     <Stack spacing={3}>
       <Stack spacing={0.5}>
         <Typography variant="h6">Select component to wrap in a map</Typography>
-        <Stack direction="row" spacing={2}>
+        <Stack direction="row" spacing={1}>
           {component?.implementation?.type === 'graph' &&
             (component.implementation as Graph).nodes?.map((node) => (
               <Radio

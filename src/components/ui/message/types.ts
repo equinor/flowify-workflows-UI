@@ -1,5 +1,5 @@
 import React from 'react';
-import { ICONS } from '../../../common/icons';
+import { ICONS } from '@common';
 
 export type MessageTheme = 'warning' | 'error' | 'success' | 'default';
 

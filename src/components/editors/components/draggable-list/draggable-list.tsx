@@ -1,9 +1,8 @@
 import React, { FC } from 'react';
 import { Icon, Typography } from '@equinor/eds-core-react';
-import { Stack } from '@mui/material';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
+import { Button, Stack } from '@ui';
 import { removeItem, reorder } from './helpers';
-import { Button } from '../../../ui';
 import { getItemStyle, getListStyle } from './styles';
 import { DraggableListProps } from './types';
 import { nanoid } from '../../helpers';
@@ -70,7 +69,7 @@ export const DraggableList: FC<DraggableListProps> = (props: DraggableListProps)
             </div>
           )}
         </Droppable>
-        <Stack alignItems="flex-end" paddingTop="1rem">
+        <Stack alignItems="flex-end" style={{ paddingTop: '1rem' }}>
           <Button theme="simple" onClick={props.addItem}>
             <Icon name="add" /> {addButtonLabel}
           </Button>

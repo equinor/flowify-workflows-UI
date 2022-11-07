@@ -1,15 +1,11 @@
 import React, { FC } from 'react';
 import { Icon, Typography } from '@equinor/eds-core-react';
-import { Dialog } from '@mui/material';
 import { useFormikContext } from 'formik';
-import { SelectFormik, createOptionsFromSingleValue } from '../../../../form';
-import { TextInputFormik } from '../../../../form/formik/text-input-formik';
-import { Button, Stack } from '../../../../ui';
+import { SelectFormik, createOptionsFromSingleValue, TextInputFormik, TextListFormik, MultiSelectFormik } from '@form';
+import { Button, Stack, Modal } from '@ui';
+import { Data } from '@models/v2';
 import { MEDIATYPES, TYPES } from '../types';
-import { Data } from '../../../../../models/v2';
-import { TextListFormik } from '../../../../form/formik/text-list-formik';
 import { StyledParameterWrapper } from './styles';
-import { MultiSelectFormik } from '../../../../form/formik/multi-select-formik';
 
 interface ParameterEditorProps {
   open: boolean;
@@ -41,7 +37,7 @@ export const ParameterEditor: FC<ParameterEditorProps> = (props: ParameterEditor
   }
 
   return (
-    <Dialog open={open} onClose={trySubmit} fullWidth maxWidth="sm">
+    <Modal open={open} onClose={trySubmit} fullWidth maxWidth="sm">
       <StyledParameterWrapper padding={2} spacing={2}>
         <Typography variant="h5">Edit {type}</Typography>
         <TextInputFormik name="name" label="Name" readOnly={onlyEditableValue} />
@@ -88,6 +84,6 @@ export const ParameterEditor: FC<ParameterEditorProps> = (props: ParameterEditor
           </Button>
         </Stack>
       </StyledParameterWrapper>
-    </Dialog>
+    </Modal>
   );
 };
