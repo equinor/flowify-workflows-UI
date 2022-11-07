@@ -15,7 +15,7 @@ const EditorHeader: FC<IEditorHeader> = (props: IEditorHeader) => {
   return (
     <Breadcrumbs
       links={[
-        { title: 'dashboard', href: '/dashboard' },
+        { title: 'Dashboard', href: '/dashboard' },
         { title: workspace, href: `/workspace/${workspace}` },
         { title: `${props.type} editor` },
       ]}
