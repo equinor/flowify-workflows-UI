@@ -1,12 +1,12 @@
 import React, { memo, useState } from 'react';
 import { Icon, Typography } from '@equinor/eds-core-react';
 import { NodeProps } from 'react-flow-renderer/nocss';
+import { Map } from '@models/v2';
+import { isNotEmptyArray } from '@common';
+import { Button, Chip, Stack } from '@ui';
 import { INode, getComponentFromRef } from '../../../helpers/helpers';
 import { Handles } from '..';
 import { NodePreview } from '../..';
-import { Map } from '../../../../../models/v2';
-import { isNotEmptyArray } from '../../../../../common';
-import { Button, Chip, Stack } from '../../../../ui';
 
 interface IMapNode extends NodeProps<INode> {}
 

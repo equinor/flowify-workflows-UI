@@ -1,9 +1,9 @@
 import React, { FC } from 'react';
 import { Typography } from '@equinor/eds-core-react';
-import { Component, Brick as IBrick } from '../../../../models/v2';
+import { Component, Brick as IBrick } from '@models/v2';
+import { BaseInput } from '@form';
+import { Stack, Grid } from '@ui';
 import { Argument, DraggableList, Result } from '../../components';
-import { BaseInput } from '../../../form';
-import { Stack, Grid } from '../../../ui';
 
 interface BrickProps {
   component: Component | null | undefined;

@@ -8,7 +8,7 @@ import ReactFlow, {
   Background,
   BackgroundVariant,
 } from 'react-flow-renderer/nocss';
-import { Component, Conditional, Map } from '../../../../../models/v2';
+import { Component, Conditional, Map } from '@models/v2';
 import { getComponentFromRef, INode, nanoid } from '../../../helpers';
 import { EndNode, StartNode, TaskNode } from '../../graph';
 import { SubNode } from '../../graph/nodes/sub-node';

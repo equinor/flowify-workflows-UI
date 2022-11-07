@@ -1,9 +1,9 @@
 import React, { FC, useState } from 'react';
 import { Icon } from '@equinor/eds-core-react';
+import { Component } from '@models/v2';
+import { DialogWrapper, Button, MultiToggle, ToggleButton, Stack, Modal } from '@ui';
 import { Marketplace } from '../../../marketplace/marketplace';
-import { Component } from '../../../../models/v2';
 import { BUTTON_STATE } from '../../../creators/add-component-to-graph';
-import { DialogWrapper, Button, MultiToggle, ToggleButton, Stack, Modal } from '../../../ui';
 import { FunctionalComponents } from '../functional-components/functional-components';
 
 interface MarketplaceModalProps {

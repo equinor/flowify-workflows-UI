@@ -3,12 +3,12 @@ import { Icon, Snackbar } from '@equinor/eds-core-react';
 import { useNavigate } from 'react-router';
 import { Form, Formik } from 'formik';
 import * as yup from 'yup';
-import { Workflow } from '../../../models/v2/workflow';
-import { services } from '../../../services';
-import { Button, DialogWrapper, Stack, Modal } from '../../ui';
+import { Workflow } from '@models/v2';
+import { services } from '@services';
+import { Button, DialogWrapper, Stack, Modal } from '@ui';
+import { TextInputFormik } from '@form';
+import { uuid } from '@common';
 import { Submitter } from '../create-component/submitter';
-import { TextInputFormik } from '../../form';
-import { uuid } from '../../../common';
 
 const makeWorkflow = (workspace: string): Workflow => ({
   type: 'workflow',

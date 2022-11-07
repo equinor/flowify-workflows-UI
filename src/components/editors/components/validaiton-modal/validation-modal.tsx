@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { Typography } from '@equinor/eds-core-react';
-import { isNotEmptyArray } from '../../../../common';
-import { DialogWrapper, Stack, Modal, Table } from '../../../ui';
+import { isNotEmptyArray } from '@common';
+import { DialogWrapper, Stack, Modal, Table } from '@ui';
 import { IParameterConfig } from '../../types';
 import { ErrorRow } from './components/error-row';
 import { IValidationError } from './types';

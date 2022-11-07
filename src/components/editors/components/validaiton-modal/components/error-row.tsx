@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import { IValidationError } from '../types';
-import { Button } from '../../../../ui';
+import { Button } from '@ui';
 import { IParameterConfig } from '../../../types';
 
 interface ErrorRowProps {

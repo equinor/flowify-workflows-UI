@@ -1,11 +1,11 @@
 import React, { memo, useState } from 'react';
 import { Icon, Typography } from '@equinor/eds-core-react';
 import { NodeProps } from 'react-flow-renderer/nocss';
+import { Conditional } from '@models/v2';
+import { Stack, Button, Chip } from '@ui';
 import { INode } from '../../../helpers/helpers';
 import { Handles } from '..';
 import { NodePreview } from '../..';
-import { Conditional } from '../../../../../models/v2';
-import { Stack, Button, Chip } from '../../../../ui';
 
 interface IConditionalNode extends NodeProps<INode> {}
 

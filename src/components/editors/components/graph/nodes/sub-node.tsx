@@ -2,10 +2,10 @@ import React, { memo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { NodeProps } from 'react-flow-renderer/nocss';
 import { Button, Chip, Icon, Tooltip, Typography } from '@equinor/eds-core-react';
+import { Stack } from '@ui';
 import { INode } from '../../../helpers/helpers';
 import { Handles } from '..';
 import { NodePreview } from '../..';
-import { Stack } from '../../../../ui';
 
 interface ISubNode extends NodeProps<INode> {}
 

@@ -1,13 +1,12 @@
 import React, { FC, useState } from 'react';
 import { Icon, Typography } from '@equinor/eds-core-react';
-import { isNotEmptyArray } from '../../../common';
+import { isNotEmptyArray } from '@common';
+import { Component, Workflow } from '@models/v2';
+import { BaseInput } from '@form';
+import { MultiToggle, ToggleButton, Button, Chip, Message, DialogWrapper, Stack, Modal } from '@ui';
 import { nanoid } from '../helpers';
-import { EditorHeader } from '../components';
-import { Component, Workflow } from '../../../models/v2';
-import { Parameter } from '.';
-import { MultiToggle, ToggleButton, Button, Chip, Message, DialogWrapper, Stack, Modal } from '../../ui';
-import { BaseInput } from '../../form';
 import { StyledTextButton } from './document-editor/styles';
+import { Parameter, EditorHeader } from '.';
 
 interface SidebarProps {
   component: Component | null | undefined;

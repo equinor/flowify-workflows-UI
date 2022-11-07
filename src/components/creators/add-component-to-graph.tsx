@@ -1,6 +1,6 @@
 import React, { FC, useState } from 'react';
 import { Button, Tooltip, Icon, Progress } from '@equinor/eds-core-react';
-import { Component } from '../../models/v2';
+import { Component } from '@models/v2';
 
 export type BUTTON_STATE = 'default' | 'loading' | 'success' | 'error';
 interface AddComponentToGraphProps {

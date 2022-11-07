@@ -4,9 +4,9 @@ import { Typography } from '@equinor/eds-core-react';
 import moment from 'moment';
 import { Link } from 'react-router-dom';
 import ReactJson from 'react-json-view';
+import { Brick, Graph } from '@models/v2';
+import { DialogWrapper, Button, Stack, Drawer } from '@ui';
 import { INode } from '../../helpers/helpers';
-import { Brick, Graph } from '../../../../models/v2';
-import { DialogWrapper, Button, Stack, Drawer } from '../../../ui';
 
 interface NodePreviewProps {
   open: boolean;

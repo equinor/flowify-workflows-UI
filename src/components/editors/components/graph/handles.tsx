@@ -1,8 +1,8 @@
 import React, { FC } from 'react';
 import { Handle, Position } from 'react-flow-renderer/nocss';
 import { Tooltip } from '@equinor/eds-core-react';
-import { Data } from '../../../../models/v2';
-import { Stack } from '../../../ui';
+import { Data } from '@models/v2';
+import { Stack } from '@ui';
 
 interface IHandles {
   parameters?: Data[];

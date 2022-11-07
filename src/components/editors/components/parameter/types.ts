@@ -1,4 +1,4 @@
-import { Data, Component, DataTypes } from '../../../../models/v2';
+import { Data, Component, DataTypes } from '@models/v2';
 
 export interface ParameterProps {
   parameter: Data;

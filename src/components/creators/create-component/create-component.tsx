@@ -1,12 +1,12 @@
 import React, { FC, useState } from 'react';
-import { Button as EDSButton, Snackbar } from '@equinor/eds-core-react';
 import { useNavigate } from 'react-router-dom';
+import { Button as EDSButton, Snackbar } from '@equinor/eds-core-react';
 import { Form, Formik } from 'formik';
 import * as yup from 'yup';
-import { Component } from '../../../models/v2';
-import { services } from '../../../services';
-import { DialogWrapper, Modal } from '../../ui';
-import { BaseInputFormik } from '../../form';
+import { Component } from '@models/v2';
+import { services } from '@services';
+import { DialogWrapper, Modal } from '@ui';
+import { BaseInputFormik } from '@form';
 import { Submitter } from './submitter';
 
 const makeComponent = (): Component => ({

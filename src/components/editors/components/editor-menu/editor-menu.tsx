@@ -1,8 +1,8 @@
 import React, { FC } from 'react';
+import { Stack } from '@ui';
 import { MenuButton } from './menu-button/menu-button';
 import { EditorMenuProps } from './types';
 import { StyledEditorMenu } from './styles';
-import { Stack } from '../../../ui';
 
 export const EditorMenu: FC<EditorMenuProps> = (props: EditorMenuProps) => {
   const { active, setActive, isWorkflow } = props;

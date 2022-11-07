@@ -1,5 +1,5 @@
 import React from 'react';
-import { Component } from '../../../../models/v2';
+import { Component } from '@models/v2';
 
 export interface FunctionalComponentsProps {
   onClose: any;

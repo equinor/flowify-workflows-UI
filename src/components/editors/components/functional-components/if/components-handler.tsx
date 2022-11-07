@@ -1,9 +1,9 @@
 import React, { FC, useState } from 'react';
 import { Typography } from '@equinor/eds-core-react';
-import { services } from '../../../../../services';
-import { Component, Conditional } from '../../../../../models/v2';
+import { services } from '@services';
+import { Component, Conditional } from '@models/v2';
+import { Button, Stack } from '@ui';
 import { MarketplaceModal } from '../..';
-import { Button, Stack } from '../../../../ui';
 
 interface ComponentsHandlerProps {
   ifComponent: Component | undefined;

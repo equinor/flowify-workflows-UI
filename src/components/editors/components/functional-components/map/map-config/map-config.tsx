@@ -1,11 +1,11 @@
 import React, { FC, useEffect, useState } from 'react';
 import { Typography } from '@equinor/eds-core-react';
+import { Component, Edge, Graph, Node } from '@models/v2';
+import { isNotEmptyArray } from '@common';
+import { DialogWrapper, Button, Stack, Grid, Modal } from '@ui';
 import { getComponentFromRef, nanoid } from '../../../../helpers';
 import { Parameter } from '../../..';
-import { Component, Edge, Graph, Node } from '../../../../../../models/v2';
 import { MapGraph } from './map-graph';
-import { isNotEmptyArray } from '../../../../../../common';
-import { DialogWrapper, Button, Stack, Grid, Modal } from '../../../../../ui';
 
 interface MapConfigProps {
   open: boolean;

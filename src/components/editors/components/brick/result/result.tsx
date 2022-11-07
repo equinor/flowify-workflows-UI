@@ -1,10 +1,10 @@
 import React, { FC, useState } from 'react';
 import { Icon, Radio, Typography } from '@equinor/eds-core-react';
+import { Brick, FilePath, Result as IResult } from '@models/v2';
+import { BaseInput, Select, createOptionsFromObjectValue } from '@form';
+import { DialogWrapper, Stack, Modal } from '@ui';
 import { ResultProps } from './types';
 import { ResultButton, ResultWrapper } from './styles';
-import { Brick, FilePath, Result as IResult } from '../../../../../models/v2';
-import { BaseInput, Select, createOptionsFromObjectValue } from '../../../../form';
-import { DialogWrapper, Stack, Modal } from '../../../../ui';
 
 export const Result: FC<ResultProps> = (props: ResultProps) => {
   const { outputs, result, setComponent, index, setWorkflow } = props;

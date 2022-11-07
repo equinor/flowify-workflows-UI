@@ -1,9 +1,9 @@
 import React, { FC, useState } from 'react';
 import { Checkbox, Icon, Radio, Typography } from '@equinor/eds-core-react';
-import { Component, Graph } from '../../../../../../models/v2';
+import { Component, Graph } from '@models/v2';
+import { Button, Stack } from '@ui';
 import { generateMap } from './helpers';
 import { getComponentFromRef } from '../../../../helpers';
-import { Button, Stack } from '../../../../../ui';
 
 interface MapCreatorProps {
   component?: Component;

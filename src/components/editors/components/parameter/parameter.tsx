@@ -2,12 +2,12 @@ import React, { FC, useState } from 'react';
 import { Icon, Typography } from '@equinor/eds-core-react';
 import * as yup from 'yup';
 import { Formik, Form } from 'formik';
-import { Brick, Data, Edge, Graph } from '../../../../models/v2';
+import { Brick, Data, Edge, Graph } from '@models/v2';
+import { Stack } from '@ui';
 import { ParameterWrapper } from './styles';
 import { ParameterProps, TYPE_ICONS } from './types';
 import { updateArgs, updateParameter, updateResults } from './helpers';
 import { ParameterEditor } from './parameter-editor/parameter-editor';
-import { Stack } from '../../../ui';
 
 export const Parameter: FC<ParameterProps> = (props: ParameterProps) => {
   const { index, setComponent, type, onlyEditableValue, editableValue, parameter, names } = props;
@@ -76,56 +76,54 @@ export const Parameter: FC<ParameterProps> = (props: ParameterProps) => {
   }
 
   return (
-    <>
-      <Stack spacing={0.5}>
-        <ParameterWrapper onClick={() => setOpen(true)}>
-          <Stack direction="row" alignItems="center" spacing={1}>
-            <Icon color="#007079" name={TYPE_ICONS[parameter.type as keyof typeof TYPE_ICONS]} />
-            <div style={{ flexGrow: '2' }}>
-              <Typography variant="h5">{parameter.name}</Typography>
-              <Typography variant="body_short">{parameter.userdata?.description}</Typography>
-              {editableValue && type === 'input' && (
-                <Stack
-                  direction="row"
-                  alignItems="center"
-                  spacing={1}
-                  style={{ paddingLeft: '0.25rem', paddingTop: '0.25rem' }}
-                >
-                  <Icon name="subdirectory_arrow_right" color="#007079" size={16} />
-                  <Typography variant="caption">
-                    {Array.isArray(parameter?.userdata?.value)
-                      ? parameter?.userdata?.value.join(', ')
-                      : parameter?.userdata?.value || 'undefined'}
-                  </Typography>
-                </Stack>
-              )}
-            </div>
-          </Stack>
-          <Formik
-            initialValues={{
-              ...props.parameter,
-              value: props?.parameter?.userdata?.value || '',
-              description: props?.parameter?.userdata?.description || '',
-            }}
-            onSubmit={onParameterUpdate}
-            validationSchema={validationSchema}
-            validateOnBlur
-          >
-            <Form>
-              <ParameterEditor
-                open={open}
-                onlyEditableValue={onlyEditableValue}
-                editableValue={editableValue}
-                secret={props.secret}
-                volume={props.volume}
-                onClose={() => setOpen(false)}
-                removeInput={removeInput}
-                type={type}
-              />
-            </Form>
-          </Formik>
-        </ParameterWrapper>
-      </Stack>
-    </>
+    <Stack spacing={0.5}>
+      <ParameterWrapper onClick={() => setOpen(true)}>
+        <Stack direction="row" alignItems="center" spacing={1}>
+          <Icon color="#007079" name={TYPE_ICONS[parameter.type as keyof typeof TYPE_ICONS]} />
+          <div style={{ flexGrow: '2' }}>
+            <Typography variant="h5">{parameter.name}</Typography>
+            <Typography variant="body_short">{parameter.userdata?.description}</Typography>
+            {editableValue && type === 'input' && (
+              <Stack
+                direction="row"
+                alignItems="center"
+                spacing={1}
+                style={{ paddingLeft: '0.25rem', paddingTop: '0.25rem' }}
+              >
+                <Icon name="subdirectory_arrow_right" color="#007079" size={16} />
+                <Typography variant="caption">
+                  {Array.isArray(parameter?.userdata?.value)
+                    ? parameter?.userdata?.value.join(', ')
+                    : parameter?.userdata?.value || 'undefined'}
+                </Typography>
+              </Stack>
+            )}
+          </div>
+        </Stack>
+        <Formik
+          initialValues={{
+            ...props.parameter,
+            value: props?.parameter?.userdata?.value || '',
+            description: props?.parameter?.userdata?.description || '',
+          }}
+          onSubmit={onParameterUpdate}
+          validationSchema={validationSchema}
+          validateOnBlur
+        >
+          <Form>
+            <ParameterEditor
+              open={open}
+              onlyEditableValue={onlyEditableValue}
+              editableValue={editableValue}
+              secret={props.secret}
+              volume={props.volume}
+              onClose={() => setOpen(false)}
+              removeInput={removeInput}
+              type={type}
+            />
+          </Form>
+        </Formik>
+      </ParameterWrapper>
+    </Stack>
   );
 };

@@ -1,8 +1,8 @@
 // @ts-nocheck
 import React, { FC } from 'react';
 import { Tooltip, Icon } from '@equinor/eds-core-react';
+import { Button, Stack } from '@ui';
 import { EditorSettings } from '..';
-import { Button, Stack } from '../../../ui';
 
 interface EditorCentralBarProps {
   setUseManifest?: any;

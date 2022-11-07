@@ -1,7 +1,7 @@
 import React, { FC, useState, useContext } from 'react';
 import { Tooltip, Typography } from '@equinor/eds-core-react';
-import { SettingsContextStore } from '../../../../common/context/editor-settings-context';
-import { Button, DialogWrapper, MultiToggle, ToggleButton, Stack, Modal } from '../../../ui';
+import { SettingsContextStore } from '@common';
+import { Button, DialogWrapper, MultiToggle, ToggleButton, Stack, Modal } from '@ui';
 
 interface IEditorSettings {}
 

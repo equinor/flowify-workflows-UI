@@ -1,8 +1,8 @@
 import React, { FC, useState } from 'react';
 import { Icon, Typography } from '@equinor/eds-core-react';
-import { Paper, Stack, Button, Grid } from '../../../ui';
-import { isNotEmptyArray } from '../../../../common';
-import { Graph } from '../../../../models/v2';
+import { Paper, Stack, Button, Grid } from '@ui';
+import { isNotEmptyArray } from '@common';
+import { Graph } from '@models/v2';
 import { generateIf } from './helpers';
 import { MapCreator } from './map/map-creator/map-creator';
 import { FunctionalComponentsProps, COMPONENT_IDS, FUNCTIONAL_COMPONENTS } from './types';

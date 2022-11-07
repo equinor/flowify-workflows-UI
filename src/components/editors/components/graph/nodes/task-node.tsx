@@ -2,11 +2,11 @@ import React, { memo, useState } from 'react';
 import { Icon, Tooltip, Typography } from '@equinor/eds-core-react';
 import { NodeProps } from 'react-flow-renderer/nocss';
 import { Link } from 'react-router-dom';
+import { isNotEmptyArray } from '@common';
+import { Button, Chip, Stack } from '@ui';
 import { INode } from '../../../helpers/helpers';
 import { Handles } from '..';
 import { NodePreview } from '../..';
-import { isNotEmptyArray } from '../../../../../common';
-import { Button, Chip, Stack } from '../../../../ui';
 
 interface ITaskNode extends NodeProps<INode> {}
 

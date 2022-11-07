@@ -1,10 +1,10 @@
 import React, { FC } from 'react';
 import { Typography } from '@equinor/eds-core-react';
-import { Data, Edge, Graph } from '../../../../models/v2';
-import { DialogWrapper, Message, Stack, Modal } from '../../../ui';
+import { Data, Edge, Graph } from '@models/v2';
+import { DialogWrapper, Message, Stack, Modal } from '@ui';
+import { Select } from '@form';
 import { getComponentFromRef } from '../../helpers';
 import { SecretsVolumesConfigProps } from './types';
-import { Select } from '../../../form';
 
 export const SecretsVolumesConfig: FC<SecretsVolumesConfigProps> = (props: SecretsVolumesConfigProps) => {
   const {

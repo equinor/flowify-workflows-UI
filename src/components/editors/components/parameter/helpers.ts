@@ -1,5 +1,5 @@
-import { Arg, Data, Port, Result } from '../../../../models/v2';
-import { isNotEmptyArray } from '../../../../common';
+import { Arg, Data, Port, Result } from '@models/v2';
+import { isNotEmptyArray } from '@common';
 
 function getMediaType(value: string | undefined, mediatypes: string[] | undefined) {
   if (value === 'parameter' || value === 'parameter_array') {

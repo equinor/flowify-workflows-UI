@@ -1,13 +1,13 @@
 import React, { FC, useEffect, useState } from 'react';
 import { Button, Icon, Typography } from '@equinor/eds-core-react';
-import { Component, Edge, Graph, Node } from '../../../../../models/v2';
+import { Component, Edge, Graph, Node } from '@models/v2';
+import { isNotEmptyArray } from '@common';
+import { DialogWrapper, Stack, Grid, Modal } from '@ui';
 import { Parameter } from '../../parameter/parameter';
 import { IfGraph } from './if-graph';
 import { nanoid } from '../../../helpers';
-import { isNotEmptyArray } from '../../../../../common';
 import { Expression } from './expression';
 import { ComponentsHandler } from './components-handler';
-import { DialogWrapper, Stack, Grid, Modal } from '../../../../ui';
 
 interface IfConfigProps {
   open: boolean;

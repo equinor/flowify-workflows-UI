@@ -1,15 +1,14 @@
 import React, { FC, useState, useEffect, useContext } from 'react';
 import { Button as EDSButton, Icon, Progress, Snackbar, Typography, Pagination } from '@equinor/eds-core-react';
 import moment from 'moment';
-import { Component, IPageInfo } from '../../models/v2';
-import { services, IFilter } from '../../services';
-import { isNotEmptyArray } from '../../common/general-helpers';
+import { Link } from 'react-router-dom';
+import { services, IFilter } from '@services';
+import { Button, Stack, Grid } from '@ui';
+import { Select, BaseInput } from '@form';
+import { Component, IPageInfo } from '@models/v2';
+import { isNotEmptyArray, UserContextStore } from '@common';
 import { ComponentCard } from './components/component-card';
 import { AddComponentToGraph, CreateComponent } from '../creators';
-import { Button, Stack, Grid } from '../ui';
-import { UserContextStore } from '../../common/context/user-context-store';
-import { Link } from 'react-router-dom';
-import { Select, BaseInput } from '../form';
 
 interface MarketplaceProps {
   onAddComponent?: any;

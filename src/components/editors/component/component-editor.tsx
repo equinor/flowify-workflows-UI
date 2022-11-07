@@ -2,8 +2,10 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import { useEdgesState, useNodesState } from 'react-flow-renderer';
 import { Helmet } from 'react-helmet-async';
-import { Component, ComponentListRequest } from '../../../models/v2';
-import { IFilter, IPagination, services } from '../../../services';
+import { Component, ComponentListRequest } from '@models/v2';
+import { IFilter, IPagination, services } from '@services';
+import { checkComponentValidation, isNotEmptyArray } from '@common';
+import { Stack } from '@ui';
 import {
   MapConfig,
   SecretsVolumesConfig,
@@ -16,8 +18,6 @@ import {
   IValidationError,
 } from '../components';
 import { createGraphElements, fetchInitialSubComponents, INode } from '../helpers';
-import { checkComponentValidation, isNotEmptyArray } from '../../../common';
-import { Stack } from '../../ui';
 
 interface IEditor {
   uid: string | null;

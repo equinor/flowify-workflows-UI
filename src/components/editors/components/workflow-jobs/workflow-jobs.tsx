@@ -1,14 +1,14 @@
 import React, { FC, useContext, useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import moment from 'moment';
 import { Icon, Typography } from '@equinor/eds-core-react';
-import { Link } from 'react-router-dom';
-import { IJobsListRequest, Workflow } from '../../../../models/v2';
-import { IFilter, IPagination } from '../../../../services';
+import { IJobsListRequest, Workflow } from '@models/v2';
+import { IFilter, IPagination } from '@services';
+import { Paper, Button, Pagination, Stack, Grid } from '@ui';
+import { BaseInput, Select } from '@form';
+import { UserContextStore } from '@common';
 import { RunWorkflow } from '../../../creators';
 import { Timestamp } from '../../../timestamp';
-import { Paper, Button, Pagination, Stack, Grid } from '../../../ui';
-import { BaseInput, Select } from '../../../form';
-import { UserContextStore } from '../../../../common/context/user-context-store';
 
 interface WorkflowJobsProps {
   workflow: Workflow | undefined;

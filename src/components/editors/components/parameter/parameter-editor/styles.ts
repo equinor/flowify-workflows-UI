@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Stack } from '../../../../ui';
+import { Stack } from '@ui';
 
 export const StyledParameterWrapper = styled(Stack)`
   background: ${({ theme }) => theme?.layout?.background};

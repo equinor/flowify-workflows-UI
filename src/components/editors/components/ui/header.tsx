@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { Breadcrumbs } from '../../../ui';
+import { Breadcrumbs } from '@ui';
 
 interface IEditorHeader {
   name?: string | null;

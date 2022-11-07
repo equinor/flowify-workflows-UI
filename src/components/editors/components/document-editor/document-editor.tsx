@@ -2,10 +2,10 @@ import React, { FC, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Icon, Pagination, Typography } from '@equinor/eds-core-react';
 import moment from 'moment';
-import { Button, Paper, Chip, Stack, DialogWrapper, Grid, Modal } from '../../../ui';
+import { BaseInput } from '@form';
+import { Button, Paper, Chip, Stack, DialogWrapper, Grid, Modal } from '@ui';
 import { DocumentEditorProps } from './types';
 import { StyledTextButton } from './styles';
-import { BaseInput } from '../../../form';
 
 export const DocumentEditor: FC<DocumentEditorProps> = (props: DocumentEditorProps) => {
   const { document, setInstance, versionsResponse, fetchVersions } = props;

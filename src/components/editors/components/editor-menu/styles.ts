@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Stack } from '../../../ui';
+import { Stack } from '@ui';
 import { ButtonTheme } from './types';
 
 export const StyledMenuButton = styled.button<{ buttonTheme: ButtonTheme }>`

@@ -1,9 +1,9 @@
 import React, { FC, useState } from 'react';
 import { Radio, Typography } from '@equinor/eds-core-react';
+import { Brick } from '@models/v2';
+import { BaseInput, Select } from '@form';
+import { DialogWrapper, Message, Stack, Modal } from '@ui';
 import { ArgumentEditorProps } from './types';
-import { Brick } from '../../../../../../models/v2';
-import { BaseInput, Select } from '../../../../../form';
-import { DialogWrapper, Message, Stack, Modal } from '../../../../../ui';
 
 export const ArgumentEditor: FC<ArgumentEditorProps> = (props: ArgumentEditorProps) => {
   const { arg, isConst, index, open, onClose, setComponent, inputs, selectValue, setSelectValue, type } = props;

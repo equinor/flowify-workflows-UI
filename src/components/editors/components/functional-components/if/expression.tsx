@@ -1,8 +1,8 @@
 import React, { FC, useState } from 'react';
 import { Typography } from '@equinor/eds-core-react';
-import { Component, Conditional } from '../../../../../models/v2';
-import { MultiToggle, ToggleButton, Stack } from '../../../../ui';
-import { BaseInput, Select } from '../../../../form';
+import { Component, Conditional } from '@models/v2';
+import { MultiToggle, ToggleButton, Stack } from '@ui';
+import { BaseInput, Select } from '@form';
 
 interface ExpressionProps {
   ifComponent: Component | undefined;

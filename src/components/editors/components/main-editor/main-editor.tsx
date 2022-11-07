@@ -1,9 +1,9 @@
 import React, { FC, useState } from 'react';
-import { Component, Workflow } from '../../../../models/v2';
+import { Component, Workflow } from '@models/v2';
+import { Stack, Grid } from '@ui';
 import { EditorCentralBar, Sidebar, Brick, GraphEditor } from '..';
 import { ManifestEditor } from '../../manifest-editor/manifest-editor';
 import { MainEditorProps } from './types';
-import { Stack, Grid } from '../../../ui';
 
 export const MainEditor: FC<MainEditorProps> = (props: MainEditorProps) => {
   const { component, document, setComponent, setDocument, secrets, subcomponents, setSubcomponents, setDirty } = props;

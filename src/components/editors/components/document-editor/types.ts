@@ -1,6 +1,6 @@
 import React from 'react';
-import { Workflow, Component, WorkflowListRequest, ComponentListRequest } from '../../../../models/v2';
-import { IFilter, IPagination } from '../../../../services';
+import { Workflow, Component, WorkflowListRequest, ComponentListRequest } from '@models/v2';
+import { IFilter, IPagination } from '@services';
 
 export interface DocumentEditorProps {
   document: Workflow | Component | undefined;

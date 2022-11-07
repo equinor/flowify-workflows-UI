@@ -1,8 +1,8 @@
 import React, { FC, useEffect, useState } from 'react';
 import { Icon, Typography } from '@equinor/eds-core-react';
+import { Port } from '@models/v2';
 import { TYPE_ICONS, ArgumentProps } from './types';
 import { ArgumentButton } from './styles';
-import { Port } from '../../../../../models/v2';
 import { ArgumentEditor } from './argument-editor/argument-editor';
 export const Argument: FC<ArgumentProps> = (props: ArgumentProps) => {
   const { arg, inputs } = props;
