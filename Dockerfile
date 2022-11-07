@@ -4,6 +4,7 @@ WORKDIR /app
 COPY package*.json ./
 COPY yarn.lock ./
 COPY tsconfig*.json ./
+COPY craco.config.json ./
 
 FROM base as builder
 RUN yarn install
