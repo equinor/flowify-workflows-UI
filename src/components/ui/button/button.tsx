@@ -1,5 +1,5 @@
-import { Icon } from '@equinor/eds-core-react';
 import React, { FC } from 'react';
+import { Icon } from '@equinor/eds-core-react';
 import { StyledButton } from './styles';
 import { ButtonProps } from './types';
 

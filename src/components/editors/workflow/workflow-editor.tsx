@@ -2,7 +2,10 @@ import React, { useEffect, useState, FC, useCallback } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useNavigate, useParams } from 'react-router';
 import { useEdgesState, useNodesState } from 'react-flow-renderer';
-import { Workflow } from '../../../models/v2/workflow';
+import { Workflow, Component, IJobsListRequest, IVolume, WorkflowListRequest } from '@models/v2';
+import { Stack } from '@ui';
+import { isNotEmptyArray, checkWorkflowValidation } from '@common';
+import { IFilter, IPagination, services } from '@services';
 import {
   MapConfig,
   SecretsVolumesConfig,
@@ -16,13 +19,8 @@ import {
   IValidationError,
 } from '../components';
 import { createGraphElements, fetchInitialSubComponents, INode } from '../helpers';
-import { Component, IJobsListRequest, IVolume, WorkflowListRequest } from '../../../models/v2';
-import { IFilter, IPagination, services } from '../../../services';
 import { IfConfig } from '../components/functional-components/if/if-config';
-import { isNotEmptyArray } from '../../../common';
-import { checkWorkflowValidation } from '../../../common/validation/workflow-validation';
 import { IFunctionalCompConfig, IParameterConfig } from '../types';
-import { Stack } from '../../ui';
 
 interface IWorkflowEditor {
   uid: string | null;

@@ -2,15 +2,15 @@ import React, { FC, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { Helmet } from 'react-helmet-async';
 import { Progress } from '@equinor/eds-core-react';
+import { Job } from '@models/v2';
+import { services } from '@services';
+import { Stack, Grid } from '@ui';
 import { NodeDetails } from './components/job-node-preview/job-node-preview';
 import { ManifestEditor } from '../manifest-editor/manifest-editor';
 import { Workflow } from '../../../models';
 import { EditorCentralBar, EditorHeader } from '../components';
 import { JobSidebar, JobGraph } from './components';
-import { Job } from '../../../models/v2';
-import { services } from '../../../services';
 import { LoadingEventsTypes } from '../../../pages/job/job-page';
-import { Stack, Grid } from '../../ui';
 
 interface JobViewerProps {
   job: Job | undefined;

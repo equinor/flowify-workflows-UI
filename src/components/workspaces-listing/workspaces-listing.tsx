@@ -1,9 +1,9 @@
 import React, { FC, useEffect, useState } from 'react';
 import { Icon, Progress } from '@equinor/eds-core-react';
-import { services } from '../../services';
-import { Workspace } from '../../models/v2';
+import { services } from '@services';
+import { Workspace } from '@models/v2';
+import { isNotEmptyArray } from '@common';
 import { DashboardListing } from '../listings/dashboard-listing';
-import { isNotEmptyArray } from '../../common';
 
 interface IWorkspacesListing {}
 

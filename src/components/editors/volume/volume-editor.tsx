@@ -1,10 +1,10 @@
 import React, { FC, useState } from 'react';
 import { Typography } from '@equinor/eds-core-react';
 import Editor from '@monaco-editor/react';
-import { IUserVolume, IVolume } from '../../../models/v2';
-import { MultiToggle, ToggleButton, Button, Stack, DialogWrapper, Modal } from '../../ui';
-import { services } from '../../../services';
-import { BaseInput } from '../../form';
+import { IUserVolume, IVolume } from '@models/v2';
+import { MultiToggle, ToggleButton, Button, Stack, DialogWrapper, Modal } from '@ui';
+import { services } from '@services';
+import { BaseInput } from '@form';
 
 interface VolumeEditorProps {
   open: boolean;

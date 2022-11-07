@@ -1,8 +1,8 @@
 import React, { FC } from 'react';
 import { Typography } from '@equinor/eds-core-react';
-import { ArtifactsDetail, ParametersDetail } from '.';
+import { Stack } from '@ui';
 import { Outputs, NodeStatus, Workflow, Inputs } from '../../../../../../models';
-import { Stack } from '../../../../../ui';
+import { ArtifactsDetail, ParametersDetail } from '.';
 
 interface IInputsOutputsDetail {
   workflow: Workflow;

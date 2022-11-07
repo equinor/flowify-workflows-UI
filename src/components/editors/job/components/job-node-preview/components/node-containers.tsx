@@ -1,8 +1,8 @@
 import React from 'react';
 import { Typography } from '@equinor/eds-core-react';
+import { Stack } from '@ui';
 import { NodeStatus } from '../../../../../../models';
 import { Container } from '../../../../../../models/kubernetes';
-import { Stack } from '../../../../../ui';
 
 interface NodeContainersProps {
   nodeStatus: NodeStatus;

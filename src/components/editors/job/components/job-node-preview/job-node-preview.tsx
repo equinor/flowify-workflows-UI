@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Typography } from '@equinor/eds-core-react';
 import ReactJson from 'react-json-view';
-import { getResolvedTemplates } from '../../../../../common';
+import { getResolvedTemplates } from '@common';
+import { Stack, Drawer } from '@ui';
+import { services } from '@services';
 import { NodeStatus, Workflow } from '../../../../../models';
-import { services } from '../../../../../services';
 import { NodeSummary } from './components';
 import { InputsOutputsDetail } from './components/inputs-outputs-detail';
 import { LogViewer } from '../log-viewer';
 import { ensurePodName } from './helpers/node-helpers';
-import { Stack, Drawer } from '../../../../ui';
 
 interface NodeDetailsProps {
   workflowName?: string;

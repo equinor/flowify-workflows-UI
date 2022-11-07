@@ -1,7 +1,6 @@
 import React, { FC } from 'react';
-import { Select } from '../../form';
-import { Button } from '../button/button';
-import { Stack } from '../stack/stack';
+import { Select } from '@form';
+import { Button, Stack } from '@ui';
 
 interface PaginationProps {
   page: number;

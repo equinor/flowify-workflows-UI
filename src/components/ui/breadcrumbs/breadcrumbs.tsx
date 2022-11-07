@@ -1,7 +1,7 @@
 import { Icon } from '@equinor/eds-core-react';
 import React, { FC } from 'react';
 import { Link } from 'react-router-dom';
-import { isNotEmptyArray } from '../../../common';
+import { isNotEmptyArray } from '@common';
 import { StyledBreadcrumbs } from './styles';
 
 interface BreadcrumbsProps {

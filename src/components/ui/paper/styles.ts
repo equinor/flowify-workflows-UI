@@ -1,5 +1,5 @@
 import styled, { css } from 'styled-components';
-import { Stack } from '../stack/stack';
+import { Stack } from '@ui';
 
 export type PaperTheme = 'paper' | 'light';
 

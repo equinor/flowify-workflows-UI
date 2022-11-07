@@ -1,9 +1,9 @@
 import React, { FC } from 'react';
-import { Typography } from '@equinor/eds-core-react';
 import { Link } from 'react-router-dom';
-import { Job } from '../../../models/v2';
+import { Typography } from '@equinor/eds-core-react';
+import { Job } from '@models/v2';
+import { Paper, Stack } from '@ui';
 import { Timestamp } from '../../timestamp';
-import { Paper, Stack } from '../../ui';
 
 interface JobCardProps {
   job: Job;

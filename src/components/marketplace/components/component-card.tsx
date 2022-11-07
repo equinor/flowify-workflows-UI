@@ -1,9 +1,9 @@
 import React, { FC } from 'react';
-import { Icon, Typography } from '@equinor/eds-core-react';
 import { Link } from 'react-router-dom';
+import { Icon, Typography } from '@equinor/eds-core-react';
 import moment from 'moment';
-import { Button, Paper, Chip, Stack } from '../../ui';
-import { Component } from '../../../models/v2';
+import { Button, Paper, Chip, Stack } from '@ui';
+import { Component } from '@models/v2';
 import { Timestamp } from '../../timestamp';
 
 interface IComponentCard {

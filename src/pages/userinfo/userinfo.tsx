@@ -1,10 +1,9 @@
 import React, { useContext } from 'react';
-import { List, Typography } from '@equinor/eds-core-react';
-import { UserContextStore } from '../../common/context/user-context-store';
-import { Container, Layout } from '../../layout';
 import { Helmet } from 'react-helmet-async';
-import { SettingsContextStore } from '../../common/context/editor-settings-context';
-import { MultiToggle, ToggleButton, Stack } from '../../components/ui';
+import { List, Typography } from '@equinor/eds-core-react';
+import { UserContextStore, SettingsContextStore } from '@common';
+import { MultiToggle, ToggleButton, Stack } from '@ui';
+import { Container, Layout } from '../../layout';
 
 interface UserInfoPageProps {}
 

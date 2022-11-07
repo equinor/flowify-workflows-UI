@@ -1,11 +1,9 @@
 import React, { FC, useState } from 'react';
 import { Icon, Typography } from '@equinor/eds-core-react';
 import { Helmet } from 'react-helmet-async';
-import { Breadcrumbs, Stack } from '../../components/ui';
+import { Breadcrumbs, Stack } from '@ui';
 import { Layout, Container } from '../../layout';
-import { Marketplace, WorkspacesListing } from '../../components';
-import { DashboardListing } from '../../components/listings/dashboard-listing';
-import { CreateComponent } from '../../components/creators';
+import { Marketplace, WorkspacesListing, DashboardListing, CreateComponent } from '../../components';
 
 interface IDashboardPage {}
 

@@ -1,8 +1,9 @@
 import React, { FC } from 'react';
 import { Icon } from '@equinor/eds-core-react';
 import { StyledChip } from './styles';
-import { ChipProps } from './types';
+import { ChipProps, ChipTheme } from './types';
 
+export type { ChipTheme };
 export const Chip: FC<ChipProps> = (props: ChipProps) => {
   const { children, onClick } = props;
   const isButton = typeof onClick === 'function';

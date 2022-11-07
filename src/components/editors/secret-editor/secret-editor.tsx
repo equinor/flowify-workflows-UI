@@ -1,11 +1,11 @@
 import React, { FC, useState } from 'react';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
-import { ISecret } from '../../../models/v2';
-import { Stack, DialogWrapper, Modal } from '../../ui';
-import { services } from '../../../services';
+import { ISecret } from '@models/v2';
+import { Stack, DialogWrapper, Modal } from '@ui';
+import { services } from '@services';
+import { TextInputFormik } from '@form';
 import { Feedback } from '../components';
-import { TextInputFormik } from '../../form/formik/text-input-formik';
 import { Submitter } from './components/submitter';
 
 interface SecretEditorProps {

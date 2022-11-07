@@ -1,12 +1,11 @@
 import React, { FC } from 'react';
 import { Link } from 'react-router-dom';
 import { Icon, Typography } from '@equinor/eds-core-react';
+import { Job } from '@models/v2';
+import { Button, Paper, Chip, Stack, Grid, ChipTheme } from '@ui';
 import { Workflow } from '../../../../models';
 import { Timestamp } from '../../../timestamp';
 import { DurationPanel } from '../../../duration-panel';
-import { Job } from '../../../../models/v2';
-import { Button, Paper, Chip, Stack, Grid } from '../../../ui';
-import { ChipTheme } from '../../../ui/chip/types';
 
 interface IJobSidebar {
   jobWatch: Workflow | undefined;

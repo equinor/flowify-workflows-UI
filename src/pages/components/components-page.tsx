@@ -1,7 +1,7 @@
 import React from 'react';
 import { Helmet } from 'react-helmet-async';
+import { Breadcrumbs, Stack } from '@ui';
 import { Container, Layout } from '../../layout';
-import { Breadcrumbs, Stack } from '../../components/ui';
 import { Marketplace } from '../../components';
 
 export const ComponentsPage: React.FC = () => {

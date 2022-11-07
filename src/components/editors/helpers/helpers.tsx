@@ -1,6 +1,6 @@
 import { Edge, Node } from 'react-flow-renderer/nocss';
-import { isNotEmptyArray } from '../../../common';
-import { Node as ComponentNode, Data, Graph, Brick, Any, Component, Edge as IEdge, CRef } from '../../../models/v2';
+import { isNotEmptyArray } from '@common';
+import { Node as ComponentNode, Data, Graph, Brick, Any, Component, Edge as IEdge, CRef } from '@models/v2';
 import { customAlphabet } from 'nanoid';
 
 // RFC1123 alphanumeric + hyphen, we skip hyphen because cant appear at start or end

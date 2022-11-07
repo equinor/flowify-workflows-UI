@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { useParams } from 'react-router';
 import { Helmet } from 'react-helmet-async';
-import { Breadcrumbs, Stack } from '../../components/ui';
+import { Breadcrumbs, Stack } from '@ui';
 import WorkflowsListing from '../../components/workflows-listing/workflows-listing';
 import { Container, Layout } from '../../layout';
 

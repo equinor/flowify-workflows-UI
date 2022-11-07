@@ -1,8 +1,8 @@
 import React, { FC } from 'react';
 import { Typography } from '@equinor/eds-core-react';
-import { isNotEmptyArray } from '../../../../common';
-import { Stack } from '../../../ui';
-import { BaseInput } from '../../../form';
+import { isNotEmptyArray } from '@common';
+import { Stack } from '@ui';
+import { BaseInput } from '@form';
 
 interface LogViewerProps {
   logs: string[];

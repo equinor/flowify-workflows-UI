@@ -1,10 +1,10 @@
-import { Typography } from '@equinor/eds-core-react';
 import React, { FC } from 'react';
 import { Link } from 'react-router-dom';
-import { Workflow } from '../../../models/v2';
+import { Typography } from '@equinor/eds-core-react';
+import { Workflow } from '@models/v2';
+import { Chip, Paper, Stack } from '@ui';
 import { RunWorkflow } from '../../creators';
 import { Timestamp } from '../../timestamp';
-import { Chip, Paper, Stack } from '../../ui';
 
 interface WorkflowCardProps {
   workflow: Workflow;

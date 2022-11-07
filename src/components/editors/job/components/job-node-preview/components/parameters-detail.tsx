@@ -1,7 +1,7 @@
 import React from 'react';
 import { Typography } from '@equinor/eds-core-react';
+import { Stack } from '@ui';
 import { Parameter } from '../../../../../../models';
-import { Stack } from '../../../../../ui';
 
 interface ParametersProps {
   parameters?: Parameter[];

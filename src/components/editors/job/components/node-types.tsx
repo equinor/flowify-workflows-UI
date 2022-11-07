@@ -2,7 +2,7 @@ import React from 'react';
 import { Icon } from '@equinor/eds-core-react';
 import { IconData } from '@equinor/eds-icons';
 import { NodeProps, Handle, Position } from 'react-flow-renderer/nocss';
-import { ICONS } from '../../../../common/icons';
+import { ICONS } from '@common';
 import { NodePhase } from '../../../../models';
 
 function phaseIcon(phase: NodePhase): string {

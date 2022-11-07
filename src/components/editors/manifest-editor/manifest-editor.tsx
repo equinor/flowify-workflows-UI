@@ -1,11 +1,11 @@
 import React, { useState, useContext, FC } from 'react';
 import Editor from '@monaco-editor/react';
 import { Typography } from '@equinor/eds-core-react';
+import { SettingsContextStore } from '@common';
+import { Button, DialogWrapper, Modal } from '@ui';
 import { StyledManifestWrapper } from './styles';
-import { SettingsContextStore } from '../../../common/context/editor-settings-context';
 import { DEFAULT_LANGUAGE, IError, ManifestEditorProps } from './types';
 import { parse, stringify } from './helpers';
-import { Button, DialogWrapper, Modal } from '../../ui';
 
 export const ManifestEditor: FC<ManifestEditorProps> = (props: ManifestEditorProps) => {
   const { value, onChange } = props;

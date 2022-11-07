@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { Icon, Typography } from '@equinor/eds-core-react';
 import { Helmet } from 'react-helmet-async';
-import { services } from '../../services';
+import { services } from '@services';
+import { ISecret, ISecretsList, IUserVolume, IVolume, Workspace, WorkspaceList } from '@models/v2';
+import { Breadcrumbs, Button, Stack, Table } from '@ui';
+import { Select } from '@form';
+import { isNotEmptyArray } from '@common';
 import { Container, Layout } from '../../layout';
-import { ISecret, ISecretsList, IUserVolume, IVolume, Workspace, WorkspaceList } from '../../models/v2';
-import { Breadcrumbs, Button, Stack, Table } from '../../components/ui';
 import { VolumeEditor } from '../../components/editors/volume/volume-editor';
 import { Feedback, Feedbacks } from '../../components/editors/components';
 import { SecretEditor } from '../../components/editors/secret-editor/secret-editor';
-import { Select } from '../../components/form';
-import { isNotEmptyArray } from '../../common';
 
 function CREATE_VOLUME_TEMPLATE(workspace: string) {
   return {

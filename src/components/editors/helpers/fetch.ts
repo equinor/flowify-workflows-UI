@@ -1,6 +1,6 @@
-import { isNotEmptyArray } from '../../../common';
-import { Component, Graph, Map, Conditional, CRef } from '../../../models/v2';
-import { services } from '../../../services';
+import { isNotEmptyArray } from '@common';
+import { Component, Graph, Map, Conditional, CRef } from '@models/v2';
+import { services } from '@services';
 
 async function referenceHandler(node: Component | CRef | string) {
   if ((node as Component)?.type === 'component') {

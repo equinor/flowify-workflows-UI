@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
-import { Icon, Typography } from '@equinor/eds-core-react';
 import { Link } from 'react-router-dom';
-import { Button, Paper, Stack } from '../ui';
+import { Icon, Typography } from '@equinor/eds-core-react';
+import { Button, Paper, Stack } from '@ui';
 
 interface ISection {
   title?: string;

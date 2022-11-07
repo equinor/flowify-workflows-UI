@@ -1,9 +1,9 @@
 import React from 'react';
 import { Button, Icon, Typography } from '@equinor/eds-core-react';
+import { services } from '@services';
+import { Stack } from '@ui';
 import { environment } from '../../../../../../environments/environment';
 import { Artifact, NodeStatus, Workflow } from '../../../../../../models';
-import { services } from '../../../../../../services';
-import { Stack } from '../../../../../ui';
 
 interface ArtifactsProps {
   workflow: Workflow;

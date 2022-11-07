@@ -8,3 +8,4 @@ export * from './validation/workflow-validation';
 export * from './validation/methods';
 export * from './context/user-context-store';
 export * from './context/editor-settings-context';
+export { ICONS } from './icons';

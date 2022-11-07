@@ -1,7 +1,7 @@
 import React from 'react';
 import { useParams } from 'react-router';
 import { Helmet } from 'react-helmet-async';
-import { Breadcrumbs, Stack } from '../../components/ui';
+import { Breadcrumbs, Stack } from '@ui';
 import { JobsListing } from '../../components';
 import { Layout, Container } from '../../layout';
 
