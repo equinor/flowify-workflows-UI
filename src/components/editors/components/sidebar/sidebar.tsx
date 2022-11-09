@@ -1,10 +1,9 @@
 import React, { FC, useState } from 'react';
 import { Icon, Typography } from '@equinor/eds-core-react';
-import { isNotEmptyArray } from '@common';
+import { isNotEmptyArray, nanoid } from '@common';
 import { Component, Workflow } from '@models/v2';
 import { BaseInput } from '@form';
 import { MultiToggle, ToggleButton, Button, Chip, Message, DialogWrapper, Stack, Modal, Breadcrumbs } from '@ui';
-import { nanoid } from '../../helpers';
 import { StyledTextButton } from '../document-editor/styles';
 import { Parameter } from '..';
 import { ImplementationTypes, SidebarProps } from './types';

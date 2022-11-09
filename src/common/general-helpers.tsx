@@ -1,3 +1,12 @@
+import { customAlphabet } from 'nanoid';
+
+// RFC1123 alphanumeric + hyphen, we skip hyphen because cant appear at start or end
+export function nanoid(len: number) {
+  const lowercase: string = 'abcdefghijklmnopqrstuvwxyz';
+  const numbers: string = '0123456789';
+  return customAlphabet(lowercase + numbers /* + '-'  exclude hyphen */, len)();
+}
+
 export function isNotEmptyArray(array: any[] | undefined): boolean {
   return Array.isArray(array) && array.length > 0;
 }

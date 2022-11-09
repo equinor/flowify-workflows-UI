@@ -1,6 +1,5 @@
-import { uuid } from '@common';
+import { uuid, nanoid } from '@common';
 import { Node } from '@models/v2';
-import { nanoid } from '../../helpers';
 
 function generateIf(nodes: Node[]) {
   nodes.push({

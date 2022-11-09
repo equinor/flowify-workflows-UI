@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import { Typography } from '@equinor/eds-core-react';
-import { nanoid } from '../../editors/helpers';
+import { nanoid } from '@common';
 import { MultiToggleProps, ToggleButtonProps } from './types';
 import { StyledMultiToggle, StyledToggleButton } from './styles';
 import { Stack } from '../stack/stack';

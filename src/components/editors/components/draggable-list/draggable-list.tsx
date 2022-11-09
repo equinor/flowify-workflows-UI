@@ -2,10 +2,10 @@ import React, { FC } from 'react';
 import { Icon, Typography } from '@equinor/eds-core-react';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import { Button, Stack } from '@ui';
+import { nanoid } from '@common';
 import { removeItem, reorder } from './helpers';
 import { getItemStyle, getListStyle } from './styles';
 import { DraggableListProps } from './types';
-import { nanoid } from '../../helpers';
 
 /**
  * DraggableList. Takes a list of items (object or string) and maps the item to draggable items. Inside the draggable the function you passed to the child prop will be called with the item from the map and the index as parameters. It will then print whatever you return in this function as a child of the draggable.

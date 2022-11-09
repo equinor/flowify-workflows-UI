@@ -13,6 +13,7 @@ import { Button as EDSButton, Snackbar } from '@equinor/eds-core-react';
 import { Component, Graph } from '@models/v2';
 import { Button } from '@ui';
 import { services } from '@services';
+import { nanoid } from '@common';
 import { StartNode, TaskNode, EndNode, ConditionalNode, MapNode } from '.';
 import {
   removeConnection,
@@ -24,7 +25,6 @@ import {
   removeEndNode,
   updateTaskNodePostion,
   updateParameterPosition,
-  nanoid,
 } from '../../helpers';
 import { ReactFlowWrapper } from './styles';
 import { MarketplaceModal } from '../marketplace-modal/marketplace-modal';

@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Typography } from '@equinor/eds-core-react';
 import ReactJson from 'react-json-view';
-import { getResolvedTemplates } from '@common';
 import { Stack, Drawer } from '@ui';
 import { services } from '@services';
+import { getResolvedTemplates } from '../../helpers';
 import { NodeStatus, Workflow } from '../../../../../models';
 import { NodeSummary } from './components';
 import { InputsOutputsDetail } from './components/inputs-outputs-detail';

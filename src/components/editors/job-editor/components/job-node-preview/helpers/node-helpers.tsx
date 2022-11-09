@@ -1,4 +1,4 @@
-import { ANNOTATION_KEY_POD_NAME_VERSION, getPodName, getTemplateNameFromNode } from '@common';
+import { ANNOTATION_KEY_POD_NAME_VERSION, getPodName, getTemplateNameFromNode } from '../../../helpers';
 import { NodeStatus, Workflow } from '../../../../../../models';
 
 export const ensurePodName = (workflow: Workflow, node: NodeStatus, nodeID: string): string => {
