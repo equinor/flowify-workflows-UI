@@ -4,14 +4,13 @@ import { Typography } from '@equinor/eds-core-react';
 import moment from 'moment';
 import { Link } from 'react-router-dom';
 import ReactJson from 'react-json-view';
-import { Brick, Graph } from '@models/v2';
+import { Brick, Graph, IGraphNode } from '@models/v2';
 import { DialogWrapper, Button, Stack, Drawer } from '@ui';
-import { INode } from '../../helpers/helpers';
 
 interface NodePreviewProps {
   open: boolean;
   onClose: (open: boolean) => void;
-  node: NodeProps<INode>;
+  node: NodeProps<IGraphNode>;
 }
 
 export const NodePreview: FC<NodePreviewProps> = (props: NodePreviewProps) => {

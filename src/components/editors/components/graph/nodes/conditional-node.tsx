@@ -1,13 +1,12 @@
 import React, { memo, useState } from 'react';
 import { Icon, Typography } from '@equinor/eds-core-react';
 import { NodeProps } from 'react-flow-renderer/nocss';
-import { Conditional } from '@models/v2';
+import { Conditional, IGraphNode } from '@models/v2';
 import { Stack, Button, Chip } from '@ui';
-import { INode } from '../../../helpers/helpers';
 import { Handles } from '..';
 import { NodePreview } from '../..';
 
-interface IConditionalNode extends NodeProps<INode> {}
+interface IConditionalNode extends NodeProps<IGraphNode> {}
 
 export const ConditionalNode = memo((props: IConditionalNode) => {
   const { data } = props;

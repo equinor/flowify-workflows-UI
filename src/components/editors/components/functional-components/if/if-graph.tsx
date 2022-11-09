@@ -8,9 +8,8 @@ import ReactFlow, {
   Background,
   BackgroundVariant,
 } from 'react-flow-renderer/nocss';
-import { Component, Conditional, Map } from '@models/v2';
+import { Component, Conditional, Map, IGraphNode, IConnectionData } from '@models/v2';
 import { nanoid, getComponentFromRef } from '@common';
-import { INode } from '../../../helpers';
 import { EndNode, StartNode, TaskNode } from '../../graph';
 import { SubNode } from '../../graph/nodes/sub-node';
 import { ReactFlowWrapper } from '../../graph/styles';
@@ -25,17 +24,11 @@ interface IfGraphProps {
 
 export const IfGraph: FC<IfGraphProps> = (props: IfGraphProps) => {
   const { component, subcomponents, id } = props;
-  const [nodes, setNodes, onNodesChange] = useNodesState<INode>([]);
+  const [nodes, setNodes, onNodesChange] = useNodesState<IGraphNode>([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState<any>([]);
   const { nodeTrue, nodeFalse } = component?.implementation as Conditional;
   const trueNode = getComponentFromRef(nodeTrue, subcomponents || []);
   const falseNode = getComponentFromRef(nodeFalse, subcomponents || []);
-
-  interface ConnectionData {
-    connectionType: string;
-    sourcePort: string;
-    targetPort: string;
-  }
 
   const nodeTypes = useMemo(
     () => ({
@@ -49,7 +42,7 @@ export const IfGraph: FC<IfGraphProps> = (props: IfGraphProps) => {
 
   useEffect(() => {
     if (component) {
-      const nodes: Node<INode>[] = [];
+      const nodes: Node<IGraphNode>[] = [];
       if (trueNode) {
         nodes.push({
           id: 'selectedTrueNode',
@@ -115,7 +108,7 @@ export const IfGraph: FC<IfGraphProps> = (props: IfGraphProps) => {
         });
       });
       function createEdges() {
-        const edges: Edge<ConnectionData>[] = [];
+        const edges: Edge<IConnectionData>[] = [];
         (component?.implementation as Map)?.inputMappings?.forEach((edge, index) => {
           if (edge.source?.port && edge.target?.port) {
             edges.push({
@@ -157,7 +150,7 @@ export const IfGraph: FC<IfGraphProps> = (props: IfGraphProps) => {
   }, [component, trueNode, falseNode, id, setEdges, setNodes]);
 
   function onConnect() {}
-  function deleteEdge(edges: Edge<ConnectionData>[]) {}
+  function deleteEdge(edges: Edge<IConnectionData>[]) {}
 
   return (
     <ReactFlowWrapper>

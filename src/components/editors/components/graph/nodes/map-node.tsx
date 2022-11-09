@@ -1,16 +1,15 @@
 import React, { memo, useState } from 'react';
 import { Icon, Typography } from '@equinor/eds-core-react';
 import { NodeProps } from 'react-flow-renderer/nocss';
-import { Map } from '@models/v2';
+import { Map, IGraphNode } from '@models/v2';
 import { isNotEmptyArray, getComponentFromRef } from '@common';
 import { Button, Chip, Stack } from '@ui';
-import { INode } from '../../../helpers/helpers';
 import { Handles } from '..';
 import { NodePreview } from '../..';
 
-interface IMapNode extends NodeProps<INode> {}
+interface MapNodeProps extends NodeProps<IGraphNode> {}
 
-export const MapNode = memo((props: IMapNode) => {
+export const MapNode = memo((props: MapNodeProps) => {
   const { data, id } = props;
   const [open, setOpen] = useState<boolean>(false);
 

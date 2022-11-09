@@ -2,7 +2,7 @@ import React, { FC, useCallback, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import { useEdgesState, useNodesState } from 'react-flow-renderer';
 import { Helmet } from 'react-helmet-async';
-import { Component, ComponentListRequest } from '@models/v2';
+import { Component, ComponentListRequest, IGraphNode } from '@models/v2';
 import { IFilter, IPagination, services } from '@services';
 import { checkComponentValidation, isNotEmptyArray } from '@common';
 import { Stack } from '@ui';
@@ -17,7 +17,7 @@ import {
   ValidationModal,
   IValidationError,
 } from '../components';
-import { createGraphElements, fetchInitialSubComponents, INode } from '../helpers';
+import { createGraphElements, fetchInitialSubComponents } from '../helpers';
 import { ComponentEditorProps } from './types';
 
 /**
@@ -42,7 +42,7 @@ const ComponentEditor: FC<ComponentEditorProps> = (props: ComponentEditorProps) 
 
   // Graph
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
-  const [nodes, setNodes, onNodesChange] = useNodesState<INode>([]);
+  const [nodes, setNodes, onNodesChange] = useNodesState<IGraphNode>([]);
 
   // Config
   const [configComponent, setConfigComponent] = useState<{ id: string; type: 'map' | 'if' }>();

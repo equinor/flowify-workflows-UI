@@ -1,26 +1,13 @@
 import { Edge, Node } from 'react-flow-renderer/nocss';
 import { isNotEmptyArray, nanoid, getComponentFromRef } from '@common';
-import { Node as ComponentNode, Data, Graph, Brick, Any, Component, Edge as IEdge } from '@models/v2';
-
-export interface INode {
-  label?: string;
-  component?: Component;
-  mediatype?: string[];
-  type?: string;
-  implementation?: Graph | Brick | Any;
-  setParameterConfig?: any;
-  subcomponents?: Component[];
-  setConfigComponent?: any;
-  inputMappings?: IEdge[];
-  isInlineComponent?: boolean;
-}
+import { Node as ComponentNode, Data, Graph, Component, Edge as IEdge, IGraphNode, IConnectionData } from '@models/v2';
 
 /**
  * Create input nodes
  * @param inputs
  * @returns <object>
  */
-function newStartNodes(inputs: Data[]): Node<INode>[] {
+function newStartNodes(inputs: Data[]): Node<IGraphNode>[] {
   const nodes = inputs
     .filter((i) => i.name)
     .filter((i) => i.type !== 'env_secret' && i.type !== 'volume')
@@ -46,7 +33,7 @@ function newStartNodes(inputs: Data[]): Node<INode>[] {
  * @param outputs
  * @returns <object>
  */
-function newEndNodes(outputs: Data[]): Node<INode>[] {
+function newEndNodes(outputs: Data[]): Node<IGraphNode>[] {
   const nodes = outputs.map((output, index) => ({
     id: `o-${output.name}` || nanoid(6),
     type: 'endNode',
@@ -76,7 +63,7 @@ async function createTaskNode(
   setParameterConfig?: any,
   setConfigComponent?: any,
   inputMappings?: IEdge[],
-): Promise<Node<INode>> {
+): Promise<Node<IGraphNode>> {
   const { id, node } = componentNode;
   const component = getComponentFromRef(node, subcomponents);
   const type = component?.implementation?.type;
@@ -111,7 +98,7 @@ async function createTaskNodes(
   setParameterConfig: any,
   setConfigComponent: any,
   component: Component,
-): Promise<Node<INode>[]> {
+): Promise<Node<IGraphNode>[]> {
   if (nodes !== undefined) {
     const { inputMappings } = component?.implementation as Graph;
     const taskNodes = await Promise.all(
@@ -131,7 +118,7 @@ async function createTaskNodes(
  * @param inputs
  * @returns <object>
  */
-function createStartNodes(inputs: Data[] | undefined): Node<INode>[] {
+function createStartNodes(inputs: Data[] | undefined): Node<IGraphNode>[] {
   if (inputs !== undefined && inputs !== null) {
     return [...newStartNodes(inputs!)];
   }
@@ -143,15 +130,11 @@ function createStartNodes(inputs: Data[] | undefined): Node<INode>[] {
  * @param outputs
  * @returns
  */
-function createEndNodes(outputs: Data[] | undefined): Node<INode>[] {
+function createEndNodes(outputs: Data[] | undefined): Node<IGraphNode>[] {
   if (outputs !== undefined && outputs !== null) {
     return [...newEndNodes(outputs!)];
   }
   return [];
-}
-
-interface ConnectionData {
-  connectionType: string;
 }
 
 /**
@@ -163,7 +146,7 @@ function buildConnections(component: Component) {
   const { implementation } = component;
   if (implementation?.type === 'graph') {
     const { edges, inputMappings, outputMappings } = implementation as Graph;
-    const connections: Edge<ConnectionData>[] = [];
+    const connections: Edge<IConnectionData>[] = [];
     if (isNotEmptyArray(edges)) {
       edges?.forEach((edge, index) => {
         if (edge.source?.node && edge.source?.port && edge.target?.node && edge.target?.port) {
@@ -228,11 +211,11 @@ export async function createGraphElements(
   subcomponents?: Component[],
   setParameterConfig?: any,
   setConfigComponent?: any,
-): Promise<{ nodes: Node<INode>[]; edges: Edge[] }> {
+): Promise<{ nodes: Node<IGraphNode>[]; edges: Edge[] }> {
   if (!component) {
     return { nodes: [], edges: [] };
   }
-  const nodes: Node<INode>[] = [...createStartNodes(component.inputs), ...createEndNodes(component.outputs)];
+  const nodes: Node<IGraphNode>[] = [...createStartNodes(component.inputs), ...createEndNodes(component.outputs)];
   /**
    * Create task-nodes if implementation is Graph and has nodes
    */

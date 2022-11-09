@@ -1,8 +1,6 @@
 import { Connection, Edge, Node } from 'react-flow-renderer';
-import { Component, Map } from '@models/v2';
+import { Component, Map, IGraphNode, IConnectionData } from '@models/v2';
 import { nanoid, getComponentFromRef } from '@common';
-import { INode } from '../../../../helpers';
-import { ConnectionData } from '../types';
 
 export function checkValidation(params: Edge<any> | Connection, component: Component, subcomponents?: Component[]) {
   const { source, sourceHandle, target, targetHandle } = params;
@@ -63,7 +61,7 @@ export function addConnection(params: any, isParentInput: boolean, isParentOutpu
 
 export function createNodes(childNode: Component, id: string, component: Component) {
   // Add child node (the mapped node)
-  const nodes: Node<INode>[] = [
+  const nodes: Node<IGraphNode>[] = [
     {
       id: id,
       type: 'subNode',
@@ -117,7 +115,7 @@ export function createNodes(childNode: Component, id: string, component: Compone
 }
 
 export function createEdges(component: Component, id: string) {
-  const edges: Edge<ConnectionData>[] = [];
+  const edges: Edge<IConnectionData>[] = [];
   (component?.implementation as Map)?.inputMappings?.forEach((edge, index) => {
     if (edge.source?.port && edge.target?.port) {
       edges.push({

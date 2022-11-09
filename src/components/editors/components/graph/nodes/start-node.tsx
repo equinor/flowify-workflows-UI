@@ -1,9 +1,9 @@
 import React, { memo } from 'react';
 import { Icon, Tooltip, Typography } from '@equinor/eds-core-react';
 import { Handle, Position, NodeProps } from 'react-flow-renderer/nocss';
-import { INode } from '../../../helpers';
+import { IGraphNode } from '@models/v2';
 
-interface IStartNode extends NodeProps<INode> {}
+interface IStartNode extends NodeProps<IGraphNode> {}
 
 export const StartNode = memo((props: IStartNode) => {
   const { data } = props;

@@ -2,7 +2,7 @@ import React, { useEffect, useState, FC, useCallback } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useNavigate, useParams } from 'react-router';
 import { useEdgesState, useNodesState } from 'react-flow-renderer';
-import { Workflow, Component, IJobsListRequest, IVolume, WorkflowListRequest } from '@models/v2';
+import { Workflow, Component, IJobsListRequest, IVolume, WorkflowListRequest, IGraphNode } from '@models/v2';
 import { Stack } from '@ui';
 import { isNotEmptyArray, checkWorkflowValidation } from '@common';
 import { IFilter, IPagination, services } from '@services';
@@ -18,7 +18,7 @@ import {
   ValidationModal,
   IValidationError,
 } from '../components';
-import { createGraphElements, fetchInitialSubComponents, INode } from '../helpers';
+import { createGraphElements, fetchInitialSubComponents } from '../helpers';
 import { IfConfig } from '../components/functional-components/if/if-config';
 import { IFunctionalCompConfig, IParameterConfig } from '../types';
 
@@ -50,7 +50,7 @@ const WorkflowEditor: FC<IWorkflowEditor> = (props: IWorkflowEditor) => {
 
   // Graph
   const [edges, setEdges, onEdgesChange] = useEdgesState<any>([]);
-  const [nodes, setNodes, onNodesChange] = useNodesState<INode>([]);
+  const [nodes, setNodes, onNodesChange] = useNodesState<IGraphNode>([]);
 
   // Configs
   const [configComponent, setConfigComponent] = useState<IFunctionalCompConfig>();
