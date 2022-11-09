@@ -13,8 +13,6 @@ export const ConditionalNode = memo((props: IConditionalNode) => {
   const { data } = props;
   const [open, setOpen] = useState<boolean>(false);
 
-  console.log(data?.component);
-
   //const trueNode = (data?.component?.implementation as Conditional)?.nodeTrue;
   const falseNode = (data?.component?.implementation as Conditional)?.nodeFalse;
 

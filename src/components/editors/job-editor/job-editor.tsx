@@ -4,11 +4,11 @@ import { Helmet } from 'react-helmet-async';
 import { Progress } from '@equinor/eds-core-react';
 import { Job } from '@models/v2';
 import { services } from '@services';
-import { Stack, Grid } from '@ui';
+import { Stack, Grid, Breadcrumbs } from '@ui';
 import { NodeDetails } from './components/job-node-preview/job-node-preview';
 import { ManifestEditor } from '../manifest-editor/manifest-editor';
 import { Workflow } from '../../../models';
-import { EditorCentralBar, EditorHeader } from '../components';
+import { EditorCentralBar } from '../components';
 import { JobSidebar, JobGraph } from './components';
 import { LoadingEventsTypes } from '../../../pages/job/job-page';
 
@@ -71,7 +71,13 @@ export const JobViewer: FC<JobViewerProps> = (props: JobViewerProps) => {
           }}
         >
           <Stack spacing={2} padding={1}>
-            <EditorHeader name={jobWatch?.metadata?.name} type="Job" workspace={props.workspace} loading={loading} />
+            <Breadcrumbs
+              links={[
+                { title: 'Dashboard', href: '/dashboard' },
+                { title: workspace, href: `/workspace/${workspace}` },
+                { title: 'Job editor' },
+              ]}
+            />
             {loading && !jobWatch ? (
               <Progress.Dots color="primary" />
             ) : (

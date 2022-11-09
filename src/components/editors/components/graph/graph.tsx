@@ -28,27 +28,10 @@ import {
 } from '../../helpers';
 import { ReactFlowWrapper } from './styles';
 import { MarketplaceModal } from '../marketplace-modal/marketplace-modal';
-import { Feedback } from '../feedbacks/types';
 import { BUTTON_STATE } from '../../../marketplace/add-button/add-button';
+import { GraphEditorProps } from './types';
 
-interface IGraphEditor {
-  component: Component | undefined;
-  onChange: (component: Component) => void;
-  elements?: any;
-  nodes?: any;
-  edges?: any;
-  setElements?: any;
-  subcomponents?: Component[];
-  setComponent?: React.Dispatch<React.SetStateAction<Component | undefined>>;
-  setSubcomponents?: React.Dispatch<React.SetStateAction<Component[] | undefined>>;
-  setFeedback?: (feedback: Feedback) => void;
-  onNodesChange?: any;
-  onEdgesChange?: any;
-  mapModalOpen?: boolean;
-  type: 'workflow' | 'component' | 'job' | undefined;
-}
-
-export const GraphEditor: React.FC<IGraphEditor> = (props: IGraphEditor) => {
+export const GraphEditor: React.FC<GraphEditorProps> = (props: GraphEditorProps) => {
   const { component, onChange, nodes, edges, mapModalOpen, setSubcomponents, setFeedback, setComponent, type } = props;
   const [wrongConnectionAlert, setWrongConnectionAlert] = useState<boolean>(false);
   const [marketplaceOpen, setMarketplaceOpen] = useState<boolean>(false);
@@ -219,9 +202,7 @@ export const GraphEditor: React.FC<IGraphEditor> = (props: IGraphEditor) => {
           defaultZoom={0.75}
         >
           <Background color="rgba(255, 255, 255, 0.15)" gap={16} variant={BackgroundVariant.Lines} />
-          <Controls style={{ right: 10, left: 'auto' }} fitViewOptions={{ duration: 1000 }}>
-            {/*<NodesDebugger />*/}
-          </Controls>
+          <Controls style={{ right: 10, left: 'auto' }} fitViewOptions={{ duration: 1000 }}></Controls>
           <Button
             onClick={() => setMarketplaceOpen(true)}
             style={{ position: 'absolute', right: 30, top: 30, zIndex: 300 }}

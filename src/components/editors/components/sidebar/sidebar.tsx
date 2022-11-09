@@ -3,23 +3,11 @@ import { Icon, Typography } from '@equinor/eds-core-react';
 import { isNotEmptyArray } from '@common';
 import { Component, Workflow } from '@models/v2';
 import { BaseInput } from '@form';
-import { MultiToggle, ToggleButton, Button, Chip, Message, DialogWrapper, Stack, Modal } from '@ui';
-import { nanoid } from '../helpers';
-import { StyledTextButton } from './document-editor/styles';
-import { Parameter, EditorHeader } from '.';
-
-interface SidebarProps {
-  component: Component | null | undefined;
-  document: Workflow | Component | undefined;
-  setComponent: any;
-  setDocument: any;
-  workspace: string;
-  secrets?: string[];
-  isLatest?: boolean;
-}
-
-type ImplementationTypes = 'any' | 'brick' | 'graph';
-
+import { MultiToggle, ToggleButton, Button, Chip, Message, DialogWrapper, Stack, Modal, Breadcrumbs } from '@ui';
+import { nanoid } from '../../helpers';
+import { StyledTextButton } from '../document-editor/styles';
+import { Parameter } from '..';
+import { ImplementationTypes, SidebarProps } from './types';
 export const Sidebar: FC<SidebarProps> = (props: SidebarProps) => {
   const { component, setComponent, workspace, setDocument, document, secrets } = props;
   const [editName, setEditName] = useState<boolean>(false);
@@ -49,7 +37,7 @@ export const Sidebar: FC<SidebarProps> = (props: SidebarProps) => {
     }));
   }
 
-  function setImplementationType(type: 'any' | 'brick' | 'graph' | undefined) {
+  function setImplementationType(type: ImplementationTypes | undefined) {
     const implementation = type === 'brick' ? { type, container: {} } : { type };
     setConfirmTypeChange(undefined);
     setComponent((prev: Component) => ({
@@ -58,7 +46,7 @@ export const Sidebar: FC<SidebarProps> = (props: SidebarProps) => {
     }));
   }
 
-  function onTypeChange(type: 'any' | 'brick' | 'graph') {
+  function onTypeChange(type: ImplementationTypes) {
     if (component?.implementation?.type === 'brick' || component?.implementation?.type === 'graph') {
       setConfirmTypeChange(type);
       return;
@@ -93,10 +81,13 @@ export const Sidebar: FC<SidebarProps> = (props: SidebarProps) => {
           </Stack>
         </DialogWrapper>
       </Modal>
-      <EditorHeader
-        type={document?.type === 'component' ? 'Component' : 'Workflow'}
-        workspace={workspace}
-      ></EditorHeader>
+      <Breadcrumbs
+        links={[
+          { title: 'Dashboard', href: '/dashboard' },
+          { title: workspace, href: `/workspace/${workspace}` },
+          { title: `${document?.type} editor` },
+        ]}
+      />
       <Stack spacing={0.5}>
         {editName ? (
           <BaseInput

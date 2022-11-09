@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { FC, useCallback, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import { useEdgesState, useNodesState } from 'react-flow-renderer';
 import { Helmet } from 'react-helmet-async';
@@ -18,16 +18,12 @@ import {
   IValidationError,
 } from '../components';
 import { createGraphElements, fetchInitialSubComponents, INode } from '../helpers';
-
-interface IEditor {
-  uid: string | null;
-  workspace: string;
-}
+import { ComponentEditorProps } from './types';
 
 /**
  * Component Editor
  */
-const Editor: React.FC<IEditor> = (props: IEditor) => {
+const ComponentEditor: FC<ComponentEditorProps> = (props: ComponentEditorProps) => {
   const { uid, workspace } = props;
   const { version } = useParams();
   const navigate = useNavigate();
@@ -302,4 +298,4 @@ const Editor: React.FC<IEditor> = (props: IEditor) => {
   );
 };
 
-export default Editor;
+export default ComponentEditor;

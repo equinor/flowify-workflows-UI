@@ -2,27 +2,12 @@ import React, { FC } from 'react';
 import { Link } from 'react-router-dom';
 import { Icon, Typography } from '@equinor/eds-core-react';
 import { Button, Paper, Stack } from '@ui';
+import { DashboardListingProps } from './types';
 
-interface ISection {
-  title?: string;
-  linklist?: {
-    title: string;
-    url?: string;
-    target?: string;
-    external?: boolean;
-    icon?: string;
-    button?: boolean;
-    onClick?: any;
-  }[];
-}
-
-interface DashboardListingProps {
-  sections: ISection[];
-  title: string;
-  icon: React.ReactNode;
-  children?: React.ReactNode;
-}
-
+/**
+ * Dashboard listing
+ * Used to lessen code of UI elements for link and content listings on dashboard
+ */
 export const DashboardListing: FC<DashboardListingProps> = (props: DashboardListingProps) => {
   const { sections, title, icon } = props;
   return (
