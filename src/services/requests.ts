@@ -3,10 +3,8 @@ import * as _superagent from 'superagent';
 import { SuperAgentRequest } from 'superagent';
 import { apiUrl } from './base';
 import { NativeEventSource, EventSourcePolyfill } from 'event-source-polyfill';
+import { environment } from '../environments/environment';
 const superagentPromise = require('superagent-promise');
-
-const BEARER_TOKEN =
-  'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJzYW5kYm94IiwiYXVkIjoiZmxvd2lmeSIsImlhdCI6MTY2MzY3NDU0NywibmJmIjoxNjYzNjc0NTQ3LCJleHAiOjI2MTA0NDU3NDcsIm9pZCI6IjgwNDgiLCJuYW1lIjoiRi4gTG93ZSIsImVtYWlsIjoiZmxvd0BzYW5kLmJveCIsInJvbGVzIjpbInNhbmRib3gtZGV2ZWxvcGVyIl19.Hc4gXrL6hsE91S6qlJpFfsONq7L-jTN9WsHxtC1fhGk';
 
 const EventSource = process.env.NODE_ENV === 'development' ? EventSourcePolyfill : NativeEventSource;
 
@@ -17,7 +15,7 @@ const EventSource = process.env.NODE_ENV === 'development' ? EventSourcePolyfill
  */
 const auth = (req: SuperAgentRequest) => {
   if (process.env.NODE_ENV === 'development') {
-    return req.set('Authorization', BEARER_TOKEN);
+    return req.set('Authorization', environment?.bearerToken);
   }
   return req;
 };
@@ -49,7 +47,7 @@ export class Request {
     return new Observable((observer: Observer<any>) => {
       const eventSource = new EventSource(
         apiUrl(url),
-        process.env.NODE_ENV === 'development' ? { headers: { Authorization: BEARER_TOKEN } } : undefined,
+        process.env.NODE_ENV === 'development' ? { headers: { Authorization: environment?.bearerToken } } : undefined,
       );
       // an null event is the best way I could find to get an event whenever we open the event source
       // otherwise, you'd have to wait for your first message (which maybe some time)
