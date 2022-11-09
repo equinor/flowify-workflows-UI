@@ -1,21 +1,28 @@
 import React, { FC, useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Icon, Typography } from '@equinor/eds-core-react';
-import { Component, IVolume, Job, JobSubmit, Workflow } from '@models/v2';
+import { Component, InputValue, IVolume, Job, JobSubmit, Workflow } from '@models/v2';
 import { services } from '@services';
 import { isNotEmptyArray } from '@common';
-import { Button, DialogWrapper, Message, Stack, Modal, ButtonProps } from '@ui';
+import { Button, DialogWrapper, Message, Stack, Modal } from '@ui';
 import { BaseInput } from '@form';
 import { checkConnections } from '@common';
 import { fetchInitialSubComponents } from '../../editors/helpers';
 import { Parameter } from '../../editors/components';
+import { RunWorkflowProps } from './types';
 
-interface RunWorkflowProps {
-  // Pass the entire workflow object or a string (uid)
-  workflow: Workflow | string;
-  secrets?: string[];
-  buttonProps?: ButtonProps;
-}
+/**
+ * Run Workflow
+ * Modal that handles running of workflow and can be called from anywhere as long as you pass workflow uid or full workflow object as prop
+ * - Fetches workflow if you pass as uid string
+ * - Fetches volumes and replaces volume uid reference with volume object
+ * - Fetches subcomponents and validates that all parameters in workflow has valid connections
+ * - Includes parameter editor so that user can change parameter values on the spot/differ from default values set for workflow parameter
+ * - Builds job object/creates input values
+ * - Navigates user to job-page if job is successfully updated
+ * @param props
+ * @returns
+ */
 
 export const RunWorkflow: FC<RunWorkflowProps> = (props: RunWorkflowProps) => {
   const { secrets } = props;
@@ -33,6 +40,10 @@ export const RunWorkflow: FC<RunWorkflowProps> = (props: RunWorkflowProps) => {
     if (!modalOpen) {
       return;
     }
+    /**
+     * Fetch all volumes used in workflow and set to state so that we can use them when workflow is run
+     * @param workflow
+     */
     async function getVolumes(workflow: Workflow) {
       const inputVolumes = workflow?.component?.inputs
         ?.filter((input) => input.type === 'volume')
@@ -64,6 +75,7 @@ export const RunWorkflow: FC<RunWorkflowProps> = (props: RunWorkflowProps) => {
       });
       return;
     }
+    // Otherwise we fetch all other things we need to run job with the passed workflow object
     getVolumes(props.workflow);
     setWorkflow(props.workflow as Workflow);
     setComponent(props.workflow?.component);
@@ -74,6 +86,9 @@ export const RunWorkflow: FC<RunWorkflowProps> = (props: RunWorkflowProps) => {
     });
   }, [props.workflow, workspace, modalOpen]);
 
+  /**
+   * On component change hook. Updates entire workflow object when parameter-editor updates component object.
+   */
   useEffect(() => {
     if (component) {
       setWorkflow((prev) => ({
@@ -83,13 +98,17 @@ export const RunWorkflow: FC<RunWorkflowProps> = (props: RunWorkflowProps) => {
     }
   }, [component]);
 
-  function createInputValues() {
+  /**
+   * createInputValues
+   * Map inputs to inputValue objects + switch out volume reference uids with stringified volume objects
+   */
+  function createInputValues(): InputValue[] {
     const inputValues = workflow?.component?.inputs?.map((input) => {
       if (input.type === 'volume') {
         const volume = volumes.find((volume) => volume.uid === input?.userdata?.value);
         return {
-          value: JSON.stringify(volume?.volume),
-          target: input.name,
+          value: JSON.stringify(volume?.volume) || '',
+          target: input.name!,
         };
       }
       return {
@@ -97,9 +116,15 @@ export const RunWorkflow: FC<RunWorkflowProps> = (props: RunWorkflowProps) => {
         target: input.name!,
       };
     });
-    return inputValues;
+    return inputValues || [];
   }
 
+  /**
+   * On workflow run
+   * - Create job object
+   * - Submit job
+   * - Navigate to job-page if submit was successful
+   */
   function onRun() {
     const job: Job = {
       type: 'job',
@@ -122,6 +147,7 @@ export const RunWorkflow: FC<RunWorkflowProps> = (props: RunWorkflowProps) => {
       .catch((error) => console.error(error));
   }
 
+  // Set default or passed buttonProps for "Run workflow" button
   const buttonProps = props.buttonProps || {
     theme: 'create',
     leftIcon: 'launch',

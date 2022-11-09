@@ -9,25 +9,15 @@ import { Button, DialogWrapper, Stack, Modal } from '@ui';
 import { TextInputFormik } from '@form';
 import { uuid } from '@common';
 import { Submitter } from '../create-component/submitter';
+import { CreateWorkflowProps } from './types';
 
-const makeWorkflow = (workspace: string): Workflow => ({
-  type: 'workflow',
-  workspace,
-  name: 'New workflow',
-  component: {
-    uid: uuid(),
-    type: 'component',
-    implementation: {
-      type: 'any',
-    },
-  },
-});
+/**
+ * Create workflow
+ * Modal that handles the creation of a new workspace workflow.
+ * Handles name setting, validation and api calls -> navigates user to editor after workflow is created.
+ */
 
-interface ICreateWorkflow {
-  workspace: string;
-}
-
-const CreateWorkflow: FC<ICreateWorkflow> = (props: ICreateWorkflow) => {
+const CreateWorkflow: FC<CreateWorkflowProps> = (props: CreateWorkflowProps) => {
   const { workspace } = props;
   const [modalOpen, setModalOpen] = useState<boolean>(false);
   const [errorSnackbar, setErrorSnackbar] = useState<boolean>(false);
@@ -79,7 +69,18 @@ const CreateWorkflow: FC<ICreateWorkflow> = (props: ICreateWorkflow) => {
         <DialogWrapper padding={2}>
           <Formik
             onSubmit={onSubmit}
-            initialValues={{ ...makeWorkflow(workspace) }}
+            initialValues={{
+              type: 'workflow',
+              workspace,
+              name: 'New workflow',
+              component: {
+                uid: uuid(),
+                type: 'component',
+                implementation: {
+                  type: 'any',
+                },
+              },
+            }}
             validationSchema={validationSchema}
           >
             <Form>
