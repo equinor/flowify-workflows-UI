@@ -9,7 +9,8 @@ import ReactFlow, {
   BackgroundVariant,
 } from 'react-flow-renderer/nocss';
 import { Component, Map, Edge as IEdge } from '@models/v2';
-import { INode, getComponentFromRef } from '../../../../helpers/helpers';
+import { getComponentFromRef } from '@common';
+import { INode } from '../../../../helpers/helpers';
 import { StartNode, EndNode, ConditionalNode, SubNode } from '../../../graph';
 import { addConnection, checkValidation, createEdges, createNodes } from './helpers';
 import { ConnectionData } from '../types';

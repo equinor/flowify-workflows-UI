@@ -9,8 +9,8 @@ import ReactFlow, {
   BackgroundVariant,
 } from 'react-flow-renderer/nocss';
 import { Component, Conditional, Map } from '@models/v2';
-import { nanoid } from '@common';
-import { getComponentFromRef, INode } from '../../../helpers';
+import { nanoid, getComponentFromRef } from '@common';
+import { INode } from '../../../helpers';
 import { EndNode, StartNode, TaskNode } from '../../graph';
 import { SubNode } from '../../graph/nodes/sub-node';
 import { ReactFlowWrapper } from '../../graph/styles';

@@ -1,6 +1,6 @@
 import { Connection, Edge } from 'react-flow-renderer/nocss';
 import { Component, CRef, Graph, Node as INode } from '@models/v2';
-import { getComponentFromRef } from './helpers';
+import { getComponentFromRef } from '@common';
 
 async function getTargetNodeInput(
   targetNode: Component | CRef | string,

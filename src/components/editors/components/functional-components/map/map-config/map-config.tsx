@@ -1,9 +1,8 @@
 import React, { FC, useEffect, useState } from 'react';
 import { Typography } from '@equinor/eds-core-react';
 import { Component, Edge, Graph, Node } from '@models/v2';
-import { isNotEmptyArray, nanoid } from '@common';
+import { isNotEmptyArray, nanoid, getComponentFromRef } from '@common';
 import { DialogWrapper, Button, Stack, Grid, Modal } from '@ui';
-import { getComponentFromRef } from '../../../../helpers';
 import { Parameter } from '../../..';
 import { MapGraph } from './map-graph';
 

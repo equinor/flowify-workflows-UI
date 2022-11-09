@@ -1,6 +1,5 @@
-import { uuid } from '@common';
+import { uuid, getComponentFromRef } from '@common';
 import { Component, Node, Edge } from '@models/v2';
-import { getComponentFromRef } from '../../../../helpers';
 
 export function generateMap(nodes: Node[], nodeId: string, subcomponents: Component[] | undefined, options: any) {
   const index = nodes.findIndex((node) => node.id === nodeId);

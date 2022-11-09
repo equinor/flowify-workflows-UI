@@ -1,4 +1,4 @@
-export * from './general-helpers';
+export * from './general';
 export * from './date-helpers';
 export * from './validation/component-validation';
 export * from './validation/workflow-validation';

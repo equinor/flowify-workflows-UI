@@ -2,9 +2,9 @@ import React, { memo, useState } from 'react';
 import { Icon, Typography } from '@equinor/eds-core-react';
 import { NodeProps } from 'react-flow-renderer/nocss';
 import { Map } from '@models/v2';
-import { isNotEmptyArray } from '@common';
+import { isNotEmptyArray, getComponentFromRef } from '@common';
 import { Button, Chip, Stack } from '@ui';
-import { INode, getComponentFromRef } from '../../../helpers/helpers';
+import { INode } from '../../../helpers/helpers';
 import { Handles } from '..';
 import { NodePreview } from '../..';
 

@@ -1,6 +1,6 @@
 import { Edge, Node } from 'react-flow-renderer/nocss';
-import { isNotEmptyArray, nanoid } from '@common';
-import { Node as ComponentNode, Data, Graph, Brick, Any, Component, Edge as IEdge, CRef } from '@models/v2';
+import { isNotEmptyArray, nanoid, getComponentFromRef } from '@common';
+import { Node as ComponentNode, Data, Graph, Brick, Any, Component, Edge as IEdge } from '@models/v2';
 
 export interface INode {
   label?: string;
@@ -61,27 +61,6 @@ function newEndNodes(outputs: Data[]): Node<INode>[] {
     },
   }));
   return nodes;
-}
-
-export function getComponentFromRef(node: Component | CRef | string, subcomponents: Component[]): Component {
-  // If node is inline component
-  if ((node as Component)?.type === 'component') {
-    return node as Component;
-  }
-  // If node references uid as string
-  if (typeof node === 'string') {
-    // Since the uid string references don't contain version we want to return the latest version. We filter 'cause there might be different version of the same component - if there only is one, we know that's the right one. If there are more we fetch the latest by the latest tag. We have to do this 'cause old components start from v0 and don't contain the latest tag, so this workaround helps solve that issue. Probably will be deprecated when all components and workflows in the db use the new versioning.
-    const subcomps = subcomponents.filter((component) => component.uid === node);
-    if (subcomps?.length === 1) {
-      return subcomps[0];
-    }
-    const latest = subcomps.find((component) => component?.version?.tags?.includes('latest'));
-    return latest!;
-  }
-  // If node references uid and version as Cref
-  return subcomponents.find(
-    (component) => component.uid === (node as CRef)?.uid && component?.version?.current === (node as CRef)?.version,
-  ) as Component;
 }
 
 /**
