@@ -31,16 +31,10 @@ export class JobService {
   }
 
   public delete(uid: string) {
-    return requests
-      .delete(`api/v1/jobs/${uid}`)
-      .then((res) => res.body as string)
-      .catch((reason) => reason);
+    return requests.delete(`api/v1/jobs/${uid}`).then((res) => res.body as string);
   }
 
   public terminate(uid: string) {
-    return requests
-      .post(`api/v1/jobs/${uid}/terminate`)
-      .then((res) => res.body as string)
-      .catch((reason) => reason);
+    return requests.post(`api/v1/jobs/${uid}/terminate`).then((res) => res.body as string);
   }
 }

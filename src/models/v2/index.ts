@@ -6,3 +6,4 @@ export * from './workspace';
 export * from './requests';
 export * from './component';
 export * from './volume';
+export * from './graph';

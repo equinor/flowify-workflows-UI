@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 import { services } from '@services';
 import { Job } from '@models/v2';
-import { JobViewer } from '../../components/editors/job/job-editor';
+import { JobViewer } from '../../components/editors/job-editor/job-editor';
 import { WorkflowJob } from '../../models/workflow-jobs';
 import { RetryWatch } from '../../common/retry-watch';
 import { Container, Layout } from '../../layout';

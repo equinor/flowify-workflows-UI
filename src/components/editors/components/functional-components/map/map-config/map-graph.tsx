@@ -8,11 +8,10 @@ import ReactFlow, {
   Background,
   BackgroundVariant,
 } from 'react-flow-renderer/nocss';
-import { Component, Map, Edge as IEdge } from '@models/v2';
-import { INode, getComponentFromRef } from '../../../../helpers/helpers';
+import { Component, Map, Edge as IEdge, IGraphNode, IConnectionData } from '@models/v2';
+import { getComponentFromRef } from '@common';
 import { StartNode, EndNode, ConditionalNode, SubNode } from '../../../graph';
 import { addConnection, checkValidation, createEdges, createNodes } from './helpers';
-import { ConnectionData } from '../types';
 import { ReactFlowWrapper } from '../../../graph/styles';
 
 interface MapGraphProps {
@@ -31,7 +30,7 @@ const nodeTypes = {
 
 export const MapGraph: FC<MapGraphProps> = (props: MapGraphProps) => {
   const { id, component, subcomponents, setComponent } = props;
-  const [nodes, setNodes, onNodesChange] = useNodesState<INode>([]);
+  const [nodes, setNodes, onNodesChange] = useNodesState<IGraphNode>([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState<any>([]);
 
   const childRef = (component?.implementation as Map)?.node;
@@ -52,7 +51,7 @@ export const MapGraph: FC<MapGraphProps> = (props: MapGraphProps) => {
     }
   }
 
-  function deleteEdge(edges: Edge<ConnectionData>[]) {
+  function deleteEdge(edges: Edge<IConnectionData>[]) {
     const { data } = edges[0];
 
     function deleteMapping(mappings: IEdge[]) {

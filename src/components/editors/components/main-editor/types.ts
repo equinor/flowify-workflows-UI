@@ -1,6 +1,5 @@
 import { Node } from 'react-flow-renderer';
-import { Component, Workflow } from '@models/v2';
-import { INode } from '../../helpers';
+import { Component, Workflow, IGraphNode } from '@models/v2';
 import { Feedback } from '../feedbacks/types';
 
 export interface MainEditorProps {
@@ -14,7 +13,7 @@ export interface MainEditorProps {
   subcomponents: Component[] | undefined;
   setSubcomponents: React.Dispatch<React.SetStateAction<Component[] | undefined>>;
   setDirty: (dirty: boolean) => void;
-  nodes: Node<INode>[];
+  nodes: Node<IGraphNode>[];
   edges: any[];
   onNodesChange: any;
   onEdgesChange: any;

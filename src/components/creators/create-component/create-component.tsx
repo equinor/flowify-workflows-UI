@@ -8,21 +8,15 @@ import { services } from '@services';
 import { DialogWrapper, Modal } from '@ui';
 import { BaseInputFormik } from '@form';
 import { Submitter } from './submitter';
+import { CreateComponentProps } from './types';
 
-const makeComponent = (): Component => ({
-  type: 'component',
-  name: 'new-component',
-  inputs: [],
-  outputs: [],
-  implementation: { type: 'any' },
-});
+/**
+ * Create component
+ * Modal that handles the creation of a new marketplace component. Modal state is handled from the parent and passed as prop.
+ * Handles name setting, validation and api calls -> navigates user to editor after component is created.
+ */
 
-interface ICreateComponent {
-  open: boolean;
-  setOpen: (state: boolean) => void;
-}
-
-const CreateComponent: FC<ICreateComponent> = (props: ICreateComponent) => {
+const CreateComponent: FC<CreateComponentProps> = (props: CreateComponentProps) => {
   const { open, setOpen } = props;
   const [submitting, setSubmitting] = useState<boolean>(false);
   const [error, setError] = useState<boolean>(false);
@@ -65,7 +59,17 @@ const CreateComponent: FC<ICreateComponent> = (props: ICreateComponent) => {
       )}
       <Modal maxWidth="sm" fullWidth open={open} onClose={() => setOpen(false)}>
         <DialogWrapper padding={2}>
-          <Formik initialValues={{ ...makeComponent() }} onSubmit={onSubmit} validationSchema={validationSchema}>
+          <Formik
+            initialValues={{
+              type: 'component',
+              name: 'new-component',
+              inputs: [],
+              outputs: [],
+              implementation: { type: 'any' },
+            }}
+            onSubmit={onSubmit}
+            validationSchema={validationSchema}
+          >
             <Form>
               <BaseInputFormik name="name" label="Component name" />
               <Submitter onClose={() => setOpen(false)} submitting={submitting} />

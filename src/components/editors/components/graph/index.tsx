@@ -5,5 +5,5 @@ export { MapNode } from './nodes/map-node';
 export { AddNode } from './nodes/add-node';
 export { SubNode } from './nodes/sub-node';
 export { GraphEditor } from './graph';
-export { Handles } from './handles';
+export { Handles } from './handles/handles';
 export { ConditionalNode } from './nodes/conditional-node';

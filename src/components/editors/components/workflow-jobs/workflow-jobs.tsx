@@ -4,11 +4,10 @@ import moment from 'moment';
 import { Icon, Typography } from '@equinor/eds-core-react';
 import { IJobsListRequest, Workflow } from '@models/v2';
 import { IFilter, IPagination } from '@services';
-import { Paper, Button, Pagination, Stack, Grid } from '@ui';
+import { Paper, Button, Pagination, Stack, Grid, Timestamp } from '@ui';
 import { BaseInput, Select } from '@form';
 import { UserContextStore } from '@common';
 import { RunWorkflow } from '../../../creators';
-import { Timestamp } from '../../../timestamp';
 
 interface WorkflowJobsProps {
   workflow: Workflow | undefined;

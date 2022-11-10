@@ -1,9 +1,9 @@
 import React, { FC } from 'react';
 import { Icon, Tooltip, Typography } from '@equinor/eds-core-react';
 import { Handle, NodeProps, Position } from 'react-flow-renderer/nocss';
-import { INode } from '../../../helpers/helpers';
+import { IGraphNode } from '@models/v2';
 
-interface IEndNode extends NodeProps<INode> {}
+interface IEndNode extends NodeProps<IGraphNode> {}
 
 export const EndNode: FC<IEndNode> = (props: IEndNode) => {
   const { data } = props;

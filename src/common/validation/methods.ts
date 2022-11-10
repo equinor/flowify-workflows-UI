@@ -1,5 +1,5 @@
-import { getComponentFromRef } from '../../components/editors/helpers';
-import { Component, Graph } from '../../models/v2';
+import { getComponentFromRef } from '@common';
+import { Component, Graph } from '@models/v2';
 
 export function isOnlyDigits(value: string) {
   return /^\d+$/.test(value);

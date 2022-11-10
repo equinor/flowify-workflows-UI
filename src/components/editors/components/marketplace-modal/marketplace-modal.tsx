@@ -1,19 +1,9 @@
 import React, { FC, useState } from 'react';
 import { Icon } from '@equinor/eds-core-react';
-import { Component } from '@models/v2';
 import { DialogWrapper, Button, MultiToggle, ToggleButton, Stack, Modal } from '@ui';
 import { Marketplace } from '../../../marketplace/marketplace';
-import { BUTTON_STATE } from '../../../creators/add-component-to-graph';
 import { FunctionalComponents } from '../functional-components/functional-components';
-
-interface MarketplaceModalProps {
-  open: boolean;
-  onClose: (open: boolean) => void;
-  onAddComponent: (component: Component, setButtonState: React.Dispatch<React.SetStateAction<BUTTON_STATE>>) => void;
-  component: Component | undefined;
-  setComponent?: React.Dispatch<React.SetStateAction<Component | undefined>>;
-  subcomponents: Component[] | undefined;
-}
+import { MarketplaceModalProps } from './types';
 
 export const MarketplaceModal: FC<MarketplaceModalProps> = (props: MarketplaceModalProps) => {
   const { open, onClose, onAddComponent } = props;
