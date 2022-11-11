@@ -24,8 +24,6 @@ export const MultiSelect: FC<MultiSelectProps> = (props: MultiSelectProps) => {
     stateReducer: (state, actionAndChanges) => {
       const { changes, type } = actionAndChanges;
       switch (type) {
-        case useSelect.stateChangeTypes.MenuKeyDownEnter:
-        case useSelect.stateChangeTypes.MenuKeyDownSpaceButton:
         case useSelect.stateChangeTypes.ItemClick:
           return {
             ...changes,
@@ -40,8 +38,6 @@ export const MultiSelect: FC<MultiSelectProps> = (props: MultiSelectProps) => {
       }
       const { type, selectedItem } = stateChange;
       switch (type) {
-        case useSelect.stateChangeTypes.MenuKeyDownEnter:
-        case useSelect.stateChangeTypes.MenuKeyDownSpaceButton:
         case useSelect.stateChangeTypes.ItemClick:
           if (selectedItem) {
             const { value: selectedValue } = selectedItem;
