@@ -12,7 +12,7 @@ COPY public public
 COPY src src
 RUN yarn run build
 
-FROM nginx
+FROM nginx:1.23.2
 ARG API_SERVER_PORT=8842
 ARG API_SERVER_HOST=flowify_server
 ENV FLOWIFY_SERVER_PORT=$API_SERVER_PORT
