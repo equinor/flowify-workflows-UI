@@ -9,7 +9,7 @@
     "@equinor/eds-icons": "0.16.0",
     "@monaco-editor/react": "4.4.6",
     "dagre": "^0.8.5",
-    "downshift": "7.0.1",
+    "downshift": "7.0.4",
     "event-source-polyfill": "^1.0.25",
     "formik": "^2.2.9",
     "js-yaml": "^4.1.0",
