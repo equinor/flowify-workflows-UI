@@ -6,7 +6,7 @@
   "dependencies": {
     "@craco/craco": "7.0.0",
     "@equinor/eds-core-react": "0.26.0",
-    "@equinor/eds-icons": "0.16.0",
+    "@equinor/eds-icons": "0.17.0",
     "@monaco-editor/react": "4.4.6",
     "dagre": "^0.8.5",
     "downshift": "7.0.1",
