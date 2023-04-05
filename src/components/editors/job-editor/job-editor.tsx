@@ -52,15 +52,6 @@ export const JobViewer: FC<JobViewerProps> = (props: JobViewerProps) => {
         <title>{jobWatch?.metadata?.name || ''} - Job viewer - Flowify</title>
       </Helmet>
       <Grid container style={{ flexGrow: '1', minHeight: '0', flexWrap: 'nowrap' }}>
-        {selectedNodeId && (
-          <NodeDetails
-            workflowName={jobWatch?.metadata!.name!}
-            nodeStatus={jobWatch?.status!.nodes[selectedNodeId]!}
-            workflow={jobWatch!}
-            onClose={() => setSelectedNodeId(undefined)}
-            open
-          />
-        )}
         <Grid
           item
           xs={3}
@@ -117,6 +108,15 @@ export const JobViewer: FC<JobViewerProps> = (props: JobViewerProps) => {
           )}
         </Grid>
       </Grid>
+      {selectedNodeId && (
+        <NodeDetails
+          workflowName={jobWatch?.metadata!.name!}
+          nodeStatus={jobWatch?.status!.nodes[selectedNodeId]!}
+          workflow={jobWatch!}
+          onClose={() => setSelectedNodeId(undefined)}
+          open
+        />
+      )}
     </>
   );
 };
