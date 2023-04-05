@@ -23,6 +23,7 @@ export const ReactFlowWrapper = styled.div`
   }
 
   .react-flow__node-taskNode,
+  .react-flow__node-execNode,
   .react-flow__node-subNode {
     border-radius: ${({ theme }) => theme?.defaults?.borderRadius};
     font-size: 1rem;
