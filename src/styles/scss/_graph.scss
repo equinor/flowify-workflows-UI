@@ -25,6 +25,7 @@
   height: 0.675rem;
   padding: 0;
   border-radius: 50%;
+
   svg {
     width: 0.475rem;
     height: 0.475rem;
@@ -34,6 +35,7 @@
 .react-flow__node-addNode {
   @include generalNodeStyles();
   padding: 0;
+
   button {
     height: 100%;
     width: 100%;
@@ -42,6 +44,7 @@
     background: none;
     cursor: pointer;
     border-radius: 0.5rem;
+
     &:hover {
       background: rgb(230, 250, 236);
     }
@@ -56,15 +59,18 @@
     align-items: center;
     padding: 0.5rem 2rem 0.5rem 1rem;
     transform: skew(-20deg);
+
     p {
       display: flex;
       align-items: center;
       column-gap: 1rem;
     }
+
     p,
     .react-flow__handle {
       transform: skew(20deg) !important;
     }
+
     .react-flow__handle {
       top: calc(50% - 5px);
       width: 0.675rem;
@@ -73,7 +79,9 @@
       border: none;
     }
   }
+
   &.selectable {
+
     .react-flow__node-startNode__wrapper,
     .react-flow__node-endNode__wrapper {
       &:hover {
@@ -83,7 +91,7 @@
   }
 
   &.selected {
-    > div {
+    >div {
       background-color: rgb(230, 250, 236);
       box-shadow: 2px 2px 4px 1px rgb(0 0 0 / 20%);
     }
@@ -92,11 +100,13 @@
 
 .react-flow__node-execNode {
   @include generalNodeStyles();
+
   &.selectable {
     &:hover {
       box-shadow: 2px 2px 4px 1px rgba(0, 0, 0, 0.2);
     }
   }
+
   .react-flow__handle {
     width: 6px;
     height: 6px;
@@ -149,4 +159,8 @@
 
 .react-flow__handle-valid {
   border: 1px solid #555;
+}
+
+.react-flow__background>pattern>path {
+  stroke: #007079;
 }

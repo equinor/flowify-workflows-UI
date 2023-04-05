@@ -4,6 +4,7 @@ export * from './paper/paper';
 export * from './stack/stack';
 export * from './chip/chip';
 export { DialogWrapper } from './dialog-wrapper/dialog-wrapper';
+export { JsonWrapper } from './json-wrapper/json-wrapper';
 export { Message } from './message/message';
 export { Pagination } from './pagination/pagination';
 export { Grid } from './grid/grid';

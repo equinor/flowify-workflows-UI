@@ -21,3 +21,7 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# Stores VSCode versions used for testing VSCode extensions
+.vscode-test
+.vscode/

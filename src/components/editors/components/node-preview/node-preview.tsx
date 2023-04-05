@@ -14,12 +14,12 @@ interface NodePreviewProps {
 }
 
 export const NodePreview: FC<NodePreviewProps> = (props: NodePreviewProps) => {
-  const { node, onClose } = props;
+  const { open, node, onClose } = props;
   const { data, type } = node;
   const inputParams = data?.component?.inputs || [];
   const outputParams = data?.component?.outputs || [];
   return (
-    <Drawer open={props.open} onClose={() => onClose(false)} maxWidth="sm">
+    <Drawer open={open} onClose={() => onClose(false)} width={440}>
       <DialogWrapper padding={2} spacing={2} style={{ width: '440px', height: '100%' }}>
         <Typography variant="h4">
           <b>{data?.label}</b>

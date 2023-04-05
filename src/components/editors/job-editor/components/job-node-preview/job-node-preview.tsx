@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Typography } from '@equinor/eds-core-react';
+import { Typography } from '@equinor/eds-core-react';
 import ReactJson from 'react-json-view';
-import { Stack, Drawer } from '@ui';
+import { DialogWrapper, JsonWrapper, Stack, Drawer, Button } from '@ui';
 import { services } from '@services';
 import { getResolvedTemplates } from '../../helpers';
 import { NodeStatus, Workflow } from '../../../../../models';
@@ -64,22 +64,26 @@ export const NodeDetails: React.FC<NodeDetailsProps> = (props: NodeDetailsProps)
   };
 
   return (
-    <Drawer open={props.open} onClose={() => props.onClose(false)} maxWidth="sm">
-      <Stack spacing={1} padding={2} style={{ maxWidth: '650px', flexWrap: 'wrap', position: 'relative' }}>
+    <Drawer open={props.open} onClose={() => props.onClose(false)} width={650}>
+      <DialogWrapper padding={2} spacing={2} style={{ width: '650px', height: '100%' }}>
         <NodeSummary nodeStatus={nodeStatus} />
-        <Typography variant="h4">Containers</Typography>
-        <ReactJson src={template?.container || {}} name="container" collapsed displayDataTypes={false} />
+        <JsonWrapper>
+          <Typography variant="h4">Containers</Typography>
+          <ReactJson src={template?.container || {}} name="container" collapsed displayDataTypes={false}/>
+        </JsonWrapper>
         <InputsOutputsDetail
           workflow={workflow}
           node={nodeStatus}
           inputs={nodeStatus.inputs}
           outputs={nodeStatus.outputs}
         />
-        <Button color="secondary" onClick={getLogs}>
-          Fetch logs
-        </Button>
-        <LogViewer logs={logs} />
-      </Stack>
+        <Stack alignItems="center">
+          <Button leftIcon="loop" theme="create" onClick={getLogs} style={{ minWidth: '325px', height: '1rem', justifyContent: 'center' }}>
+            Fetch logs
+          </Button>
+          <LogViewer logs={logs} />
+        </Stack>
+      </DialogWrapper>
     </Drawer>
   );
 };
