@@ -5,7 +5,7 @@ import { Button, Stack } from '@ui';
 interface SubmitterProps {
   onClose: () => void;
   submitting?: boolean;
-  type?: 'component' | 'workflow';
+  type?: 'component' | 'workflow' | 'workspace';
 }
 
 export const Submitter: FC<SubmitterProps> = (props: SubmitterProps) => {

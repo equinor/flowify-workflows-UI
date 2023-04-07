@@ -4,12 +4,14 @@ import { services } from '@services';
 import { Workspace } from '@models/v2';
 import { isNotEmptyArray } from '@common';
 import { DashboardListing } from '../dashboard-listing/dashboard-listing';
+import { CreateWorkspace } from '../../components';
 
 interface IWorkspacesListing {}
 
 const WorkspacesListing: FC<IWorkspacesListing> = (props: IWorkspacesListing) => {
   const [workspaces, setWorkspaces] = useState<any[]>([]);
   const [loadingWorkspaces, setLoadingWorkspaces] = useState(true);
+  const [newWorkspaceOpen, setNewWorkspaceOpen] = useState<boolean>(false);
 
   useEffect(() => {
     function createWorkspacesLinkList(items: Workspace[]) {
@@ -38,30 +40,42 @@ const WorkspacesListing: FC<IWorkspacesListing> = (props: IWorkspacesListing) =>
       {loadingWorkspaces ? (
         <Progress.Dots />
       ) : (
-        <DashboardListing
-          title="Workspaces"
-          icon={<Icon name="dashboard" size={24} color="#709DA0" />}
-          sections={[
-            { linklist: workspaces },
-            {
-              title: 'Workspaces documentation',
-              linklist: [
-                {
-                  title: 'Creating a workspace',
-                  url: 'https://equinor.github.io/flowify-documentation/workspaces/',
-                  target: '_blank',
-                  external: true,
-                },
-                {
-                  title: 'Configure workspace secrets',
-                  url: 'https://equinor.github.io/flowify-documentation/secrets/',
-                  target: '_blank',
-                  external: true,
-                },
-              ],
-            },
-          ]}
-        />
+        <>
+          <CreateWorkspace open={newWorkspaceOpen} setOpen={setNewWorkspaceOpen} />
+          <DashboardListing
+            title="Workspaces"
+            icon={<Icon name="dashboard" size={24} color="#709DA0" />}
+            sections={[
+              { linklist: [
+                  { 
+                    title: 'Create new workspace',
+                    icon: 'add',
+                    button: true,
+                    onClick: () => setNewWorkspaceOpen(true),
+                  },
+                ],
+              },
+              { linklist: workspaces },
+              {
+                title: 'Workspaces documentation',
+                linklist: [
+                  {
+                    title: 'Creating a workspace',
+                    url: 'https://equinor.github.io/flowify-documentation/workspaces/',
+                    target: '_blank',
+                    external: true,
+                  },
+                  {
+                    title: 'Configure workspace secrets',
+                    url: 'https://equinor.github.io/flowify-documentation/secrets/',
+                    target: '_blank',
+                    external: true,
+                  },
+                ],
+              },
+            ]}
+          />
+        </>
       )}
     </div>
   );

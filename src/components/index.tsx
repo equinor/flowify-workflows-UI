@@ -5,6 +5,7 @@ export { default as JobsListing } from './jobs-listing/jobs-listing';
 export { default as ComponentEditor } from './editors/component-editor/component-editor';
 export { default as WorkflowEditor } from './editors/workflow-editor/workflow-editor';
 export { default as CreateComponent } from './creators/create-component/create-component';
+export { CreateWorkspace } from './creators';
 export { Marketplace } from './marketplace/marketplace';
 export { DashboardListing } from './dashboard-listing/dashboard-listing';
 export { SecretEditor } from './editors/secret-editor/secret-editor';

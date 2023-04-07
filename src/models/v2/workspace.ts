@@ -10,6 +10,7 @@ export interface Role {
  * Workspace is the definition of a Workspace resource
  */
 export interface Workspace {
+  type?: 'workspace';
   name: string;
   roles: string[];
   description?: string;
