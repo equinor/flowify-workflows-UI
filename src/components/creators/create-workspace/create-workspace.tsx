@@ -1,5 +1,5 @@
 import React, { FC, useState } from 'react';
-// import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Button as EDSButton, Snackbar } from '@equinor/eds-core-react';
 import { Form, Formik } from 'formik';
 import * as yup from 'yup';
@@ -20,7 +20,7 @@ const CreateWorkspace: FC<CreateWorkspaceProps> = (props: CreateWorkspaceProps) 
   const { open, setOpen } = props;
   const [submitting, setSubmitting] = useState<boolean>(false);
   const [error, setError] = useState<boolean>(false);
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
 
   const validationSchema = yup.object({
     name: yup.string().required('Workspace name is a required field'),
@@ -35,7 +35,10 @@ const CreateWorkspace: FC<CreateWorkspaceProps> = (props: CreateWorkspaceProps) 
       .create(values)
       .then((res) => {
         if (res) {
-          console.log('HEY +++++++');
+          console.log('HEY +++++++', res);
+          setOpen(false);
+          setSubmitting(false);
+          navigate(`/workspace/${values.name}`);
         }
       })
       .catch((error) => {
@@ -63,7 +66,7 @@ const CreateWorkspace: FC<CreateWorkspaceProps> = (props: CreateWorkspaceProps) 
             initialValues={{
               type: 'workspace',
               name: 'new-workspace',
-              roles: ['ws-owner', 'ws-collaborator']
+              roles: ['ws-owner', 'ws-collaborator', 'sandbox']
             }}
             onSubmit={onSubmit}
             validationSchema={validationSchema}

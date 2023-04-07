@@ -55,7 +55,7 @@ const WorkspacesListing: FC<IWorkspacesListing> = (props: IWorkspacesListing) =>
                   },
                 ],
               },
-              { linklist: workspaces },
+              { title: 'Your workspaces', linklist: workspaces },
               {
                 title: 'Workspaces documentation',
                 linklist: [
