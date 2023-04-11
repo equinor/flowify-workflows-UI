@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button as EDSButton, Snackbar } from '@equinor/eds-core-react';
 import { Form, Formik } from 'formik';
@@ -6,14 +6,15 @@ import * as yup from 'yup';
 import { Workspace } from '@models/v2';
 import { services } from '@services';
 import { DialogWrapper, Modal } from '@ui';
+import { UserContextStore } from '@common';
 import { BaseInputFormik } from '@form';
 import { Submitter } from '../create-component/submitter';
 import { CreateWorkspaceProps } from './types';
 
 /**
- * Create component
- * Modal that handles the creation of a new marketplace component. Modal state is handled from the parent and passed as prop.
- * Handles name setting, validation and api calls -> navigates user to editor after component is created.
+ * Create workspace
+ * Modal that handles the creation of a new workspace. Modal state is handled from the parent and passed as prop.
+ * Handles name setting, validation and api calls -> navigates to workspace after it is created.
  */
 
 const CreateWorkspace: FC<CreateWorkspaceProps> = (props: CreateWorkspaceProps) => {
@@ -21,6 +22,8 @@ const CreateWorkspace: FC<CreateWorkspaceProps> = (props: CreateWorkspaceProps) 
   const [submitting, setSubmitting] = useState<boolean>(false);
   const [error, setError] = useState<boolean>(false);
   const navigate = useNavigate();
+
+  const { userInfo: { email } } = useContext(UserContextStore);
 
   const validationSchema = yup.object({
     name: yup.string().required('Workspace name is a required field'),
@@ -66,7 +69,7 @@ const CreateWorkspace: FC<CreateWorkspaceProps> = (props: CreateWorkspaceProps) 
             initialValues={{
               type: 'workspace',
               name: 'new-workspace',
-              roles: ['ws-owner', 'ws-collaborator', 'sandbox']
+              roles: [`${email}--$owner`]
             }}
             onSubmit={onSubmit}
             validationSchema={validationSchema}
