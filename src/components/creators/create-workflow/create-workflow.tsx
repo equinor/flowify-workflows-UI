@@ -1,5 +1,5 @@
 import React, { FC, useState } from 'react';
-import { Icon, Snackbar } from '@equinor/eds-core-react';
+import { Button as EDSButton, Icon, Snackbar } from '@equinor/eds-core-react';
 import { useNavigate } from 'react-router';
 import { Form, Formik } from 'formik';
 import * as yup from 'yup';
@@ -7,7 +7,7 @@ import { Workflow } from '@models/v2';
 import { services } from '@services';
 import { Button, DialogWrapper, Stack, Modal } from '@ui';
 import { TextInputFormik } from '@form';
-import { uuid } from '@common';
+import { uuid, useUser, useWorkspaces } from '@common';
 import { Submitter } from '../create-component/submitter';
 import { CreateWorkflowProps } from './types';
 
@@ -24,6 +24,15 @@ const CreateWorkflow: FC<CreateWorkflowProps> = (props: CreateWorkflowProps) => 
   const [submitting, setSubmitting] = useState<boolean>(false);
 
   const navigate = useNavigate();
+
+  const { getWorkspaceItem } = useWorkspaces();
+  const workspaceItem = getWorkspaceItem(workspace);
+
+  const { checkIfUserIsWorkflowCreator } = useUser();
+
+  const showAddWorkflowButton = checkIfUserIsWorkflowCreator(workspaceItem);
+
+  if (!showAddWorkflowButton) return null;
 
   const validationSchema = yup.object({
     name: yup.string().required('Workflow name is required'),
@@ -56,9 +65,9 @@ const CreateWorkflow: FC<CreateWorkflowProps> = (props: CreateWorkflowProps) => 
       <Snackbar open={errorSnackbar} onClose={() => setErrorSnackbar(false)}>
         Could not create workflow.
         <Snackbar.Action>
-          <Button onClick={() => setErrorSnackbar(false)} theme="simple">
+          <EDSButton onClick={() => setErrorSnackbar(false)} variant="ghost">
             Close
-          </Button>
+          </EDSButton>
         </Snackbar.Action>
       </Snackbar>
       <Button theme="create" onClick={() => setModalOpen(true)}>

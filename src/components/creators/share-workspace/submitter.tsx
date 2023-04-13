@@ -5,11 +5,10 @@ import { Button, Stack } from '@ui';
 interface SubmitterProps {
   onClose: () => void;
   submitting?: boolean;
-  type?: 'component' | 'workflow' | 'workspace';
 }
 
 export const Submitter: FC<SubmitterProps> = (props: SubmitterProps) => {
-  const { onClose, submitting, type } = props;
+  const { onClose, submitting } = props;
   const { isValid, setTouched, submitForm } = useFormikContext();
   function trySubmit() {
     submitForm().then(() => {
@@ -28,12 +27,8 @@ export const Submitter: FC<SubmitterProps> = (props: SubmitterProps) => {
         Close
       </Button>
       <Button theme="create" onClick={trySubmit} loading={submitting}>
-        {submitting ? `Creating new ${type}…` : `Create new ${type}`}
+        {submitting ? `Sharing a workspace…` : `Share a workspace`}
       </Button>
     </Stack>
   );
-};
-
-Submitter.defaultProps = {
-  type: 'component',
 };

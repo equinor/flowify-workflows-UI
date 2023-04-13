@@ -1,4 +1,4 @@
-import React, { FC, useState, useEffect, useContext } from 'react';
+import React, { FC, useState, useEffect } from 'react';
 import { Button as EDSButton, Icon, Progress, Snackbar, Typography, Pagination } from '@equinor/eds-core-react';
 import moment from 'moment';
 import { Link } from 'react-router-dom';
@@ -6,7 +6,7 @@ import { services, IFilter } from '@services';
 import { Button, Stack, Grid } from '@ui';
 import { Select, BaseInput } from '@form';
 import { Component, IPageInfo } from '@models/v2';
-import { isNotEmptyArray, UserContextStore } from '@common';
+import { isNotEmptyArray, useUser } from '@common';
 import { ComponentCard } from './component-card/component-card';
 import { AddButton } from './add-button/add-button';
 import { CreateComponent } from '../creators';
@@ -29,7 +29,9 @@ export const Marketplace: FC<MarketplaceProps> = (props: MarketplaceProps) => {
   const [searchSnackbar, setSearchSnackbar] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
   const [createModalOpen, setCreateModalOpen] = useState<boolean>(false);
-  const user = useContext(UserContextStore);
+  const { userInfo, checkIfUserIsComponentCreator } = useUser();
+
+  const showCreateComponentButton = checkIfUserIsComponentCreator();
 
   useEffect(() => {
     setLoading(true);
@@ -38,7 +40,7 @@ export const Marketplace: FC<MarketplaceProps> = (props: MarketplaceProps) => {
     function createFilterObjects() {
       const filters: IFilter[] = [];
       if (values.createdBy !== 'default') {
-        filters.push({ name: 'modifiedBy.email', type: 'EQUALTO', value: user.userInfo.email });
+        filters.push({ name: 'modifiedBy.email', type: 'EQUALTO', value: userInfo.email });
       }
       if (values.type !== 'default') {
         filters.push({ name: 'implementation.type', type: 'EQUALTO', value: values.type });
@@ -70,7 +72,7 @@ export const Marketplace: FC<MarketplaceProps> = (props: MarketplaceProps) => {
         console.error(error);
         setLoading(false);
       });
-  }, [values, user, preview, page, search, searchParam]);
+  }, [values, userInfo, preview, page, search, searchParam]);
 
   useEffect(() => {
     setPage(1);
@@ -95,10 +97,12 @@ export const Marketplace: FC<MarketplaceProps> = (props: MarketplaceProps) => {
                 <Typography variant="h3">Marketplace</Typography>
               </Link>
             </Stack>
-            <Button theme="create" onClick={() => setCreateModalOpen(true)}>
-              <Icon name="add" size={24} color="#709DA0" />
-              Create new component
-            </Button>
+            {showCreateComponentButton && (
+              <Button theme="create" onClick={() => setCreateModalOpen(true)}>
+                <Icon name="add" size={24} color="#709DA0" />
+                Create new component
+              </Button>
+            )}
             <CreateComponent open={createModalOpen} setOpen={setCreateModalOpen} />
           </Stack>
         )}

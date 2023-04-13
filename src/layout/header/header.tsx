@@ -1,14 +1,15 @@
-import React, { FC, useContext } from 'react';
+import React, { FC } from 'react';
 import { Icon, Typography } from '@equinor/eds-core-react';
 import { Link } from 'react-router-dom';
-import { Stack } from '../../components/ui';
+import { useWorkspaces } from '@common';
+import { Stack } from '@ui';
 import { TopBar, IconsWrapper } from './styles';
-import { UserContextStore } from '../../common/context/user-context-store';
+
 
 interface IHeader {}
 
 const Header: FC<IHeader> = (props: IHeader) => {
-  const { hasAnyAdminAccess } = useContext(UserContextStore);
+  const { hasAnyAdminAccess } = useWorkspaces();
   return (
     <TopBar>
       <Stack direction="row" alignItems="center" spacing={1}>

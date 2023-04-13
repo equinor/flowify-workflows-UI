@@ -1,8 +1,8 @@
-import React, { FC, useEffect, useState, useContext } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { Typography } from '@equinor/eds-core-react';
 import { services, IFilter } from '@services';
 import { IPageInfo, Workflow } from '@models/v2';
-import { UserContextStore } from '@common';
+import { useUser } from '@common';
 import { Select, BaseInput } from '@form';
 import { Pagination, Stack } from '@ui';
 import { WorkflowCard } from './workflow-card/workflow-card';
@@ -24,7 +24,7 @@ const WorkflowsListing: FC<IWorkflowsListing> = (props: IWorkflowsListing) => {
   const [searchParam, setSearchParam] = useState<string>('name');
   const [values, setValues] = useState({ createdBy: 'default' });
   const [loadingWorkflows, setLoadingWorkflows] = useState<boolean>(true);
-  const user = useContext(UserContextStore);
+  const { userInfo } = useUser();
 
   useEffect(() => {
     const workflowFilters: IFilter[] = [{ name: 'workspace', value: workspace, type: 'EQUALTO' }];
@@ -32,7 +32,7 @@ const WorkflowsListing: FC<IWorkflowsListing> = (props: IWorkflowsListing) => {
       workflowFilters.push({ name: searchParam, type: 'SEARCH', value: search });
     }
     if (values.createdBy !== 'default') {
-      workflowFilters.push({ name: 'modifiedBy.email', type: 'EQUALTO', value: user.userInfo.email });
+      workflowFilters.push({ name: 'modifiedBy.email', type: 'EQUALTO', value: userInfo.email });
     }
     const itemsPerPage = 10;
     const pagination = { limit: itemsPerPage, offset: page === 1 ? 0 : (page - 1) * itemsPerPage };
@@ -55,7 +55,7 @@ const WorkflowsListing: FC<IWorkflowsListing> = (props: IWorkflowsListing) => {
         console.error(error);
         setLoadingWorkflows(false);
       });
-  }, [workspace, page, order, orderBy, search, searchParam, user, values]);
+  }, [workspace, page, order, orderBy, search, searchParam, userInfo, values]);
 
   const headerSortOptions = [
     { label: 'Name', value: 'name' },
