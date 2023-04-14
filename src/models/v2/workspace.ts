@@ -10,6 +10,7 @@ export interface Role {
  * Workspace is the definition of a Workspace resource
  */
 export interface Workspace {
+  type?: 'workspace' | 'share-workspace';
   name: string;
   roles: string[];
   description?: string;
@@ -21,3 +22,8 @@ export interface Workspace {
 export interface WorkspaceList {
   items: Workspace[];
 }
+
+export enum WorkspaceOwnership {
+  Owner = 'owner',
+  Collaborator = 'collaborator',
+};

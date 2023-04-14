@@ -2,6 +2,7 @@ import React, { FC, useState } from 'react';
 import { Icon, Typography } from '@equinor/eds-core-react';
 import { Helmet } from 'react-helmet-async';
 import { Breadcrumbs, Stack } from '@ui';
+import { useUser } from '@common';
 import { Layout, Container } from '../../layout';
 import { Marketplace, WorkspacesListing, DashboardListing, CreateComponent } from '../../components';
 
@@ -10,6 +11,18 @@ interface IDashboardPage {}
 const DashboardPage: FC<IDashboardPage> = (props: IDashboardPage) => {
   const [newComponentOpen, setNewComponentOpen] = useState<boolean>(false);
 
+  const { checkIfUserIsComponentCreator } = useUser();
+  const showCreateComponentButton = checkIfUserIsComponentCreator();
+
+  const marketplaceLinkDefinition = { title: 'Visit Flowify marketplace', icon: 'mall', url: '/components' };
+  const createComponetButtonDefinition = {
+    title: 'Create new component',
+    icon: 'add',
+    button: true,
+    onClick: () => setNewComponentOpen(true),
+  };
+  const likkslistDynamicDefinition = showCreateComponentButton ? [marketplaceLinkDefinition, createComponetButtonDefinition] : [marketplaceLinkDefinition];
+  
   return (
     <Layout>
       <Helmet>
@@ -25,15 +38,7 @@ const DashboardPage: FC<IDashboardPage> = (props: IDashboardPage) => {
             icon={<Icon name="component" />}
             sections={[
               {
-                linklist: [
-                  { title: 'Visit Flowify marketplace', icon: 'mall', url: '/components' },
-                  {
-                    title: 'Create new component',
-                    icon: 'add',
-                    button: true,
-                    onClick: () => setNewComponentOpen(true),
-                  },
-                ],
+                linklist: likkslistDynamicDefinition,
               },
               {
                 title: 'Component documentation',

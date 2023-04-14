@@ -2,9 +2,9 @@ import React, { FC, useState } from 'react';
 import { useParams } from 'react-router';
 import { Helmet } from 'react-helmet-async';
 import { Container, Layout } from '../../layout';
+import { Stack, MultiToggle, ToggleButton, Breadcrumbs } from '@ui';
 import { WorkflowsListing, JobsListing } from '../../components';
-import { Stack, MultiToggle, ToggleButton, Breadcrumbs } from '../../components/ui';
-import { CreateWorkflow } from '../../components/creators';
+import { CreateWorkflow, ShareWorkspace } from '../../components/creators';
 import { Icon } from '@equinor/eds-core-react';
 
 interface IWorkspace {}
@@ -20,7 +20,10 @@ const Workspace: FC<IWorkspace> = (props: IWorkspace) => {
       </Helmet>
       <Container>
         <Stack style={{ padding: '1rem 3rem 1rem 3rem' }} spacing={2}>
-          <Breadcrumbs links={[{ title: 'Dashboard', href: '/dashboard' }, { title: workspace || '' }]} />
+          <Stack direction="row" alignItems="center" justifyContent="space-between">
+            <Breadcrumbs links={[{ title: 'Dashboard', href: '/dashboard' }, { title: workspace || '' }]} />
+            <ShareWorkspace workspace={workspace!} />
+          </Stack>
           <Stack direction="row" alignItems="center" justifyContent="space-between">
             <MultiToggle style={{ fontSize: '1.5rem' }}>
               <ToggleButton active={type === 'workflows'} onClick={() => setType('workflows')}>

@@ -1,4 +1,4 @@
-import React, { FC, useContext, useEffect, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
 import { Icon, Typography } from '@equinor/eds-core-react';
@@ -6,7 +6,7 @@ import { IJobsListRequest, Workflow } from '@models/v2';
 import { IFilter, IPagination } from '@services';
 import { Paper, Button, Pagination, Stack, Grid, Timestamp } from '@ui';
 import { BaseInput, Select } from '@form';
-import { UserContextStore } from '@common';
+import { useUser } from '@common';
 import { RunWorkflow } from '../../../creators';
 
 interface WorkflowJobsProps {
@@ -23,14 +23,14 @@ export const WorkflowJobs: FC<WorkflowJobsProps> = (props: WorkflowJobsProps) =>
   const [search, setSearch] = useState<string>('');
   const [searchParam, setSearchParam] = useState('uid');
   const [values, setValues] = useState<{ modifiedBy: string }>({ modifiedBy: 'default' });
-  const user = useContext(UserContextStore);
+  const { userInfo } = useUser();
   const itemsPerPage = 10;
 
   useEffect(() => {
     function createFilters() {
       const filters: IFilter[] = [{ name: 'workflow.uid', value: workflow?.uid || '', type: 'EQUALTO' }];
       if (values?.modifiedBy !== 'default') {
-        filters.push({ name: 'modifiedBy.email', type: 'EQUALTO', value: user?.userInfo?.email });
+        filters.push({ name: 'modifiedBy.email', type: 'EQUALTO', value: userInfo?.email });
       }
       if (search !== '') {
         filters.push({ name: searchParam, type: 'SEARCH', value: search });
@@ -41,7 +41,7 @@ export const WorkflowJobs: FC<WorkflowJobsProps> = (props: WorkflowJobsProps) =>
     const pagination = { limit: itemsPerPage, offset: page === 1 ? 0 : (page - 1) * itemsPerPage };
 
     fetchJobs(pagination, filters);
-  }, [fetchJobs, page, search, searchParam, values, user, workflow?.uid]);
+  }, [fetchJobs, page, search, searchParam, values, userInfo, workflow?.uid]);
 
   return (
     <Grid container style={{ flexGrow: '1', minHeight: '0', flexWrap: 'nowrap' }}>

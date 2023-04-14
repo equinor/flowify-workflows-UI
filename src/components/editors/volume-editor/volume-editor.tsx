@@ -61,7 +61,7 @@ export const VolumeEditor: FC<VolumeEditorProps> = (props: VolumeEditorProps) =>
 
   return (
     <Modal open={open} onClose={saveVolume} maxWidth="md" fullWidth>
-      <DialogWrapper padding={2} style={{ height: '80vh' }} justifyContent="space-between">
+      <DialogWrapper padding={2} style={{ height: '90vh' }} justifyContent="space-between">
         <Stack spacing={2} style={{ flexGrow: '2' }}>
           <Typography variant="h4">{mode === 'edit' ? 'Edit' : 'Create new'} volume</Typography>
           <MultiToggle>

@@ -5,7 +5,7 @@ import { services } from '@services';
 import { ISecret, ISecretsList, IUserVolume, IVolume, Workspace, WorkspaceList } from '@models/v2';
 import { Breadcrumbs, Button, Stack, Table } from '@ui';
 import { Select } from '@form';
-import { isNotEmptyArray } from '@common';
+import { useUser } from '@common';
 import { Container, Layout } from '../../layout';
 import { VolumeEditor, Feedback, Feedbacks, SecretEditor } from '../../components';
 
@@ -39,6 +39,8 @@ export const AdminPage: React.FC = (): React.ReactElement => {
   const [editableVolume, setEditableVolume] = useState<{ volume: IUserVolume; mode: 'edit' | 'create' }>();
   const [editableSecret, setEditableSecret] = useState<{ secret: ISecret; mode: 'edit' | 'create' }>();
   const [feedback, setFeedback] = useState<Feedback>();
+
+  const { checkIfUserIsWorkspaceEditor } = useUser();
 
   function fetchSecrets(workspace: string) {
     services.secrets
@@ -100,8 +102,7 @@ export const AdminPage: React.FC = (): React.ReactElement => {
   }
 
   const workspaceOptions =
-    workspaces
-      ?.filter((workspace) => isNotEmptyArray(workspace.roles) && workspace?.roles?.includes('admin'))
+    workspaces?.filter((workspace) => checkIfUserIsWorkspaceEditor(workspace))
       .map((workspace) => ({ label: workspace.name, value: workspace.name })) || [];
 
   return (

@@ -1,14 +1,14 @@
 import React, { useContext } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { List, Typography } from '@equinor/eds-core-react';
-import { UserContextStore, SettingsContextStore } from '@common';
+import { useUser, SettingsContextStore } from '@common';
 import { MultiToggle, ToggleButton, Stack } from '@ui';
 import { Container, Layout } from '../../layout';
 
 interface UserInfoPageProps {}
 
 export const UserInfoPage: React.FC<UserInfoPageProps> = (props: UserInfoPageProps) => {
-  const { userInfo: user } = useContext(UserContextStore);
+  const { userInfo: user } = useUser();
   const { settings, updateSetting } = useContext(SettingsContextStore);
 
   return (

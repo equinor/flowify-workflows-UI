@@ -1,9 +1,9 @@
-import React, { FC, useContext, useEffect, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { Typography } from '@equinor/eds-core-react';
 import { services, IFilter } from '@services';
 import { Job, IPageInfo } from '@models/v2';
 import { Pagination, Stack } from '@ui';
-import { UserContextStore } from '@common';
+import { useUser } from '@common';
 import { BaseInput, Select } from '@form';
 import { JobCard } from './job-card/job-card';
 
@@ -23,7 +23,7 @@ const JobsListing: FC<IJobsListing> = (props: IJobsListing) => {
   const [searchParam, setSearchParam] = useState<string>('uid');
   const [values, setValues] = useState({ createdBy: 'default' });
   const [loadingJobs, setLoadingJobs] = useState<boolean>(true);
-  const user = useContext(UserContextStore);
+  const { userInfo } = useUser();
 
   useEffect(() => {
     const jobsFilters: IFilter[] = [{ name: 'workflow.workspace', value: workspace, type: 'EQUALTO' }];
@@ -31,7 +31,7 @@ const JobsListing: FC<IJobsListing> = (props: IJobsListing) => {
       jobsFilters.push({ name: searchParam, type: 'SEARCH', value: search });
     }
     if (values.createdBy !== 'default') {
-      jobsFilters.push({ name: 'modifiedBy.email', type: 'EQUALTO', value: user.userInfo.email });
+      jobsFilters.push({ name: 'modifiedBy.email', type: 'EQUALTO', value: userInfo.email });
     }
     const itemsPerPage = 10;
     const pagination = { limit: itemsPerPage, offset: page === 1 ? 0 : (page - 1) * itemsPerPage };
@@ -48,7 +48,7 @@ const JobsListing: FC<IJobsListing> = (props: IJobsListing) => {
         setJobs(res.items);
       })
       .catch((error) => console.error(error));
-  }, [workspace, page, order, orderBy, search, searchParam, user, values]);
+  }, [workspace, page, order, orderBy, search, searchParam, userInfo, values]);
 
   const headerSortOptions = [
     { label: 'Submitted', value: 'timestamp' },
