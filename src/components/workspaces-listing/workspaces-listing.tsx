@@ -35,7 +35,7 @@ const WorkspacesListing: FC<IWorkspacesListing> = (props: IWorkspacesListing) =>
         setLoadingWorkspaces(false);
         console.error(error);
       });
-  }, []);
+  }, [checkIfUserIsWorkspaceViewer]);
 
   const showCreateWorkspaceButton = checkIfUserIsWorkspaceCreator();
 
