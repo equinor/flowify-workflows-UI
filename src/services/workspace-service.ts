@@ -16,6 +16,13 @@ export class WorkspaceService {
       .then((res) => res.body as Workspace);
   }
 
+  public delete(workspace: Workspace) {
+    return requests
+      .delete(`api/v1/workspaces/`)
+      .send(workspace)
+      .then((res) => res.body as Workspace);
+  }
+
   public list() {
     return requests.get('api/v1/workspaces/').then((res) => res.body as WorkspaceList);
   }

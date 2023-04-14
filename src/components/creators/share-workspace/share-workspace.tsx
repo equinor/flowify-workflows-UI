@@ -1,6 +1,6 @@
 import React, { FC, useState } from 'react';
 import { Button as EDSButton, Snackbar } from '@equinor/eds-core-react';
-import { Modal as OPTModal, Button as OPTButton, RadioGroup, Radio } from '@equinor/opt-ui-core';
+import { Modal as OPTModal, RadioGroup, Radio } from '@equinor/opt-ui-core';
 import { Share } from '@equinor/opt-ui-icons';
 import { Form, Formik } from 'formik';
 import * as yup from 'yup';
@@ -146,11 +146,11 @@ const ShareWorkspace: FC<ShareWorkspaceProps> = (props: ShareWorkspaceProps) => 
           </EDSButton>
         </Snackbar.Action>
       </Snackbar>
-      <Button theme="create" aria-label="Share icon button" onClick={() => setModalOpen(true)}>
+      <Button theme="simple" aria-label="Share icon button" onClick={() => setModalOpen(true)}>
         <Share />
       </Button>
       <Modal maxWidth="sm" fullWidth open={modalOpen} onClose={() => setModalOpen(false)}>
-        <DialogWrapper padding={2}>
+        <DialogWrapper padding={2} basis='content'>
           <Formik
             onSubmit={onSubmit}
             initialValues={{
@@ -178,12 +178,12 @@ const ShareWorkspace: FC<ShareWorkspaceProps> = (props: ShareWorkspaceProps) => 
         onClose={onCloseWarning}
         title="Workspace sharing"
         footer={[
-          <OPTButton key="modal_cancel" variant="outlined" color="primary" onClick={onCloseWarning}>
+          <Button key="modal_cancel" theme='simple' onClick={onCloseWarning}>
             Cancel
-          </OPTButton>,
-          <OPTButton key="modal_save" onClick={onContinue}>
+          </Button>,
+          <Button key="modal_save" theme='create' onClick={onContinue}>
             Continue
-          </OPTButton>
+          </Button>
         ]}
       >
         <p>Are you sure you want to {warningMessage}?</p>
