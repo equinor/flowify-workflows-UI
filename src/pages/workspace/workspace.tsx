@@ -4,7 +4,7 @@ import { Helmet } from 'react-helmet-async';
 import { Container, Layout } from '../../layout';
 import { Stack, MultiToggle, ToggleButton, Breadcrumbs } from '@ui';
 import { WorkflowsListing, JobsListing } from '../../components';
-import { CreateWorkflow, ShareWorkspace } from '../../components/creators';
+import { CreateWorkflow, ShareWorkspace, DeleteWorkspace } from '../../components/creators';
 import { Icon } from '@equinor/eds-core-react';
 
 interface IWorkspace {}
@@ -22,7 +22,10 @@ const Workspace: FC<IWorkspace> = (props: IWorkspace) => {
         <Stack style={{ padding: '1rem 3rem 1rem 3rem' }} spacing={2}>
           <Stack direction="row" alignItems="center" justifyContent="space-between">
             <Breadcrumbs links={[{ title: 'Dashboard', href: '/dashboard' }, { title: workspace || '' }]} />
-            <ShareWorkspace workspace={workspace!} />
+            <Stack direction="row" spacing={1}>
+              <ShareWorkspace workspace={workspace!} />
+              <DeleteWorkspace workspace={workspace!} />
+            </Stack>
           </Stack>
           <Stack direction="row" alignItems="center" justifyContent="space-between">
             <MultiToggle style={{ fontSize: '1.5rem' }}>

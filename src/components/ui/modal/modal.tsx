@@ -21,7 +21,6 @@ export const Modal: FC<ModalProps> = (props: ModalProps) => {
 
   const customStyles: Styles = {
     content: {
-      minHeight: '60vh',
       top: '50%',
       left: '50%',
       right: 'auto',
